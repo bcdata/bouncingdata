@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>  
+  <definition name="stream" extends="based-layout">  
+    <put-attribute name="main-content" value="/WEB-INF/views/stream.jsp"></put-attribute>
+  </definition>
+  
+  <definition name="create" extends="based-layout">  
+    <put-attribute name="main-content" value="/WEB-INF/views/workbench.jsp"></put-attribute>
+  </definition>
+  
+  <definition name="analysis" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/analysis.jsp"></put-attribute>
+  </definition>
+  
+  <definition name="datapage" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/datapage.jsp"></put-attribute>
+  </definition>
+  
+  <definition name="error" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/error.jsp"></put-attribute>
+  </definition>
+        
+  <definition name="based-layout" template="/WEB-INF/views/layout/bouncingdata/layout.jsp">
+    <put-attribute name="title" value="Bouncing Data"></put-attribute>
+    <put-attribute name="header-content" value="/WEB-INF/views/layout/bouncingdata/header.jsp" />
+    <put-attribute name="navigation" value="/WEB-INF/views/layout/bouncingdata/nav.jsp"></put-attribute>
+    <put-attribute name="footer-content" value="/WEB-INF/views/layout/bouncingdata/footer.jsp" />
+  </definition>
+  
+  <definition name="connect" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/connect.jsp"></put-attribute>
+  </definition>
+  
+  <definition name="search" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/search.jsp"></put-attribute>
+  </definition>
+    
+</tiles-definitions>

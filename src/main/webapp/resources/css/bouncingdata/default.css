@@ -1,0 +1,228 @@
+body, html>body {
+  margin: 0 auto;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Arial, sans-serif; 
+}
+
+/** Global styles **/
+body .ui-widget {
+  font-size: 1em;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+#page input.ui-button, #page button.ui-button .ui-button-text {
+  padding: 0.3em 1.5em;
+}
+
+#page .ui-tabs .ui-tabs-nav li a {
+  padding: 0.3em 1em;
+}
+
+#page .ui-widget input, #page .ui-widget select, .ui-widget textarea, .ui-widget button {
+  font-size: 0.9em;
+}
+
+div.clear {
+  clear: both;
+}
+
+.ui-tab-nav li a {
+  outline: none;
+}
+
+/** Layout **/
+#page {
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  background: none repeat top left #F1F1F1;
+}
+
+#page .header-container {
+  background: none repeat top left #F1F1F1;
+  clear: both;  
+  height: 60px;
+  position: fixed;
+  width: 100%;
+  z-index: 10000;
+}
+#page .header-container .header-content {
+  padding: 15px 0 5px 5px;
+  font-family: Verdana, Arial, sans-serif;
+}
+
+.header-container .header-content a, .header-container .header-content a:active, .header-container .header-content a:visited {
+  text-decoration: none;
+  color: #000000;
+}
+
+#page .header-container .search-container {
+  float: left;  
+  margin-left: 30px;
+}
+
+#page .header-container .search-container .search-input {
+  width: 430px;
+  border: 1px solid #CCCCCC;
+  height: 24px;
+}
+
+#page .header-container .search-container #search-submit {
+  height: 26px;
+  margin: 0 10px;
+  padding: 3px 18px;
+}
+
+#page .main-content-container {
+  margin-left: 105px;
+  z-index: 1;
+  background-color: transparent;
+  min-height: 500px;
+}
+
+#page .main-navigation {
+  position: fixed;
+  width: 100px;
+  height: 100%;
+}
+
+.footer-container {
+  width: 100%;
+  background-color: transparent;
+}
+
+.footer-container .footer {
+  margin: 0 auto;
+  padding: 0 0 20px 0;
+  color: #333333;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+}
+
+.footer-container .footer .footer-content {
+  text-align: center;
+  padding-top: 15px;
+  font-size: 0.9em;
+}
+
+.footer-container .footer .footer-horizontal-rule {
+  border-bottom: 1px solid #FFFFFF;
+  border-top: 1px solid #DDDDDD;
+  height: 0;
+  margin: 0;
+  z-index: -99;
+}
+
+/** End Layout **/
+
+/** Navigation */
+#page .main-navigation .nav-item {
+  height: 60px;
+  padding: 0 10px 20px 10px;
+}
+
+#page .main-navigation .nav-item a {
+  color: #000000; /*#A7A7A7;*/
+  text-decoration: none;
+  outline: none;
+}
+
+#page .main-navigation .nav-item a:hover, #page .main-navigation .nav-item-selected a {
+  color: #000000;
+  font-weight: bold;
+}
+
+#page .main-navigation .nav-item .nav-item-icon {
+  margin: 0 auto;
+  width: 32px;
+  height: 32px;
+  display: block;
+  border: 1px solid #DEE;
+  border-radius: 2px;  
+}
+
+#page .main-navigation .nav-item .nav-item-text {
+  text-align: center;
+  margin-top: 5px;
+}
+
+#page .main-navigation .nav-item .nav-item-text:hover {
+  color: #003366;
+}
+
+/** Main content layout **/
+#main-content {
+  position: relative;
+}
+
+#main-content .right-content {
+  position: fixed;
+  top: 60px;
+  bottom: 20px;
+  right: 6px;
+  width: 250px;
+  background-color: #FFFFFF;
+}
+
+#main-content .center-content {
+  margin-right: 270px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+}
+
+#main-content .center-content .center-content-wrapper {
+  height: 100%;
+  position: relative;
+}
+
+#main-content .center-content .center-content-wrapper .top-rule {
+  height: 8px;
+  position: fixed;
+  left: 105px;
+  right: 270px;
+  top: 60px;
+  border-top: 1px solid #CCCCCC;
+  z-index: 9999;
+}
+
+#main-content .center-content .center-content-wrapper .header {
+  padding: 15px;
+}
+
+#main-content .center-content .center-content-wrapper .header .main-title h2 {
+  margin: 0;
+}
+
+#main-content .center-content .center-content-wrapper .header-rule {
+  border-bottom: 1px solid #CCCCCC;
+  border-top: 0 none;
+  height: 0;
+}
+
+#main-content .center-content .center-content-wrapper .content {
+  padding: 15px;
+  overflow-x: auto;
+}
+
+#main-content .center-content .center-content-wrapper .comments-container {
+  padding: 15px;
+}
+
+.ui-tabs .ui-state-disabled { 
+    display: none; /* disabled tabs don't show up */ 
+}
+
+body > #ajaxLoadingMessage {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 45%;
+  background-color: #F1F80F;
+  color: #000;
+  font-weight: bold;
+  padding: 5px 12px;
+  z-index: 10000;
+}
+
+
