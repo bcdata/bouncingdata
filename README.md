@@ -1,4 +1,8 @@
 bouncingdata
 ============
 
-bouncingdata.com web application
+The bouncingdata.com web application
+
+- CI: 
+- Demo: 
+- BugTracker: 
