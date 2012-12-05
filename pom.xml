@@ -2,16 +2,16 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <!--parent>
+  <parent>
     <artifactId>dataprj-parent</artifactId>
     <groupId>dataprj</groupId>
     <version>1.0-SNAPSHOT</version>
-  </parent-->
-  <groupId>com.bouncingdata</groupId>
+  </parent>
+  <groupId>dataprj.com.bouncingdata</groupId>
   <artifactId>bouncingdata</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>BouncingData Web Application Demo</name>
+  <name>BouncingData Web Application</name>
   <url>http://bouncingdata.com</url>
   
   <properties>
