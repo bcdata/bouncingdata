@@ -37,9 +37,21 @@
   <definition name="search" extends="based-layout">
     <put-attribute name="main-content" value="/WEB-INF/views/search.jsp"></put-attribute>
   </definition>
+      
+  <definition name="help-python-content" template="/WEB-INF/views/layout/bouncingdata/help-layout.jsp">  
+    <put-attribute name="help-content" value="/WEB-INF/views/help-python.jsp"></put-attribute>  
+  </definition>
   
-  <definition name="help" extends="based-layout">
-    <put-attribute name="main-content" value="/WEB-INF/views/help.jsp"></put-attribute>
+  <definition name="help-r-content" template="/WEB-INF/views/layout/bouncingdata/help-layout.jsp">  
+    <put-attribute name="help-content" value="/WEB-INF/views/help-r.jsp"></put-attribute>    
+  </definition>
+    
+  <definition name="help-python" extends="based-layout">
+    <put-attribute name="main-content" value="help-python-content"></put-attribute>
+  </definition>
+  
+  <definition name="help-r" extends="based-layout">
+    <put-attribute name="main-content" value="help-r-content"></put-attribute>
   </definition>
     
 </tiles-definitions>

@@ -9,16 +9,16 @@
   <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery-1.7.2.min.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery-ui-1.8.20.custom.min.js" />"></script>
   <style>
-  .error-block, .message-block-error {
-    color: #ff0000;
-    border: 0 none;
-    padding: 8px;
-  }
-  .message-block {
-    color: blue;
-    border: 0 none;
-    padding: 8px;  
-  }
+    .error-block, .message-block-error {
+      color: #ff0000;
+      border: 0 none;
+      padding: 8px;
+    }
+    .message-block {
+      color: blue;
+      border: 0 none;
+      padding: 8px;  
+    }
   </style>
   <script type="text/javascript">
   	$(function() {

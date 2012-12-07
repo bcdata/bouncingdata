@@ -33,9 +33,14 @@ public class LoginController {
     return "create";
   }
   
-  @RequestMapping(value="/help", method = RequestMethod.GET)
-  public String openHelp() {
-    return "help";
+  @RequestMapping(value="/help/python", method = RequestMethod.GET)
+  public String openPyHelp() {
+    return "help-python";
+  }
+  
+  @RequestMapping(value="/help/r", method = RequestMethod.GET)
+  public String openRHelp() {
+    return "help-r";
   }
     
   @RequestMapping(value="/auth", method=RequestMethod.GET)

@@ -28,8 +28,8 @@
   </a>
 </div>
 <div class="nav-item" id="nav-help">
-  <form action="<c:url value='/help'/>" method="GET" id="nav-help-form" style="padding: 0px;margin: 0px;"></form>
-  <a href="<c:url value='/help'/>" class="nav-item-link" id="nav-help-link" ref="help">
+  <form action="<c:url value='/help/python'/>" method="GET" id="nav-help-form" style="padding: 0px;margin: 0px;"></form>
+  <a href="<c:url value='/help/python'/>" class="nav-item-link" id="nav-help-link" ref="help">
     <div class="nav-item-icon"></div>
     <div class="nav-item-text">API Help</div>
   </a>
