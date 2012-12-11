@@ -42,6 +42,9 @@
       </div>
       &nbsp;&nbsp;<strong style="color: red;">(to be updated...)</strong>
   </div>
+  <div class="help-right-menu">
+  
+  </div>
   <div class="help-content-wrapper">
     <tiles:insertAttribute name="help-content"></tiles:insertAttribute>
   </div>

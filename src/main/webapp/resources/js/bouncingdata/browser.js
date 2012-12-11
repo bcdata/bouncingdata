@@ -19,27 +19,13 @@ Browser.prototype.init = function() {
     me.getMyStuff();
     me.setMode("all");
     
-    $('#browser-tabs .dataset-list-panel h4').click(function() {
+    $('#browser-tabs .browser-tab-panel h4').click(function() {
       if (!$(this).next().is(':empty')) {
         $(this).next().toggle('fast');
       }
       return false;
     });
-    
-    $('#browser-tabs .analysis-list-panel h4').click(function() {
-      if (!$(this).next().is(':empty')) {
-        $(this).next().toggle('fast');
-      }
-      return false;
-    })
-    
-    $('#browser-tabs .scraper-list-panel h4').click(function() {
-      if (!$(this).next().is(':empty')) {
-        $(this).next().toggle('fast');
-      }
-      return false;
-    });
-    
+        
     // initializes search
     $('#workbench-browser #search-form .search-criteria').change(function() {
       var value = $(this).val();
@@ -66,6 +52,11 @@ Browser.prototype.init = function() {
     });
     $('#workbench-browser #search-form #search-submit').click(function() {
       searchFunc();
+      return false;
+    });
+    
+    $('#workbench-browser .browser-buttons .refresh-button').click(function() {
+      me.refreshMyStuff();
       return false;
     });
   });
@@ -267,9 +258,9 @@ Browser.prototype.loadStuff = function(stuffs, type, $container) {
     expandFunc($itemDetail, $expandLink);
   });
   
-  $('.browser-item-footer-link.expand-link', $container).click(function() {
-    var $expandLink = $('.browser-item-footer-link.expand-link', $(this).next());
-    var $itemDetail = $(this).next().next();
+  $('a.browser-item-footer-link.expand-link', $container).click(function() {
+    var $expandLink = $(this);
+    var $itemDetail = $(this).parent().next();
     expandFunc($itemDetail, $expandLink);
   });
   

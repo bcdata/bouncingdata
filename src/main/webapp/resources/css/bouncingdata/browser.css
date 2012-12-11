@@ -20,7 +20,7 @@
 .browser-container #browser-tabs .ui-tabs-panel {
   position: absolute;
   top: 32px;
-  bottom: 2px;  
+  bottom: 0px;  
   left: 5px;
   right: 5px;
   padding: 7px 5px 8px 5px;
@@ -28,14 +28,35 @@
 }
 
 .browser-container #browser-tabs .ui-tabs-panel:hover {
-  overflow-y: auto; 
+  /*overflow-y: auto;*/ 
 }
 
 .browser-container #browser-tabs #browser-mystuff .show-all {
   float: right;
 }
 
-.browser-container #browser-tabs #browser-mystuff .show-all a {
+.browser-container #browser-tabs .browser-tab-content {
+  position: absolute;
+  bottom: 20px;  
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow-y: hidden; 
+}
+
+.browser-container #browser-tabs .browser-tab-content:hover {
+  overflow-y: auto; 
+}
+
+.browser-container #browser-tabs #browser-mystuff .browser-buttons {
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  font-size: .85em;
+}
+
+
+.browser-container #browser-tabs #browser-mystuff .show-all a, .browser-container #browser-tabs .browser-buttons a {
   color: #0084B4;
   text-decoration: none;
 }

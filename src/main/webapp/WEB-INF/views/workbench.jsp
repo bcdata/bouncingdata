@@ -38,22 +38,27 @@
           <li><a href="#browser-mystuff">My Stuff</a></li>
         </ul>
         <div id="browser-mystuff" class="browser-mystuff">
-          <div class="dataset-list-panel">
+          <div class="browser-tab-content">
+            <div class="dataset-list-panel browser-tab-panel">
             <h4>Datasets</h4>
             <div id="dataset-list"></div>
+            </div>
+            <div class="browser-separator"></div>
+            <div class="analysis-list-panel browser-tab-panel">
+              <h4>Analyses</h4>
+              <div id="analysis-list"></div>
+            </div>
+            <div class="browser-separator"></div>
+            <div class="scraper-list-panel browser-tab-panel">
+              <h4>Scrapers</h4>
+              <div id="scraper-list"></div>
+            </div>
+            <div class="show-all"><a id="show-all-button" href="javascript:void(0)">Back</a></div>
           </div>
-          <div class="browser-separator"></div>
-          <div class="analysis-list-panel">
-            <h4>Analyses</h4>
-            <div id="analysis-list"></div>
-          </div>
-          <div class="browser-separator"></div>
-          <div class="scraper-list-panel">
-            <h4>Scrapers</h4>
-            <div id="scraper-list"></div>
-          </div>
-          <div class="show-all"><a id="show-all-button" href="javascript:void(0)">Back</a></div>
           <div class="clear"></div>
+          <div class="browser-buttons">
+            <a href="javascript:void(0);" class="refresh-button" title="Reload stuffs">Reload</a>
+          </div>
         </div>      
           
       </div>

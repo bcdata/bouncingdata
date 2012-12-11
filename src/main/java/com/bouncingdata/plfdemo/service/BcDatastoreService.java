@@ -56,6 +56,9 @@ public class BcDatastoreService {
   }
   
   public void storeData(String dsFullName, String[] headers, List<String[]> data) throws Exception {
+    for (int i = 0; i < headers.length; i++) {
+      headers[i] = headers[i].trim();
+    }
     jdbcBcDatastore.persistDataset(dsFullName , headers, data);
   }
   
