@@ -4,6 +4,7 @@
 <script>
 	$(function() {
 	  com.bouncingdata.ActivityStream.init();
+	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
 	});
 </script>
 <div id="main-content">
@@ -11,9 +12,6 @@
   </div>
   <div class="center-content">
     <div class="center-content-wrapper">
-      <div class="trends-container center-content-side">
-        <h3>Trends</h3>
-      </div>
       <div class="stream-container center-content-main">
         <h3>Activity stream</h3>
         <div class="stream" id="stream">

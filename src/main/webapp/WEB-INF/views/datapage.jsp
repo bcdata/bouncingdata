@@ -6,6 +6,7 @@
 	$(function() {
 	  $('#dataset-content').tabs();
 	  com.bouncingdata.Nav.setSelected('data', '${dataset.guid}');
+	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
 	});
 </script>
 <div id="main-content" class="datapage-container">

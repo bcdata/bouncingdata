@@ -2,7 +2,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <div class="header-content">
-  <div style="float: right; margin-right: 10px; text-align: right;">
+  <div class="header-login">
     <sec:authorize access="isAuthenticated()">
       <div>Welcome back <span style="font-weight: bold;"> 
           <sec:authentication property="principal.username" />
@@ -12,7 +12,7 @@
     </sec:authorize>
   </div>
   
-  <h2 style="margin: 0 0 0 10px; float: left; display: inline;">
+  <h2 class="header-logo">
     <a href="#">Bouncing Data</a>
   </h2>
   <div class="search-container">

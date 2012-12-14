@@ -10,7 +10,7 @@ Connect.prototype.init = function() {
   $('#main-content input:button').button();
   $('#main-content input:submit').button();
   
-  $('#main-content>.connect-page-tabs').tabs({
+  $('#main-content.connect-page .connect-page-tabs').tabs({
     // each time show the tab
     show: function(event, ui) {       
       if (ui.index == 1) {
@@ -18,8 +18,7 @@ Connect.prototype.init = function() {
       }
     }
   });
-  
-  
+
   $('#find-friends .search-form').submit(function() {
     var query = $('#find-friends #friend-name').val();
     if (!query) return false;

@@ -7,13 +7,10 @@
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
   
   <title><tiles:insertAttribute name="title" ignore="true" /></title>
+
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/default.css" />" />
-  <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/browser.css" />" />
-  <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/workbench.css" />" />
-  <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/analysis.css" />" />
-  <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/home.css" />" />
-  <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/connect.css" />" />
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/datatable.css" />" />
+
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery-ui/smoothness/jquery-ui-1.8.20.custom.css" />" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/datatable/css/demo_page.css" />" />
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/datatable/css/jquery.dataTables.css" />" />

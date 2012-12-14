@@ -1,6 +1,5 @@
 #main-content .center-content-main {
-  padding: 10px;
-  padding-right: 280px;
+  padding: 10px 15px;
 }
 
 #main-content .center-content-side {
@@ -29,7 +28,7 @@
   float: left;
   border: 1px solid #DDDDDD;
   border-radius: 2px;
-  margin-left: 10px;
+  margin-left: 15px;
   padding: 5px 10px;
   width: 480px;
 }

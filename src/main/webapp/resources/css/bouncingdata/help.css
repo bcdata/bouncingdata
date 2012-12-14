@@ -1,9 +1,4 @@
-.help-page {
-  padding: 10px;
-  background-color: #fff;
-}
-
-code {
+.help-page code {
   display: block;
   padding: 8px;
   border-radius: 4px;
@@ -12,14 +7,19 @@ code {
   background-color: #C1E0F0;
   margin: 1em 0;
   font-family: monospace;
-  font-size: 120%;
+  font-size: 15px;
   white-space: pre;
   overflow: auto;
 }
 
-.help-page-nav {
-  background-color: #E8F2F9;
+.help-page .help-page-nav {
+  margin: 10px 10px 10px 15px;
   padding-left: 10px;
+  background-color: #E8F2F9;
+}
+
+.help-page .help-content-wrapper {
+  margin: 10px 10px 10px 15px;
 }
 
 .help-page-nav .help-page-nav-item {
@@ -51,14 +51,13 @@ code {
 .help-page var {
   background-color: #EEEEEE;
   font-family: monospace;
-  font-size: 1.2em;
   font-style: normal;
   padding: 2px 5px; 
 }
 
 .help-page dt {
   background-color: #F4F8FB;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 22px;
   margin-top: 1em;
   padding: 0.3em 1em;

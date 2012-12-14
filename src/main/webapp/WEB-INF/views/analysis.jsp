@@ -4,6 +4,8 @@
 
 <script>
 	$(function() {
+	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
+
 	  if (!com.bouncingdata.Analysis) {
 	    $.getScript(ctx + "/resources/js/bouncingdata/analysis.js", function() {
 	    	console.debug("analysis.js async. loaded!");
@@ -79,7 +81,6 @@
     
   <div class="analysis-main center-content">
     <div class="center-content-wrapper">
-      <div class="top-rule"></div>
       <div class="anls-header">
         <div class="anls-title main-title"><h2>${anls.name}</h2></div>
         <div class="anls-action-links">

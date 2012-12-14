@@ -2,7 +2,7 @@
   position: fixed;
   top: 60px;
   right: 0;
-  left: 100px;
+  left: 120px;
   bottom: 10px;
 }
 
@@ -12,19 +12,20 @@
   bottom: 20px;
   width: 248px;
   right: 10px;
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-  border-radius: 4px;
+  background-color: none repeat scroll 0 0 #FFFFFF;
+  border: 1px solid #E2E2E2;
 }
 
 .workbench-container#main-content .workbench-ide {
-  margin-right: 270px;
-  background-color: #FFFFFF;
+  margin-right: 280px;
+  background: none repeat scroll 0 0 #FFFFFF;
   height: 100%;
+  border: 1px solid #E2E2E2;
+  position: relative;
 }
 
 .workbench-ide .workbench-main-tabs {
-  padding: 2px;
+  padding: 10px;
   border: 0 none;
   position: absolute;
   top: 40px;
@@ -35,7 +36,7 @@
 
 .workbench-ide .workbench-toolbar {
   height: 30px;
-  padding: 5px;
+  padding: 10px;
 }
 
 .workbench-toolbar .app-actions {
@@ -73,11 +74,10 @@
 }
 
 .workbench-main-tabs > div.ui-tabs-panel {
-  padding: 10px;
   position: absolute;
-  top: 35px;
+  top: 45px;
   left: 0;
-  right: 0;
+  right: 10px;
   bottom: 0;
   overflow: auto;
 }

@@ -57,7 +57,7 @@ ActivityStream.prototype.init = function() {
  */
 ActivityStream.prototype.loadMore = function(lastId) {
   $.ajax({
-    url: '',
+    url: ''
     
   });
 }

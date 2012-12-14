@@ -1,10 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/help.css" />" />
-
 <script>
 	$(function() {
+	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/help.css", "help");
+	  
 	  $('#help-page-nav .help-page-nav-item').each(function() {
 	    var $form = $('form', this);
 	    var $link = $('a', this);
@@ -30,22 +30,27 @@
 	});
 </script>
 <div id="main-content" class="help-page">
-  <div id="help-page-nav" class="help-page-nav">
-      <span>Choose your language:&nbsp;&nbsp;</span>
-      <div class="help-page-nav-item">
-        <form action="<c:url value='/help/python'/>" method="GET" id="help-page-python" style="padding: 0px;margin: 0px;"></form>
-        <a class="help-page-link" href="<c:url value='/help/python'/>" id="help-page-python-link">Python</a>
+  <div class="right-content"></div>
+  <div class="center-content">
+    <div class="center-content-wrapper">
+      <div id="help-page-nav" class="help-page-nav">
+        <span>Choose your language:&nbsp;&nbsp;</span>
+        <div class="help-page-nav-item">
+          <form action="<c:url value='/help/python'/>" method="GET" id="help-page-python" style="padding: 0px;margin: 0px;"></form>
+          <a class="help-page-link" href="<c:url value='/help/python'/>" id="help-page-python-link">Python</a>
+        </div>
+        <div class="help-page-nav-item">
+          <form action="<c:url value='/help/r'/>" method="GET" id="help-page-r" style="padding: 0px;margin: 0px;"></form>
+          <a href="<c:url value='/help/r'/>" id="help-page-r-link" class="help-page-link">R</a>
+        </div>
+        &nbsp;&nbsp;<strong style="color: red;">(to be updated...)</strong>
       </div>
-      <div class="help-page-nav-item">
-        <form action="<c:url value='/help/r'/>" method="GET" id="help-page-r" style="padding: 0px;margin: 0px;"></form>
-        <a href="<c:url value='/help/r'/>" id="help-page-r-link" class="help-page-link">R</a>
+      <div class="help-right-menu">
+
       </div>
-      &nbsp;&nbsp;<strong style="color: red;">(to be updated...)</strong>
-  </div>
-  <div class="help-right-menu">
-  
-  </div>
-  <div class="help-content-wrapper">
-    <tiles:insertAttribute name="help-content"></tiles:insertAttribute>
+      <div class="help-content-wrapper">
+        <tiles:insertAttribute name="help-content"></tiles:insertAttribute>
+      </div>
+    </div>
   </div>
 </div>

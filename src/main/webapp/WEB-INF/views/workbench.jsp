@@ -18,6 +18,9 @@
   } else {
     com.bouncingdata.Browser.init();
   }
+
+  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/browser.css", "browser");
+  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/workbench.css", "workbench");
 </script>
 
 <div id="main-content" class="workbench-container">
@@ -64,7 +67,7 @@
       </div>
     </div>
   </div>
-  <div class="workbench-ide center-content">  
+  <div class="workbench-ide">  
     <div class="center-content-wrapper">
       <div class="top-rule"></div>
       <div class="workbench-toolbar">

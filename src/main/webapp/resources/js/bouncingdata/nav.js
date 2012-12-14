@@ -58,7 +58,7 @@ Nav.prototype.init = function() {
     $('#page>.main-container>.main-navigation div.nav-item#nav-home').addClass('nav-item-selected');*/
     
     
-    
+    // only push state to history if this event does not originate from the 'Back' button
     if (!e.originalEvent["isBackAction"]) {
       window.history.pushState({linkId: $(this).prop('href')}, null, $(this).prop('href'));
     }
@@ -138,7 +138,10 @@ Nav.prototype.setSelected = function(type, ref) {
 }
 
 /**
- * 
+ * Fires an Ajax load event, in fact, a click event is dispatched on the hidden link.
+ * If successful, the main content will be loaded.
+ * @param link the link to load
+ * @param isBack is this event originated from the 'Back' button?
  */
 Nav.prototype.fireAjaxLoad = function(link, isBack) {
   var $hiddenLink = $('#hiddenLinkForAjax');
@@ -149,7 +152,7 @@ Nav.prototype.fireAjaxLoad = function(link, isBack) {
     event.initEvent("click", false, true);
     event["isBackAction"] = isBack;
     $hiddenLink[0].dispatchEvent(event);
-  } else { //IE?
+  } else { //IE
     event = document.createEventObject();
     event.eventType = "click";
     event["isBackAction"] = isBack;

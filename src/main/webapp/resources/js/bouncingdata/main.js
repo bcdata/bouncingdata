@@ -1,4 +1,5 @@
 function Main() {
+  this.cssLoader = {};
 }
 
 Main.prototype.setContext = function(ctx) {
@@ -37,12 +38,44 @@ Main.prototype.init = function() {
   });
 }
 
+/**
+ * Show/hide the ajax loading message on the top of page
+ */
 Main.prototype.toggleAjaxLoading = function(display, message) {
   var $element = $('body > #ajaxLoadingMessage');
   if (display) $('span.ajaxLoadingMessage', $element).text(message?message:'Loading...')
   if (display) {
     $element.show();
   } else $element.hide();
+}
+
+/**
+ * Loads CSS asynchronously
+ */
+Main.prototype.loadCss = function(cssUrl, pageName) {
+  if (!com.bouncingdata.Main.cssLoader[pageName]) {
+    /*$.ajax({
+      url: cssUrl,
+      success: function(result) {
+        var $style = $('head style');
+        if ($style.length <= 0) {
+          $style.appendTo('head');
+        }
+        $style.append(result);
+        com.bouncingdata.Main.cssLoader[pageName] = true;
+        console.debug("Css file " + cssUrl + " anync. loaded successfully.");
+      },
+      error: function(result) {
+        console.debug("Failed to load css from " + cssUrl);
+        console.debug("Error: " + result);
+      }
+    });*/
+    var $head = $('head');
+    $head.append('<link rel="stylesheet" type="text/css" href="' + cssUrl + '" /> ');
+    com.bouncingdata.Main.cssLoader[pageName] = true;
+  } else {
+    console.debug("Css file " + cssUrl + " was loaded before.");
+  }
 }
 
 function Utils() {

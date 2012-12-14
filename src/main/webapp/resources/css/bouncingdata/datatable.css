@@ -15,6 +15,5 @@
 }
 
 #main-content .dataTables_wrapper {
-  height: 350px;
   overflow: auto;
 }
