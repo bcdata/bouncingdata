@@ -5,5 +5,5 @@ target/
 
 *.ipr
 *.iml
-*.idea
+.idea/
 *.iws
