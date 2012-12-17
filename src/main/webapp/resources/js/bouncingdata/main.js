@@ -1,5 +1,7 @@
 function Main() {
+  // these fields keep tract of css/js asynchronous loading, each file should loaded 1 time.  
   this.cssLoader = {};
+  this.jsLoader = {};
 }
 
 Main.prototype.setContext = function(ctx) {

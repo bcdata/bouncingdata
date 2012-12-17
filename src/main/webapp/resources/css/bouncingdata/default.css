@@ -262,7 +262,7 @@ body > #ajaxLoadingMessage {
 }
 
 .search-page .search-result-wrapper {
-  padding: 10px 10px 10px 15px;
+  padding: 15px;
 }
 
 .search-page .search-result-item .thumbnail {
@@ -289,7 +289,45 @@ body > #ajaxLoadingMessage {
   color: #003366;
 }
 
-.search-page .search-result ul.search-result-list {
+.search-page ul.search-result-list {
   padding-left: 10px;
+}
+
+.search-page .search-result-nav {
+  padding: 10px 0;
+}
+
+.search-page .result-nav-item {
+  display: inline-block;
+  border: 1px solid #CCC;
+  padding: 6px 13px;
+  margin: 0;
+  font-weight: bold;
+  background-image: -webkit-linear-gradient(top,whiteSmoke,#F1F1F1);
+  background-image: -moz-linear-gradient(top,whiteSmoke,#F1F1F1);
+  background-image: linear-gradient(top,whiteSmoke,#F1F1F1);
+  background-image: -ms-linear-gradient(top,whiteSmoke,#F1F1F1);
+  background-image: -o-linear-gradient(top,whiteSmoke,#F1F1F1);
+  background-color: whiteSmoke;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.search-page .result-nav-item.right-item {
+  margin-left: -3px;
+}
+
+.search-page .result-nav-item:hover {
+  border: 1px solid #4D90FE;
+}
+
+.search-page .result-nav-item.user-selected {
+  background-color: #EEE;
+  background-image: -webkit-linear-gradient(top,#EEE,#E0E0E0);
+  background-image: -moz-linear-gradient(top,#EEE,#E0E0E0);
+  background-image: -ms-linear-gradient(top,#EEE,#E0E0E0);
+  background-image: -o-linear-gradient(top,#EEE,#E0E0E0);
+  background-image: linear-gradient(top,#EEE,#E0E0E0);
+  border: 1px solid #4D90FE;
 }
 

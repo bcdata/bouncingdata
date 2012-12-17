@@ -34,7 +34,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "deprecation" })
 public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   
   @Override
@@ -941,11 +941,17 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       activities = (List<Activity>) pm.detachCopyAll(activities);
       
       // set the target object
-      for (Activity ac : activities) {
-        Analysis anls = pm.getObjectById(Analysis.class, ac.getObjectId());
-        List<Comment> comments = getComments(ac.getObjectId());
-        anls.setCommentCount(comments!=null?comments.size():0);
-        ac.setObject(anls);
+      Iterator<Activity> iter = activities.iterator();
+      while (iter.hasNext()) {
+        Activity ac = iter.next();
+        try {
+          Analysis anls = pm.getObjectById(Analysis.class, ac.getObjectId());
+          List<Comment> comments = getComments(ac.getObjectId());
+          anls.setCommentCount(comments!=null?comments.size():0);
+          ac.setObject(anls);
+        } catch (Exception e) {
+          iter.remove();
+        }
       }
       return activities;
     } finally {

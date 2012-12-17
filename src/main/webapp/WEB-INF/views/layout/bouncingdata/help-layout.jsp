@@ -2,9 +2,9 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <script>
-	$(function() {
-	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/help.css", "help");
-	  
+  $(function() {
+    com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/help.css", "help");
+
 	  $('#help-page-nav .help-page-nav-item').each(function() {
 	    var $form = $('form', this);
 	    var $link = $('a', this);
@@ -16,8 +16,8 @@
 	      window.history.pushState({linkId: href, type: 'page'}, $link.text(), href);
 	      e.preventDefault();
 	    });
-	    
-	 		// load corresponding help page
+
+	    // load corresponding help page
 	    Spring.addDecoration(new Spring.AjaxEventDecoration({
 	      elementId: $link.attr('id'),
 	      formId: $form.attr('id'),
@@ -25,7 +25,7 @@
 	      params: {fragments: "help-content"}
 	    }));
 	  });
-	  
+
 	  com.bouncingdata.Nav.setSelected('page', 'help');
 	});
 </script>

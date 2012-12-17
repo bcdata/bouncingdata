@@ -2,10 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <script>
-	$(function() {
-	  com.bouncingdata.ActivityStream.init();
-	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
-	});
+  $(function() {
+    com.bouncingdata.ActivityStream.init();
+    com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
+  });
 </script>
 <div id="main-content">
   <div class="right-content">
@@ -17,7 +17,7 @@
         <div class="stream" id="stream">
           <c:forEach items="${activities }" var="activity">
             <c:if test="${not empty activity.object }">
-              <div class="event">
+              <div class="event" aid="${activity.id }">
                 <div class="event-avatar">
                   <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.jpg" />">
                 </div>
@@ -64,7 +64,8 @@
             </c:if>
           </c:forEach>      
           <div class="stream-footer">
-            <a href="#">More</a>
+            <a href="javascript:void(0);" class="more-feed">More</a> &nbsp;&nbsp;
+            <img style="display: none;" class="feed-loading" src="<c:url value="/resources/images/loader32.gif" />" />
           </div>    
         </div>
       </div>

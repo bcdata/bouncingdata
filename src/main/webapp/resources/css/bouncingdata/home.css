@@ -82,4 +82,12 @@
   color: orange;
 }
 
+#stream .stream-footer {
+  padding: 10px;
+}
+
+#stream a.more-feed {
+  text-decoration: none;
+}
+
 
