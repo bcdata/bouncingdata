@@ -1,6 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <script type="text/javascript">
+  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/browser.css", "browser");
+  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/workbench.css", "workbench");
+  
   if (!com.bouncingdata.Workbench) {
     $.getScript(ctx + "/resources/js/bouncingdata/workbench.js", function() {
     	console.debug("workbench.js async. loaded!");
@@ -18,9 +21,6 @@
   } else {
     com.bouncingdata.Browser.init();
   }
-
-  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/browser.css", "browser");
-  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/workbench.css", "workbench");
 </script>
 
 <div id="main-content" class="workbench-container">
@@ -91,7 +91,7 @@
         <form>
           <fieldset>
             <label>Analysis name</label>
-            <input type="text" class="app-name" maxlength="40"></input><br>
+            <input type="text" class="app-name" maxlength="40" /><br>
             <label>Language</label>
             <select class="app-language">
               <option value="python">Python</option>
@@ -105,7 +105,7 @@
               <span>Private&nbsp;</span><input value="private" class="app-privacy-private" type="radio" name="app-privacy" />  
             </span><br>     
             <label>Tags</label>
-            <input type="text" class="app-tags" title="Separate tags by comma"></input><br>
+            <input type="text" class="app-tags" title="Separate tags by comma"/><br>
           </fieldset>
         </form>
       </div>
@@ -125,12 +125,12 @@
             <label>Select your file</label> &nbsp;
             <input id="file" name="file" type="file" /> &nbsp;
           </fieldset>
-          <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress">&nbsp;
+          <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" />&nbsp;
           <span class="upload-status"></span>
         </form>
       </div>
       
-      <div class="popup new-dialog" id="new-dialog" title="Create new script">
+      <div class="popup new-dialog" id="new-dialog-old" title="Create new script">
         <ul class="select-type">
           <li class="script-type" script-type="analysis"><a href="#">Analysis</a></li>
           <li class="script-type" script-type="scraper"><a href="#">Scraper</a></li>
@@ -139,6 +139,38 @@
           <li class="script-language" lang="python"><a href="#">Python</a></li>
           <li class="script-language" lang="r"><a href="#">R</a></li>
         </ul-->
+      </div>
+      
+      <div class="popup new-dialog" id="new-dialog" title="Create new script">
+        <form id="new-script-form" class="new-script-form">
+          <fieldset>
+            <label for="script-type">Type</label>
+            <select name="type" id="script-type">
+              <option value="analysis">Analysis</option>
+              <option value="scraper">Scraper</option>
+            </select><br />
+            <label for="script-name">Name</label>
+            <input type="text" id="script-name" name="name" maxlength="100" /> <br />
+            <label for="script-language">Language</label>
+            <select name="language" id="script-language">
+              <option value="python">Python</option>
+              <option value="r">R</option>
+            </select><br />
+            <label>Privacy</label>
+            <span>
+              <span>Public&nbsp;</span><input type="radio" value="public" id="script-privacy-public" />
+              <span>Private&nbsp;</span><input type="radio" value="private" id="script-privacy-private" />
+            </span><br />
+            <label><a href="javascript:void(0)" class="more-info-link" style="color: blue; text-decoration: none;">Add more info..</a></label>
+            <br/>
+            <div class="more-info" style="display: none;">
+              <label for="script-description">Description</label>
+              <textarea rows="" cols="" name="description" id="script-description"></textarea><br/>
+              <label for="script-tags">Tags</label>
+              <input type="text" id="script-tags" name="tags" maxlength="100"/>
+            </div>
+          </fieldset>
+        </form>
       </div>
     </div> 
   </div>

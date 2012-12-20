@@ -97,11 +97,11 @@
   right: 0;
 }
 
-.workbench-ide-content .app-code, .workbench-ide-content .app-code .app-code-layout {
+.workbench-ide-content .app-code .app-code-editor {
   height: 350px;
 }
 
-.workbench-ide-content .app-code .app-code-layout-center>div {
+.workbench-ide-content .app-code .app-code-editor>div {
   height: 328px;
   position: relative;
   padding: 0;
@@ -375,47 +375,47 @@ body>div.resizable-iframe-fix, body>div.ui-draggable-iframeFix {
 }
 
 /* New application dialog styles */
-#save-app-dialog {
-  padding: 10px 10px 0 10px;
+.popup {
+  padding: 10px;
 }
 
-#save-app-dialog form {
+ .popup form {
 }
 
-#save-app-dialog form input, #save-app-dialog form textarea, #save-app-dialog form label, #save-app-dialog form select {
+.popup form input, .popup form textarea, .popup form label, .popup form select {
   display: block;
   float: left;
   margin-bottom: 8px;
 }
 
-#save-app-dialog form label {
+.popup form label {
   text-align: right;
   padding-right: 10px;  
   width: 120px;
 }
 
-#save-app-dialog fieldset, #publish-dialog fieldset {
+.popup form fieldset, .workbench-container .popup form fieldset {
   padding: 12px;
   border: 1px solid #DDDDDD;
   border-radius: 1px;
 }
 
-#save-app-dialog br, #publish-dialog br {
+.popup br, .workbench-container #publish-dialog br {
   clear: left;
 }
 
-#save-app-dialog fieldset input, #save-app-dialog fieldset textarea {
+.popup form fieldset input, .popup form fieldset textarea {
   width: 250px;
   border: 1px solid #BBBBBB;
   padding: .2em;
 }
 
-#save-app-dialog form .app-privacy span {
+.popup form .app-privacy span {
   float: left;
   margin: 0;
 }
 
-#save-app-dialog form .app-privacy input {
+.popup form .app-privacy input {
   float: left;
   margin: 0 5px 0 0; 
 }
@@ -432,33 +432,4 @@ body>div.resizable-iframe-fix, body>div.ui-draggable-iframeFix {
 
 #file-upload-form fieldset {
   border: 0 none;
-}
-
-.popup#new-dialog {
-  min-height: 0 !important;
-}
-
-.popup#new-dialog ul {
-  list-style: none;
-  padding: 0;
-  border: 1px solid #CCC;
-  border-radius: 3px;
-  background-color: #EEE;
-}
-
-.popup#new-dialog li {
-  padding: 10px;
-  border-top: 1px solid #CCC;
-}
-
-.popup#new-dialog li:hover {
-  cursor: pointer;  
-}
-
-.popup#new-dialog li:first-child {
-  border-top: none;
-}
-
-.popup#new-dialog ul a {
-  text-decoration: none;
 }

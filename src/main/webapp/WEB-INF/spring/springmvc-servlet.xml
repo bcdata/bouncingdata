@@ -28,6 +28,8 @@
     
   <context:property-placeholder location="classpath:appstore.properties" />
   
+  <util:properties id="mailConfig" location="classpath:mail-accounts.properties"/>
+  
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <property name="maxUploadSize" value="20000000"/><!-- Max size in bytes, ~ 10M -->
   </bean>
@@ -42,23 +44,9 @@
     <property name="logDir" value="${com.bouncingdata.appstore.logDir}"></property>
   </bean>
   
-  <!--bean id="mainController" class="com.bouncingdata.plfdemo.controller.MainController">
+  <bean id="mailService" class="com.bouncingdata.plfdemo.service.MailService">
+    <property name="mailConfiguration" ref="mailConfig"></property>
   </bean>
-  
-  <bean id="appController" class="com.bouncingdata.plfdemo.controller.AppController">
-  </bean>
-  
-  <bean id="datasetController" class="com.bouncingdata.plfdemo.controller.DatasetController">
-  </bean>
-  
-  <bean id="visualizeController" class="com.bouncingdata.plfdemo.controller.VisualizeController">
-  </bean>
-  
-  <bean id="loginController" class="com.bouncingdata.plfdemo.controller.LoginController">
-  </bean>
-  
-  <bean id="analysisController" class="com.bouncingdata.plfdemo.controller.AnalysisController">
-  </bean-->
   
   <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
     <property name="definitions">

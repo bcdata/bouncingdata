@@ -116,6 +116,22 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
+  
+  @Override
+  public User findUserByEmail(String email) {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(User.class);
+    User user = null;
+    q.setFilter("email == '" + email + "'");
+    try {
+      List<User> results = (List<User>) q.execute();
+      if (results.size() > 0) user = ((List<User>)pm.detachCopyAll(results)).get(0);
+      return user;
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
 
   @Override
   public ExecutionLog getExecutionLog(String executionId) {

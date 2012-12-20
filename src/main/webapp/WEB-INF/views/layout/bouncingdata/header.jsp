@@ -138,21 +138,19 @@
           </ul>
           
           <div class="app-code" id="\${tabId}-code">
-            <!--div class="app-code-layout"-->
-              <div class="app-code-layout-center app-code-editor" id="app-code-layout-center-\${tabId }">
-                <div>
-                  <div id="code-editor-\${tabId}" class="code-editor"></div>
-                </div>    
-              </div>
-              <!--div class="app-code-layout-east app-execution-logs" id="app-code-layout-east-\${tabId }">
-                <div id="app-execution-logs-\${tabId}">
-                  <div class="console prompt" style="display: block;"></div>
-                  <div class="console-actions">
-                    <input class="clear-console" type="button" value="Clear console" />
-                  </div>
+            <div class="app-code-editor">
+              <div>
+                <div id="code-editor-\${tabId}" class="code-editor"></div>
+              </div>    
+            </div>
+            <div class="execution-logs-wrapper">
+              <div id="execution-logs-\${tabId}" class="execution-logs">
+                <div class="console prompt" style="display: block;"></div>
+                <div class="console-actions">
+                  <input class="clear-console" type="button" value="Clear console" />
                 </div>
-              </div-->
-            <!--/div-->
+              </div>
+            </div>
           </div>
           <div class="app-viz" id="\${tabId}-viz">
             <div><strong>Visualization Dashboard.</strong></div><br />
@@ -173,14 +171,6 @@
           </div>
           <div class="app-data" id="\${tabId}-data">
             <span class="no-data">No data</span>
-          </div>
-        </div>
-        
-        <div class="clear"></div>
-        <div id="execution-logs-\${tabId}" class="execution-logs">
-          <div class="console prompt" style="display: block;"></div>
-          <div class="console-actions">
-            <input class="clear-console" type="button" value="Clear console" />
           </div>
         </div>
     </div>

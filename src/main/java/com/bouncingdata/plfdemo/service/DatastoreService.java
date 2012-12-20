@@ -125,6 +125,18 @@ public interface DatastoreService {
   public User getUser(int userId) throws Exception;
   
   /**
+   * @param username
+   * @return
+   */
+  public User findUserByUsername(String username);
+  
+  /**
+   * @param email
+   * @return
+   */
+  public User findUserByEmail(String email);
+  
+  /**
    * @param dataset
    * @return
    * @throws Exception

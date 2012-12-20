@@ -26,7 +26,7 @@ Workbench.prototype.init = function(callback) {
   console.info('Initializing Workbench..');
   var me = this;
   
-  //the tabs counter, always increase, = the number of tabs which was created
+  //the tabs counter, always increase, = the number of tabs which was created (not the current number of tabs)
   this.tabsCounter = 0;
   
   // current opening applications (only saved apps), key: app guid, value: tab info { tabId, app info, type }
@@ -154,18 +154,51 @@ Workbench.prototype.init = function(callback) {
     
     me.$newDialog = $('.workbench-container #new-dialog').dialog({
       autoOpen: false,
-      width: 300,
+      width: 480,
       modal: true,
       resizable: false,
-      buttons: {},
+      buttons: {
+        "Create": function() {
+          // validate
+          
+          // create new analysis: save then open new tab
+          
+          
+          // open new tab
+          // var index = me.createTab(null, null, 'analysis', null);
+          var name = $('#script-name', me.$newDialog).val();
+          var language = $('#script-language', me.$newDialog).val();
+          var description = $('#script-description', me.$newDialog).val();
+          var isPublic = $('#script-privacy-public', me.$newDialog).prop('checked');
+          var code = "";
+          var tags = $('#script-tags', me.$newDialog).val();
+          var type = $('#script-type', me.$newDialog).val();
+          //me.createApp(appname, language, description, code, isPublic, tags, type);
+          me.newScript(type, name, language, description, isPublic, tags);
+          $(this).dialog('close');
+        }, 
+        "Cancel": function() {
+          $(this).dialog('close');
+        }
+        
+      },
       open: function(event, ui) {        
         $('.ui-widget-overlay').bind('click', function(){ me.$newDialog.dialog('close'); });
+        $('a.more-info-link', $(this)).click(function() {
+          $('.more-info', me.$newDialog).toggle();
+          if ($('.more-info', me.$newDialog).is(':visible')) {
+            $('a.more-info-link', me.$newDialog).text('Hide additional info..');
+          } else {
+            $('a.more-info-link', me.$newDialog).text('Show more info..');
+          }
+          return false;
+        });
       }
     });
-    $('li.script-type', me.$newDialog).click(function() {
+    /*$('li.script-type', me.$newDialog).click(function() {
       me.$newDialog.dialog('close');
-      me.createTab(null, null, $(this).attr('script-type'), null);
-    });
+      
+    });*/
     
     // get the tab template
     me.$tabTemplate = $('#workbench-content-template').template();
@@ -405,7 +438,7 @@ Workbench.prototype.resizeAll = function() {
     var $layout = $('.workbench-content-layout', $tab).layout();
     if ($layout) $layout.resizeAll();
   } else if (type == 'dataset') {
-    var $layout = $('.dataset-view-layout', $tab).layout();
+    var $layout = $('.dataset-view-layout', $tab).layout();createTab
     if ($layout) $layout.resizeAll();
   }
 }
@@ -420,17 +453,18 @@ Workbench.prototype.resizeEditor = function($tab) {
  * Builds tab content from the template for given application or dataset 
  */
 Workbench.prototype.makeTabContent = function(tabId, obj, type) {
+  var tabObj;
   if (type == 'analysis' || type == 'scraper') {
-    var tabObj = {
+    tabObj = {
         tabId: tabId,
         appName: obj?obj.name:'',
         appLang: obj?obj.language:'',
         appAuthor: obj?obj.user.username:'',
-        guid: obj?obj.guid:'',
+        guid: obj?obj.guid:''
     }
     return $.tmpl(this.$tabTemplate, tabObj);
   } else if (type == 'dataset') {
-    var tabObj = {
+    tabObj = {
         tabId: tabId,
         dsName: obj?obj.name:'',
         dsAuthor: obj?obj.user.username:'',
@@ -808,6 +842,9 @@ Workbench.prototype.execute = function(tabIndex) {
             }
           }
           
+          // switch to Viz. or Data tab to view the result
+          $('.app-editor-tabs', $tab).tabs('select', 1);
+          
         } else {
           console.debug(result);
           me.setStatus($tab, "error");
@@ -823,6 +860,8 @@ Workbench.prototype.execute = function(tabIndex) {
   });
   
 }
+
+
 
 /**
  * Saves the application code at the tab tabIndex
@@ -922,6 +961,59 @@ Workbench.prototype.cloneApp = function(tabIndex) {
     this.setCode(code, $newTab);
     $('.new-app-info .language-select', $newTab).val(lang?lang:'python');
   }
+}
+
+/**
+ * Creates new script. This function does 2 main things: save new script to bouncingdata then open it in script editor
+ * @param type
+ * @param name
+ * @param language
+ * @param description
+ * @param isPublic
+ * @param tags
+ * @param callback
+ */
+Workbench.prototype.newScript = function(type, name, language, description, isPublic, tags, callback) {
+  // 
+  var code = "";
+  var data = {
+    appname : name,
+    language : language,
+    description : description,
+    code : code,
+    isPublic : isPublic,
+    tags : tags,
+    type : type
+  };
+  
+  var me = this;
+  
+  $.ajax({
+    url: ctx + "/main/createapp",
+    data: data,
+    type: "post",
+    success: function(result) {
+      var app = result;
+      // open new tab with created app. object
+      me.createTab(app, app['name'], type, language);
+      
+      if (callback) callback();
+    },
+    error: function(result) {
+      
+    }
+  
+  });
+}
+
+
+/**
+ * Saves script code. This does not save script's metadata (like name, description, ...)
+ * @param scriptGuid the script guid
+ * @param code the code to save
+ */
+Workbench.prototype.saveScript = function(scriptGuid, code) {
+  
 }
 
 /**

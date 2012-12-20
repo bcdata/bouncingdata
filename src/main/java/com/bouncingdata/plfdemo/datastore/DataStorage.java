@@ -70,9 +70,15 @@ public interface DataStorage {
    * Finds the <code>User</code> by username.
    * @param username the username
    * @return <code>User</code> object, or null if not found
-   * @throws DataAccessException
    */
   public User findUserByUsername(String username);
+  
+  /**
+   * Finds the <code>User</code> by email. The email is unique in whole system.
+   * @param email the email
+   * @return<code>User</code> object, or null if no email found.
+   */
+  public User findUserByEmail(String email);
   
   /**
    * Gets the <code>ExecutionLog</code> detail by execution id.

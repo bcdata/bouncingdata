@@ -31,6 +31,7 @@ public class User implements UserDetails {
   private String username;
   private String firstName;
   private String lastName;
+  @Index(name="email_idx", unique="true")
   private String email;
   private String password;
   private boolean enabled;

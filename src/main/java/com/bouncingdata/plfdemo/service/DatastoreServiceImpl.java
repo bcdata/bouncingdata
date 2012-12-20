@@ -485,4 +485,14 @@ public class DatastoreServiceImpl implements DatastoreService {
     dataStorage.addDatasetToCollection(datasetId, collectionId);
   }
 
+  @Override
+  public User findUserByUsername(String username) {
+    return dataStorage.findUserByUsername(username);
+  }
+
+  @Override
+  public User findUserByEmail(String email) {
+    return dataStorage.findUserByEmail(email);
+  }
+
 }

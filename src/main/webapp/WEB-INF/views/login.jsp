@@ -8,6 +8,7 @@
   <link type="text/css" href="<c:url value="/resources/css/jquery-ui/smoothness/jquery-ui-1.8.20.custom.css" />" rel="stylesheet" />
   <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery-1.7.2.min.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery-ui-1.8.20.custom.min.js" />"></script>
+  <script type="text/javascript" src="<c:url value="/resources/js/bouncingdata/login.js" />"></script>
   <style>
     .error-block, .message-block-error {
       color: #ff0000;
@@ -20,39 +21,6 @@
       padding: 8px;  
     }
   </style>
-  <script type="text/javascript">
-  	$(function() {
-  	  $('#login-tabs').tabs();
-  	  $('input:button').button();
-      $('input:submit').button();
-      $('input:reset').button();
-      
-      var mode = '${mode}';
-      if (mode == "register") {
-        $('#login-tabs').tabs('select', 1);
-      } else {
-        $('#login-tabs').tabs('select', 0);
-      }
-      
-      $('#login-tabs').bind('tabsselect', function(event, ui) {
-        if (ui.index == 1) {
-          if ($('#register-msg')) {
-            $('#register-msg').hide();
-          } else if ($('#error-msg')) {
-            $('#error-msg').hide();
-          }
-        }
-      });
-      
-      $('#login-tabs').bind('tabsshow', function(event, ui) {
-        if (ui.index == 1) {
-          $('#reg-username').focus();
-        } else {
-          $('#username').focus();
-        }
-      });
-  	})
-  </script>
 </head>
 <body onload='document.f.j_username.focus();'>
   <div class="page" id="page">
@@ -95,7 +63,7 @@
           </div>
         </div>
         <div id="signup">
-          <h4>New account</h4>
+          <h4>Register new account</h4>
           <div class="message">
             <c:if test="${not empty regResult}">
               <div class="message-block" id="register-msg">
@@ -123,6 +91,10 @@
                 <label for='reg-password'>Password</label>
                 <input class="input-field" type='password' name='password' id='reg-password' maxlength="100"></input>
               </div>
+              <div>  
+                <label for='reg-password2'>Re-type Password</label>
+                <input class="input-field" type='password' name='password2' id='reg-password2' maxlength="100"></input>
+              </div>
               <div>
                 <label for='reg-email'>Email</label>
                 <input class="input-field" type='text' name='email' id='reg-email' maxlength="100"></input>
@@ -133,6 +105,20 @@
                 <input type="reset" name="reset" value="Reset"></input>
               </div>            
               <div class="clear"></div>
+            </form>
+          </div>
+        </div>
+        <div id="forgot-password" style="display: none;">
+          <h4>Reset your password</h4>
+          <div class="message">
+          
+          </div>
+          <div class="forgot-password-form">
+            <form action="" method="post">
+              <div>
+                <label for='user-email'>Please enter your registered email:</label>
+                <input class="input-field" type='text' name='user-email' id='user-email' maxlength="100"></input>
+              </div>
             </form>
           </div>
         </div>

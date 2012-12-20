@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.RegisterResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.service.DatastoreService;
+import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
 public class LoginController {
@@ -86,17 +87,47 @@ public class LoginController {
     result.setUsername(username);
     result.setEmail(email);
     model.addAttribute("mode", "register");
-    // validate 
-    if (username == null || username.length() < 4 
-        || password == null || password.length() < 6
-        || email == null) {
-      result.setMessage("Your input data is invalid. Please check and try again.");
+    
+    // validate inputs
+    boolean isValid = true;
+    StringBuilder errMsg = new StringBuilder();
+    if (username == null || username.length() < 4) {
+      errMsg.append("Username must be at least 4 characters.");
+      isValid = false;
+    }
+    
+    if (password == null || password.length() < 4) {
+      if (errMsg.length() > 0) errMsg.append("\n");
+      errMsg.append("Password must be at least 4 characters.");
+      isValid = false;
+    }
+    
+    if (email == null || !Utils.validate(email)) {
+      if (errMsg.length() > 0) errMsg.append("\n");
+      errMsg.append("Your email address is invalid.");
+      isValid = false;
+    }
+    
+    if (datastoreService.findUserByUsername(username) != null) {
+      if (errMsg.length() > 0) errMsg.append("\n");
+      errMsg.append("Username already exists.");
+      isValid = false;
+    }
+    
+    if (datastoreService.findUserByEmail(email) != null) {
+      if (errMsg.length() > 0) errMsg.append("\n");
+      errMsg.append("Email address already exists.");
+      isValid = false;
+    }
+    
+    if (!isValid) {
+      result.setMessage(errMsg.toString());
       result.setStatusCode(-1);     
       model.addAttribute("regResult", result);
       return "login";
     }
     
-    // do business logic to create account
+    // business logic to create account
     User user = new User();
     user.setUsername(username);
     user.setEmail(email);
@@ -112,9 +143,23 @@ public class LoginController {
     } catch (Exception e) {
       if (logger.isDebugEnabled()) logger.debug("Failed to create new user " + username, e);
       result.setStatusCode(-2);
-      result.setMessage(e.getMessage());
+      result.setMessage("Failed to register new user. Internal server error.");
       model.addAttribute("regResult", result);
     }
+    
+    return "login";
+  }
+  
+  @RequestMapping(value="/auth/resetpasswd", method = RequestMethod.POST)
+  public String resetPassword(@RequestParam(value="user-email", required=true) String email, ModelMap model) {
+    model.addAttribute("mode", "resetpasswd");
+    
+    // validate email
+    
+    // find email to determine user
+    
+    // send new password to email address
+    
     
     return "login";
   }

@@ -37,6 +37,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.BcDatastoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
+import com.bouncingdata.plfdemo.service.MailService;
 import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
@@ -53,6 +54,9 @@ public class PublicController {
   
   @Autowired
   private BcDatastoreService userDataService;
+  
+  @Autowired
+  private MailService mailService;
   
   @RequestMapping(value="/embed/{guid}")
   public String embedAnalysis(@PathVariable String guid, ModelMap model, HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException {
@@ -262,5 +266,10 @@ public class PublicController {
       return null;
     }
     
+  }
+  
+  @RequestMapping(value="/test", method = RequestMethod.GET)
+  public @ResponseBody void test() {
+    mailService.printConfiguration();
   }
 }

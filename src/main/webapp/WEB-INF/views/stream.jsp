@@ -2,10 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <script>
-  $(function() {
-    com.bouncingdata.ActivityStream.init();
-    com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
-  });
+  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
+  com.bouncingdata.ActivityStream.init();
 </script>
 <div id="main-content">
   <div class="right-content">
