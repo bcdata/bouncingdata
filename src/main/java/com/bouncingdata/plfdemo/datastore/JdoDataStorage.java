@@ -197,6 +197,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     }
   }
 
+  
   @Override
   public SearchResult search(String query) {
     PersistenceManager pm = getPersistenceManager();
@@ -255,6 +256,10 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
+  
+  
+  
+  
 
   @Override
   public void createUser(User user) {
