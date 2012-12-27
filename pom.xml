@@ -1,18 +1,18 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>dataprj.com.bouncingdata</groupId>
-  <artifactId>bouncingdata-minimal</artifactId>
+  <artifactId>bouncingdata</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>BouncingData Web Application</name>
   <url>http://bouncingdata.com</url>
-  
+
   <properties>
     <spring.version>3.1.0.RELEASE</spring.version>
   </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -20,21 +20,21 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>javax.servlet.jsp</groupId>
       <artifactId>jsp-api</artifactId>
       <version>2.1</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>javax.servlet.jsp.jstl</groupId>
       <artifactId>jstl-api</artifactId>
@@ -47,7 +47,7 @@
       <version>1.2</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Spring 3 dependencies -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -55,35 +55,35 @@
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
- 
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
- 
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework.webflow</groupId>
       <artifactId>spring-js</artifactId>
@@ -96,7 +96,7 @@
       <version>2.3.1.RELEASE</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Spring Security -->
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -104,28 +104,28 @@
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
- 
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
- 
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
       <version>${spring.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Apache Tiles -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
@@ -150,14 +150,14 @@
       <artifactId>tiles-servlet</artifactId>
       <version>2.2.2</version>
       <scope>provided</scope>
-    </dependency>        
+    </dependency>
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-template</artifactId>
       <version>2.2.2</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Datastore libraries -->
     <dependency>
       <groupId>mysql</groupId>
@@ -189,13 +189,9 @@
       <version>3.0.5</version>
       <scope>provided</scope>
     </dependency>
-    <!-- dependency>
-      <groupId>org.datanucleus</groupId>
-      <artifactId>datanucleus-enhancer</artifactId>
-      <version>3.0.1</version>
-      <scope>provided</scope>
-    </dependency-->
-  
+    <!-- dependency> <groupId>org.datanucleus</groupId> <artifactId>datanucleus-enhancer</artifactId> 
+      <version>3.0.1</version> <scope>provided</scope> </dependency -->
+
     <!-- Apache Commons -->
     <dependency>
       <groupId>commons-lang</groupId>
@@ -227,16 +223,34 @@
       <version>1.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Jackson JSON Processor -->
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
       <version>1.8.1</version>
       <scope>provided</scope>
-    </dependency>    
+    </dependency>
+
+    <!-- hibernate -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>4.1.4.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search</artifactId>
+      <version>4.1.1.Final</version>
+    </dependency>
+    <!-- SQLite JDBC library -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.7.2</version>
+    </dependency>
     
-    <!-- Logging framework -->    
+    <!-- Logging framework -->
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -272,7 +286,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>snapshot</finalName>
+    <finalName>minimal</finalName>
     <resources>
       <resource>
         <directory>${basedir}/src/main/java</directory>
@@ -315,7 +329,8 @@
             </goals>
           </execution>
         </executions>
-        <!-- Force the Datanucleus plugin to use datanucleus-core-3.0.5 instead of the newest version  -->
+        <!-- Force the Datanucleus plugin to use datanucleus-core-3.0.5 instead 
+          of the newest version -->
         <dependencies>
           <dependency>
             <groupId>org.datanucleus</groupId>
@@ -324,7 +339,7 @@
           </dependency>
         </dependencies>
       </plugin>
-      
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>tomcat-maven-plugin</artifactId>
@@ -334,7 +349,7 @@
           <server>TomcatServer</server>
           <path>/bouncingdata</path>
         </configuration>
-      </plugin>	
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -343,10 +358,10 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
-      </plugin>  
+      </plugin>
     </plugins>
   </build>
-  
+
   <repositories>
     <repository>
       <id>apache</id>
