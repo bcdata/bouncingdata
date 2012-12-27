@@ -17,12 +17,21 @@ function Workbench() {
   
   // use to name untitled tabs
   this.untitledCounter = 0;*/
+  this.callback = null;
+
 }
+
+Workbench.prototype.VIEW_CODE = 0;
+Workbench.prototype.VIEW_RESULT = 1;
+
+Workbench.prototype.STATUS_CODING = 0;
+Workbench.prototype.STATUS_VIZING = 1;
+Workbench.prototype.STATUS_BACK2CODE = 2;
 
 /**
  * Initializes workbench: init. variables, bind handlers, load last session
  */
-Workbench.prototype.init = function(callback) {
+Workbench.prototype.init = function() {
   console.info('Initializing Workbench..');
   var me = this;
   
@@ -33,16 +42,16 @@ Workbench.prototype.init = function(callback) {
   this.tabsInfo = {};
   
   // key: index (0, 1, 2, ...), value: guid = app guid, type = ?, jqconsole, if the tab belongs to new app., value = null 
+  // status: coding = 0, vizing = 1, back-to-code = 2
+  // codechanged = true/false represents editor's state
   this.tabsIndex = [];
       
   // use to name untitled tabs
   this.untitledCounter = 0;
   
   $(function() {
-    $('#main-content input:button').button();
-    $('#main-content input:submit').button();
-    
-    $('#app-actions-toolbar .app-action').button();
+    $('#main-content input:button, #main-content input:submit, ' +
+        '#main-content button, #app-actions-toolbar .app-action').button();
     
     /**
      * Initilizes popup dialogs
@@ -91,117 +100,9 @@ Workbench.prototype.init = function(callback) {
       }
     });
     
-    me.$uploadDataDialog = $('.workbench-container #upload-data-dialog').dialog({
-      autoOpen: false,
-      height: 180,
-      width: 400,
-      modal: true,
-      resizable: false,
-      buttons: {
-        "Upload": function() {
-          console.debug("Upload dataset file...");
-          var $form = $('form#file-upload-form', $(this));
-          //var file = $form.prop('value');
-          var file = $('#file', $form).val();
-          if (!file) {
-            return;
-          }
-          // determine file type
-          if (file.indexOf('/') > -1) file = file.substring(file.lastIndexOf('/') + 1);
-          else if (file.indexOf('\\') > -1) file = file.substring(file.lastIndexOf('\\') + 1);
-          
-          if (file.indexOf('.') < 0) {
-            $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
-            return;
-          }
-          
-          var extension = file.substring(file.lastIndexOf('.') + 1);
-          if ($.inArray(extension, ['xls', 'xlsx', 'csv', 'txt']) < 0) {
-            $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
-            return;
-          }
-          
-          $('.upload-in-progress', $form).show();
-          $('.upload-status', $form).text('Uploading in progress').show();
-          $form.ajaxSubmit({
-            url: ctx + '/dataset/up',
-            type: 'post',
-            data: {
-              type: extension
-            },
-            clearForm: true,
-            resetForm: true,
-            success: function(res) {
-              $('.upload-in-progress', $form).hide();
-              if (res < 0) {
-                $('.upload-status', $form).text('Upload failed! Your file may not valid.');
-                return;
-              }
-              console.debug("Uploaded successfully!");
-              $('.upload-status', $form).text(res +  ' bytes uploaded successfully');
-            }
-          });
-        },
-        "Cancel": function() {
-          $(this).dialog('close');
-        }
-      },
-      open: function(event, ui) {
-        $('.upload-status', me.$uploadDataDialog).text('Maximum file size is 10MB').show();
-        $('.ui-widget-overlay').bind('click', function(){ me.$uploadDataDialog.dialog('close'); })
-      }
-    });
-    
-    me.$newDialog = $('.workbench-container #new-dialog').dialog({
-      autoOpen: false,
-      width: 480,
-      modal: true,
-      resizable: false,
-      buttons: {
-        "Create": function() {
-          // validate
-          
-          // create new analysis: save then open new tab
-          
-          
-          // open new tab
-          // var index = me.createTab(null, null, 'analysis', null);
-          var name = $('#script-name', me.$newDialog).val();
-          var language = $('#script-language', me.$newDialog).val();
-          var description = $('#script-description', me.$newDialog).val();
-          var isPublic = $('#script-privacy-public', me.$newDialog).prop('checked');
-          var code = "";
-          var tags = $('#script-tags', me.$newDialog).val();
-          var type = $('#script-type', me.$newDialog).val();
-          //me.createApp(appname, language, description, code, isPublic, tags, type);
-          me.newScript(type, name, language, description, isPublic, tags);
-          $(this).dialog('close');
-        }, 
-        "Cancel": function() {
-          $(this).dialog('close');
-        }
-        
-      },
-      open: function(event, ui) {        
-        $('.ui-widget-overlay').bind('click', function(){ me.$newDialog.dialog('close'); });
-        $('a.more-info-link', $(this)).click(function() {
-          $('.more-info', me.$newDialog).toggle();
-          if ($('.more-info', me.$newDialog).is(':visible')) {
-            $('a.more-info-link', me.$newDialog).text('Hide additional info..');
-          } else {
-            $('a.more-info-link', me.$newDialog).text('Show more info..');
-          }
-          return false;
-        });
-      }
-    });
-    /*$('li.script-type', me.$newDialog).click(function() {
-      me.$newDialog.dialog('close');
-      
-    });*/
-    
     // get the tab template
-    me.$tabTemplate = $('#workbench-content-template').template();
+    //me.$tabTemplate = $('#workbench-content-template').template();
+    me.$tabTemplate = $('#workbench-flow-template').template();
     me.$dsTemplate = $('#data-view-template').template();
     
     /**
@@ -211,6 +112,7 @@ Workbench.prototype.init = function(callback) {
       tabTemplate: "<li class='tab-header workbench-tab-header'><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' title='Close this tab'>Remove Tab</span></li>",
       
       add: function(event, ui) {
+
         // trick here: select before finish the adding, by this way the layout achieves the full width
         var index = ui.index;
         me.tabsIndex[index].loaded = false;
@@ -222,7 +124,8 @@ Workbench.prototype.init = function(callback) {
           var app = null;
           if (guid) app = me.tabsInfo[guid].app;
           var $tabContent = me.makeTabContent(ui.panel.id, app, type);
-          $(ui.panel).append($tabContent).addClass('workbench-tab-panel');
+          $(ui.panel).addClass('workbench-tab-panel')
+              .append($tabContent);
           
           // complete UI & functionalities for this tab
           me.processTab(index, $tabContent);
@@ -243,7 +146,6 @@ Workbench.prototype.init = function(callback) {
         //me.updateActionStatus(guid, !guid?null:(me.tabsInfo[guid].app.user.username == com.bouncingdata.Main.username));
         me.updateActionStatus(app);
       }
-
     });
     
     // handles double click on tab bar
@@ -345,27 +247,46 @@ Workbench.prototype.init = function(callback) {
         }
       }
     });
-    
+
+    com.bouncingdata.Nav.setSelected('page', 'create');
+
     //
     me.loadLastSession();
-    
-    com.bouncingdata.Nav.setSelected('page', 'create');
-    if(callback) callback();
-    
+
+    // check callback
+    if(me.callback) me.callback();
+
   });
 }
 
 /**
- * Create a new tab to view application workbench or dataset
+ * Switches between views in the flow of given tab.
+ * @param viewName name of view, Workbench.VIEW_CODE or Workbench.VIEW_RESULT
+ * @param $tab the container tab
  */
-Workbench.prototype.createTab = function(obj, tabName, type, lang) {
+Workbench.prototype.showView = function(viewName, $tab) {
+  if (viewName == this.VIEW_RESULT) {
+    $('.workbench-result .result-tabs', $tab).tabs();
+    $('.workbench-result', $tab).css('left', 0);
+    $('.workbench-editor', $tab).css('left', '-14000px');
+
+  } else if (viewName == this.VIEW_CODE) {
+    $('.workbench-editor', $tab).css('left', 0);
+    $('.workbench-result', $tab).css('left', '-14000px');
+  }
+}
+
+/**
+ * Creates a new tab to view application workbench or dataset
+ */
+Workbench.prototype.createTab = function(obj, tabName, type, lang, status) {
   if (type == 'dataset') return this.openDataset(obj, tabName);
-  else return this.openApp(obj, tabName, type, lang);
+  else return this.openApp(obj, tabName, type, lang, status);
 } 
 
-Workbench.prototype.openApp = function(app, tabName, type, lang) {
+Workbench.prototype.openApp = function(app, tabName, type, lang, status) {
   var index = this.getNumberOfTabs();
-  this.tabsIndex[index] = {type: type};
+  this.tabsIndex[index] = {'type': type, 'status': status};
   if (!app) {
     this.tabsCounter++;
     this.untitledCounter++;
@@ -484,18 +405,17 @@ Workbench.prototype.makeTabContent = function(tabId, obj, type) {
  * Some magic works to render tab content & function correctly
  */
 Workbench.prototype.processTab = function(tabIndex, $tabContent) {
-  
+  var status = this.tabsIndex[tabIndex].status;
   var type = this.tabsIndex[tabIndex].type;
   var lang = this.tabsIndex[tabIndex].lang;
-  var $tab = $tabContent.parent();
-  var tabId = $tab.attr('id');
+  var $parentTab = $tabContent.parent();
+  var tabId = $parentTab.attr('id');
   var guid = this.tabsIndex[tabIndex].guid;
   var me = this;
   
   //buttons
-  $('input:button', $tabContent).button();
-  $('input:submit', $tabContent).button();
-  
+  $('input:button, input:submit, button', $tabContent).button();
+
   if (type == 'dataset') {
     
     // initializes jQuery Layout
@@ -573,117 +493,123 @@ Workbench.prototype.processTab = function(tabIndex, $tabContent) {
     this.tabsIndex[tabIndex].loaded = true;
     return;
   }
-    
-  
-  // initializes the inner tabs: code, visualizations, data
-  var $tabs = $('.app-editor-tabs', $tab).tabs();
-  if (type == "scraper") {   
-    $tabs.tabs("select", 0);
-    $tabs.tabs("disable", 1);
-  }
+
+  var $editorPanel = $('.workbench-editor', $tabContent);
+  var $resultPanel = $('.workbench-result', $tabContent);
 
   this.tabsIndex[tabIndex].dsloaded = false;
   
   // init console
   //var jqConsole = $('#app-execution-logs-' + tabId + ' .console', $tab).jqconsole('Welcome to our console\n', Utils.getConsoleCaret('python'));
-  var jqConsole = $('#execution-logs-' + tabId + ' .console', $tab).jqconsole('Welcome to our console\n', Utils.getConsoleCaret('python'));
+  var jqConsole = $('.execution-logs .console', $editorPanel).jqconsole('Welcome to our console\n', Utils.getConsoleCaret('python'));
   this.tabsIndex[tabIndex].jqConsole = jqConsole;
   this.startPrompt(jqConsole, 'python');
-  
-  // init app. actions
-  var app;
-  if (guid) {
-    $('.app-info', $tab).show();
-    $('.new-app-info', $tab).hide();
-    app = this.tabsInfo[guid].app;    
-  } else {
-    $('.app-info', $tab).hide();
-    $('.new-app-info', $tab).show();
-  }
-    
-  /*var $appCodeLayoutContainer = $('.app-code-layout', $tab);
-  $appCodeLayoutContainer.layout({
-    center__paneSelector: '#app-code-layout-center-' + tabId,
-    east__paneSelector: '#app-code-layout-east-' + tabId,
-    east__size: 350,
-    east__initClosed: true,
-    applyDefaultStyles: true,
-    center__onresize: function() {
-      com.bouncingdata.Workbench.resizeEditor($tab);
-    }
-  });*/
-  
+
   // initialize ace editor
-  var editorDom = $('.app-code-editor .code-editor', $tab)[0];
+  var editorDom = $('.code-editor', $editorPanel)[0];
   var editor = ace.edit(editorDom);
   editor.getSession().setMode('ace/mode/python');
+
+
+  /**
+   *
+   */
+  var app;
+  if (guid) {
+    app = this.tabsInfo[guid].app;
+  }
   
+  $('.console-actions .clear-console', $editorPanel).click(function() {
+    var jqconsole = me.tabsIndex[tabIndex].jqConsole;
+    jqconsole.Reset();
+    me.startPrompt(jqconsole, 'python');
+    return false;
+  });
+
+  $('.app-execute-button', $editorPanel).click(function() {
+    me.execute(tabIndex);
+  });
+
+  $('.app-back-button', $resultPanel).click(function() {
+    me.showView(me.VIEW_CODE, $parentTab);
+  });
+
+  $('.app-post-button', $resultPanel).click(function() {
+    var $dashboard = $("#viz-dashboard-" + tabId, $resultPanel);
+    if (com.bouncingdata.Dashboard.size($dashboard) <= 0) {
+      console.debug("Dashboard is empty!");
+      return;
+    }
+    com.bouncingdata.Main.$publishDialog['object'] = app;
+    com.bouncingdata.Main.$publishDialog.dialog("open");
+  });
+
+  if (status == me.STATUS_CODING) {
+    me.showView(me.VIEW_CODE, $parentTab);
+  } else if (status == me.STATUS_VIZING) {
+    me.showView(me.VIEW_RESULT, $parentTab);
+  }
+
+  var $tabs = $('.result-tabs', $resultPanel).tabs();
   var url = type=="analysis"?(ctx + "/app/a/" + guid):type=="scraper"?(ctx + "/app/scr/" + guid):null;
   // Retrieve app. details
   if (app) {
     $(function() {
-      me.setStatus($tab, "loading");
+      me.setStatus($parentTab, "loading");
       console.info('Retrieving application details...');
       $.ajax({
         url: url,
         success: function(result) {
           console.debug(result);
-          /*var $codeText = $("<pre></pre>");
-          $codeText.text(result.code).appendTo($('.app-output-code .code-block', $tab));*/
-          
-          
-          me.setCode(result.code, $tab);
+          me.setCode(result.code, $parentTab);
+
+          $('.code-block pre', $resultPanel).text(result.code);
+          SyntaxHighlighter.highlight();
+
           if (type == "analysis") {
             //if ($tabs.tabs("option", "select") == 1 && !$tabs['dbloaded']) {
-              me.loadDashboard(result['visualizations'], result['dashboard'], $tab, app);
+            me.loadDashboard(result['visualizations'], result['dashboard'], $parentTab, app);
             //} else {
             //  $tab['dbloaded'] = false;
-            //}       
-              
+            //}
+
             if ((result['datasets'] && result['datasets'].length > 0) || (result['attachments'] && result['attachments'].length > 0)) {
-              $('#' + $tab.prop('id') + '-data .no-data', $tab).remove();
+              $('#' + $parentTab.prop('id') + '-data .no-data', $parentTab).remove();
             }
             $tabs.bind('tabsselect', function(event, ui) {
               //var tabIndex = me.getTabIndex($tab.prop('id'));
               //if (ui.index == 2 && !me.tabsIndex[tabIndex].dsloaded) {
-              if (ui.index == 2 && !$tab.dsloaded) {
-                me.loadDatasets(result['datasets'], $tab);
+              if (ui.index == 1 && !$parentTab.dsloaded) {
+                me.loadDatasets(result['datasets'], $parentTab);
                 //me.renderAttachments(result['attachments'], $('#' + $tab.attr('id') + '-data', $tab));
               }
             });
-            
-            me.renderAttachments(result['attachments'], $('#' + $tab.attr('id') + '-data', $tab));
-            
+
+            me.renderAttachments(result['attachments'], $('#' + $parentTab.attr('id') + '-data', $parentTab));
+
           } else if (type == "scraper") {
-            // 
+            //
             $tabs.bind('tabsselect', function(event, ui) {
-              if (ui.index == 2 && !$tab.dsloaded) {
-                me.loadDatasets(result['datasets'], $tab);
+              if (ui.index == 1 && !$parentTab.dsloaded) {
+                me.loadDatasets(result['datasets'], $parentTab);
               }
-            });  
+            });
           }
-          
-          me.setStatus($tab, "");
+
+          me.setStatus($parentTab, "");
         },
         error: function(msg) {
           console.debug(msg);
-          me.setStatus($tab, "error");
+          me.setStatus($parentTab, "error");
+          alert('Cannot load this analysis/scraper\nError message: ' + msg);
         }
       });
     });
   } else {
-    me.setLanguage(lang, $tab);
-    me.setCode(lang=='python'?'import datastore\n':'', $tab);
+    me.setLanguage(lang, $parentTab);
+    me.setCode(lang=='python'?'import datastore\n':'', $parentTab);
   }
-  
-  $('.console-actions .clear-console', $tab).click(function() {
-    var index = me.getSelectedIndex();
-    var jqconsole = me.tabsIndex[index].jqConsole;
-    jqconsole.Reset();
-    me.startPrompt(jqconsole, 'python');
-    return false;
-  });
-  
+
   this.tabsIndex[tabIndex].loaded = true;
 }
 
@@ -694,7 +620,7 @@ Workbench.prototype.loadLastSession = function() {
   var session = com.bouncingdata.Main.workbenchSession;
   if ($.isEmptyObject(session) || session["tabsIndex"].length == 0) {
     // create an empty tab
-    this.createTab(null, null, 'analysis', 'python');
+    //this.createTab(null, null, 'analysis', 'python');
     return;
   }
     
@@ -740,6 +666,8 @@ Workbench.prototype.loadLastSession = function() {
  */
 Workbench.prototype.saveSession = function() {
   // save to workbenchSession object of com.bouncingdata.Main
+  if (this.tabsCounter < 1) return;
+
   for (i in this.tabsIndex) {
     if (!this.tabsIndex[i].guid) {
       this.tabsIndex[i].code = this.getCode(this.getTabContainer(i));
@@ -843,8 +771,9 @@ Workbench.prototype.execute = function(tabIndex) {
           }
           
           // switch to Viz. or Data tab to view the result
-          $('.app-editor-tabs', $tab).tabs('select', 1);
-          
+          //$('.app-editor-tabs', $tab).tabs('select', 1);
+          me.showView(me.VIEW_RESULT, $tab);
+
         } else {
           console.debug(result);
           me.setStatus($tab, "error");
@@ -995,7 +924,7 @@ Workbench.prototype.newScript = function(type, name, language, description, isPu
     success: function(result) {
       var app = result;
       // open new tab with created app. object
-      me.createTab(app, app['name'], type, language);
+      me.createTab(app, app['name'], type, language, 0);
       
       if (callback) callback();
     },
@@ -1008,12 +937,17 @@ Workbench.prototype.newScript = function(type, name, language, description, isPu
 
 
 /**
- * Saves script code. This does not save script's metadata (like name, description, ...)
- * @param scriptGuid the script guid
- * @param code the code to save
+ * Auto. save current script code. This does not save script's metadata (like name, description, ...)
  */
-Workbench.prototype.saveScript = function(scriptGuid, code) {
-  
+Workbench.prototype.saveScript = function() {
+  // check status of current script editor
+  var currentIndex = this.getSelectedIndex();
+  var $editor = $();
+
+  if (this.tabsIndex[currentIndex]['codechanged']) {
+    // send update to server
+
+  }
 }
 
 /**
@@ -1082,13 +1016,13 @@ Workbench.prototype.bindAppToTab = function(index, app) {
 }
 
 Workbench.prototype.setCode = function(code, $tab) {
-  var editorDom = $('.app-code-editor .code-editor', $tab)[0];
+  var editorDom = $('.workbench-editor .code-editor', $tab)[0];
   var editor = ace.edit(editorDom);
   editor.getSession().getDocument().setValue(code);
 }
 
 Workbench.prototype.getCode = function($tab) {
-  var editorDom = $('.app-code-editor .code-editor', $tab)[0];
+  var editorDom = $('.workbench-editor .code-editor', $tab)[0];
   var editor = ace.edit(editorDom);
   return editor.getSession().getDocument().getValue();
 }
@@ -1449,4 +1383,50 @@ Workbench.prototype.getTabIndex = function(tabId) {
   return $("li.tab-header", this.$tabs).index($("li:has(a[href='#" + tabId +"'])"));
 }
 
+Workbench.prototype.uploadDataset = function($uploadDataDialog) {
+  console.debug("Upload dataset file...");
+  var $form = $('form#file-upload-form', $uploadDataDialog);
+  //var file = $form.prop('value');
+  var file = $('#file', $form).val();
+  if (!file) {
+    return;
+  }
+  // determine file type
+  if (file.indexOf('/') > -1) file = file.substring(file.lastIndexOf('/') + 1);
+  else if (file.indexOf('\\') > -1) file = file.substring(file.lastIndexOf('\\') + 1);
+
+  if (file.indexOf('.') < 0) {
+    $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
+    return;
+  }
+
+  var extension = file.substring(file.lastIndexOf('.') + 1);
+  if ($.inArray(extension, ['xls', 'xlsx', 'csv', 'txt']) < 0) {
+    $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
+    return;
+  }
+
+  $('.upload-in-progress', $form).show();
+  $('.upload-status', $form).text('Uploading in progress').show();
+  $form.ajaxSubmit({
+    url: ctx + '/dataset/up',
+    type: 'post',
+    data: {
+      type: extension
+    },
+    clearForm: true,
+    resetForm: true,
+    success: function(res) {
+      $('.upload-in-progress', $form).hide();
+      if (res < 0) {
+        $('.upload-status', $form).text('Upload failed! Your file may not valid.');
+        return;
+      }
+      console.debug("Uploaded successfully!");
+      $('.upload-status', $form).text(res +  ' bytes uploaded successfully');
+    }
+  });
+}
+
 com.bouncingdata.Workbench = new Workbench();
+var ctx = com.bouncingdata.Main.ctx;

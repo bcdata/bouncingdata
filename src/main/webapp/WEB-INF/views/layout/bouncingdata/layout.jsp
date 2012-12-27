@@ -85,6 +85,9 @@
   <div id="ajaxLoadingMessage">
     <span class="ajaxLoadingMessage">Loading...</span>
   </div>
+  <div class="popup-container">
+    <tiles:insertAttribute name="popup-container" />
+  </div>
   <a href="#" id="hiddenLinkForAjax" style="display: none;"></a> 
 </body>
 </html>

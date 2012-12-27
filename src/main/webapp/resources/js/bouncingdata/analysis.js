@@ -161,6 +161,14 @@ Analysis.prototype.init = function(anls) {
       com.bouncingdata.Nav.openWorkbench();
     });
   }
+
+  var $publish = $('.anls-action-links a#anls-publish-button');
+  if ($publish.length > 0) {
+    $publish.click(function() {
+      com.bouncingdata.Main.$publishDialog['object'] = anls;
+      com.bouncingdata.Main.$publishDialog.dialog("open");
+    });
+  }
   
   $('#anls-code #code-block pre').text(anls["code"]);
   SyntaxHighlighter.highlight();

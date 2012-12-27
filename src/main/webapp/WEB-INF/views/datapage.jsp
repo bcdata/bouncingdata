@@ -59,7 +59,6 @@
   </div>
   <div class="center-content">
     <div class="center-content-wrapper">
-      <div class="top-rule"></div>
       <div class="dataset-header header">
         <div class="dataset-title main-title"><h2>${dataset.name}</h2></div>
         <!-- div class="dataset-vote">

@@ -20,12 +20,12 @@
   <div class="right-content"></div>
   <div class="center-content">
     <div class="center-content-wrapper">
-      <div class="connect-page-tabs">
+      <div class="connect-page-tabs ui-tabs">
         <ul>
           <li><a href="#find-friends">Find friends</a></li>
           <li><a href="#connections">Your connections</a></li>
         </ul>
-        <div class="find-friends" id="find-friends">
+        <div class="find-friends ui-tabs-hide" id="find-friends">
           <form class="search-form">
             <label for="friend-name">Your friend name</label>
             <input id="friend-name" type="text" maxlength="100" />
@@ -36,7 +36,7 @@
             <span>No result here.</span>
           </div>
         </div>
-        <div class="connections" id="connections">
+        <div class="connections ui-tabs-hide" id="connections">
           <div class="followings">
             <h3>You are following</h3>
             <div class="following-list" id="following-list">

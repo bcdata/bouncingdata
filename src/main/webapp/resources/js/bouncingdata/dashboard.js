@@ -291,6 +291,7 @@ Dashboard.prototype.refresh = function() {
   
 }
 
+
 /**
  * Post dashboard status to server
  */
@@ -427,6 +428,10 @@ Dashboard.prototype.showSnapLines = function($viz, $container, isResized) {
 Dashboard.prototype.hideSnapLines = function($container) {
   var $ruler = $('.dashboard-ruler', $container.parent());
   $('.snap-line', $ruler).css('opacity', 0);
+}
+
+Dashboard.prototype.size = function($container) {
+  return $('.viz-container', $container).length;
 }
 
 com.bouncingdata.Dashboard = new Dashboard();

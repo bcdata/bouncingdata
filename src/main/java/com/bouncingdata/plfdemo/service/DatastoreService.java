@@ -292,4 +292,6 @@ public interface DatastoreService {
   public void deleteUserCollections(int userId);
   
   public void addDatasetToCollection(int datasetId, int collectionId);
+
+  void createAnalysisPost(User user, Analysis analysis, String message) throws Exception;
 }

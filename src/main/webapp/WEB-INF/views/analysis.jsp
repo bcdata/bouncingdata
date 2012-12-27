@@ -49,7 +49,7 @@
         <strong>Analysis: </strong><span>${anls.name }</span>
       </p>
       <p class="line-item">
-        <strong>Author: </strong><span>${anls.user.username }</span>
+        <strong>Author: </strong><a href="javascript:void(0)"><span>${anls.user.username }</span></a>
       </p>
       <p class="line-item">
         <strong>Description: </strong><span>${anls.description }</span>
@@ -90,6 +90,9 @@
           <a href="javascript:void(0)" class="anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
             <a href="javascript:void(0)" class="anls-edit-button" id="anls-edit-button" title="Edit this analysis in your workbench">Edit</a>
+          </c:if>&nbsp;&nbsp;
+          <c:if test="${isOwner }">
+            <a href="javascript:void(0)" class="anls-publish-button" id="anls-publish-button" title="Publish this analysis">Publish</a>
           </c:if>
         </div>
         <div class="embedded-link" id="embedded-link" style="display: none;">

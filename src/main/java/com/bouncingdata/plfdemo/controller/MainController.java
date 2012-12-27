@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.ExecutionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.SearchResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
@@ -261,6 +262,15 @@ public class MainController {
       logger.debug("Failed to execute browser search with query: " + query, e);
     }
     return result;
+  }
+  
+  @RequestMapping(value="/publish", method = RequestMethod.POST)
+  public @ResponseBody ActionResult publish(@RequestParam(value="guid", required=true) String guid, @RequestParam(value="message", required=true) String message, Principal principal) throws Exception {
+    User user = (User) ((Authentication)principal).getPrincipal();
+    Analysis analysis = datastoreService.getAnalysisByGuid(guid);
+    if (analysis == null) return new ActionResult(-1, "Analysis not found");
+    datastoreService.createAnalysisPost(user, analysis, message);
+    return new ActionResult(0, "OK");
   }
     
 }

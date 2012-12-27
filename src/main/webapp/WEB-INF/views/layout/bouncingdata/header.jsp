@@ -17,9 +17,11 @@
   </h2>
   <div class="search-container">
     <form id="search-form" class="search-form" method="get">
-      <input type="text" class="search-input" id="query" name="query" />
+      <div class="search-input-wrapper">
+        <input type="text" class="search-input" id="query" name="query" />
+      </div>
       <input type="hidden" name="criteria" value="global" id="criteria" />
-      <input type="submit" value="Search" id="search-submit" />
+      <button type="submit" id="search-submit">Search</button>
     </form>
     <div class="clear"></div>
   </div>
@@ -110,6 +112,87 @@
       </div>    
     </div>
   </script>
+
+  <script id="workbench-flow-template" type="text/x-jquery-tmpl">
+    <div class="workbench-flow">
+      <div class="app-info">
+        <div class='app-title'><label style='font-weight: bold;'>Name: </label>\${appName}</div>
+        <div class='app-language'><label style='font-weight: bold;'>Language: </label>\${appLang}</div>
+      </div>
+      <div class="workbench-flow-nav">
+        <div class="flow-nav-item">
+          <a href="javascript:void(0)" class="flow-nav-editor">Code</a>
+        </div>
+        <div class="flow-nav-item">
+          <a href="javascript:void(0)" class="flow-nav-viz">Visualization</a>
+        </div>
+      </div>
+      <div class="workbench-flow-content">
+        <div class="workbench-editor">
+          <div class="app-actions">
+            <button id="app-execute-button-\${tabId}" class="app-action-button app-execute-button" title="Execute">Execute</button>
+          </div>
+          <div class="app-status">
+            <img id="ajax-loading" width="20px" height="20px" src="<c:url value="/resources/images/ajax-loader.gif" />" style="opacity: 0;"  />
+            <span id="ajax-message" style="color: Green; font-style: italic;"></span>
+            <div class="saving-status">*</div>
+          </div>
+          <div class="code-editor-wrapper">
+            <div>
+              <div id="code-editor-\${tabId}" class="code-editor"></div>
+            </div>
+          </div>
+          <div class="execution-logs-wrapper">
+            <div id="execution-logs-\${tabId}" class="execution-logs">
+              <div class="console prompt" style="display: block;"></div>
+              <div class="console-actions">
+                <input class="clear-console" type="button" value="Clear console" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="workbench-result">
+          <div class="app-actions">
+            <button id="app-post-button-\${tabId}" class="app-action-button app-post-button" title="Post">Publish</button>
+            <button id="app-back-button-\${tabId}" class="app-action-button app-back-button" title="Back">Back</button>
+          </div>
+          <div class="result-tabs output-tabs" id="\${tabId}-result-tabs">
+            <ul>
+              <li><a href="#\${tabId}-viz">Visualization</a></li>
+              <li><a href="#\${tabId}-data">Data</a></li>
+              <li><a href="#\${tabId}-code">Code</a></li>
+            </ul>
+            <div class="clear"></div>
+            <div class="result-tab-viz ui-tabs-hide" id="\${tabId}-viz">
+              <div><strong>Visualization Dashboard.</strong></div><br />
+                <div class="viz-wrapper">
+                  <div class="dashboard-ruler">
+                    <div class="dashboard-ruler-left ruler"></div>
+                    <div class="dashboard-ruler-top ruler"></div>
+                    <div class="dashboard-ruler-right ruler"></div>
+                    <div class="dashboard-ruler-bottom ruler"></div>
+                    <div class="snap-line-left snap-line"></div>
+                    <div class="snap-line-top snap-line"></div>
+                    <div class="snap-line-right snap-line"></div>
+                    <div class="snap-line-bottom snap-line"></div>
+                  </div>
+                  <div id="dashboard-wrapper-\${tabId}" class="dashboard-wrapper" style="width: 800px;position: absolute; visibility: hidden; height: 14000px;"></div>
+                  <div class="viz-dashboard" id="viz-dashboard-\${tabId}"></div>
+              </div>
+            </div>
+            <div class="result-tab-code ui-tabs-hide" id="\${tabId}-code">
+              <div class="code-block">
+                <pre class="brush: py"></pre>
+              </div>
+            </div>
+            <div class="result-tab-data ui-tabs-hide" id="\${tabId}-data">
+              <span class="no-data">No data</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </script>
   
   <script id="workbench-content-template" type="text/x-jquery-tmpl">
     <div class="workbench-ide-content">
@@ -129,15 +212,21 @@
           <img id="ajax-loading" width="20px" height="20px" src="<c:url value="/resources/images/ajax-loader.gif" />" style="opacity: 0;"  />
           <span id="ajax-message" style="color: Green; font-style: italic;"></span>
         </div>
+
+        <div class="app-actions">
+          <button id="app-execute-button-\${tabId}" class="app-action-button app-execute-button" title="Execute">Execute</button>
+          <button id="app-post-button-\${tabId}" class="app-action-button app-post-button" title="Post">Post</button>
+          <button id="app-back-to-code-button-\${tabId}" class="app-action-button app-back-to-code-button" title="Back">Back</button>
+        </div>
         <div class="clear"></div>
-        <div class="app-editor-container app-editor-tabs">
+        <div class="app-editor-container app-editor-tabs ui-tabs">
           <ul>
             <li><a href="#\${tabId}-code">Code</a></li>
             <li><a href="#\${tabId}-viz">Visualization</a></li>
             <li><a href="#\${tabId}-data">Data</a></li>
           </ul>
           
-          <div class="app-code" id="\${tabId}-code">
+          <div class="app-code ui-tabs-hide" id="\${tabId}-code">
             <div class="app-code-editor">
               <div>
                 <div id="code-editor-\${tabId}" class="code-editor"></div>
@@ -152,7 +241,7 @@
               </div>
             </div>
           </div>
-          <div class="app-viz" id="\${tabId}-viz">
+          <div class="app-viz ui-tabs-hide" id="\${tabId}-viz">
             <div><strong>Visualization Dashboard.</strong></div><br />
             <div class="app-viz-dashboard">
               <div class="dashboard-ruler">
@@ -169,7 +258,7 @@
               <div class="viz-dashboard" id="viz-dashboard-\${tabId}"></div>
             </div>
           </div>
-          <div class="app-data" id="\${tabId}-data">
+          <div class="app-data ui-tabs-hide" id="\${tabId}-data">
             <span class="no-data">No data</span>
           </div>
         </div>

@@ -28,6 +28,7 @@
     <put-attribute name="header-content" value="/WEB-INF/views/layout/bouncingdata/header.jsp" />
     <put-attribute name="navigation" value="/WEB-INF/views/layout/bouncingdata/nav.jsp"></put-attribute>
     <put-attribute name="footer-content" value="/WEB-INF/views/layout/bouncingdata/footer.jsp" />
+    <put-attribute name="popup-container" value="/WEB-INF/views/popup-container.jsp" />
   </definition>
   
   <definition name="connect" extends="based-layout">

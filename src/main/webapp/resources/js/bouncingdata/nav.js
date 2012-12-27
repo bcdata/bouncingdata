@@ -3,28 +3,70 @@ function Nav() {
 }
 
 Nav.prototype.init = function() {
-  $('#page>.main-container>.main-navigation .nav-item').each(function() {
-    var $form = $('form', this);
-    var $link = $('a.nav-item-link', this);
-    
+  var $mainNav = $('#page>.main-container>.main-navigation');
+
+  // binds Ajax actions, history
+  this.bindAjaxActions();
+
+  // manage 'Create' sub-menu
+  var $createPopup = $('.nav-hidden .nav-create-popup', $mainNav);
+  var $createLink = $('a#nav-create-link', $mainNav);
+  $createLink.mouseenter(function() {
+    clearTimeout($(this).data('create-popup-hide-timeout'));
+    var createPopupShowTimeout = setTimeout(function() {
+      $createPopup.addClass("nav-create-popup-visible").show("slide");
+    }, 450);
+    $(this).data('create-popup-show-timeout', createPopupShowTimeout);
+  }).mouseleave(function() {
+    clearTimeout($(this).data('create-popup-show-timeout'));
+    var createPopupHideTimeout = setTimeout(function() {
+      $createPopup.hide("slide").removeClass('nav-create-popup-visible');
+    }, 350);
+    $(this).data('create-popup-hide-timeout', createPopupHideTimeout);
+
+  });
+
+  $createPopup.mouseleave(function() {
+    $(this).hide("slide").removeClass('nav-create-popup-visible'); //.removeClass('nav-create-popup-visible');
+  }).mouseenter(function() {
+    clearTimeout($createLink.data('create-popup-hide-timeout'));
+  });
+
+  // click to the 'Create' link from navigation
+  $createLink.click(function() {
+    com.bouncingdata.Main.$newDialog.open();
+    clearTimeout($(this).data('create-popup-show-timeout'));
+    $createPopup.hide("slide").removeClass('nav-create-popup-visible');
+    return false;
+  });
+
+  // the sub-menu of 'Create'
+  $('.nav-create-popup .nav-create-viz, .nav-create-popup .nav-create-scraper', $mainNav).click(function() {
+    com.bouncingdata.Main.$newDialog.open("viz");
+    $createPopup.hide("slide").removeClass('nav-create-popup-visible');
+  });
+
+  $('.nav-create-popup .nav-upload-data', $mainNav).click(function() {
+    com.bouncingdata.Main.$uploadDataDialog.dialog("open");
+  });
+}
+
+/**
+ * Declares various ajax actions for the navigation, hidden nav. item, manage history
+ */
+Nav.prototype.bindAjaxActions = function() {
+  var $mainNav = $('#page>.main-container>.main-navigation');
+  $('.nav-item.nav-page', $mainNav).each(function() {
+    var $form = $('form', $(this));
+    var $link = $('a.nav-item-link', $(this));
+
     $link.bind('click', function(e) {
       com.bouncingdata.Main.toggleAjaxLoading(true);
-      /*var $oldSelected = $('#page>.main-container>.main-navigation div.nav-item-selected');
-      if ($oldSelected) {
-        $oldSelected.removeClass('nav-item-selected');
-        var oldPageId = $('a.nav-item-link', $oldSelected).prop('id');
-        if (oldPageId == "nav-create-link") {
-          //
-          com.bouncingdata.Workbench.dispose();
-        }      
-      }
-      $(this).parent().addClass('nav-item-selected');*/
-            
       if (!e.originalEvent["isBackAction"]) {
         window.history.pushState({linkId: $(this).attr('id'), type:'page'}, $('.nav-item-text', $(this)).text(), $form.attr('action'));
       }
     });
-    
+
     // load page
     Spring.addDecoration(new Spring.AjaxEventDecoration({
       elementId: $link.attr('id'),
@@ -32,44 +74,31 @@ Nav.prototype.init = function() {
       event: "onclick",
       params: {fragments: "main-content"}
     }));
-    
+
   });
-  
+
   // register ajax loading handler
   Spring.addDecoration(new Spring.AjaxEventDecoration({
     elementId: 'hiddenLinkForAjax',
     event: "onclick",
     params: {fragments: "main-content"}
   }));
-  
+
   $('#hiddenLinkForAjax').click(function(e) {
     com.bouncingdata.Main.toggleAjaxLoading(true);
-    
-    /*var $oldSelected = $('#page>.main-container>.main-navigation div.nav-item-selected');
-    if (($oldSelected.length > 0) && ($oldSelected.prop('id') != 'nav-home')) {
-      $oldSelected.removeClass('nav-item-selected');
-      var oldPageId = $('a.nav-item-link', $oldSelected).prop('id');
-      if (oldPageId == "nav-create-link") {
-        //
-        com.bouncingdata.Workbench.dispose();
-      }      
-    }
-    
-    $('#page>.main-container>.main-navigation div.nav-item#nav-home').addClass('nav-item-selected');*/
-    
-    
+
     // only push state to history if this event does not originate from the 'Back' button
     if (!e.originalEvent["isBackAction"]) {
       window.history.pushState({linkId: $(this).prop('href')}, null, $(this).prop('href'));
     }
     return false;
   });
-  
+
   // hide the ajax loading status when received response
-  dojo.connect(Spring.RemotingHandler.prototype, 'handleResponse', null, function() {
+  dojo.connect(Spring.RemotingHandler.prototype, 'handleResponse', null, function(res) {
     com.bouncingdata.Main.toggleAjaxLoading(false);
   });
-  
+
   // manage history
   window.onpopstate = function(e) {
     if(e.state) {
@@ -99,14 +128,13 @@ Nav.prototype.init = function() {
       } else {
         com.bouncingdata.Nav.fireAjaxLoad(linkId, true);
       }
-      
+
     } else {
-      // TODO: have problem with Chrome, which always fire onpopstate when loading page   
+      // TODO: have problem with Chrome, which always fire onpopstate when loading page
       //location.reload();
       console.debug("Onpopstate fired with no state.");
     }
   }
-    
 }
 
 /**
@@ -160,9 +188,12 @@ Nav.prototype.fireAjaxLoad = function(link, isBack) {
   }
 }
 
+/**
+ * Fires an event to open workbench
+ */
 Nav.prototype.openWorkbench = function() {
   //create a native event on workbench navigation link
-  var $link = $('a#nav-create-link');
+  /*var $link = $('a#nav-create-link');
   if (document.createEvent) {
     event = document.createEvent("HTMLEvents");
     event.initEvent("click", false, true);
@@ -173,7 +204,9 @@ Nav.prototype.openWorkbench = function() {
     event.eventType = "click";
     event["isBackAction"] = false;
     $link[0].fireEvent("on" + event.eventType, event);
-  }
+  }*/
+
+  this.fireAjaxLoad(ctx + '/create', false);
 }
 
 com.bouncingdata.Nav = new Nav();

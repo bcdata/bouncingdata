@@ -197,11 +197,11 @@ public class AppController {
       }
       
       // if analysis is public and this is the first execution
-      if (!script.isExecuted() && script.isPublished() && script instanceof Analysis) {
+      /*if (!script.isExecuted() && script.isPublished() && script instanceof Analysis) {
         script.setExecuted(true);
         datastoreService.updateBcDataScript(script);
         datastoreService.doPublishAction(user, script);
-      }
+      }*/
       
       //datastoreService.doExecuteAction(user, script);
       
@@ -272,10 +272,10 @@ public class AppController {
         return "KO";
       }
       
-      if (app.isPublished() && "execute".equals(cause)) {
+      /*if (app.isPublished() && "execute".equals(cause)) {
         // create activity
         datastoreService.doUpdateAction(user, app);
-      }
+      }*/
       datastoreService.updateDashboard(guid, status);
     } catch (Exception e) {
       logger.error("Failed to update dashboard.", e);

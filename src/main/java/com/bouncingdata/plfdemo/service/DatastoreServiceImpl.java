@@ -274,6 +274,24 @@ public class DatastoreServiceImpl implements DatastoreService {
       logger.error("Exception detail", e);
     }
   }
+  
+  @Override
+  public void createAnalysisPost(User user, Analysis analysis, String message)  throws Exception {
+    try {
+      // add activity 
+      Activity activity = new Activity();
+      activity.setAction(Action.PUBLISH.getAction());
+      activity.setUser(user);
+      activity.setObjectId(analysis.getId());
+      activity.setTime(new Date());
+      activity.setPublic(true);
+      activity.setMessage(message);
+      dataStorage.createActivity(activity);
+    } catch (DataAccessException e) {
+      logger.error("Failed to add publish activity for user {}, analysisId {}", user.getUsername(), analysis.getId());
+      logger.error("Exception detail", e);
+    }
+  }
 
   @Override
   public List<Activity> getRecentFeed(int userId) throws Exception {

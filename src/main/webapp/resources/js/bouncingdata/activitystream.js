@@ -8,35 +8,38 @@ ActivityStream.prototype.init = function() {
   this.streamLoading = false;
   me.$feedTemplate = $('#feed-item-template').template();
   var main = com.bouncingdata.Main;
-  
-  $('#stream .event').each(function() {
-    com.bouncingdata.ActivityStream.loadAnalysisByAjax($(this));    
-  });
-  
-  $('.more-feed').click(function() {
-    var $lastEvent = $('#stream .event:last');
-    if ($lastEvent.length > 0 && !me.streamEnded && !me.streamLoading) {
-      me.loadMore($lastEvent.attr('aid'));
-    }
-  });
 
-  if (!main.jsLoader["stream"]) {
-    $(window).scroll(function() {
-      if ($('#stream').length > 0 && ($(window).scrollTop() + 80 >= $(document).height() - $(window).height())) {
-        if (!me.streamEnded && !me.streamLoading) {
-          var $lastEvent = $('#stream .event:last');
-          if ($lastEvent.length > 0) {
-            me.loadMore($lastEvent.attr('aid'));
-          }
-        }
+  $(function() {
+
+    $('#stream .event').each(function() {
+      com.bouncingdata.ActivityStream.loadAnalysisByAjax($(this));
+    });
+
+    $('.more-feed').click(function() {
+      var $lastEvent = $('#stream .event:last');
+      if ($lastEvent.length > 0 && !me.streamEnded && !me.streamLoading) {
+        me.loadMore($lastEvent.attr('aid'));
       }
     });
-  }  
-  
-  com.bouncingdata.Nav.setSelected('page', 'stream');
-  
-  // important! to avoid duplicate events on window object 
-  main.jsLoader["stream"] = true;
+
+    if (!main.jsLoader["stream"]) {
+      $(window).scroll(function() {
+        if ($('#stream').length > 0 && ($(window).scrollTop() + 80 >= $(document).height() - $(window).height())) {
+          if (!me.streamEnded && !me.streamLoading) {
+            var $lastEvent = $('#stream .event:last');
+            if ($lastEvent.length > 0) {
+              me.loadMore($lastEvent.attr('aid'));
+            }
+          }
+        }
+      });
+    }
+
+    com.bouncingdata.Nav.setSelected('page', 'stream');
+
+    // important! to avoid duplicate events on window object
+    main.jsLoader["stream"] = true;
+  });
 }
 
 /**

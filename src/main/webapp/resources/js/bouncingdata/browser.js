@@ -236,9 +236,9 @@ Browser.prototype.loadStuff = function(stuffs, type, $container) {
           return false;
         }
         if (type == "analysis" || type == "scraper") {
-          workbench.createTab(itemObj, null, type);          
+          workbench.createTab(itemObj, null, type, itemObj.language, 1);
         } else if (type == "dataset") {
-          workbench.createTab(itemObj, null, 'dataset');
+          workbench.createTab(itemObj, null, 'dataset', itemObj.language, 1);
         }
         return false;
       }

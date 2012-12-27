@@ -41,7 +41,7 @@
                     <a id="evt-title-${activity.id }" href="<c:url value="/anls/${activity.object.guid}" />"><strong>${activity.object.name}</strong></a>
                   </p>
                   <p class="description">
-                    <span>${activity.object.description }</span>
+                    <span>${activity.message }</span>
                   </p>
                   <div class="clear"></div>
                   <div class="event-footer">
