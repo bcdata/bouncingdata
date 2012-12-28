@@ -9,6 +9,8 @@ ActivityStream.prototype.init = function() {
   me.$feedTemplate = $('#feed-item-template').template();
   var main = com.bouncingdata.Main;
 
+  com.bouncingdata.Nav.setSelected('page', 'stream');
+
   $(function() {
 
     $('#stream .event').each(function() {
@@ -34,8 +36,6 @@ ActivityStream.prototype.init = function() {
         }
       });
     }
-
-    com.bouncingdata.Nav.setSelected('page', 'stream');
 
     // important! to avoid duplicate events on window object
     main.jsLoader["stream"] = true;

@@ -26,7 +26,7 @@ Workbench.prototype.VIEW_RESULT = 1;
 
 Workbench.prototype.STATUS_CODING = 0;
 Workbench.prototype.STATUS_VIZING = 1;
-Workbench.prototype.STATUS_BACK2CODE = 2;
+Workbench.prototype.STATUS_RECODING = 2;
 
 /**
  * Initializes workbench: init. variables, bind handlers, load last session
@@ -48,7 +48,14 @@ Workbench.prototype.init = function() {
       
   // use to name untitled tabs
   this.untitledCounter = 0;
-  
+
+  // get the tab template
+  //me.$tabTemplate = $('#workbench-content-template').template();
+  me.$tabTemplate = $('#workbench-flow-template').template();
+  me.$dsTemplate = $('#data-view-template').template();
+
+  com.bouncingdata.Nav.setSelected('page', 'create');
+
   $(function() {
     $('#main-content input:button, #main-content input:submit, ' +
         '#main-content button, #app-actions-toolbar .app-action').button();
@@ -99,11 +106,7 @@ Workbench.prototype.init = function() {
         $('.ui-widget-overlay').bind('click', function(){ $(this).dialog('close'); });
       }
     });
-    
-    // get the tab template
-    //me.$tabTemplate = $('#workbench-content-template').template();
-    me.$tabTemplate = $('#workbench-flow-template').template();
-    me.$dsTemplate = $('#data-view-template').template();
+
     
     /**
      * Initializes workbench tabs
@@ -248,8 +251,6 @@ Workbench.prototype.init = function() {
       }
     });
 
-    com.bouncingdata.Nav.setSelected('page', 'create');
-
     //
     me.loadLastSession();
 
@@ -260,20 +261,37 @@ Workbench.prototype.init = function() {
 }
 
 /**
- * Switches between views in the flow of given tab.
- * @param viewName name of view, Workbench.VIEW_CODE or Workbench.VIEW_RESULT
- * @param $tab the container tab
+ * Switches view in the current tab
+ * @param status the tab status (Workbench.STATUS_CODING, Workbench.STATUS_VIZING, Workbench.STATUS_RECODING)
+ * @param tabIndex the tab index
  */
-Workbench.prototype.showView = function(viewName, $tab) {
-  if (viewName == this.VIEW_RESULT) {
-    $('.workbench-result .result-tabs', $tab).tabs();
-    $('.workbench-result', $tab).css('left', 0);
-    $('.workbench-editor', $tab).css('left', '-14000px');
+Workbench.prototype.setView = function(status, tabIndex) {
+  var $tab = this.getTabContainer(tabIndex);
+  this.tabsIndex[tabIndex].status = status;
 
-  } else if (viewName == this.VIEW_CODE) {
-    $('.workbench-editor', $tab).css('left', 0);
-    $('.workbench-result', $tab).css('left', '-14000px');
+  // show view
+  switch (status) {
+    case this.STATUS_CODING:
+      $('.workbench-editor', $tab).css('left', 0);
+      $('.workbench-result', $tab).css('left', '-14000px');
+      $('.workbench-editor .app-view-viz-button', $tab).hide();
+      break;
+    case this.STATUS_VIZING:
+      $('.workbench-result .result-tabs', $tab).tabs();
+      $('.workbench-result', $tab).css('left', 0);
+      $('.workbench-editor', $tab).css('left', '-14000px');
+      break;
+    case this.STATUS_RECODING:
+      var $viewVizBtn = $('.workbench-editor .app-view-viz-button', $tab).show();
+      $('.workbench-editor', $tab).css('left', 0);
+      $('.workbench-result', $tab).css('left', '-14000px');
+      if (this.tabsIndex[tabIndex]['codechanged']) {
+        $viewVizBtn.prop('disabled', 'disabled').prop('title', 'You need to execute this code to view visualization!');
+      } else {
+        $viewVizBtn.prop('disabled', null).prop('title', 'View visualization');
+      }
   }
+
 }
 
 /**
@@ -531,7 +549,7 @@ Workbench.prototype.processTab = function(tabIndex, $tabContent) {
   });
 
   $('.app-back-button', $resultPanel).click(function() {
-    me.showView(me.VIEW_CODE, $parentTab);
+    me.setView(me.STATUS_RECODING, tabIndex);
   });
 
   $('.app-post-button', $resultPanel).click(function() {
@@ -544,11 +562,12 @@ Workbench.prototype.processTab = function(tabIndex, $tabContent) {
     com.bouncingdata.Main.$publishDialog.dialog("open");
   });
 
-  if (status == me.STATUS_CODING) {
-    me.showView(me.VIEW_CODE, $parentTab);
-  } else if (status == me.STATUS_VIZING) {
-    me.showView(me.VIEW_RESULT, $parentTab);
-  }
+  $('.app-view-viz-button', $editorPanel).click(function() {
+    if (me.tabsIndex[tabIndex]['codechanged']) return;
+    me.setView(me.STATUS_VIZING, tabIndex);
+  });
+
+  me.setView(status, tabIndex);
 
   var $tabs = $('.result-tabs', $resultPanel).tabs();
   var url = type=="analysis"?(ctx + "/app/a/" + guid):type=="scraper"?(ctx + "/app/scr/" + guid):null;
@@ -772,7 +791,7 @@ Workbench.prototype.execute = function(tabIndex) {
           
           // switch to Viz. or Data tab to view the result
           //$('.app-editor-tabs', $tab).tabs('select', 1);
-          me.showView(me.VIEW_RESULT, $tab);
+          me.setView(me.STATUS_VIZING, tabIndex);
 
         } else {
           console.debug(result);
@@ -1381,51 +1400,6 @@ Workbench.prototype.getTabContainer = function(index) {
  */
 Workbench.prototype.getTabIndex = function(tabId) {
   return $("li.tab-header", this.$tabs).index($("li:has(a[href='#" + tabId +"'])"));
-}
-
-Workbench.prototype.uploadDataset = function($uploadDataDialog) {
-  console.debug("Upload dataset file...");
-  var $form = $('form#file-upload-form', $uploadDataDialog);
-  //var file = $form.prop('value');
-  var file = $('#file', $form).val();
-  if (!file) {
-    return;
-  }
-  // determine file type
-  if (file.indexOf('/') > -1) file = file.substring(file.lastIndexOf('/') + 1);
-  else if (file.indexOf('\\') > -1) file = file.substring(file.lastIndexOf('\\') + 1);
-
-  if (file.indexOf('.') < 0) {
-    $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
-    return;
-  }
-
-  var extension = file.substring(file.lastIndexOf('.') + 1);
-  if ($.inArray(extension, ['xls', 'xlsx', 'csv', 'txt']) < 0) {
-    $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
-    return;
-  }
-
-  $('.upload-in-progress', $form).show();
-  $('.upload-status', $form).text('Uploading in progress').show();
-  $form.ajaxSubmit({
-    url: ctx + '/dataset/up',
-    type: 'post',
-    data: {
-      type: extension
-    },
-    clearForm: true,
-    resetForm: true,
-    success: function(res) {
-      $('.upload-in-progress', $form).hide();
-      if (res < 0) {
-        $('.upload-status', $form).text('Upload failed! Your file may not valid.');
-        return;
-      }
-      console.debug("Uploaded successfully!");
-      $('.upload-status', $form).text(res +  ' bytes uploaded successfully');
-    }
-  });
 }
 
 com.bouncingdata.Workbench = new Workbench();

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.Attachment;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DatasetDetail;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.QueryResult;
@@ -41,6 +42,7 @@ import com.bouncingdata.plfdemo.util.Utils;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParser;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory.FileType;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
 
 @Controller
 @RequestMapping("/dataset")
@@ -146,6 +148,48 @@ public class DatasetController {
   }
   
   @RequestMapping(value="/up", method = RequestMethod.POST)
+  public @ResponseBody ActionResult submitDataset(@RequestParam(value = "file", required = true) MultipartFile file,
+      @RequestParam(value = "type", required = true) String type, ModelMap model, Principal principal) {
+    
+    User user = (User) ((Authentication)principal).getPrincipal();
+    String filename = file.getOriginalFilename();    
+    filename = filename.substring(0, filename.lastIndexOf("."));
+    long size = file.getSize();
+    logger.debug("UPLOAD FILE: Received {} file. Size {}", filename, size);
+    if (size <= 0) {
+      return new ActionResult(-1, "Cannot determine file size");
+    }
+    
+    DataParser parser;
+    if (type.equals("xls") || type.equals("xlsx")) {
+      parser = DataParserFactory.getDataParser(FileType.EXCEL);       
+    } else if (type.equals("txt")) {
+      parser = DataParserFactory.getDataParser(FileType.TEXT);
+    } else if (type.equals("csv")) {
+      parser = DataParserFactory.getDataParser(FileType.CSV);
+    } else return new ActionResult(-1, "Unknown type");
+    
+    // temporary store to where? in which format?
+    try {
+      // parse schema
+      List<DatasetColumn> schema = parser.parseSchema(file.getInputStream());
+      ActionResult result = new ActionResult(1, "Successfully parsed schema");
+      result.setObject(schema);
+      return result;
+    } catch(Exception e) {
+      return new ActionResult(-1, "Cannot parse schema");
+    }
+    
+    
+  }
+  
+  public @ResponseBody ActionResult persistDataset() {
+    
+    return null;
+  }
+  
+  
+  /*@RequestMapping(value="/up", method = RequestMethod.POST)
   public @ResponseBody long uploadDataset(@RequestParam(value="file", required=true) MultipartFile file, @RequestParam(value="type", required=true) String type, ModelMap model,
       Principal principal) {
     User user = (User) ((Authentication)principal).getPrincipal();
@@ -195,7 +239,7 @@ public class DatasetController {
       return -1;
     }
     return size;
-  }
+  }*/
   
   @SuppressWarnings("rawtypes")
   @RequestMapping(value="/view/{guid}", method = RequestMethod.GET)

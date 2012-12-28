@@ -22,7 +22,7 @@ public class TextParser implements DataParser {
   
   private Logger logger = LoggerFactory.getLogger(TextParser.class);
   
-  TextParser() {};
+  protected TextParser() {};
 
   @Override
   public List<String[]> parse(InputStream is) throws Exception {
@@ -62,6 +62,12 @@ public class TextParser implements DataParser {
     TextParser parser = new TextParser();
     List<String[]> results = parser.parse(new FileInputStream(file));
     System.out.println("Number of line: " + results.size());
+  }
+
+  @Override
+  public List<DatasetColumn> parseSchema(InputStream is) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

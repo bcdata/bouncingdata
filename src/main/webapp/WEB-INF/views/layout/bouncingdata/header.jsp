@@ -131,6 +131,7 @@
         <div class="workbench-editor">
           <div class="app-actions">
             <button id="app-execute-button-\${tabId}" class="app-action-button app-execute-button" title="Execute">Execute</button>
+            <button id="app-view-viz-\${tabId}" class="app-action-button app-view-viz-button" title="View visualization">Visualization</button>
           </div>
           <div class="app-status">
             <img id="ajax-loading" width="20px" height="20px" src="<c:url value="/resources/images/ajax-loader.gif" />" style="opacity: 0;"  />

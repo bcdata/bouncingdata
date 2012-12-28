@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -14,11 +16,13 @@ import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bouncingdata.plfdemo.util.Utils;
+
 public class CsvParser implements DataParser {
   
   private Logger logger = LoggerFactory.getLogger(CsvParser.class);
   
-  CsvParser() {}
+  protected CsvParser() {}
 
   @Override
   public List<String[]> parse(InputStream is) throws Exception {
@@ -48,11 +52,97 @@ public class CsvParser implements DataParser {
   }
   
   public static void main(String[] args) throws Exception {
-    File file = new File("/home/khiem/Downloads/COMPS.csv");
+    File file = new File("/home/khiem/Downloads/Fuel.csv");
     CSVParser parser = new CSVParser(new FileReader(file));
     //Map<String, Integer> headerMap = parser.getHeaderMap();
-    List<CSVRecord> records = parser.getRecords();
-    long lineNumber = parser.getLineNumber();
-    System.out.println("Number of line " + lineNumber);
+    //List<CSVRecord> records = parser.getRecords();
+    //long lineNumber = parser.getLineNumber();
+    //System.out.println("Number of line " + lineNumber);
+    //Map<String, Integer> headerMap = parser.
+    Iterator<CSVRecord> iter = parser.iterator();
+    CSVRecord header = iter.next();
+    int fieldNumber = (int) header.size();
+    for (int i = 0; i < fieldNumber; i++) {
+      System.out.println("Field " + i + ": " + header.get(i));
+    }
+    
+    for (int i = 1; i <= 10; i++) {
+      if (iter.hasNext()) {
+        CSVRecord record = iter.next();
+      }
+      
+    }
+  }
+
+  @Override
+  public List<DatasetColumn> parseSchema(InputStream is) throws Exception {
+    CSVParser parser = new CSVParser(new InputStreamReader(is), CSVFormat.DEFAULT);
+    Iterator<CSVRecord> iter = parser.iterator();
+    CSVRecord header = iter.next();
+    int fieldNumber = (int) header.size();
+    
+    List<CSVRecord> recordList = new ArrayList<CSVRecord>();
+    
+    // guess column type from the first 10 records
+    for (int i = 1; i <= 10; i++) {
+      if (iter.hasNext()) {
+        recordList.add(iter.next());
+      }
+    }
+    
+    List<DatasetColumn> dsColumns = new ArrayList<DatasetColumn>();
+    
+    for (int i = 0; i < fieldNumber; i++) {
+      String column = header.get(i);
+      DatasetColumn dsCol = new DatasetColumn(column);
+      boolean isBoolean = true;
+      boolean isInt = true;
+      boolean isLong = true;
+      boolean isDouble = true;
+      
+      for (int j = 0; j < recordList.size(); j++) {
+        String value = recordList.get(j).get(i);
+        if (isBoolean && !Utils.isBoolean(value)) isBoolean = false;
+        if (isInt && !Utils.isInt(value)) isInt = false;
+        if (isLong && !Utils.isLong(value)) isLong = false;
+        if (isDouble && !Utils.isDouble(value)) isDouble = false;
+      }
+      
+      if (isBoolean) {
+        dsCol.setTypeName("Boolean");
+        dsCol.setTypeClass(java.lang.Boolean.class);
+        dsColumns.add(dsCol);
+        continue;
+      }
+      
+      if (isInt) {
+        dsCol.setTypeName("Integer");
+        dsCol.setTypeClass(java.lang.Integer.class);
+        dsColumns.add(dsCol);
+        continue;
+      }
+      
+      if (isLong) {
+        dsCol.setTypeName("Long");
+        dsCol.setTypeClass(java.lang.Long.class);
+        dsColumns.add(dsCol);
+        continue;
+      }
+      
+      if (isDouble) {
+        dsCol.setTypeName("Double");
+        dsCol.setTypeClass(java.lang.Double.class);
+        dsColumns.add(dsCol);
+        continue;
+      }
+      
+      dsCol.setTypeName("String");
+      dsCol.setTypeClass(java.lang.String.class);
+      dsColumns.add(dsCol);
+      continue;
+      
+    }
+    
+    return dsColumns;
   }
 }

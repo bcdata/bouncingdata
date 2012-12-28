@@ -16,7 +16,7 @@ class ExcelParser implements DataParser {
   
   private Logger logger = LoggerFactory.getLogger(ExcelParser.class);
   
-  ExcelParser() {}
+  protected ExcelParser() {}
 
   @Override
   public List<String[]> parse(InputStream is) throws Exception {
@@ -89,5 +89,11 @@ class ExcelParser implements DataParser {
         return cell.toString();
       }
     }
+  }
+
+  @Override
+  public List<DatasetColumn> parseSchema(InputStream is) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

@@ -40,6 +40,7 @@ public class User implements UserDetails {
   private Date lastLogin;
   
   @NotPersistent private Set<GrantedAuthority> authorities;
+  
   @JsonIgnore
   public int getId() {
     return id;

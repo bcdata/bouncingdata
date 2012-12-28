@@ -2,177 +2,189 @@ function Analysis() {
   
 }
 
-Analysis.prototype.init = function(anls) {
+Analysis.prototype.init = function(anls, dbDetail) {
   var guid = anls.guid;
   //$('#anls-content').easytabs();
-  $('#anls-content').tabs();
   var me = this;
   this.loadedData = false;
-  
-  $('#anls-content').bind('tabsselect', function(event, ui) {
-    // select data tab
-    if (ui.index == 2 && me.loadedData == false) {
-      var $dataPanel = $('#anls-data');
-      var dsguids = '';
-      $('.anls-dataset', $dataPanel).each(function() {
-        dsguids += $(this).attr('dsguid') + ',';
-      });
-      dsguids = dsguids.substring(0, dsguids.length - 1);
-      if (dsguids.length > 0) {
-        com.bouncingdata.Utils.setOverlay($dataPanel, true);
-        $.ajax({
-          url: ctx + '/dataset/m/' + dsguids,
-          type: 'get',
-          dataType: 'json',
-          success: function(result) {
-            com.bouncingdata.Utils.setOverlay($dataPanel, false);
-            $('.anls-dataset', $dataPanel).each(function() {
-              var dsguid = $(this).attr('dsguid');
-              var $table = $('table', $(this));
-              var data = result[dsguid].data;
-              if (data) {
-                com.bouncingdata.Workbench.renderDatatable($.parseJSON(data), $table);
-              } else if (result[dsguid].size > 0) {
-                console.debug("Load datatable by Ajax...");
-                var columns = result[dsguid].columns;
-                com.bouncingdata.Workbench.loadDatatableByAjax(dsguid, columns, $table);
-              }
-            });
-            me.loadedData = true;
-          },
-          error: function(result) {
-            com.bouncingdata.Utils.setOverlay($dataPanel, false);
-            console.debug('Failed to load datasets.');
-            console.debug(result);
-            $dataPanel.text('Failed to load datasets.');
-          }
-        });
-      }
-    }
-  });
-  
-  
-  $('#comment-form #comment-submit').click(function() {
-    // validate
-    var message = $('#comment-form #message').val();
-    if (!message) return;
-    me.postComment(guid, message, -1, function() { $('#comment-form #message').val(''); });
-  });
-  
-  $('.comments h3.comments-count').click(function() {
-    $(this).next().toggle('slow');
-  }).css('cursor', 'pointer');
-  
-  this.loadCommentList(guid); 
-  
+  this.votingCache = {};
+
   this.$commentTemplate = $('#comment-template').template();
   this.$commentEditor = $('#comment-editor-template').template();
-  
-  // callback function when click on 'reply'
-  this.inlineReplyFunction = function() {
-    // 
-    var $commentBody = $(this).parent().parent();
-    var $comment = $commentBody.parent();
-    if ($commentBody.next().is('div.inline-editor')) {
-      $commentBody.next().remove();
-      return false;
-    }
-    var $inlineEditor = $.tmpl(me.$commentEditor, { rows: 3 });
-    $commentBody.after($inlineEditor);
-    $('input.reply-button', $inlineEditor).click(function() {
-      var message = $(this).prev().val();
-      if (!message) return false;
-      me.postComment(guid, message, $comment.attr('nodeid'), function() {$commentBody.next().remove();});
-    }).button();
-    return false;
-  }
-  
-  var $score = $('.anls-header .anls-score');
-  var score = $score.text();
-  if (score > 0) {
-    $score.attr('class', 'anls-score anls-score-positive');
-  } else {
-    if (score == 0) $score.attr('class', 'anls-score'); 
-    else $score.attr('class', 'anls-score anls-score-negative');
-  }
-  
-  $('.anls-header a.anls-vote-up').click(function() {
-    me.voteAnalysis(guid, 1);
-    return false;
-  });
-  
-  $('.anls-header a.anls-vote-down').click(function() {
-    me.voteAnalysis(guid, -1);
-    return false;
-  });
-  
-  this.votingCache = {};
-  
-  // embedded
-  var $embedded = $('#embedded-link');
-  $('.anls-action-links a#anls-embed-button').click(function() {
-    $embedded.toggle('slow');
-    // still not reversed the remote ip to hostname, temporarily hard code the host
-    var host = "www.bouncingdata.com";
-    var embedded = '<iframe src="http://' + host + ctx + '/public/embed/' + guid + '" style="border: 0" width="800" height="600" frameborder="0"></iframe>';
-    $('#embedded-link-text', $embedded).val(embedded).click(function() { 
-      $(this).select();
-      $(this).attr('title', 'CTRL-C to copy embedded code');
-    });
-    
-    // reset options
-    $('#include-viz', $embedded).prop('checked', true);
-    $('#include-code', $embedded).prop('checked', false);
-    $('#include-data', $embedded).prop('checked', false);
-    $('#embedded-width', $embedded).val('800');
-    $('#embedded-height', $embedded).val('600');
-    $('#embedded-border', $embedded).prop('checked', false);
-  });  
-  
-  $('.embedded-options input', $embedded).change(function() {
-    me.updateEmbeddedLink(guid);
-  });
-  
-  var $edit = $('.anls-action-links a#anls-edit-button');
-  if ($edit.length > 0) {
-    
-    $edit.click(function() {
-      // check if the current workbench's cache has contained this analysis already
-      if (com.bouncingdata.Main.workbenchSession.tabsInfo
-          && guid in com.bouncingdata.Main.workbenchSession.tabsInfo) {
-        com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
-      } else { // if not, add this analysis then open workbench
-        if (!com.bouncingdata.Main.workbenchSession.tabsInfo) {
-          com.bouncingdata.Main.workbenchSession.tabsInfo = {};
-          com.bouncingdata.Main.workbenchSession.tabsInfo[guid] = {'app': anls};
-          if (!com.bouncingdata.Main.workbenchSession.tabsIndex) {
-            com.bouncingdata.Main.workbenchSession.tabsIndex = [];
-          }
-          com.bouncingdata.Main.workbenchSession.tabsIndex.push({'guid': guid, 'type': 'analysis'});
-          com.bouncingdata.Main.workbenchSession.tabsCounter = com.bouncingdata.Main.workbenchSession.tabsIndex.length;
-          com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
-        } else {
-          com.bouncingdata.Main.workbenchSession.tabsInfo[guid] = {'app': anls};
-          com.bouncingdata.Main.workbenchSession.tabsIndex.push({'guid': guid, 'type': 'analysis'});
-          com.bouncingdata.Main.workbenchSession.tabsCounter = com.bouncingdata.Main.workbenchSession.tabsIndex.length;
-          com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
+
+  com.bouncingdata.Nav.setSelected('anls', anls.guid);
+
+  $(function() {
+    $('#anls-content').tabs();
+
+    com.bouncingdata.Dashboard.view(dbDetail.visualizations, dbDetail.dashboard, $('#main-content #anls-dashboard'));
+
+    $('#anls-content').bind('tabsselect', function(event, ui) {
+      // select data tab
+      if (ui.index == 2 && me.loadedData == false) {
+        var $dataPanel = $('#anls-data');
+        var dsguids = '';
+        $('.anls-dataset', $dataPanel).each(function() {
+          dsguids += $(this).attr('dsguid') + ',';
+        });
+        dsguids = dsguids.substring(0, dsguids.length - 1);
+        if (dsguids.length > 0) {
+          com.bouncingdata.Utils.setOverlay($dataPanel, true);
+          $.ajax({
+            url: ctx + '/dataset/m/' + dsguids,
+            type: 'get',
+            dataType: 'json',
+            success: function(result) {
+              com.bouncingdata.Utils.setOverlay($dataPanel, false);
+              $('.anls-dataset', $dataPanel).each(function() {
+                var dsguid = $(this).attr('dsguid');
+                var $table = $('table', $(this));
+                var data = result[dsguid].data;
+                if (data) {
+                  com.bouncingdata.Workbench.renderDatatable($.parseJSON(data), $table);
+                } else if (result[dsguid].size > 0) {
+                  console.debug("Load datatable by Ajax...");
+                  var columns = result[dsguid].columns;
+                  com.bouncingdata.Workbench.loadDatatableByAjax(dsguid, columns, $table);
+                }
+              });
+              me.loadedData = true;
+            },
+            error: function(result) {
+              com.bouncingdata.Utils.setOverlay($dataPanel, false);
+              console.debug('Failed to load datasets.');
+              console.debug(result);
+              $dataPanel.text('Failed to load datasets.');
+            }
+          });
         }
       }
-      com.bouncingdata.Nav.openWorkbench();
     });
-  }
 
-  var $publish = $('.anls-action-links a#anls-publish-button');
-  if ($publish.length > 0) {
-    $publish.click(function() {
-      com.bouncingdata.Main.$publishDialog['object'] = anls;
-      com.bouncingdata.Main.$publishDialog.dialog("open");
+
+    $('#comment-form #comment-submit').click(function() {
+      // validate
+      var message = $('#comment-form #message').val();
+      if (!message) return;
+      me.postComment(guid, message, -1, function() { $('#comment-form #message').val(''); });
     });
+
+    $('.comments h3.comments-count').click(function() {
+      $(this).next().toggle('slow');
+    }).css('cursor', 'pointer');
+
+    me.loadCommentList(guid);
+
+    var $score = $('.anls-header .anls-score');
+    var score = $score.text();
+    if (score > 0) {
+      $score.attr('class', 'anls-score anls-score-positive');
+    } else {
+      if (score == 0) $score.attr('class', 'anls-score');
+      else $score.attr('class', 'anls-score anls-score-negative');
+    }
+
+    $('.anls-header a.anls-vote-up').click(function() {
+      me.voteAnalysis(guid, 1);
+      return false;
+    });
+
+    $('.anls-header a.anls-vote-down').click(function() {
+      me.voteAnalysis(guid, -1);
+      return false;
+    });
+
+
+    // embedded
+    var $embedded = $('#embedded-link');
+    $('.anls-action-links a#anls-embed-button').click(function() {
+      $embedded.toggle('slow');
+      // still not reversed the remote ip to hostname, temporarily hard code the host
+      var host = "www.bouncingdata.com";
+      var embedded = '<iframe src="http://' + host + ctx + '/public/embed/' + guid + '" style="border: 0" width="800" height="600" frameborder="0"></iframe>';
+      $('#embedded-link-text', $embedded).val(embedded).click(function() {
+        $(this).select();
+        $(this).attr('title', 'CTRL-C to copy embedded code');
+      });
+
+      // reset options
+      $('#include-viz', $embedded).prop('checked', true);
+      $('#include-code', $embedded).prop('checked', false);
+      $('#include-data', $embedded).prop('checked', false);
+      $('#embedded-width', $embedded).val('800');
+      $('#embedded-height', $embedded).val('600');
+      $('#embedded-border', $embedded).prop('checked', false);
+    });
+
+    $('.embedded-options input', $embedded).change(function() {
+      me.updateEmbeddedLink(guid);
+    });
+
+    var $edit = $('.anls-action-links a#anls-edit-button');
+    if ($edit.length > 0) {
+
+      $edit.click(function() {
+        // check if the current workbench's cache has contained this analysis already
+        /*if (com.bouncingdata.Main.workbenchSession.tabsInfo
+            && guid in com.bouncingdata.Main.workbenchSession.tabsInfo) {
+          com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
+        } else { // if not, add this analysis then open workbench
+          if (!com.bouncingdata.Main.workbenchSession.tabsInfo) {
+            com.bouncingdata.Main.workbenchSession.tabsInfo = {};
+            com.bouncingdata.Main.workbenchSession.tabsInfo[guid] = {'app': anls};
+            if (!com.bouncingdata.Main.workbenchSession.tabsIndex) {
+              com.bouncingdata.Main.workbenchSession.tabsIndex = [];
+            }
+            com.bouncingdata.Main.workbenchSession.tabsIndex.push({'guid': guid, 'type': 'analysis'});
+            com.bouncingdata.Main.workbenchSession.tabsCounter = com.bouncingdata.Main.workbenchSession.tabsIndex.length;
+            com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
+          } else {
+            com.bouncingdata.Main.workbenchSession.tabsInfo[guid] = {'app': anls};
+            com.bouncingdata.Main.workbenchSession.tabsIndex.push({'guid': guid, 'type': 'analysis'});
+            com.bouncingdata.Main.workbenchSession.tabsCounter = com.bouncingdata.Main.workbenchSession.tabsIndex.length;
+            com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
+          }
+        }*/
+
+        com.bouncingdata.Workbench.callback = function () {
+          com.bouncingdata.Workbench.openApp(anls, null, 'analysis', null, com.bouncingdata.Workbench.STATUS_VIZING);
+        }
+        com.bouncingdata.Nav.openWorkbench();
+      });
+    }
+
+    var $publish = $('.anls-action-links a#anls-publish-button');
+    if ($publish.length > 0) {
+      $publish.click(function() {
+        com.bouncingdata.Main.$publishDialog['object'] = anls;
+        com.bouncingdata.Main.$publishDialog.dialog("open");
+      });
+    }
+
+    $('#anls-code #code-block pre').text(anls["code"]);
+    SyntaxHighlighter.highlight();
+  });
+
+}
+
+// callback function when click on 'reply'
+Analysis.prototype.inlineReplyFunction = function() {
+  //
+  var me = this;
+  var $commentBody = $(this).parent().parent();
+  var $comment = $commentBody.parent();
+  if ($commentBody.next().is('div.inline-editor')) {
+    $commentBody.next().remove();
+    return false;
   }
-  
-  $('#anls-code #code-block pre').text(anls["code"]);
-  SyntaxHighlighter.highlight();
-  com.bouncingdata.Nav.setSelected('anls', anls.guid);
+  var $inlineEditor = $.tmpl(me.$commentEditor, { rows: 3 });
+  $commentBody.after($inlineEditor);
+  $('input.reply-button', $inlineEditor).click(function() {
+    var message = $(this).prev().val();
+    if (!message) return false;
+    me.postComment(guid, message, $comment.attr('nodeid'), function() {$commentBody.next().remove();});
+  }).button();
+  return false;
 }
 
 Analysis.prototype.postComment = function(guid, message, parentId, callback) {
@@ -346,7 +358,7 @@ Analysis.prototype.addComment = function(guid, commentObj) {
     $parent.children('ul.children').append($comment);
   }
   
-  $('a.comment-reply', $comment).click(this.inlineReplyFunction);
+  $('a.comment-reply', $comment).click(me.inlineReplyFunction);
   
   $('a.up-vote-link', $commentList).click(function() {
     var $comment = $(this).parent().parent().parent();

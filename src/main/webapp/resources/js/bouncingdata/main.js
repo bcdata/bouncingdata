@@ -205,6 +205,65 @@ Main.prototype.publish = function(guid, message) {
   });
 }
 
+Main.prototype.uploadDataset = function($uploadDataDialog) {
+  console.debug("Upload dataset file...");
+  var $form = $('form#file-upload-form', $uploadDataDialog);
+  //var file = $form.prop('value');
+  var file = $('#file', $form).val();
+  if (!file) {
+    return;
+  }
+  // determine file type
+  if (file.indexOf('/') > -1) file = file.substring(file.lastIndexOf('/') + 1);
+  else if (file.indexOf('\\') > -1) file = file.substring(file.lastIndexOf('\\') + 1);
+
+  if (file.indexOf('.') < 0) {
+    $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
+    return;
+  }
+
+  var extension = file.substring(file.lastIndexOf('.') + 1);
+  if ($.inArray(extension, ['xls', 'xlsx', 'csv', 'txt']) < 0) {
+    $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
+    return;
+  }
+
+  $('.upload-in-progress', $form).show();
+  $('.upload-status', $form).text('Uploading in progress').show();
+  $form.ajaxSubmit({
+    url: ctx + '/dataset/up',
+    type: 'post',
+    data: {
+      type: extension
+    },
+    clearForm: true,
+    resetForm: true,
+    success: function(res) {
+      $('.upload-in-progress', $form).hide();
+      /*if (res < 0) {
+        $('.upload-status', $form).text('Upload failed! Your file may not valid.');
+        return;
+      }
+      console.debug("Uploaded successfully!");
+      $('.upload-status', $form).text(res +  ' bytes uploaded successfully');*/
+
+      if (res['code'] < 0) {
+        $('.upload-status', $form).text('Upload failed! Your file may not valid.');
+        console.debug(res['message']);
+        return;
+      }
+      console.debug("Uploaded successfully!");
+      $('.upload-status', $form).text('Uploaded successfully');
+      console.debug(res['message']);
+      console.debug(res['object']);
+    },
+    error: function(err) {
+      $('.upload-status', $form).text('Failed to upload');
+      console.debug(err);
+    }
+  });
+}
+
 /**
  * Show/hide the ajax loading message on the top of page
  * @param display

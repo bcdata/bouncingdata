@@ -24,7 +24,7 @@ Dashboard.prototype.loadAll = function(vizList, dashboardPos, $container) {
 Dashboard.prototype.load = function(vizList, dashboardPos, $container, editMode) {
   var dbCache;
   if (editMode) {
-    this.zCounter[$container.attr('tabid')] = 50;
+    this.zCounter[$container.attr('tabid')] = 0;
     dbCache = this.dashboardCache[$container.attr('guid')];
   }
   $container.empty();
@@ -132,7 +132,7 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
     // add info tooltip
     var $info = $('<div class="viz-dimension-info"></div>');
     $info.css('position', 'absolute').css('top', 0).css('left', 0)
-      .css('border', '1px solid #555555').css('background-color', 'yellow').css('z-index', 9999);
+      .css('border', '1px solid #555555').css('background-color', 'yellow').css('z-index', 1000);
     $info.css('padding', '2px').css('opacity', 0.8).css('font-size', '10px');
     
     $vizContainer.append($info);
@@ -175,7 +175,7 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
       // iframe fix for resizing
       $("iframe", $container).each(function() {
         var $frame = $(this);
-        var $resizeIframeFix = $('<div class="resizable-iframe-fix" style="position: absolute; opacity: 0.001; z-index: 9999;"></div>');
+        var $resizeIframeFix = $('<div class="resizable-iframe-fix" style="position: absolute; opacity: 0.001; z-index: 1000;"></div>');
         if ($frame.is($currentViz.children)) {
           $resizeIframeFix.addClass("resizable-iframe-fix-inner");
         }

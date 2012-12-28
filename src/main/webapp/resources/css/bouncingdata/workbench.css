@@ -202,7 +202,7 @@
 .result-tab-viz .dashboard-ruler .snap-line {
   position: absolute;
   opacity: 0;  
-  z-index: 9999;
+  z-index: 1000;
 }
 
 .result-tab-viz .dashboard-ruler .snap-line-left, .result-tab-viz .dashboard-ruler .snap-line-right {
@@ -219,7 +219,7 @@
 
 .result-tab-viz .dashboard-ruler .ruler {
   position: absolute;
-  z-index: 9999;
+  z-index: 1000;
 }
 
 .result-tab-viz .dashboard-ruler .dashboard-ruler-top {
@@ -315,7 +315,7 @@
 body>div.resizable-iframe-fix, body>div.ui-draggable-iframeFix {
   position: absolute; 
   opacity: 0.001; 
-  z-index: 9999 !important;
+  z-index: 1000 !important;
 }
 
 /** Dataset view styles **/

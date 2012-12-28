@@ -3,40 +3,24 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <script>
-	$(function() {
-	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
-
-	  if (!com.bouncingdata.Analysis) {
-	    $.getScript(ctx + "/resources/js/bouncingdata/analysis.js", function() {
-	    	console.debug("analysis.js async. loaded!");
-	    	
-	    	var anls = {
-	    	    guid: '${anls.guid}',
-	    	    name: '${anls.name}',
-	    	    description: '${anls.description}',
-	    	    user: {username: '${anls.user.username}'},
-	    	    language: '${anls.language}',
-	    	    code: '${anlsCode}'
-	    	}	
-	  	  	
-	    	com.bouncingdata.Analysis.init(anls);
-	    });  
-	  } else {
-	    var anls = {
-	  	    guid: '${anls.guid}',
-	  	    name: '${anls.name}',
-	  	    description: '${anls.description}',
-	  	    user: {username: '${anls.user.username}'},
-	  	    language: '${anls.language}',
-	  	    code: '${anlsCode}'
-	  	}
-	    com.bouncingdata.Analysis.init(anls);
-	  }
-	 
-	  var dbDetail = $.parseJSON('${dashboardDetail}');
-	  com.bouncingdata.Dashboard.view(dbDetail.visualizations, dbDetail.dashboard, $('#main-content #anls-dashboard'));
-	
-	});
+  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
+  var anls = {
+    guid: '${anls.guid}',
+    name: '${anls.name}',
+    description: '${anls.description}',
+    user: {username: '${anls.user.username}'},
+    language: '${anls.language}',
+    code: '${anlsCode}'
+  };
+  var dbDetail = $.parseJSON('${dashboardDetail}');
+  if (!com.bouncingdata.Analysis) {
+    $.getScript(ctx + "/resources/js/bouncingdata/analysis.js", function() {
+      console.debug("analysis.js async. loaded!");
+      com.bouncingdata.Analysis.init(anls, dbDetail);
+    });
+  } else {
+    com.bouncingdata.Analysis.init(anls, dbDetail);
+  }
 </script>
 <div id="main-content" class="analysis-container">
   <div class="analysis-info right-content">
