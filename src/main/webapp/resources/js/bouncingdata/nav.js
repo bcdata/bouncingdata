@@ -42,7 +42,11 @@ Nav.prototype.init = function() {
 
   // the sub-menu of 'Create'
   $('.nav-create-popup .nav-create-viz, .nav-create-popup .nav-create-scraper', $mainNav).click(function() {
-    com.bouncingdata.Main.$newDialog.open("viz");
+    if($(this).hasClass('nav-create-scraper')) {
+      com.bouncingdata.Main.$newDialog.open("scraper");
+    }  else {
+      com.bouncingdata.Main.$newDialog.open("viz");
+    }
     $createPopup.hide("slide").removeClass('nav-create-popup-visible');
   });
 

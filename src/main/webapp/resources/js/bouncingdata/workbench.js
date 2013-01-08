@@ -202,6 +202,9 @@ Workbench.prototype.init = function() {
             com.bouncingdata.Nav.fireAjaxLoad(ctx + '/anls/' + guid, false);
           }         
         } else if (actionId == 'publish-app') {
+          /**
+           * @deprecated
+           */
           // WHY IT'S SO COMPLICATED???
           var guid = me.tabsIndex[index].guid;
           if (guid) {

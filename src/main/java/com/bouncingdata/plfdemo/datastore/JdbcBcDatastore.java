@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +17,27 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.bouncingdata.plfdemo.util.Utils;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
+import com.bouncingdata.plfdemo.util.dataparsing.InvalidColumnTypeException;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
 public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
   
   private Logger logger = LoggerFactory.getLogger(JdbcBcDatastore.class);
+  
+  private final static Map<ColumnType, String> typeMap;
+  
+  /**
+   * The current mapping follows MySQL datatype definition
+   */
+  static {
+    typeMap = new HashMap<DatasetColumn.ColumnType, String>();
+    typeMap.put(ColumnType.INTEGER, "INTEGER");
+    typeMap.put(ColumnType.LONG, "LONG");
+    typeMap.put(ColumnType.DOUBLE, "DOUBLE");
+    typeMap.put(ColumnType.BOOLEAN, "BIT");
+    typeMap.put(ColumnType.STRING, "TEXT");
+  }
 
   @Override
   public String getDataset(String dataset) throws Exception {
@@ -245,6 +263,110 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       if (conn != null) try { conn.close(); } catch (Exception e) {}
     }
   }
+  
+  @Override
+  public void persistDataset(String tableName, DatasetColumn[] columns, List<String[]> data) {
+    Connection conn = null;
+    Statement st = null;
+    PreparedStatement pst = null;
+    int columnNum = columns.length;
+    int currentColumn = -1;
+    try {
+      conn = getDataSource().getConnection();
+      st = conn.createStatement();
+      String sql = "DROP TABLE IF EXISTS `" + tableName + "`";
+      st.executeUpdate(sql);
+      
+      sql = buildSchema(tableName, columns);
+      logger.debug("Creating table: {}...", sql);
+      st.execute(sql);
+      
+      StringBuilder insertSql = new StringBuilder("INSERT INTO `" + tableName + "`(");
+      for (int i = 0; i < columnNum; i++) {
+        insertSql.append("`" + columns[i].getName() + "`,");
+      }
+      insertSql = new StringBuilder(insertSql.substring(0, insertSql.length() - 1));
+      insertSql.append(") VALUES ");
+      
+      for (int i = 0; i < data.size(); i++) {      
+        StringBuilder row = new StringBuilder("(");
+        for (int j = 0; j < columnNum; j++) {
+          row.append("?,");
+        }
+        String rowStr = row.substring(0, row.length() - 1);
+        rowStr += "),";
+        insertSql.append(rowStr);
+      }
+      
+      sql = insertSql.substring(0, insertSql.length() - 1);
+      pst = conn.prepareStatement(sql);
+      for (int i = 0; i < data.size(); i++) {
+        String[] rowData = data.get(i);
+        for (int j = 0; j < columnNum; j++) {
+          currentColumn = j;
+          switch (columns[j].getType()) {
+            case INTEGER:
+              int intVal = Integer.parseInt(rowData[j]);
+              pst.setInt(i*columnNum + j + 1, intVal);
+              break;
+            case LONG:
+              long longVal = Long.parseLong(rowData[j]);
+              pst.setLong(i*columnNum + j + 1, longVal);
+              break;
+            case DOUBLE:
+              double doubleVal = Double.parseDouble(rowData[j]); 
+              pst.setDouble(i*columnNum + j + 1, doubleVal);
+              break;
+            case BOOLEAN:
+              boolean boolVal = Boolean.parseBoolean(rowData[j]);
+              pst.setBoolean(i*columnNum + j + 1, boolVal);
+              break;
+            case STRING:
+              pst.setString(i*columnNum + j + 1, rowData[j]);
+              break;
+            default:
+              pst.setString(i*columnNum + j + 1, rowData[j]);
+          }
+          
+          pst.setString(i*columnNum + j + 1, rowData[j]);
+        }
+      }
+      //int result = st.executeUpdate(sql);
+      
+      boolean disabledKey = false;
+      if (data.size() > 1000) {
+        // disable keys
+        sql = "ALTER TABLE `" + tableName + "` DISABLE KEYS";
+        st.executeUpdate(sql);
+        disabledKey = true;
+      }
+      
+      logger.debug("Inserting data to table `{}`...", tableName);
+      // execute insert
+      int result = pst.executeUpdate();
+      
+      // enable keys
+      if (disabledKey) {
+        sql = "ALTER TABLE `" + tableName + "` ENABLE KEYS";
+        st.executeUpdate(sql);
+      }
+      
+      logger.debug("Insert completed: {} rows.", result);
+      
+    } catch (NumberFormatException e) {
+      if (currentColumn >= 0) {
+        throw new InvalidColumnTypeException(String.format("Column %d %s is not %s", currentColumn,
+            columns[currentColumn].getName(), columns[currentColumn].getTypeName()));
+      } else throw new RuntimeException(e);
+      
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    } finally {
+      if (st != null) try { st.close(); } catch (Exception e) {}
+      if (pst != null) try { pst.close(); } catch (Exception e) {}
+      if (conn != null) try { conn.close(); } catch (Exception e) {}
+    }
+  }
 
   @Override
   public void dropDataset(String dsFullname) {
@@ -337,6 +459,18 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       if (st != null) try { st.close(); } catch (Exception e) {}
       if (conn != null) try { conn.close(); } catch (Exception e) {}
     }
+  }
+
+  @Override
+  public String buildSchema(String tableName, DatasetColumn[] columns) {    
+    StringBuilder createSql = new StringBuilder("CREATE TABLE `" + tableName + "` (");
+    for (DatasetColumn column : columns) {
+      createSql.append("`" + column.getName() + "` ");
+      createSql.append(typeMap.get(column.getType()));
+      createSql.append(",");
+    }
+    
+    return createSql.substring(0, createSql.length() - 1) + ")";
   }
   
 }

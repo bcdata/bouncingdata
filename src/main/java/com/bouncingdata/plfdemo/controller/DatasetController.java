@@ -1,7 +1,13 @@
 package com.bouncingdata.plfdemo.controller;
 
 import java.io.BufferedOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +18,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +49,7 @@ import com.bouncingdata.plfdemo.util.Utils;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParser;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory.FileType;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
 
 @Controller
@@ -58,6 +66,12 @@ public class DatasetController {
   
   @Autowired
   private ApplicationStoreService appStoreService;
+  
+  private String logDir;
+  
+  public void setLogDir(String ld) {
+    this.logDir = ld;
+  }
     
   @SuppressWarnings("rawtypes")
   @RequestMapping(value="/{guid}", method = RequestMethod.GET)
@@ -170,11 +184,32 @@ public class DatasetController {
     } else return new ActionResult(-1, "Unknown type");
     
     // temporary store to where? in which format?
+    final String ticket = Utils.getExecutionId();
+    String tempDataFilePath = logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat";
+    File tempDataFile = new File(tempDataFilePath);
+    
+    try {
+      if (!tempDataFile.getParentFile().isDirectory()) {
+        tempDataFile.getParentFile().mkdirs();
+      }
+      
+      List<String[]> data = parser.parse(file.getInputStream());
+      ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
+      for (String[] row : data) {
+        os.writeObject(row);
+      }
+      os.close();
+      
+    } catch (Exception e) {
+      logger.debug("Failed to write to temporary datafile {}", tempDataFilePath);
+      return new ActionResult(-1, "Failed to parse and save your data");
+    }
+    
     try {
       // parse schema
       List<DatasetColumn> schema = parser.parseSchema(file.getInputStream());
       ActionResult result = new ActionResult(1, "Successfully parsed schema");
-      result.setObject(schema);
+      result.setObject(new Object[] { ticket, schema });
       return result;
     } catch(Exception e) {
       return new ActionResult(-1, "Cannot parse schema");
@@ -183,9 +218,93 @@ public class DatasetController {
     
   }
   
-  public @ResponseBody ActionResult persistDataset() {
+  @RequestMapping(value="/persist", method = RequestMethod.POST)
+  @ResponseBody
+  public ActionResult persistDataset(@RequestParam(value = "ticket", required = true) String ticket,
+      @RequestParam(value = "schema", required = true) String schema,
+      @RequestParam(value = "name", required = true) String name, Principal principal) {
     
-    return null;
+    User user = (User) ((Authentication)principal).getPrincipal();
+    
+    // check if the guid is valid and temp. file exists
+    File tempDataFile = new File(logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat");
+    if (!tempDataFile.isFile()) {
+      return new ActionResult(-1, "Can't find your submitted data. Please try again.");
+    }
+    
+    List<String[]> data = new ArrayList<String[]>();
+    int columnNumber = -1;
+    
+    // read the temporary file
+    try {
+      ObjectInputStream is = new ObjectInputStream(new FileInputStream(tempDataFile));
+      while (true) {
+        try {
+          String[] row = (String[]) is.readObject();
+          data.add(row);
+          if (columnNumber < 0) columnNumber = row.length;
+        } catch (EOFException eof) {
+          break;
+        }
+      }
+       
+    } catch (Exception e) {
+      logger.debug("Failed to read temporary datafile {}", tempDataFile.getAbsolutePath());
+      return new ActionResult(-1, "Can't read your subbmitted data. Data persist failed.");
+    }
+    
+    DatasetColumn[] columns = new DatasetColumn[columnNumber];
+    
+    // parse the schema string
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode schemaArray = mapper.readTree(schema);
+      for (int i = 0; i < schemaArray.size(); i++) {
+        JsonNode element = schemaArray.get(i);
+        String colName = element.get(0).getTextValue();
+        String colType = element.get(1).getTextValue();
+        DatasetColumn col = new DatasetColumn(colName);
+        col.setTypeName(colType);
+        col.setType(ColumnType.getTypeFromName(colType));
+        columns[i] = col;
+      }
+    } catch (Exception e) {
+      logger.debug("Failed to parse schema json string: {}", schema);
+      logger.debug("", e);
+      return new ActionResult(-1, "Failed to parse the submitted schema. Please try again");
+    }
+    
+    String dsFName = user.getUsername() + "." + name;
+    String datasetSchema = userDataService.buildSchema(dsFName, columns);
+    String guid = Utils.generateGuid();
+    try {
+      userDataService.storeData(dsFName, columns, data.subList(1, data.size()));  
+      Dataset ds = new Dataset();
+      ds.setUser(user);
+      ds.setActive(true);
+      Date timestamp = new Date();
+      ds.setCreateAt(timestamp);
+      ds.setLastUpdate(timestamp);
+      ds.setDescription("Uploaded by " + user.getUsername() + " at " + timestamp.toString());       
+      ds.setName(dsFName);
+      ds.setScraper(null);
+      ds.setRowCount(data.size() - 1);
+      ds.setGuid(guid);      
+      ds.setSchema(datasetSchema);
+      datastoreService.createDataset(ds);
+    } catch (Exception e) {
+      logger.debug("Failed to store datafile {} to datastore as {}", tempDataFile.getAbsolutePath(), dsFName);
+      logger.debug("Requested schema: {}", datasetSchema);
+      logger.debug("", e);
+      return new ActionResult(-1, "Failed to store your dataset");
+    }
+    
+    // delete temp. file
+    tempDataFile.delete();
+    
+    ActionResult result = new ActionResult(0, "OK");
+    result.setObject(guid);
+    return result;
   }
   
   

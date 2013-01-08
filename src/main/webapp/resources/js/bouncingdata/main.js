@@ -1,5 +1,5 @@
 function Main() {
-  // these fields keep tract of css/js asynchronous loading, each file should loaded 1 time.  
+  // these fields keep tract of css/js asynchronous loading, each file should loaded 1 time.
   this.cssLoader = {};
   this.jsLoader = {};
 }
@@ -11,11 +11,11 @@ Main.prototype.setContext = function(ctx) {
 Main.prototype.init = function() {
   this.workbenchSession = {};
   $(function() {
-    
+
     $('input:button, input:submit, button').button();
-    
+
     // initializes main navigation & ajax loading capabilities
-    com.bouncingdata.Nav.init();    
+    com.bouncingdata.Nav.init();
 
     // search form submit
     $('.search-container #search-form').submit(function(e) {
@@ -23,7 +23,7 @@ Main.prototype.init = function() {
       var query = $('#query', $(this)).val();
       var criteria = $('#criteria', $(this)).val();
       if (!query || !criteria) return false;
-      com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);      
+      com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);
       return false;
     });
 
@@ -32,7 +32,7 @@ Main.prototype.init = function() {
 
     // inits. history stack with the first state
     window.history.pushState({linkId: window.location.href}, null, window.location.href);
-    
+
   });
 }
 
@@ -88,13 +88,17 @@ Main.prototype.initPopups = function() {
         $('.new-script-wrapper', self).show();
         $('.ui-dialog-buttonpane', self.parent()).show();
         $('#script-name', self).focus();
-        return false;
+
+        if ($(this).hasClass('new-scraper')) {
+          $('#script-type', self).val('scraper');
+        } else {
+          $('#script-type', self).val('analysis');
+        }
       });
 
       $('.entity-list a.upload-data', self).click(function() {
         self.dialog("close");
         me.$uploadDataDialog.dialog("open");
-        return false;
       });
     }
   });
@@ -136,15 +140,23 @@ Main.prototype.initPopups = function() {
     resizable: false,
     buttons: {
       "Upload": function() {
-        me.uploadDataset($(this));
+        me.submitDataset();
       },
       "Cancel": function() {
         $(this).dialog('close');
+      },
+      "Save": function() {
+        me.persistDataset();
       }
     },
     open: function(event, ui) {
+      $('#file-upload-form', me.$uploadDataDialog)[0].reset();
       $('.upload-status', me.$uploadDataDialog).text('Maximum file size is 20MB').show();
-      $('.ui-widget-overlay').bind('click', function(){ me.$uploadDataDialog.dialog('close'); })
+      $('.preview-panel', me.$uploadDataDialog).hide();
+      $('#schema-table tbody', me.$uploadDataDialog).empty();
+      me.$uploadDataDialog['ticket'] = null;
+      //$('.ui-dialog-buttonpane ', me.$uploadDataDialog.parent())
+      $('.ui-widget-overlay').bind('click', function(){ me.$uploadDataDialog.dialog('close'); });
     }
   });
 
@@ -183,6 +195,11 @@ Main.prototype.initPopups = function() {
   });
 }
 
+/**
+ * Publish a post with an analysis
+ * @param guid
+ * @param message
+ */
 Main.prototype.publish = function(guid, message) {
   var me = this;
   $.ajax({
@@ -205,8 +222,12 @@ Main.prototype.publish = function(guid, message) {
   });
 }
 
-Main.prototype.uploadDataset = function($uploadDataDialog) {
+/**
+ * The first step to upload a dataset, submit dataset file to server
+ */
+Main.prototype.submitDataset = function() {
   console.debug("Upload dataset file...");
+  var $uploadDataDialog = this.$uploadDataDialog;
   var $form = $('form#file-upload-form', $uploadDataDialog);
   //var file = $form.prop('value');
   var file = $('#file', $form).val();
@@ -241,25 +262,86 @@ Main.prototype.uploadDataset = function($uploadDataDialog) {
     success: function(res) {
       $('.upload-in-progress', $form).hide();
       /*if (res < 0) {
-        $('.upload-status', $form).text('Upload failed! Your file may not valid.');
-        return;
-      }
-      console.debug("Uploaded successfully!");
-      $('.upload-status', $form).text(res +  ' bytes uploaded successfully');*/
+       $('.upload-status', $form).text('Upload failed! Your file may not valid.');
+       return;
+       }
+       console.debug("Uploaded successfully!");
+       $('.upload-status', $form).text(res +  ' bytes uploaded successfully');*/
 
       if (res['code'] < 0) {
         $('.upload-status', $form).text('Upload failed! Your file may not valid.');
         console.debug(res['message']);
         return;
       }
-      console.debug("Uploaded successfully!");
       $('.upload-status', $form).text('Uploaded successfully');
-      console.debug(res['message']);
+
+      console.debug("Message: " + res['message']);
       console.debug(res['object']);
+
+      var ticket = res['object'][0];
+      $uploadDataDialog['ticket'] = ticket;
+      var schema = res['object'][1];
+      var $schemaTableBody = $('#schema-table tbody', $uploadDataDialog);
+      var index;
+      for (index in schema) {
+        var column = schema[index];
+        var $row = $('<tr><td>' + index + '</td><td>' + column['name'] + '</td><td>'
+            + '<select class="column-type-select"><option value="Boolean">Boolean</option>'
+            + '<option value="Integer">Integer</option><option value="Long">Long</option>'
+            + '<option value="Double">Double</option><option value="String">String</option>'
+            + '</select></td></tr>');
+        $schemaTableBody.append($row);
+        $('select.column-type-select', $row).val(column['typeName']);
+      }
+
+      $('.preview-panel', $uploadDataDialog).show();
+      $('.preview-panel .dataset-name', this.$uploadDataDialog).val(file).focus();
     },
     error: function(err) {
       $('.upload-status', $form).text('Failed to upload');
       console.debug(err);
+    }
+  });
+}
+
+/**
+ * The second step to upload dataset: preview & decide the schema, dataset name.
+ */
+Main.prototype.persistDataset = function() {
+  var ticket = this.$uploadDataDialog['ticket'];
+  if (!ticket) {
+    return;
+  }
+
+  var name = $('.preview-panel .dataset-name', this.$uploadDataDialog).val();
+  if (!name) {
+    return;
+  }
+
+  // submit schema to server to persist data
+  var $schemaTableBody = $('#schema-table tbody', this.$uploadDataDialog);
+  var schema = [];
+  $('tr', $schemaTableBody).each(function() {
+    var $tds = $('td', $(this));
+    schema.push([$($tds[1]).text(), $('select.column-type-select', $tds[2]).val()])
+  });
+
+  var schemaStr = JSON.stringify(schema);
+  console.debug("Name: " + name + "; Schema: " + schemaStr);
+  $.ajax({
+    url: ctx + '/dataset/persist',
+    type: 'post',
+    data: {
+      ticket: ticket,
+      name: name,
+      schema: schemaStr
+    },
+    success: function(res) {
+      console.debug(res);
+    },
+    error: function(msg) {
+      console.debug('Failed to make request to persist data');
+      console.debug(msg);
     }
   });
 }
@@ -285,21 +367,21 @@ Main.prototype.toggleAjaxLoading = function(display, message) {
 Main.prototype.loadCss = function(cssUrl, pageName) {
   if (!com.bouncingdata.Main.cssLoader[pageName]) {
     /*$.ajax({
-      url: cssUrl,
-      success: function(result) {
-        var $style = $('head style');
-        if ($style.length <= 0) {
-          $style.appendTo('head');
-        }
-        $style.append(result);
-        com.bouncingdata.Main.cssLoader[pageName] = true;
-        console.debug("Css file " + cssUrl + " anync. loaded successfully.");
-      },
-      error: function(result) {
-        console.debug("Failed to load css from " + cssUrl);
-        console.debug("Error: " + result);
-      }
-    });*/
+     url: cssUrl,
+     success: function(result) {
+     var $style = $('head style');
+     if ($style.length <= 0) {
+     $style.appendTo('head');
+     }
+     $style.append(result);
+     com.bouncingdata.Main.cssLoader[pageName] = true;
+     console.debug("Css file " + cssUrl + " anync. loaded successfully.");
+     },
+     error: function(result) {
+     console.debug("Failed to load css from " + cssUrl);
+     console.debug("Error: " + result);
+     }
+     });*/
     var $head = $('head');
     $head.append('<link rel="stylesheet" type="text/css" href="' + cssUrl + '" /> ');
     com.bouncingdata.Main.cssLoader[pageName] = true;
@@ -324,14 +406,14 @@ Utils.prototype.getConsoleCaret = function(language) {
  */
 Utils.prototype.renderDatatable = function(data, $table) {
   if (!data || data.length <= 0) return;
-  
+
   //prepare data
   var first = data[0];
   var aoColumns = [];
   for (key in first) {
     aoColumns.push({ "sTitle": key});
   }
-  
+
   var aaData = [];
   for (index in data) {
     var item = data[index];
@@ -342,8 +424,8 @@ Utils.prototype.renderDatatable = function(data, $table) {
     aaData.push(arr);
   }
   var datatable = $table.dataTable({
-    "aaData": aaData, 
-    "aoColumns": aoColumns, 
+    "aaData": aaData,
+    "aoColumns": aoColumns,
     "bJQueryUI": true,
     "sPaginationType": "full_numbers"
   });
@@ -362,7 +444,7 @@ Utils.prototype.setOverlay = function($panel, isActive) {
   if (isActive) {
     var $overlay = $('<div class="overlay-panel" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>');
     $overlay.css('background', 'url("' + ctx + '/resources/images/ajax-loader.gif") no-repeat 50% 10% #eee')
-      .css('z-index', 10).css('background-size', '30px 30px').css('opacity', '0.8');
+        .css('z-index', 10).css('background-size', '30px 30px').css('opacity', '0.8');
     if (!$panel.css('position')) {
       $panel.css('position', 'relative');
     }

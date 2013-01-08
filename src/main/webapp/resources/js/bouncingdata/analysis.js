@@ -167,26 +167,13 @@ Analysis.prototype.init = function(anls, dbDetail) {
 
 }
 
-// callback function when click on 'reply'
-Analysis.prototype.inlineReplyFunction = function() {
-  //
-  var me = this;
-  var $commentBody = $(this).parent().parent();
-  var $comment = $commentBody.parent();
-  if ($commentBody.next().is('div.inline-editor')) {
-    $commentBody.next().remove();
-    return false;
-  }
-  var $inlineEditor = $.tmpl(me.$commentEditor, { rows: 3 });
-  $commentBody.after($inlineEditor);
-  $('input.reply-button', $inlineEditor).click(function() {
-    var message = $(this).prev().val();
-    if (!message) return false;
-    me.postComment(guid, message, $comment.attr('nodeid'), function() {$commentBody.next().remove();});
-  }).button();
-  return false;
-}
-
+/**
+ *
+ * @param guid
+ * @param message
+ * @param parentId
+ * @param callback
+ */
 Analysis.prototype.postComment = function(guid, message, parentId, callback) {
   var me = this;
   if (!message) return;
@@ -235,6 +222,26 @@ Analysis.prototype.loadCommentList = function(guid) {
   
   // maps the commentId with commentObj
   me.commentList = {};
+
+  // callback function when click on 'reply'
+  me.inlineReplyFunction = function(event) {
+    //
+    var $self = $(event.target);
+    var $commentBody = $self.parent().parent();
+    var $comment = $commentBody.parent();
+    if ($commentBody.next().is('div.inline-editor')) {
+      $commentBody.next().remove();
+      return false;
+    }
+    var $inlineEditor = $.tmpl(me.$commentEditor, { rows: 3 });
+    $commentBody.after($inlineEditor);
+    $('input.reply-button', $inlineEditor).click(function() {
+      var message = $(this).prev().val();
+      if (!message) return false;
+      me.postComment(guid, message, $comment.attr('nodeid'), function() {$commentBody.next().remove();});
+    }).button();
+    return false;
+  }
   
   // fetch comment list from server
   $.ajax({
@@ -273,7 +280,7 @@ Analysis.prototype.loadCommentList = function(guid) {
       }
       
       $commentList.append(commentToInsert.join(''));
-      
+
       $('a.comment-reply', $commentList).click(me.inlineReplyFunction);
       
       $('a.up-vote-link', $commentList).click(function() {
@@ -357,7 +364,7 @@ Analysis.prototype.addComment = function(guid, commentObj) {
     if (!$parent) return false;
     $parent.children('ul.children').append($comment);
   }
-  
+
   $('a.comment-reply', $comment).click(me.inlineReplyFunction);
   
   $('a.up-vote-link', $commentList).click(function() {

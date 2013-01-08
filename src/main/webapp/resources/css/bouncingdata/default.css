@@ -53,7 +53,7 @@ div.clear {
 }
 
 #page .header-container .header {
-  margin-left: 40px;
+  margin-left: 20px;
   position: relative;  
 }
 
@@ -69,7 +69,7 @@ div.clear {
 
 #page .header-container .search-container {
   position: absolute;  
-  left: 153px;
+  left: 173px;
 }
 
 #page .header-container .search-container .search-form {
@@ -92,6 +92,7 @@ div.clear {
   border: 0 none;
   padding: 0;
   height: 20px;
+  outline: none;
 }
 
 #page .header-container .search-container #search-submit {
@@ -128,7 +129,7 @@ div.clear {
 #page .header-container .header-content .header-logo {
   margin: 5px 0 0;
   float: left; 
-  display: inline;
+  display: inline-block;
 }
 
 #page > .main-container {
@@ -260,7 +261,7 @@ body > .popup-container {
 }
 
 .main-navigation a.nav-hidden-item:hover {
-  background-color: #FBFBFB;
+  background-color: #F1F1F1;
 }
 
 .main-navigation .nav-hidden-menu-rule {

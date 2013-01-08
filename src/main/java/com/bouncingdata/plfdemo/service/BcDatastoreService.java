@@ -1,8 +1,6 @@
 package com.bouncingdata.plfdemo.service;
 
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bouncingdata.plfdemo.datastore.DataStorage;
 import com.bouncingdata.plfdemo.datastore.JdbcBcDatastore;
-import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
-import com.bouncingdata.plfdemo.util.Utils;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
 
 @Transactional
 public class BcDatastoreService {
@@ -62,12 +59,20 @@ public class BcDatastoreService {
     jdbcBcDatastore.persistDataset(dsFullName , headers, data);
   }
   
+  public void storeData(String dsFullName, DatasetColumn[] columns, List<String[]> data) throws Exception {
+    jdbcBcDatastore.persistDataset(dsFullName , columns, data);
+  }
+  
   public String[] getColumnNames(String dsFullname) throws Exception {
     return jdbcBcDatastore.getColumnNames(dsFullname);
   }
   
   public void getCsvStream(String dsFullname, OutputStream os) throws Exception {
     jdbcBcDatastore.getCsvStream(dsFullname, os);
+  }
+  
+  public String buildSchema(String tableName, DatasetColumn[] columns) {
+    return jdbcBcDatastore.buildSchema(tableName, columns);
   }
       
 }

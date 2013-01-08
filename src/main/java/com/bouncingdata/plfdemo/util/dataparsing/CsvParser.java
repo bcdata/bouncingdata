@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bouncingdata.plfdemo.util.Utils;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
 public class CsvParser implements DataParser {
   
@@ -83,8 +84,9 @@ public class CsvParser implements DataParser {
     
     List<CSVRecord> recordList = new ArrayList<CSVRecord>();
     
-    // guess column type from the first 10 records
-    for (int i = 1; i <= 10; i++) {
+    int patternSize = (int) Math.max(100, parser.getRecordNumber());
+    // guess column type from the first 100 records
+    for (int i = 1; i <= patternSize; i++) {
       if (iter.hasNext()) {
         recordList.add(iter.next());
       }
@@ -110,34 +112,34 @@ public class CsvParser implements DataParser {
       
       if (isBoolean) {
         dsCol.setTypeName("Boolean");
-        dsCol.setTypeClass(java.lang.Boolean.class);
+        dsCol.setType(ColumnType.BOOLEAN);
         dsColumns.add(dsCol);
         continue;
       }
       
       if (isInt) {
         dsCol.setTypeName("Integer");
-        dsCol.setTypeClass(java.lang.Integer.class);
+        dsCol.setType(ColumnType.INTEGER);
         dsColumns.add(dsCol);
         continue;
       }
       
       if (isLong) {
         dsCol.setTypeName("Long");
-        dsCol.setTypeClass(java.lang.Long.class);
+        dsCol.setType(ColumnType.LONG);
         dsColumns.add(dsCol);
         continue;
       }
       
       if (isDouble) {
         dsCol.setTypeName("Double");
-        dsCol.setTypeClass(java.lang.Double.class);
+        dsCol.setType(ColumnType.DOUBLE);
         dsColumns.add(dsCol);
         continue;
       }
       
       dsCol.setTypeName("String");
-      dsCol.setTypeClass(java.lang.String.class);
+      dsCol.setType(ColumnType.STRING);
       dsColumns.add(dsCol);
       continue;
       

@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="popup new-dialog" id="new-dialog" title="Create new script">
   <div class="entity-chooser">
-    <span>Create new script or upload dataset</span>
+    <span>Create new analysis, scraper or upload dataset</span>
 
     <div class="entity-list">
       <a class="new-anls" href="">Analysis</a>
@@ -61,8 +61,24 @@
     <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" />&nbsp;
     <span class="upload-status"></span>
   </form>
-  <div class="data-preview">
+  <div class="preview-panel" style="margin-top: 20px;">
+    <div>
+      <label>Dataset name</label>
+      <input type="text" class="dataset-name" />
+    </div>
+    <div class="clear"></div>
+    <table id="schema-table" class="schema-table" border="1" style="width: 100%; margin-top: 10px;">
+      <thead>
+        <tr>
+          <td><strong>No.</strong></td>
+          <td><strong>Column name</strong></td>
+          <td><strong>Data type</strong></td>
+        </tr>
+      </thead>
+      <tbody>
 
+      </tbody>
+    </table>
   </div>
 </div>
 

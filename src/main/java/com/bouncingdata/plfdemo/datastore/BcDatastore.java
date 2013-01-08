@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
+
 public interface BcDatastore {
 
   /**
@@ -37,5 +39,9 @@ public interface BcDatastore {
   void dropDataset(String datasetName);
   
   void getCsvStream(String dsFullname, OutputStream os) throws Exception;
+
+  void persistDataset(String tableName, DatasetColumn[] columns, List<String[]> data);
+  
+  String buildSchema(String tableName, DatasetColumn[] columns);
 
 }

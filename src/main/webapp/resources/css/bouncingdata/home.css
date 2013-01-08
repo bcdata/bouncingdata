@@ -50,6 +50,7 @@
   border: 1px solid #EEEEEE;
   margin: 10px 10px 0 0;
   float: left;
+  border-radius: 2px;
 }
 
 #stream .event .event-content .thumbnail a {
