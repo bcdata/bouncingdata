@@ -12,6 +12,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bouncingdata.plfdemo.util.Utils;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
+
 class ExcelParser implements DataParser {
   
   private Logger logger = LoggerFactory.getLogger(ExcelParser.class);
@@ -93,7 +96,91 @@ class ExcelParser implements DataParser {
 
   @Override
   public List<DatasetColumn> parseSchema(InputStream is) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Workbook wb = WorkbookFactory.create(is);
+    Sheet sheet = wb.getSheetAt(0);
+
+    // from the first row, determine the schema
+    int firstRowNum = sheet.getFirstRowNum();
+    int lastRowNum = sheet.getLastRowNum();
+    Row firstRow = sheet.getRow(firstRowNum);
+    int firstCellNum = firstRow.getFirstCellNum();
+    int lastCellNum = firstRow.getLastCellNum() - 1;
+
+    List<Row> rows = new ArrayList<Row>();
+    int patternSize = (int) Math.max(100, lastRowNum - firstRowNum);
+    
+    for (int i = 1 ; i <= patternSize; i++) {
+      rows.add(sheet.getRow(firstRowNum + i));
+    }
+    
+    List<DatasetColumn> columns = new ArrayList<DatasetColumn>();
+    for (int i = firstCellNum; i <= lastCellNum; i++) {
+      Cell headerCell = firstRow.getCell(i);
+      String header = getCellStringValue(headerCell).trim();
+      DatasetColumn column = new DatasetColumn(header);
+      
+      boolean isBoolean = true;
+      boolean isInt = true;
+      boolean isLong = true;
+      boolean isDouble = true;
+      
+      // read first 100 value of this column to guess the datatype
+      for (int j = 0; j < rows.size(); j++) {
+        Cell cell = rows.get(j).getCell(i);
+        if (cell != null) {
+          int type = cell.getCellType();
+          switch(type) {
+          case Cell.CELL_TYPE_BOOLEAN:
+            isInt = false;
+            isLong = false;
+            isDouble = false;
+            break;
+          case Cell.CELL_TYPE_NUMERIC:
+            isBoolean = false;
+            // set as double
+            isInt = false;
+            isLong = false;
+            break;
+          }
+        }
+      }
+      
+      if (isBoolean) {
+        column.setTypeName("Boolean");
+        column.setType(ColumnType.BOOLEAN);
+        columns.add(column);
+        continue;
+      }
+      
+      if (isInt) {
+        column.setTypeName("Integer");
+        column.setType(ColumnType.INTEGER);
+        columns.add(column);
+        continue;
+      }
+      
+      if (isLong) {
+        column.setTypeName("Long");
+        column.setType(ColumnType.LONG);
+        columns.add(column);
+        continue;
+      }
+      
+      if (isDouble) {
+        column.setTypeName("Double");
+        column.setType(ColumnType.DOUBLE);
+        columns.add(column);
+        continue;
+      }
+      
+      column.setTypeName("String");
+      column.setType(ColumnType.STRING);
+      columns.add(column);
+      continue;
+      
+    }
+    
+    return columns;
+    
   }
 }

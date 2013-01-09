@@ -3,10 +3,11 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <script>
+	com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
 	$(function() {
-	  $('#dataset-content').tabs();
+	  $('#dataset-content').tabs();  
+	  //SyntaxHighlighter.highlight();
 	  com.bouncingdata.Nav.setSelected('data', '${dataset.guid}');
-	  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
 	});
 </script>
 <div id="main-content" class="datapage-container">
@@ -106,7 +107,8 @@
           </div>
         </div>
         <div id="schema">
-          <pre style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre>
+          <!-- pre style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre-->
+          <pre class="brush: sql" style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre>
         </div>
         <div id="description">
         <c:choose>

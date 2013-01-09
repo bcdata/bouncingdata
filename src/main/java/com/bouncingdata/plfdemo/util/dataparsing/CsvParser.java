@@ -95,7 +95,7 @@ public class CsvParser implements DataParser {
     List<DatasetColumn> dsColumns = new ArrayList<DatasetColumn>();
     
     for (int i = 0; i < fieldNumber; i++) {
-      String column = header.get(i);
+      String column = header.get(i).trim();
       DatasetColumn dsCol = new DatasetColumn(column);
       boolean isBoolean = true;
       boolean isInt = true;

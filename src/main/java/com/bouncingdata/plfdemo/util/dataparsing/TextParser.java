@@ -66,8 +66,7 @@ public class TextParser implements DataParser {
 
   @Override
   public List<DatasetColumn> parseSchema(InputStream is) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    throw new Exception("Temporarily disabled the text support");
   }
 
 }

@@ -157,6 +157,9 @@ Main.prototype.initPopups = function() {
       me.$uploadDataDialog['ticket'] = null;
       //$('.ui-dialog-buttonpane ', me.$uploadDataDialog.parent())
       $('.ui-widget-overlay').bind('click', function(){ me.$uploadDataDialog.dialog('close'); });
+    },
+    close: function(event, ui) {
+      me.$uploadDataDialog['ticket'] = null;
     }
   });
 
@@ -244,6 +247,7 @@ Main.prototype.submitDataset = function() {
   }
 
   var extension = file.substring(file.lastIndexOf('.') + 1);
+  var filename = file.substring(0, file.lastIndexOf('.'));
   if ($.inArray(extension, ['xls', 'xlsx', 'csv', 'txt']) < 0) {
     $('.upload-status', $form).text('This file could not be imported. Supported formats: .xls, .xlsx, .csv, .txt').show();
     return;
@@ -295,7 +299,7 @@ Main.prototype.submitDataset = function() {
       }
 
       $('.preview-panel', $uploadDataDialog).show();
-      $('.preview-panel .dataset-name', this.$uploadDataDialog).val(file).focus();
+      $('.preview-panel .dataset-name', this.$uploadDataDialog).val(filename).focus();
     },
     error: function(err) {
       $('.upload-status', $form).text('Failed to upload');
@@ -308,6 +312,7 @@ Main.prototype.submitDataset = function() {
  * The second step to upload dataset: preview & decide the schema, dataset name.
  */
 Main.prototype.persistDataset = function() {
+  var me = this;
   var ticket = this.$uploadDataDialog['ticket'];
   if (!ticket) {
     return;
@@ -323,7 +328,7 @@ Main.prototype.persistDataset = function() {
   var schema = [];
   $('tr', $schemaTableBody).each(function() {
     var $tds = $('td', $(this));
-    schema.push([$($tds[1]).text(), $('select.column-type-select', $tds[2]).val()])
+    schema.push([$.trim($($tds[1]).text()), $('select.column-type-select', $tds[2]).val()])
   });
 
   var schemaStr = JSON.stringify(schema);
@@ -338,6 +343,15 @@ Main.prototype.persistDataset = function() {
     },
     success: function(res) {
       console.debug(res);
+      if (res['code'] < 0) {
+        window.alert("Failed to upload dataset.\nError: " + res['message']);
+        return;
+      }
+      var guid = res['object'];
+      me.$uploadDataDialog.dialog('close');
+      if (window.confirm("Your dataset \"" + name + "\" has been uploaded successfully. Open it now?")) {
+        com.bouncingdata.Nav.fireAjaxLoad(ctx + '/dataset/view/' + guid, false);
+      }
     },
     error: function(msg) {
       console.debug('Failed to make request to persist data');

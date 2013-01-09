@@ -261,7 +261,7 @@ public class DatasetController {
       JsonNode schemaArray = mapper.readTree(schema);
       for (int i = 0; i < schemaArray.size(); i++) {
         JsonNode element = schemaArray.get(i);
-        String colName = element.get(0).getTextValue();
+        String colName = element.get(0).getTextValue().trim();
         String colType = element.get(1).getTextValue();
         DatasetColumn col = new DatasetColumn(colName);
         col.setTypeName(colType);
