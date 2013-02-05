@@ -1,4 +1,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<div class="main-nav-container">
+  <div class="main-nav-content">
+    <ul class="main-nav-links">
+      <li><a class="main-nav-item" href="#">Timeline</a></li>
+      <li><a class="main-nav-item" href="#">Created By Me</a></li>
+      <li><a class="main-nav-item" href="#">All</a></li>
+      <li><a class="main-nav-item" href="#">Staff's Picks</a></li>
+      <li><a class="main-nav-item" href="#">Popular Authors</a></li>
+      <li>
+        <a class="main-nav-item" href="#">Tags</a>
+        <div class="tags-container">
+          <ul class="tag-links">
+            <li><a href="#">Economics</a></li>
+            <li><a href="#">Finance</a></li>
+            <li><a href="#">Health</a></li>
+            <li><a href="#">Education</a></li>
+            <li><a href="#">US</a></li>
+            <li><a href="#">Football</a></li>
+            <li><a href="#">Sports</a></li>
+            <li><a href="#">AMZ</a></li>
+            <li><a href="#">World Bank</a></li>
+            <li><a href="#">OCED</a></li>
+            <li><a href="#">Payroll</a></li>
+            <li><a href="#">More..</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
 <div class="nav-item nav-page" id="nav-stream">
   <form action="<c:url value='/stream'/>" method="GET" id="nav-stream-form" style="padding: 0px;margin: 0px;"></form>
   <a href="<c:url value='/stream'/>" class="nav-item-link" id="nav-stream-link" ref="stream">

@@ -6,7 +6,19 @@
   com.bouncingdata.ActivityStream.init();
 </script>
 <div id="main-content">
-  <div class="right-content">
+  <div class="right-content" style="color: #555555;">
+    <div class="right-content-section most-popular-section">
+      <div class="right-content-section-title">
+        <h4>Most Popular</h4>   
+        <div class="most-popular-content" style="border: 1px solid #dddddd; height: 300px; background-color: #fefefe;"></div> 
+      </div>
+    </div>
+    <div class="right-content-section recommendation-section">
+      <div class="right-content-section-title">
+        <h4>Staff's Pick</h4>    
+        <div class="staff-pick-content" style="border: 1px solid #dddddd; height: 300px; background-color: #fefefe;"></div>
+      </div>
+    </div>
   </div>
   <div class="center-content">
     <div class="center-content-wrapper">
