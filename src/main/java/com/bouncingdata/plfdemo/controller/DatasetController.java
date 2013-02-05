@@ -49,8 +49,8 @@ import com.bouncingdata.plfdemo.util.Utils;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParser;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory.FileType;
-import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
 @Controller
 @RequestMapping("/dataset")
