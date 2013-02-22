@@ -2,7 +2,7 @@
 <div class="main-nav-container">
   <div class="main-nav-content">
     <ul class="main-nav-links">
-      <li><a class="main-nav-item" href="#">Timeline</a></li>
+      <li><a class="main-nav-item" href="<c:url value="/stream" />">Timeline</a></li>
       <li><a class="main-nav-item" href="#">Created By Me</a></li>
       <li><a class="main-nav-item" href="#">All</a></li>
       <li><a class="main-nav-item" href="#">Staff's Picks</a></li>
