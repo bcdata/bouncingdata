@@ -13,17 +13,35 @@
   </div>
   
   <h2 class="header-logo">
-    <a href="#">Bouncing Data</a>
+    <a href="<c:url value="/"/>">Bouncing Data</a>
   </h2>
-  <div class="search-container">
-    <form id="search-form" class="search-form" method="get">
-      <div class="search-input-wrapper">
-        <input type="text" class="search-input" id="query" name="query" />
+  <div class="top-page-panel">
+    <div class="search-container">
+      <form id="search-form" class="search-form" method="get">
+        <div class="search-input-wrapper">
+          <input type="text" class="search-input" id="query" name="query" />
+        </div>
+        <input type="hidden" name="criteria" value="global" id="criteria" />
+        <!-- button type="submit" id="search-submit">Search</button-->
+      </form>
+    </div>
+    <div class="header-buttons">
+      <div class="guide-button-container">
+        <div class="guide-button">Learn</div>
+        <div class="guide-button">Help</div>
+        <div class="guide-button">Me</div>
       </div>
-      <input type="hidden" name="criteria" value="global" id="criteria" />
-      <button type="submit" id="search-submit">Search</button>
-    </form>
-    <div class="clear"></div>
+      <div class="create-button-container">
+        <button class="create-button">Create</button>
+        <div class="create-submenu" style="display: none;">
+          <ul>
+            <li><a href="javascript:void(0);">Analysis</a></li>
+            <li><a href="javascript:void(0);">Dataset</a></li>
+            <li><a href="javascript:void(0);">Scraper</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <jqtemplate>

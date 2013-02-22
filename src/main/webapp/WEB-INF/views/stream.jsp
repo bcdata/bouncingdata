@@ -24,7 +24,7 @@
     <div class="center-content-wrapper">
       <div class="stream-container center-content-main">
         <h3>Activity stream</h3>
-        <div class="stream" id="stream">
+        <div class="stream main-activity-stream" id="stream">
           <c:forEach items="${activities }" var="activity">
             <c:if test="${not empty activity.object }">
               <div class="event" aid="${activity.id }">

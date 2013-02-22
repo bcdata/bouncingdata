@@ -68,10 +68,38 @@ div.clear {
   color: #000000;
 }
 
-#page .header-container .search-container {
-  position: absolute;  
+#page .header-container .top-page-panel {
+  position: absolute;
   left: 180px;
+  width: 925px;
 }
+
+#page .header-container .search-container {
+  /*position: absolute;  
+  left: 180px;*/
+  float: left;
+}
+
+#page .top-page-panel .header-buttons {
+  float: left;
+  margin-left: 30px;
+}
+
+#page .top-page-panel .header-buttons .guide-button-container {
+  float: left;
+}
+
+#page .top-page-panel .header-buttons .guide-button-container .guide-button {
+  display: inline-block;
+  color: blue;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+#page .top-page-panel .header-buttons .create-button-container {
+  float: left;
+  margin-left: 20px;
+} 
 
 #page .header-container .search-container .search-form {
   height: 30px;
@@ -80,7 +108,7 @@ div.clear {
 }
 
 #page .header-container .search-container .search-input-wrapper {
-  width: 530px;
+  width: 430px;
   border: 1px solid #CCCCCC;
   height: 22px;
   padding: 4px 5px 2px 5px;
@@ -89,7 +117,7 @@ div.clear {
 }
 
 #page .header-container .search-container .search-input {
-  width: 518px;
+  width: 418px;
   border: 0 none;
   padding: 0;
   height: 20px;

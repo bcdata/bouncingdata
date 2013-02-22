@@ -29,6 +29,7 @@
     </ul>
   </div>
 </div>
+<div style="display:none;">
 <div class="nav-item nav-page" id="nav-stream">
   <form action="<c:url value='/stream'/>" method="GET" id="nav-stream-form" style="padding: 0px;margin: 0px;"></form>
   <a href="<c:url value='/stream'/>" class="nav-item-link" id="nav-stream-link" ref="stream">
@@ -77,4 +78,5 @@
     <div class="nav-hidden-menu-rule"></div>
     <a href="javascript:void(0)" class="nav-hidden-item nav-upload-data">Upload dataset</a>
   </div>
+</div>
 </div>
