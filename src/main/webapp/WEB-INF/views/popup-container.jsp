@@ -4,9 +4,9 @@
     <span>Create new analysis, scraper or upload dataset</span>
 
     <div class="entity-list">
-      <a class="new-anls" href="">Analysis</a>
-      <a class="new-scraper" href="">Scraper</a>
-      <a class="upload-data" href="">Upload dataset</a>
+      <a class="new-anls" href="javascript:void(0)">Analysis</a>
+      <a class="new-scraper" href="javascript:void(0)">Scraper</a>
+      <a class="upload-data" href="javascript:void(0)">Upload dataset</a>
     </div>
   </div>
   <div class="new-script-wrapper">
