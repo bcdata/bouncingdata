@@ -9,6 +9,7 @@
   <title><tiles:insertAttribute name="title" ignore="true" /></title>
 
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/default.css" />" />
+  <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/home.css" />" />
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bouncingdata/datatable.css" />" />
 
   <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery-ui/smoothness/jquery-ui-1.8.20.custom.css" />" rel="stylesheet" />
@@ -68,7 +69,7 @@
         <tiles:insertAttribute name="header-content" />
       </div>
     </div>
-    <div style="clear: both; height: 60px;"></div>
+    <div style="clear: both; height: 50px;"></div>
     <div class="main-container">
       <div class="main-navigation">
         <tiles:insertAttribute name="navigation" />

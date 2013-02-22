@@ -46,7 +46,7 @@ div.clear {
 #page .header-container {
   background: none repeat top left #F1F1F1;
   clear: both;  
-  height: 60px;
+  height: 50px;
   position: fixed;
   width: 100%;
   z-index: 1000;
@@ -59,7 +59,7 @@ div.clear {
 }
 
 #page .header-container .header-content {
-  padding: 15px 0 5px 5px;
+  padding: 10px 0 5px 5px;
   font-family: Verdana, Arial, sans-serif;
 }
 
@@ -85,6 +85,22 @@ div.clear {
   margin-left: 30px;
 }
 
+#page .top-page-panel .create-button {
+  float: left;
+}
+
+#page .top-page-panel .create-button a#create-button-trigger {
+  background: url("../../images/search-create-sprite.png") no-repeat scroll -45px -28px transparent;
+  color: #FFFFFF;
+  display: block;
+  font-weight: bold;
+  height: 30px;
+  line-height: 28px;
+  padding-left: 13px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+  width: 71px;
+}
+
 #page .top-page-panel .header-buttons .guide-button-container {
   float: left;
 }
@@ -108,20 +124,21 @@ div.clear {
 }
 
 #page .header-container .search-container .search-input-wrapper {
-  width: 430px;
+  width: 520px;
   border: 1px solid #CCCCCC;
-  height: 22px;
-  padding: 4px 5px 2px 5px;
+  height: 28px;
+  padding: 0 0 0 5px;
   display: inline-block;
   background-color: #FFFFFF;
 }
 
 #page .header-container .search-container .search-input {
-  width: 418px;
+  width: 510px;
   border: 0 none;
   padding: 0;
-  height: 20px;
+  height: 28px;
   outline: none;
+  font-size: 16px;
 }
 
 #page .header-container .search-container #search-submit {
@@ -156,7 +173,7 @@ div.clear {
 }
 
 #page .header-container .header-content .header-logo {
-  margin: 5px 0 0;
+  margin: 0;
   float: left; 
   display: inline-block;
 }

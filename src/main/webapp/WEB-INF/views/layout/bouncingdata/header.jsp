@@ -32,7 +32,9 @@
         <div class="guide-button">Me</div>
       </div>
       <div class="create-button-container">
-        <button class="create-button">Create</button>
+        <div id="create-button" class="create-button">
+          <a id="create-button-trigger" class="create-button-trigger" href="javascript:void(0);">Create</a>
+        </div>
         <div class="create-submenu" style="display: none;">
           <ul>
             <li><a href="javascript:void(0);">Analysis</a></li>
@@ -309,7 +311,7 @@
   </script>
   
   <script id="feed-item-template" type="text/x-jquery-tmpl">
-    <div class="event" aid="\${id }">
+    <div class="event stream-item" aid="\${id }">
       <div class="event-avatar">
         <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.jpg" />">
       </div>

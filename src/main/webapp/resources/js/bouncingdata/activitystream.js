@@ -13,6 +13,10 @@ ActivityStream.prototype.init = function() {
 
   $(function() {
 
+    $('.right-content #most-popular-content-tabs').tabs();
+    
+    $('.right-content #staff-pick-content-tabs').tabs();
+    
     $('#stream .event').each(function() {
       com.bouncingdata.ActivityStream.loadAnalysisByAjax($(this));
     });
@@ -26,7 +30,12 @@ ActivityStream.prototype.init = function() {
 
     if (!main.jsLoader["stream"]) {
       $(window).scroll(function() {
-        if ($('#stream').length > 0 && ($(window).scrollTop() + 80 >= $(document).height() - $(window).height())) {
+        var $stream = $('#stream');
+        var itemNumber = $('.stream-item', $stream).length;
+        // automatically load more item when scrolling down to page bottom if the stream is not empty 
+        // and the number of item in stream less than 100
+        if ($stream.length > 0 && itemNumber < 100 
+            && ($(window).scrollTop() + 80 >= $(document).height() - $(window).height())) {
           if (!me.streamEnded && !me.streamLoading) {
             var $lastEvent = $('#stream .event:last');
             if ($lastEvent.length > 0) {

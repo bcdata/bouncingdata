@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <script>
-  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
+  //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
   com.bouncingdata.ActivityStream.init();
 </script>
 <div id="main-content">
@@ -10,13 +10,39 @@
     <div class="right-content-section most-popular-section">
       <div class="right-content-section-title">
         <h4>Most Popular</h4>   
-        <div class="most-popular-content" style="border: 1px solid #dddddd; height: 300px; background-color: #fefefe;"></div> 
+        <div class="most-popular-content">
+          <div id="most-popular-content-tabs" class="most-popular-content-tabs">
+            <ul>
+              <li><a href="#most-popular-analysis">Analysis</a></li>
+              <li><a href="#most-popular-dataset">Dataset</a></li>
+            </ul>
+            <div id="most-popular-analysis">
+              <div style="height: 250px;">Most popular analysis here</div>
+            </div>
+            <div id="most-popular-dataset">
+              <div style="height: 250px;">Most popular dataset here</div>
+            </div>
+          </div>
+        </div> 
       </div>
     </div>
     <div class="right-content-section recommendation-section">
       <div class="right-content-section-title">
         <h4>Staff's Pick</h4>    
-        <div class="staff-pick-content" style="border: 1px solid #dddddd; height: 300px; background-color: #fefefe;"></div>
+        <div class="staff-pick-content">
+          <div id="staff-pick-content-tabs">
+            <ul>
+              <li><a href="#staff-pick-analysis">Analysis</a></li>
+              <li><a href="#staff-pick-dataset">Dataset</a></li>
+            </ul>
+            <div id="staff-pick-analysis">
+              <div style="height: 250px;">Staff pick analysis here</div>
+            </div>
+            <div id="staff-pick-dataset">
+              Staff pick dataset here
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -27,9 +53,9 @@
         <div class="stream main-activity-stream" id="stream">
           <c:forEach items="${activities }" var="activity">
             <c:if test="${not empty activity.object }">
-              <div class="event" aid="${activity.id }">
+              <div class="event stream-item" aid="${activity.id }">
                 <div class="event-avatar">
-                  <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.jpg" />">
+                  <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
                 </div>
                 <div class="event-content">
                   <div class="info" aid="${activity.id }">
