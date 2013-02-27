@@ -1,5 +1,7 @@
 package com.bouncingdata.plfdemo.datastore.pojo.model;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -120,6 +122,16 @@ public abstract class BcDataScript {
   }
   public void setCreateSource(String createSource) {
     this.createSource = createSource;
+  }
+  
+  public String getShortCreateAt() {
+    DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    return df.format(createAt);
+  }
+  
+  public String getShortLastUpdate() {
+    DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    return df.format(lastUpdate);
   }
   
 }

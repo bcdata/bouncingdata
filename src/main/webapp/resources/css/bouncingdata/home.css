@@ -33,12 +33,17 @@
   width: 480px;
 }
 
+#stream .event .event-content .title {
+  color: #0077CC;
+  font-size: 13px;
+  line-height: 1.2em;
+}
+
 #stream .event-content:hover {
   border-color: #CCCCCC;
 }
 
 #stream .event a {
-  color: #000;
   text-decoration: none;
 }
 

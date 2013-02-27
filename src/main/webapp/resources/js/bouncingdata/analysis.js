@@ -16,7 +16,8 @@ Analysis.prototype.init = function(anls, dbDetail) {
 
   $(function() {
     $('#anls-content').tabs();
-
+    $('#related-tabs').tabs();
+    
     com.bouncingdata.Dashboard.view(dbDetail.visualizations, dbDetail.dashboard, $('#main-content #anls-dashboard'));
 
     $('#anls-content').bind('tabsselect', function(event, ui) {

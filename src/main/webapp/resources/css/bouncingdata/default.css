@@ -1,6 +1,7 @@
 body, html>body {
   margin: 0 auto;
   font-size: 12px;
+  color: #333;
   font-family: "Helvetica Neue", Arial, sans-serif; 
 }
 
@@ -10,9 +11,14 @@ body .ui-widget {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-#page a, #page a:link, #page a:hover, #page a:visited {
+a, a:link, a:visited, a:active {
   outline: none;
   text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;  
 }
 
 #page input.ui-button, #page button.ui-button .ui-button-text {
@@ -53,12 +59,12 @@ div.clear {
   border-bottom: 1px solid #E2E2E2;
 }
 
-#page .header-container .header {
+.header-container .header {
   margin-left: 45px;
   position: relative;  
 }
 
-#page .header-container .header-content {
+.header-container .header-content {
   padding: 10px 0 5px 5px;
   font-family: Verdana, Arial, sans-serif;
 }
@@ -68,28 +74,28 @@ div.clear {
   color: #000000;
 }
 
-#page .header-container .top-page-panel {
+.header-container .top-page-panel {
   position: absolute;
   left: 180px;
   width: 925px;
 }
 
-#page .header-container .search-container {
+.header-container .search-container {
   /*position: absolute;  
   left: 180px;*/
   float: left;
 }
 
-#page .top-page-panel .header-buttons {
+.top-page-panel .header-buttons {
   float: left;
   margin-left: 30px;
 }
 
-#page .top-page-panel .create-button {
+.top-page-panel .create-button {
   float: left;
 }
 
-#page .top-page-panel .create-button a#create-button-trigger {
+.top-page-panel .create-button a#create-button-link {
   background: url("../../images/search-create-sprite.png") no-repeat scroll -45px -28px transparent;
   color: #FFFFFF;
   display: block;
@@ -99,6 +105,48 @@ div.clear {
   padding-left: 13px;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
   width: 71px;
+}
+
+.top-page-panel .create-button a#create-button-link.active {
+  background-position: -141px -94px;
+  position: relative;
+  z-index: 501;
+}
+
+.top-page-panel .create-button a#create-button-link:hover {
+  background-position: -45px -61px;
+}
+
+.top-page-panel .create-button-container a.create-sub-item {
+  background-color: #272727;
+  border: medium none;
+  color: #CCCCCC;
+  display: block;
+  float: none;
+  font-size: 12px;
+  font-weight: normal;
+  height: 25px;
+  line-height: 26px;
+  margin: 0 4px 0 2px;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  margin: 0 3px;
+}
+
+.top-page-panel .create-button-container .create-submenu {
+  clear: both;  
+}
+
+.top-page-panel .create-button-container .create-submenu ul {
+  list-style: none;
+  padding-left: 0px;
+}
+
+.top-page-panel .create-button-container .create-submenu span.sub-item-icon {
+  width: 15px;
+  height: 12px;
+  margin: 7px 7px 0 6px;
 }
 
 #page .top-page-panel .header-buttons .guide-button-container {
@@ -252,7 +300,8 @@ body > .popup-container {
   display: block;
 }
 
-#page .main-navigation {
+#page .main-navigation .nav-item a:hover {
+  text-decoration: none;
 }
 
 #page .main-navigation ul.main-nav-links > li {
@@ -270,6 +319,7 @@ body > .popup-container {
 #page .main-navigation ul.main-nav-links a.main-nav-item:hover {
   background-color: #555555;
   color: #fff;
+  text-decoration: none;
 }
 
 #page .main-navigation .nav-item a:hover, #page .main-navigation .nav-item-selected a {
@@ -353,7 +403,7 @@ body > .popup-container {
 /** Main content layout **/
 
 #main-content .right-content {
-  width: 230px;
+  width: 235px;
   background: none repeat scroll 0 0 transparent;
   float: right;
   min-height: 500px;

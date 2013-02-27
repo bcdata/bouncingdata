@@ -33,13 +33,18 @@
       </div>
       <div class="create-button-container">
         <div id="create-button" class="create-button">
-          <a id="create-button-trigger" class="create-button-trigger" href="javascript:void(0);">Create</a>
+          <a id="create-button-link" class="create-button-link" href="javascript:void(0);">Create</a>
         </div>
         <div class="create-submenu" style="display: none;">
           <ul>
-            <li><a href="javascript:void(0);">Analysis</a></li>
-            <li><a href="javascript:void(0);">Dataset</a></li>
-            <li><a href="javascript:void(0);">Scraper</a></li>
+            <li>
+              <a class="create-sub-item" href="javascript:void(0);">
+                <span class="sub-item-icon"></span>
+              Analysis
+              </a>
+            </li>
+            <li><a class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Dataset</a></li>
+            <li><a class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
           </ul>
         </div>
       </div>

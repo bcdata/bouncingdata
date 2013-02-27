@@ -24,7 +24,7 @@
 </script>
 <div id="main-content" class="analysis-container">
   <div class="analysis-info right-content">
-    <div class="anls-summary summary">
+    <!-- div class="anls-summary summary">
       <div class="anls-info-header info-header">
         <div class="anls-info-title info-title">Analysis Info</div>
         <div class="anls-info-title-line info-title-line"></div>
@@ -44,22 +44,42 @@
       <p class="line-item">
         <strong>Tags: </strong><span>${anls.tags }</span>
       </p>  
+    </div-->
+    <div class="anls-summary">
+      <div class="author-summary">       
+        <a class="author-avatar" href="javascript:void(0);"><img src="<c:url value="/resources/images/no-avatar.png" />" /></a>       
+        <p class="author-name"><a href="javascript:void(0);"><strong>${anls.user.username }</strong></a></p>
+        <p class="published-date">Published on ${anls.shortCreateAt }</p>
+        <div class="clear"></div>
+      </div>
+      <p><strong>Reference: </strong><a href="#">http://www.economist.com/football</a></p>
+      <p><strong>Referenced by: </strong><a href="#">Football vs. NFL Revenues</a></p>
+      <p><strong>Dataset used: </strong><a href="#">2011 Football Revenues</a></p>
+      <p><strong>Last updated: </strong>${anls.shortLastUpdate }</p>
+    </div>
+    <div class="tag-set">
+      <div class="tag-list">
+        <a class="tag-element" href="javascript:void(0);">Football</a>
+        <a class="tag-element" href="javascript:void(0);">Money</a>
+        <a class="tag-element" href="javascript:void(0);">Madrid</a>
+      </div>
+      <a class="add-tag-button>" href="javascript:void()">
+        Add tag
+      </a>
     </div>
     <div class="anls-related-info related-info">
-      <div class="anls-info-header info-header">
-        <div class="anls-info-title">Related Info</div>
-        <div class="anls-info-title-line"></div>
+      <p><strong>Related:</strong></p>
+      <div class="related-tabs" id="related-tabs">
+        <ul>
+          <li><a href="#related-dataset">Dataset</a></li>
+          <li><a href="#related-author">Author</a></li>
+          <li><a href="#related-voters">Voters</a></li>
+        </ul>
+        <div id="related-dataset"></div>
+        <div id="related-author"></div>
+        <div id="related-voters"></div>
       </div>
       
-      <c:if test="${not empty datasetList }">
-        <p class="relatedDatasets">
-          <strong>Related datasets: </strong>
-          
-          <c:forEach items="${datasetList }" var="entry">
-            <a class="related-dataset-link" href="<c:url value="/dataset/view/${entry.key }" />"${entry.value }></a>&nbsp;
-          </c:forEach>
-        </p>
-      </c:if>
     </div>
   </div>
     
@@ -67,6 +87,24 @@
     <div class="center-content-wrapper">
       <div class="anls-header">
         <div class="anls-title main-title"><h2>${anls.name}</h2></div>
+        <div class="share-panel" style="float: right;">
+          <!-- AddThis Button BEGIN -->
+          <div class="addthis_toolbox addthis_default_style ">
+          <a class="addthis_button_preferred_1"></a>
+          <a class="addthis_button_preferred_2"></a>
+          <a class="addthis_button_preferred_3"></a>
+          <a class="addthis_button_preferred_4"></a>
+          <a class="addthis_button_compact"></a>
+          <a class="addthis_counter addthis_bubble_style"></a>
+          </div>
+          <script type="text/javascript">
+            var addthis_config = addthis_config||{};
+            addthis_config.data_track_addressbar = false;
+            //var addthis_config = {"data_track_addressbar":true};
+          </script>
+          <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-512cd44d6cd449d2"></script>
+          <!-- AddThis Button END -->
+        </div>
         <div class="anls-action-links">
           <h3 class="anls-score">${anls.score}</h3>&nbsp;
           <a href="javascript:void(0)" class="anls-vote-up">Vote up</a>&nbsp;&nbsp;
@@ -156,6 +194,11 @@
             </c:if>
           </div>
         </div>
+      </div>
+      <div class="clear"></div>
+      <div class="anls-description">
+        <h3 style="margin: 0 0 10px; cursor: pointer">Description</h3>
+        <span>${anls.description }</span>
       </div>
         
       <div class="comments-container">

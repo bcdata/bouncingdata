@@ -13,6 +13,24 @@ Main.prototype.init = function() {
   $(function() {
 
     $('input:button, input:submit, button').button();
+    
+    $('.top-page-panel .create-button a#create-button-link').click(function() {
+      if (!$(this).hasClass('active')) {
+        $(this).addClass('active');
+        $('.top-page-panel .create-submenu').show();
+      } else {
+        $(this).removeClass('active');
+        $('.top-page-panel .create-submenu').hide();
+      }
+    });
+    
+    $(document).click(function() {
+      var $createButton = $('.top-page-panel .create-button a#create-button-link');
+      if ($createButton.hasClass('active')) {
+        $createButton.removeClass('active');
+        $('.top-page-panel .create-submenu').hide();
+      }
+    });
 
     // initializes main navigation & ajax loading capabilities
     com.bouncingdata.Nav.init();
@@ -24,7 +42,6 @@ Main.prototype.init = function() {
       var criteria = $('#criteria', $(this)).val();
       if (!query || !criteria) return false;
       com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);
-      return false;
     });
 
     // inits. popups
