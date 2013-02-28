@@ -22,6 +22,7 @@ Main.prototype.init = function() {
         $(this).removeClass('active');
         $('.top-page-panel .create-submenu').hide();
       }
+      return false;
     });
     
     $(document).click(function() {
