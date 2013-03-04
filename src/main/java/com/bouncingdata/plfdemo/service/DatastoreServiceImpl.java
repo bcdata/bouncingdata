@@ -512,5 +512,24 @@ public class DatastoreServiceImpl implements DatastoreService {
   public User findUserByEmail(String email) {
     return dataStorage.findUserByEmail(email);
   }
+  
+  @Override
+  public List<Analysis> getMostPopularAnalyses() {
+    return dataStorage.getMostPopularAnalyses();
+  }
+  
+  @Override
+  public List<Dataset> getMostPopularDatasets() {
+    return null;
+  }
 
+  @Override
+  public List<Analysis> getStaffPickAnalyses() {
+    return getMostPopularAnalyses();
+  }
+  
+  @Override
+  public List<Dataset> getStaffPickDatasets() {
+    return getMostPopularDatasets();
+  }
 }

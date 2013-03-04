@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 
@@ -32,6 +34,11 @@ public class ActivityController {
       User user = (User) ((Authentication)principal).getPrincipal();
       List<Activity> activities = datastoreService.getRecentFeed(user.getId());
       model.addAttribute("activities", activities);
+      
+      List<Analysis> analyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", analyses);
+      List<Dataset> datasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", datasets);
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");

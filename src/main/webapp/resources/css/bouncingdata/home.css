@@ -96,4 +96,29 @@
   text-decoration: none;
 }
 
+.side-item-panel .small-thumbnail {
+  float: left;
+  margin-right: 10px;
+}
+
+.side-item-panel .small-thumbnail .thumb-img {
+  width: 80px;
+  height: 80px;
+}
+
+.right-content div.side-list-panel  {
+  padding: 5px;
+  overflow-y: hidden;
+  min-height: 250px;
+  height: 250px;
+  width: 205px;
+  color: #333333;
+}
+
+.right-content div.side-list-panel:hover {
+  overflow-y: auto;
+}
+
+
+
 

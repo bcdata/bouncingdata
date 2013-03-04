@@ -294,4 +294,12 @@ public interface DatastoreService {
   public void addDatasetToCollection(int datasetId, int collectionId);
 
   void createAnalysisPost(User user, Analysis analysis, String message) throws Exception;
+
+  List<Analysis> getMostPopularAnalyses();
+
+  List<Dataset> getMostPopularDatasets();
+
+  List<Analysis> getStaffPickAnalyses();
+
+  List<Dataset> getStaffPickDatasets();
 }

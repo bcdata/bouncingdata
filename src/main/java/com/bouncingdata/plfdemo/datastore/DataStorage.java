@@ -459,5 +459,10 @@ public interface DataStorage {
   public void deleteUserCollections(int userId);
   
   public void addDatasetToCollection(int datasetId, int collectionId);
+  
+  public List<Analysis> getMostPopularAnalyses();
+    
+  public List<Dataset> getMostPopularDatasets();
+
 }
 

@@ -16,11 +16,48 @@
               <li><a href="#most-popular-analysis">Analysis</a></li>
               <li><a href="#most-popular-dataset">Dataset</a></li>
             </ul>
-            <div id="most-popular-analysis">
-              <div style="height: 250px;">Most popular analysis here</div>
+            <div class="side-list-panel" id="most-popular-analysis">
+              <c:forEach items="${topAnalyses }" var="anls">
+                <div class="side-item-panel">
+                  <div class="small-thumbnail">
+                    <a href="<c:url value="/anls/${anls.guid}" />">
+                      <c:choose>
+                        <c:when test="${not empty anls.thumbnail }">
+                          <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+                        </c:when>
+                        <c:otherwise>
+                          <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+                        </c:otherwise>
+                      </c:choose>
+                    </a>
+                  </div>
+                  <p class="side-item-title">
+                    <a href="<c:url value="/anls/${anls.guid}" />"><strong>${anls.name}</strong></a>
+                  </p>
+                  <p class="side-item-author">
+                    <span>by ${anls.user.username }</span>
+                  </p>
+                  <div class="clear"></div>
+                </div>
+              </c:forEach>
             </div>
-            <div id="most-popular-dataset">
-              <div style="height: 250px;">Most popular dataset here</div>
+            <div class="side-list-panel" id="most-popular-dataset">
+              <c:forEach items="${topDatasets }" var="dts">
+                <div class="side-item-panel">
+                  <div class="small-thumbnal">
+                    <a href="<c:url value="/dataset/${dts.guid}" />">
+                      <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+                    </a>
+                  </div>
+                  <p class="side-item-title">
+                    <a href="<c:url value="/dataset/${dts.guid}" />"><strong>${dts.name}</strong></a>
+                  </p>
+                  <p class="side-item-author">
+                    <span>by ${dts.user.username }</span>
+                  </p>
+                  <div class="clear"></div>
+                </div>
+              </c:forEach>
             </div>
           </div>
         </div> 
@@ -35,11 +72,48 @@
               <li><a href="#staff-pick-analysis">Analysis</a></li>
               <li><a href="#staff-pick-dataset">Dataset</a></li>
             </ul>
-            <div id="staff-pick-analysis">
-              <div style="height: 250px;">Staff pick analysis here</div>
+            <div class="side-list-panel" id="staff-pick-analysis">
+              <c:forEach items="${topAnalyses }" var="anls">
+                <div class="side-item-panel">
+                  <div class="small-thumbnal">
+                    <a href="<c:url value="/anls/${anls.guid}" />">
+                      <c:choose>
+                        <c:when test="${not empty anls.thumbnail }">
+                          <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+                        </c:when>
+                        <c:otherwise>
+                          <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+                        </c:otherwise>
+                      </c:choose>
+                    </a>
+                  </div>
+                  <p class="side-item-title">
+                    <a href="<c:url value="/anls/${anls.guid}" />"><strong>${anls.name}</strong></a>
+                  </p>
+                  <p class="side-item-author">
+                    <span>by ${anls.user.username }</span>
+                  </p>
+                  <div class="clear"></div>
+                </div>
+              </c:forEach>
             </div>
-            <div id="staff-pick-dataset">
-              Staff pick dataset here
+            <div class="side-list-panel" id="staff-pick-dataset">
+              <c:forEach items="${topDatasets }" var="dts">
+                <div class="side-item-panel">
+                  <div class="small-thumbnail">
+                    <a href="<c:url value="/dataset/${dts.guid}" />">
+                      <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+                    </a>
+                  </div>
+                  <p class="side-item-title">
+                    <a href="<c:url value="/dataset/${dts.guid}" />"><strong>${dts.name}</strong></a>
+                  </p>
+                  <p class="side-item-author">
+                    <span>by ${dts.user.username }</span>
+                  </p>
+                  <div class="clear"></div>
+                </div>
+              </c:forEach>
             </div>
           </div>
         </div>

@@ -1470,5 +1470,35 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
+  
+  @Override
+  public List<Analysis> getMostPopularAnalyses() {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Analysis.class);
+    q.setOrdering("score DESC");
+    try {
+      List<Analysis> scrapers = (List<Analysis>) q.execute();
+      scrapers = scrapers.subList(0, 10);
+      return (List<Analysis>) pm.detachCopyAll(scrapers);
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
+  
+  @Override
+  public List<Dataset> getMostPopularDatasets() {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Dataset.class);
+    q.setOrdering("rowCount DESC");
+    try {
+      List<Dataset> datasets = (List<Dataset>) q.execute();
+      datasets = datasets.subList(0, 10);
+      return (List<Dataset>) pm.detachCopyAll(datasets);
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
 
 }
