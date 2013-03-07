@@ -43,7 +43,7 @@
               Analysis
               </a>
             </li>
-            <li><a class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Dataset</a></li>
+            <li><a class="create-sub-item" href="<c:url value="/upload" />"><span class="sub-item-icon"></span>Dataset</a></li>
             <li><a class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
           </ul>
         </div>
