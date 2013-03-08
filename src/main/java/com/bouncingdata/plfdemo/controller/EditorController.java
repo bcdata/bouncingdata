@@ -137,6 +137,10 @@ public class EditorController {
         return "size";
       }
       
+      if ("describe".equals(mode)) {
+        return "describe";
+      }
+      
     } catch (Exception e) {
       logger.debug("Failed to load analysis {}", guid);
       model.addAttribute("errorMsg", e.getMessage());

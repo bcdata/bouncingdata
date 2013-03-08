@@ -5,8 +5,12 @@
 
   var anls = {
     guid: '${anls.guid}',
-    code: '${anlsCode}'
-  }
+    name: '${anls.name}',
+    description: '${anls.description}',
+    user: {username: '${anls.user.username}'},
+    language: '${anls.language}',
+  };
+  
   // supports async. load js but we really should pre-load workbench.js from the layout.jsp
   if (!com.bouncingdata.Editor) {
     $.getScript(ctx + "/resources/js/bouncingdata/editor.js", function() {
@@ -18,36 +22,28 @@
   }
 </script>
 
-<div id="main-content" class="editor-container">
-  <div class="top-bar">
-    <div class="left-buttons">
-      <button>Clone</button>
-      <button>Cancel</button>
-    </div>
-    <div class="editor-nav-panel">
-      <button class="editor-nav" id="editor-publish">Publish</button>
-    </div>
-    <div class="editor-progress">
-      <a href="<c:url value="/editor/anls/${anls.guid }/edit" />" class="editor-step editor-code-link">Code</a>
-      <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="editor-step editor-size-link">Size</a>
-      <a href="<c:url value="/editor/anls/${anls.guid }/describe" />" class="editor-step editor-describe-link">Describe</a>
-    </div>
-  </div>
-  <div class="clear-bar"></div>
-  <div class="editor-container">
-    <div class="info-area">
-      <h3 class="title">${anls.name }</h3>
-      <div class="author">
-        <img src="<c:url value="/resources/images/no-avatar.png" />" class="author-avatar" />
-        <p class="author-name"><strong>${anls.user.username }</strong></p>
+<div id="main-content" class="editor-container">  
+  <div class="editor-describe-container">
+    <div class="detail-area" style="padding: 10px;">
+      <form class="detail-form" method="post" action="">
+        <fieldset style="border: 0 none;">
+          <label for="name">Analysis name</label>
+          <input type="text" name="name" id="name"><br/>
+          <label for="description">Description</label>
+          <textarea name="description" id="description" style="width: 100%; height: 300px;"></textarea> <br/>
+          <input type="submit" value="Submit">
+        </fieldset>
+      </form>
+      <div class="tag-set">
+        <div class="tag-list">
+          <a class="tag-element" href="javascript:void(0);">Football</a>
+          <a class="tag-element" href="javascript:void(0);">Money</a>
+          <a class="tag-element" href="javascript:void(0);">Madrid</a>
+        </div>
+        <a class="add-tag-button>" href="javascript:void()">
+          Add tag
+        </a>
       </div>
-      <div class="editor-status">
-        <div class="saving-status">Automatically saved at 4:25 pm</div>
-      </div>
-    </div>
-    <div class="clear"></div>
-    <div class="detail-area">
-      
     </div>
   </div>
 </div>

@@ -43,6 +43,7 @@ Main.prototype.init = function() {
     
     $('.top-page-panel a#create-analysis').click(function() {
       me.$newDialog.dialog("open");
+      var $createButton = $('.top-page-panel .create-button a#create-button-link');
       $createButton.removeClass('active');
       $('.top-page-panel .create-submenu').hide();
       return false;
@@ -86,7 +87,7 @@ Main.prototype.initPopups = function() {
         }
         
         // create new analysis and open the editor
-        com.bouncingdata.Editor.newAnalysis(name, language, isPublic);
+        me.newAnalysis(name, language, isPublic);
         self.dialog('close');
       },
       "Cancel": function() {
@@ -383,6 +384,32 @@ Main.prototype.toggleLeftNav = function() {
     $nav.show();
     $mainContainer.css('margin-left', '180px');
   }
+}
+
+Main.prototype.newAnalysis = function(name, language, isPublic) {
+  var data = {
+    appname : name,
+    language : language,
+    description : '',
+    code : '',
+    isPublic : isPublic,
+    tags : '',
+    type : 'analysis'
+  };
+  
+  var me = this;
+  
+  $.ajax({
+    url: ctx + "/main/createapp",
+    data: data,
+    type: "post",
+    success: function(anls) {
+      window.location = ctx + '/editor/anls/' + anls.guid + '/edit';
+    },
+    error: function(res) {
+      console.debug(res)
+    }
+  });
 }
 
 function Utils() {

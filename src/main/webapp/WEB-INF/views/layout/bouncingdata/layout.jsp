@@ -25,6 +25,8 @@
   <script type="text/javascript" src="<c:url value="/resources/js/KeyTable.min.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/jquery.tmpl.min.js" />"></script>
   
+  <script type="text/javascript" src="<c:url value="/resources/js/tiny_mce/tiny_mce.js" />"></script>
+  
   <script type="text/javascript" src="<c:url value="/resources/dojo/dojo.js" />"> </script>
   <script type="text/javascript" src="<c:url value="/resources/spring/Spring.js" />"> </script>
   <script type="text/javascript" src="<c:url value="/resources/spring/Spring-Dojo.js" />"> </script>
