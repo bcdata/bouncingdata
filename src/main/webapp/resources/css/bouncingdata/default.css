@@ -53,7 +53,6 @@ div.clear {
   background: none repeat top left #F1F1F1;
   clear: both;  
   height: 50px;
-  position: fixed;
   width: 100%;
   z-index: 1000;
   border-bottom: 1px solid #E2E2E2;
@@ -155,9 +154,12 @@ div.clear {
 
 #page .top-page-panel .header-buttons .guide-button-container .guide-button {
   display: inline-block;
-  color: blue;
   cursor: pointer;
-  padding: 0 5px;
+  padding: 5px;
+  text-align: center;
+  width: 38px;
+  border: 1px solid #CCC;
+  background-color: #fff;
 }
 
 #page .top-page-panel .header-buttons .create-button-container {

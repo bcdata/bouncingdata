@@ -102,8 +102,8 @@
 }
 
 .side-item-panel .small-thumbnail .thumb-img {
-  width: 80px;
-  height: 80px;
+  width: 76px;
+  height: 76px;
 }
 
 .right-content div.side-list-panel  {
@@ -111,8 +111,19 @@
   overflow-y: hidden;
   min-height: 250px;
   height: 250px;
-  width: 205px;
   color: #333333;
+}
+
+.right-content .side-list-panel .side-item-panel {
+  width: 205px;
+}
+
+.right-content .side-list-panel .side-item-panel p {
+  margin: 5px 0;
+}
+
+.side-list-panel .side-ite-panel .side-item-author {
+  color: #556;
 }
 
 .right-content div.side-list-panel:hover {

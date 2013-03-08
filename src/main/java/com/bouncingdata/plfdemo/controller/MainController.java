@@ -41,7 +41,6 @@ import com.bouncingdata.plfdemo.util.ScriptType;
 import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
-@RequestMapping(value = "/main")
 public class MainController {
   
   private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -54,15 +53,8 @@ public class MainController {
   
   @Autowired
   private ApplicationExecutor appExecutor;
-      
-  @RequestMapping(method = RequestMethod.GET)
-  public String main(ModelMap model, Principal principal) {
-    String username = principal.getName();
-    model.addAttribute("username", username);
-    return "create";
-  }
-  
-  @RequestMapping(value="/mystuff", method=RequestMethod.GET)
+        
+  @RequestMapping(value="/main/mystuff", method=RequestMethod.GET)
   public @ResponseBody Map<String,List> getMyStuff(ModelMap model, Principal principal) {
     User user = (User) ((Authentication) principal).getPrincipal();
     if (user == null) return null;
@@ -79,7 +71,7 @@ public class MainController {
     return stuffs;
   }
   
-  @RequestMapping(value = "/dataset", method = RequestMethod.GET)
+  @RequestMapping(value = "/main/dataset", method = RequestMethod.GET)
   public @ResponseBody List<Dataset> getDatasets(ModelMap model, Principal principal) {
     User user = (User) ((Authentication) principal).getPrincipal();
     try {
@@ -93,12 +85,12 @@ public class MainController {
     
   }
   
-  @RequestMapping(value="/table/{datastore}")
+  @RequestMapping(value="/main/table/{datastore}")
   public @ResponseBody List<Dataset> getTables(@PathVariable String datastore) {
     return null;
   }
   
-  @RequestMapping(value="/application", method = RequestMethod.GET)
+  @RequestMapping(value="/main/application", method = RequestMethod.GET)
   @ResponseBody
   public List<Analysis> getApplications(ModelMap model, Principal principal) {
     User user = (User) ((Authentication) principal).getPrincipal();
@@ -112,7 +104,7 @@ public class MainController {
     }
   }
   
-  @RequestMapping(value = "/createapp", method = RequestMethod.POST)
+  @RequestMapping(value = "/main/createapp", method = RequestMethod.POST)
   @ResponseBody
   public BcDataScript createApplication(@RequestParam(value = "appname", required = true) String appname,
       @RequestParam(value = "language", required = true) String language,
@@ -208,7 +200,7 @@ public class MainController {
     return script;
   }
   
-  @RequestMapping(value="/execute", method = RequestMethod.POST)
+  @RequestMapping(value="/main/execute", method = RequestMethod.POST)
   public @ResponseBody ExecutionResult executeApp(@RequestParam(value="code", required=true) String code, 
       @RequestParam(value="language", required=true) String language, 
       @RequestParam(value="type", required=true) String type, ModelMap model, Principal principal) {
@@ -229,7 +221,7 @@ public class MainController {
     }
   }
   
-  @RequestMapping(value="/search", method = RequestMethod.GET)
+  @RequestMapping(value="/main/search", method = RequestMethod.GET)
   public String search(@RequestParam(value="query", required=true) String query, @RequestParam(value="criteria", required=true) String criteria, ModelMap model, Principal principal) {
     SearchResult result = null;
     User user = (User) ((Authentication)principal).getPrincipal();
@@ -248,7 +240,7 @@ public class MainController {
     return "search";
   }
   
-  @RequestMapping(value="/browsersearch", method = RequestMethod.GET)
+  @RequestMapping(value="/main/browsersearch", method = RequestMethod.GET)
   public @ResponseBody SearchResult browerSearch(@RequestParam(value="query", required=true) String query, @RequestParam(value="criteria", required=true) String criteria, ModelMap model, Principal principal) {
     SearchResult result = null;
     User user = (User) ((Authentication)principal).getPrincipal();
@@ -264,7 +256,7 @@ public class MainController {
     return result;
   }
   
-  @RequestMapping(value="/publish", method = RequestMethod.POST)
+  @RequestMapping(value="/main/publish", method = RequestMethod.POST)
   public @ResponseBody ActionResult publish(@RequestParam(value="guid", required=true) String guid, @RequestParam(value="message", required=true) String message, Principal principal) throws Exception {
     User user = (User) ((Authentication)principal).getPrincipal();
     Analysis analysis = datastoreService.getAnalysisByGuid(guid);

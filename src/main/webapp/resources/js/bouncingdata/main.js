@@ -10,9 +10,17 @@ Main.prototype.setContext = function(ctx) {
 
 Main.prototype.init = function() {
   this.workbenchSession = {};
+  var me = this;
   $(function() {
 
+    // init buttons
     $('input:button, input:submit, button').button();
+    
+    // inits. popups
+    com.bouncingdata.Main.initPopups();
+    
+    // initializes main navigation & ajax loading capabilities
+    com.bouncingdata.Nav.init();
     
     $('.top-page-panel .create-button a#create-button-link').click(function() {
       if (!$(this).hasClass('active')) {
@@ -32,10 +40,14 @@ Main.prototype.init = function() {
         $('.top-page-panel .create-submenu').hide();
       }
     });
-
-    // initializes main navigation & ajax loading capabilities
-    com.bouncingdata.Nav.init();
-
+    
+    $('.top-page-panel a#create-analysis').click(function() {
+      me.$newDialog.dialog("open");
+      $createButton.removeClass('active');
+      $('.top-page-panel .create-submenu').hide();
+      return false;
+    });
+    
     // search form submit
     $('.search-container #search-form').submit(function(e) {
       e.preventDefault();
@@ -44,9 +56,6 @@ Main.prototype.init = function() {
       if (!query || !criteria) return false;
       com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);
     });
-
-    // inits. popups
-    com.bouncingdata.Main.initPopups();
 
     // inits. history stack with the first state
     window.history.pushState({linkId: window.location.href}, null, window.location.href);
@@ -59,7 +68,7 @@ Main.prototype.init = function() {
  */
 Main.prototype.initPopups = function() {
   var me = this;
-  this.$newDialog = $('.popup-container > #new-dialog').dialog({
+  this.$newDialog = $('.popup-container > #new-anls-popup').dialog({
     autoOpen: false,
     width: 470,
     modal: true,
@@ -68,25 +77,16 @@ Main.prototype.initPopups = function() {
       "Create": function() {
         var self = $(this);
         // validate
-        var name = $('#script-name', self).val();
-        var language = $('#script-language', self).val();
-        var isPublic = $('#script-privacy-public', self).prop('checked');
-        var type = $('#script-type', self).val();
+        var name = $('#anls-name', self).val();
+        var language = $('#anls-language', self).val();
+        var isPublic = $('#anls-privacy-public', self).prop('checked');
 
         if (!name || $.trim(name).length < 1) {
           return;
         }
-
-        // if current page is not the 'create' page
-        if (com.bouncingdata.Nav.selected['ref'] != 'create') {
-          com.bouncingdata.Workbench.callback = function() {
-            com.bouncingdata.Workbench.newScript(type, name, language, "", isPublic, "");
-          }
-          com.bouncingdata.Nav.openWorkbench();
-        } else {
-          com.bouncingdata.Workbench.newScript(type, name, language, "", isPublic, "");
-        }
-
+        
+        // create new analysis and open the editor
+        com.bouncingdata.Editor.newAnalysis(name, language, isPublic);
         self.dialog('close');
       },
       "Cancel": function() {
@@ -97,59 +97,8 @@ Main.prototype.initPopups = function() {
     open: function(event, ui) {
       $('form', $(this))[0].reset();
       $('.ui-widget-overlay').bind('click', function(){ me.$newDialog.dialog('close'); });
-    },
-
-    create: function(event, ui) {
-      var self = $(this);
-      $('.entity-list a.new-anls, .entity-list a.new-scraper', self).click(function() {
-        $('.entity-chooser', self).hide();
-        $('.new-script-wrapper', self).show();
-        $('.ui-dialog-buttonpane', self.parent()).show();
-        $('#script-name', self).focus();
-
-        if ($(this).hasClass('new-scraper')) {
-          $('#script-type', self).val('scraper');
-        } else {
-          $('#script-type', self).val('analysis');
-        }
-      });
-
-      $('.entity-list a.upload-data', self).click(function() {
-        self.dialog("close");
-        me.$uploadDataDialog.dialog("open");
-      });
     }
   });
-
-  /**
-   * Parameterized the 'open' method of the new dialog
-   * @param type the type, empty for the entity chooser, "viz" for the new visualization form or "scraper" for new scraper
-   */
-  this.$newDialog.open = function(type) {
-    var self = $(this);
-    if (!type) {
-      self.dialog("open");
-      $('.entity-chooser', self).show();
-      $('.new-script-wrapper',  self).hide();
-      $('.ui-dialog-buttonpane', self.parent()).hide();
-    } else if (type == "viz") {
-      self.dialog("open");
-      $('.entity-chooser', self).hide();
-      $('.new-script-wrapper',  self).show();
-      $('.ui-dialog-buttonpane', self.parent()).show();
-
-      $('.new-script-form #script-type', self).val('analysis');
-      $('.new-script-form #script-name', self).focus();
-    } else if (type == "scraper") {
-      self.dialog("open");
-      $('.entity-chooser', self).hide();
-      $('.new-script-wrapper',  self).show();
-      $('.ui-dialog-buttonpane', self.parent()).show();
-      $('.new-script-form #script-type', self).val('scraper');
-      $('.new-script-form #script-name', self).focus();
-    }
-
-  }
 
   this.$uploadDataDialog = $('.popup-container > #upload-data-dialog').dialog({
     autoOpen: false,
@@ -419,6 +368,20 @@ Main.prototype.loadCss = function(cssUrl, pageName) {
     com.bouncingdata.Main.cssLoader[pageName] = true;
   } else {
     console.debug("Css file " + cssUrl + " was loaded before.");
+  }
+}
+
+Main.prototype.toggleLeftNav = function() {
+  var $nav = $('#page .main-container .main-navigation');
+  var $mainContainer = $('#page .main-container .main-content-container');
+  if ($nav.is(':visible')) {
+    //$nav.hide('slow', function() { $mainContainer.css('margin-left', 0); });
+    $nav.hide();
+    $mainContainer.css('margin-left', 0)
+  } else {
+    //$nav.show('slow', function() { $mainContainer.css('margin-left', '180px'); });
+    $nav.show();
+    $mainContainer.css('margin-left', '180px');
   }
 }
 

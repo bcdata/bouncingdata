@@ -75,7 +75,7 @@
             <div class="side-list-panel" id="staff-pick-analysis">
               <c:forEach items="${topAnalyses }" var="anls">
                 <div class="side-item-panel">
-                  <div class="small-thumbnal">
+                  <div class="small-thumbnail">
                     <a href="<c:url value="/anls/${anls.guid}" />">
                       <c:choose>
                         <c:when test="${not empty anls.thumbnail }">

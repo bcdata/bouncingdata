@@ -213,4 +213,18 @@ Nav.prototype.openWorkbench = function() {
   this.fireAjaxLoad(ctx + '/create', false);
 }
 
+/**
+ * Toogles the main navigation and expand the main content area
+ */
+Nav.prototype.toggle = function(speed) {
+  var $nav = $('#page .main-container .main-navigation');
+  var $mainContainer = $('#page .main-container .main-content-container');
+  if (speed) {
+    $nav.toggle(speed, function() {  });
+  } else {
+    $nav.toggle('fast', function() {  });
+    
+  }
+}
+
 com.bouncingdata.Nav = new Nav();

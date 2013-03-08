@@ -111,11 +111,10 @@
           <a href="javascript:void(0)" class="anls-vote-down">Vote down</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
-            <a href="javascript:void(0)" class="anls-edit-button" id="anls-edit-button" title="Edit this analysis in your workbench">Edit</a>
+            <a href="javascript:void(0)" class="anls-edit-button" id="anls-edit-button" title="Edit this analysis in your workbench">Edit</a>&nbsp;&nbsp;
+            <a href="javascript:void(0)" class="anls-publish-button" id="anls-publish-button" title="Publish this analysis">Publish</a>&nbsp;&nbsp;
+            <a href="<c:url value="/editor/anls/${anls.guid }/size" />" title="Edit this analysis">Edit</a>
           </c:if>&nbsp;&nbsp;
-          <c:if test="${isOwner }">
-            <a href="javascript:void(0)" class="anls-publish-button" id="anls-publish-button" title="Publish this analysis">Publish</a>
-          </c:if>
         </div>
         <div class="embedded-link" id="embedded-link" style="display: none;">
           <textarea id="embedded-link-text" spellcheck='false' style="float: left;"></textarea>

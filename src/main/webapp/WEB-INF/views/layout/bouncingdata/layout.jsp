@@ -49,17 +49,13 @@
   <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shCore.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shBrushJScript.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shBrushPython.js" />"></script>
-  <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shBrushSql.js" />"></script>
   <link href="<c:url value="/resources/js/syntaxhighlighter/styles/shCore.css" />" rel="stylesheet" type="text/css" />
   <link href="<c:url value="/resources/js/syntaxhighlighter/styles/shThemeDefault.css" />" rel="stylesheet" type="text/css" />
     
   <script>
     var ctx = '${pageContext.request.contextPath}';
-    var host = '${pageContext.request.remoteHost}';
-    console.debug('Host name: ' + host);
     com.bouncingdata.Main.setContext(ctx);
     com.bouncingdata.Main.username = '${pageContext.request.userPrincipal.name}';
-    console.debug('Username: ' + com.bouncingdata.Main.username);
   </script>
 </head>
 <body>
@@ -69,7 +65,7 @@
         <tiles:insertAttribute name="header-content" />
       </div>
     </div>
-    <div style="clear: both; height: 50px;"></div>
+    <div style="clear: both;"></div>
     <div class="main-container">
       <div class="main-navigation">
         <tiles:insertAttribute name="navigation" />

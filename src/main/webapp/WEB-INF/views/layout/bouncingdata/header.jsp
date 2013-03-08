@@ -38,13 +38,13 @@
         <div class="create-submenu" style="display: none;">
           <ul>
             <li>
-              <a class="create-sub-item" href="javascript:void(0);">
+              <a id="create-analysis" class="create-sub-item" href="javascript:void(0);">
                 <span class="sub-item-icon"></span>
               Analysis
               </a>
             </li>
-            <li><a class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Dataset</a></li>
-            <li><a class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
+            <li><a id="create-dataset" class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Dataset</a></li>
+            <li><a id="create-scraper" class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
           </ul>
         </div>
       </div>
