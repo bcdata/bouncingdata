@@ -10,6 +10,7 @@ import org.springframework.test.context.junit38.AbstractJUnit38SpringContextTest
 import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 
 @ContextConfiguration
@@ -34,7 +35,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     if (demo != null) jdoDataStorage.deleteUser(demo.getId());
   }
   
-  public void testJdoDataStorage() {
+  public void _testJdoDataStorage() {
     assertNotNull(jdoDataStorage);
     
     User demo = jdoDataStorage.findUserByUsername("test");
@@ -44,7 +45,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     System.out.println("Number of application by demo: " + apps.size());
   }
     
-  public void testCreateAnalysis() {
+  public void _testCreateAnalysis() {
     Analysis anls = new Analysis();
     anls.setName("testAnalysis");
     anls.setLanguage("python");
@@ -61,7 +62,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     jdoDataStorage.deleteAnalysis(anls1.getId());
   }
   
-  public void testUpdateApplication() {
+  public void _testUpdateApplication() {
     Analysis anls = new Analysis();
     anls.setName("testAnalysis");
     anls.setLanguage("python");
@@ -81,7 +82,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     jdoDataStorage.deleteAnalysis(anls1.getId());
   }
   
-  public void testGetFeed() {
+  public void _testGetFeed() {
     User demo = jdoDataStorage.findUserByUsername("test");
     assertNotNull(demo);
     Calendar calendar = Calendar.getInstance();
@@ -97,30 +98,41 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     System.out.println("Number of dataset for scraper 4: " + datasetList.size());
   }
   
-  /*public void testGetComment() {
-    User test = new User();
-    test.setUsername("testUser");
-    test.setPassword("testPassword");
-    test.setEmail("test@bouncingdata.com");
-    
-    Analysis analysis = new Analysis("testGuid", "testStatus");
-    Comment c = new Comment();
-    c.setAnalysis(analysis);
-    c.setUser(test);
-    c.setTitle("testComment");
-    c.setMessage("This is a test comment");
-    c.setAccepted(true);
-    c.setOrder(1);
-    c.setParentId(-1);
-    
-    jdoDataStorage.addComment(test.getId(), analysisId, comment)
-    
-    List<Comment> comments = jdoDataStorage.getComments(analysis.getId());
-    assertNotNull(comments);
-    Comment c1 = comments.get(0);
-    assertTrue(c1.getId() == c.getId());
-    assertTrue(c1.getTitle().equals(c.getTitle()));
-    assertTrue(c1.getMessage().equals(c.getMessage()));
-  }*/
+
   
+  public void testCreateTag() {
+	  Tag tag;
+	  /*tag = new Tag("ZACHMAN");
+	  jdoDataStorage.createTag(tag);*/
+	 
+	 tag = jdoDataStorage.getTag("EA");	  
+	  assertNotNull(tag);	  	  
+	 /* jdoDataStorage.addAnalysisTag(8, tag.getId());*/	
+	  
+	  
+	  jdoDataStorage.addDataSetTag(1, tag.getId());
+	  
+/* 
+	  jdoDataStorage.getScraperByTag(tag.getId());
+	  jdoDataStorage.getTagByScraper(3);
+	  jdoDataStorage.deleteAnalysisTag(8, tag.getId());
+	  jdoDataStorage.addScraperTag(3, tag.getId());
+	  
+	   jdoDataStorage.addScraperTag(4, tag.getId());	
+	  jdoDataStorage.addScraperTag(5, tag.getId());	
+	  jdoDataStorage.addScraperTag(6, tag.getId());	*/
+	  
+	
+	  
+	  /* jdoDataStorage.getTagByAnalysis(8);
+	   jdoDataStorage.deleteAnalysisTag(8, tag.getId());
+	  jdoDataStorage.addScapperTag(3, tag.getId());
+	  jdoDataStorage.getAnalysisByTag(tag.getId());
+	   jdoDataStorage.addAnalysisTag(10, tag.getId());	
+	  jdoDataStorage.addAnalysisTag(11, tag.getId());	
+	  jdoDataStorage.addAnalysisTag(12, tag.getId());	
+	  jdoDataStorage.addAnalysisTag(13, tag.getId());
+	*/
+	  
+  }
 }

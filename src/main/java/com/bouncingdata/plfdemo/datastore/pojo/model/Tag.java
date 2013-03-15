@@ -2,12 +2,20 @@ package com.bouncingdata.plfdemo.datastore.pojo.model;
 
 import java.util.Date;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.Index;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.Unique;
 
 @PersistenceCapable
 public class Tag {
+  @PrimaryKey
+  @Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
   private int id;
-  private String tag;
+  @Index
+  private @Unique String tag;
   private int creator;
   private int popularity;
   private Date createAt;

@@ -25,6 +25,7 @@ public abstract class BcDataScript {
   private @Unique String guid;
   @Persistent(defaultFetchGroup="true", nullValue=NullValue.EXCEPTION)
   private User user;
+  
   private int lineCount;
   private boolean published;
   private boolean publicCode;

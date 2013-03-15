@@ -3,6 +3,7 @@ package com.bouncingdata.plfdemo.datastore;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
 
@@ -20,6 +21,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.ExecutionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Group;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 
@@ -464,5 +466,30 @@ public interface DataStorage {
     
   public List<Dataset> getMostPopularDatasets();
 
+  /*Add for tag features*/
+  public void createTag(Tag tag);  
+
+  public void addAnalysisTag(int anlsId, int tagId);
+  public void deleteAnalysisTag(int anlsId, int tagId);
+  /*How many tag for an analysis*/
+  public Set<Tag> getTagByAnalysis(int anlsId);
+  public List<Analysis> getAnalysisByTag(int tagId);
+ 
+  public void addScraperTag(int scId, int tagId);
+  public void deleteScraperTag(int scId, int tagId);
+  /*How many tag for an Scraper*/
+  public Set<Tag> getTagByScraper(int scId);
+  public List<Scraper> getScraperByTag(int tagId);
+  
+  
+  public void addDataSetTag(int dsId, int tagId);
+  public void deleteDataSetTag(int dsId, int tagId);
+  /*How many tag for an DataSet*/
+  public Set<Tag> getTagByDataSet(int dsId);
+  public List<Analysis> getDataSetByTag(int tagId);
+  
+  
+  
+  
 }
 
