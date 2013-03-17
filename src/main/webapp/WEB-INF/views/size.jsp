@@ -4,13 +4,9 @@
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/editor.css", "editor");
 
   var anls = {
-      guid: '${anls.guid}',
-      name: '${anls.name}',
-      description: '${anls.description}',
-      user: {username: '${anls.user.username}'},
-      language: '${anls.language}',
-      code: '${anlsCode}'
-    };
+    guid: '${anls.guid}',
+    code: '${anlsCode}'
+  };
   var dbDetail = $.parseJSON('${dashboardDetail}');
   
   // supports async. load js but we really should pre-load workbench.js from the layout.jsp
@@ -27,21 +23,21 @@
 <div id="main-content" class="editor-container">
   <div class="top-bar">
     <div class="left-buttons">
-      <button>Clone</button>
-      <button>Cancel</button>
+      <button class="editor-button">Clone</button>
+      <button class="editor-button">Cancel</button>
     </div>
     <div class="editor-nav-panel">
-      <button class="editor-nav" id="size-back">Back</button>
-      <button class="editor-nav" id="size-next">Next</button>
+      <a href="<c:url value="/editor/anls/${anls.guid }/edit" />" class="editor-nav" id="size-back">Back</a>
+      <a href="<c:url value="/editor/anls/${anls.guid }/describe" />" class="editor-nav" id="size-next">Next</a>
     </div>
-    <div class="editor-progress">
-      <a href="<c:url value="/editor/anls/${anls.guid }/edit" />" class="editor-step editor-code-link">Code</a>
-      <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="editor-step editor-size-link">Size</a>
-      <a href="<c:url value="/editor/anls/${anls.guid }/describe" />" class="editor-step editor-describe-link">Describe</a>
+    <div class="editor-progress progress">
+      <a class="progress-step editor-step editor-code-link">Code</a>
+      <a class="progress-step editor-step editor-size-link progress-current" style="border-color: red;">Size</a>
+      <a class="progress-step editor-step editor-describe-link">Describe</a>
     </div>
   </div>
   <div class="clear-bar"></div>
-  <div class="editor-size-container">
+  <div class="editor-size-container center-content-container">
     <div class="info-area">
       <h3 class="title">${anls.name }</h3>
       <div class="author">
@@ -62,10 +58,6 @@
         </ul>
         <div class="clear"></div>
         <div class="size-viz ui-tabs-hide" id="size-viz">
-          <div>
-            <strong>Visualization Dashboard.</strong>
-          </div>
-          <br />
           <div class="viz-wrapper">
             <div class="dashboard-ruler">
               <div class="dashboard-ruler-left ruler"></div>
@@ -77,7 +69,7 @@
               <div class="snap-line-right snap-line"></div>
               <div class="snap-line-bottom snap-line"></div>
             </div>
-            <div id="dashboard-wrapper" class="dashboard-wrapper" style="width: 800px; position: absolute; visibility: hidden; height: 14000px;"></div>
+            <div id="dashboard-wrapper" class="dashboard-wrapper"></div>
             <div class="viz-dashboard" id="viz-dashboard"></div>
           </div>
         </div>

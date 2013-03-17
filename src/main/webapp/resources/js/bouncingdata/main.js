@@ -80,7 +80,7 @@ Main.prototype.initPopups = function() {
         // validate
         var name = $('#anls-name', self).val();
         var language = $('#anls-language', self).val();
-        var isPublic = $('#anls-privacy-public', self).prop('checked');
+        var isPublic = false; //$('#anls-privacy-public', self).prop('checked');
 
         if (!name || $.trim(name).length < 1) {
           return;

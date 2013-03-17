@@ -19,6 +19,11 @@
   padding: 0;
 }
 */
+
+#main-content.analysis-container .right-content {
+  width: 240px;  
+}
+
 .analysis-container#main-content .center-content .center-content-wrapper .top-rule, .datapage-container#main-content .center-content .center-content-wrapper .top-rule {
   right: 300px;
 }

@@ -1,0 +1,35 @@
+.top-bar {
+  margin-top: 10px;
+}
+
+.clear-bar {
+  margin: 10px 0;
+  background-color: #DDD;
+  height: 1px;
+}
+
+.top-bar .left-buttons {
+  float: left;
+}
+
+.top-bar .progress {
+  width: 230px;
+  margin: 0 auto;
+}
+
+.top-bar .progress a.progress-step {
+  background-color: #fff;
+  border: 1px solid green;
+  display: inline-block;
+  font-weight: bold;
+  padding: 5px 10px;
+  text-align: center;  
+}
+
+.top-bar .upload-nav-panel, .top-bar .schema-nav-panel {
+  float: right;
+}
+
+.top-bar .progress a.progress-step:hover {
+  text-decoration: none;
+}

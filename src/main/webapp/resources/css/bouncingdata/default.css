@@ -46,7 +46,7 @@ div.clear {
   width: 100%;
   margin: 0 auto;
   height: 100%;
-  background: none repeat scroll 0 0 #FBFBFB;
+  background: none repeat scroll 0 0 #FFF;
 }
 
 #page .header-container {
@@ -59,7 +59,7 @@ div.clear {
 }
 
 .header-container .header {
-  margin-left: 45px;
+  margin: 0 45px;
   position: relative;  
 }
 
@@ -229,7 +229,7 @@ div.clear {
 }
 
 #page > .main-container {
-  width: 1105px;
+  width: 1200px;
   margin-left: 45px;
 }
 
@@ -238,6 +238,10 @@ div.clear {
   z-index: 1;
   background: none repeat scroll 0 0 transparent;
   min-height: 500px;
+}
+
+#page #main-content .center-content-container {
+  margin: 0 180px;
 }
 
 #page .main-navigation {
@@ -405,7 +409,6 @@ body > .popup-container {
 /** Main content layout **/
 
 #main-content .right-content {
-  width: 235px;
   background: none repeat scroll 0 0 transparent;
   float: right;
   min-height: 500px;
@@ -455,6 +458,10 @@ body > .popup-container {
 
 #main-content .center-content .center-content-wrapper .comments-container {
   padding: 15px;
+}
+
+#main-content .right-content .ui-tabs {
+  border: 1px solid #E2E2E2;
 }
 
 .ui-tabs .ui-state-disabled { 
@@ -521,7 +528,7 @@ body > #ajaxLoadingMessage {
 
 .search-page .result-nav-item {
   display: inline-block;
-  border: 1px solid #CCC;
+  border: 1px solid #E2E2E2;
   padding: 6px 13px;
   margin: 0;
   font-weight: bold;
@@ -615,11 +622,11 @@ body > #ajaxLoadingMessage {
   margin-bottom: 8px;
 }
 
-#file-upload-form .upload-in-progress, #file-upload-form .upload-status {
+#upload-form .upload-in-progress, #upload-form .upload-status {
   display: none;
 }
 
-#file-upload-form fieldset {
+fieldset {
   border: 0 none;
 }
 

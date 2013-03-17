@@ -6,9 +6,10 @@ Editor.prototype.init = function(anls) {
   var me = this;
   me.anls = anls;
   
-  $(function() {
-    
+  $(function() {    
     com.bouncingdata.Main.toggleLeftNav();
+    
+    $('.editor-nav').button();
     
     //initialize ace editor
     var editorDom = $('.editor-container .code-editor')[0];
@@ -25,7 +26,9 @@ Editor.prototype.init = function(anls) {
     me.$loading = $(".editor-status .ajax-loading");
     
     $('button#editor-execute').click(function() {
-      me.execute();
+      me.execute(function() {
+        window.location = ctx + '/editor/anls/' + anls.guid + '/size';
+      });
     });
     
   });
@@ -63,6 +66,7 @@ Editor.prototype.initSize = function(anls, dbDetail) {
   $(function() {
     com.bouncingdata.Main.toggleLeftNav();
     var $tabs = $('#size-tabs').tabs();
+    $('.editor-nav').button();
     
     // set code
     $('#size-code .code-block pre').text(anls["code"]);
@@ -120,24 +124,49 @@ Editor.prototype.initSize = function(anls, dbDetail) {
 
 Editor.prototype.initDescribe = function(anls) {
   $(function() {
-    $('.detail-area #name').val(anls.name);
-    $('.detail-area #description').val(anls.description);
+    com.bouncingdata.Main.toggleLeftNav();
+    $('.editor-nav').button();
     tinyMCE.init({
       mode : "textareas",
-      theme : "advanced",
+      theme : "simple",
       plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
 
       // Theme options
-      theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+      theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
       theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
       theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
-      theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
       theme_advanced_toolbar_location : "top",
       theme_advanced_toolbar_align : "left",
       theme_advanced_statusbar_location : "bottom",
       theme_advanced_resizing : true
     });
-  });
+    
+        
+    $('#describe-publish').click(function() {
+      var name = $('#detail-form #name').val();
+      var description = tinymce.editors[0].getContent(); //$('#detail-form #description').val();
+      $('.saving-status .ajax-loading').css('opacity', 1);
+      $('.saving-status .status-message').text('Saving..').css('color', 'green');
+      $.ajax({
+        url: ctx + '/editor/anls/' + anls.guid + '/describe',
+        type: 'post',
+        data: {
+          'name': name,
+          'description': description
+        },
+        success: function(res) {
+          $('.saving-status .ajax-loading').css('opacity', 0);
+          $('.saving-status .status-message').text('Saved').css('color', 'green');
+        },
+        error: function(res) {
+          console.debug(res);
+          $('.saving-status .ajax-loading').css('opacity', 0);
+          $('.saving-status .status-message').text('Failed').css('color', 'red');
+        }
+      });
+      return false;
+    });
+  }); 
 }
 
 
@@ -146,7 +175,7 @@ Editor.prototype.loadDashboard = function(visuals, dashboard, $dashboard, anls) 
   com.bouncingdata.Dashboard.load(visuals, dashboard, $dashboard, anls.user.username==com.bouncingdata.Main.username);
 }
 
-Editor.prototype.execute = function() {
+Editor.prototype.execute = function(callback) {
   var me = this;
   var code = me.editor.getSession().getDocument().getValue();
   var type = 'analysis';
@@ -168,12 +197,7 @@ Editor.prototype.execute = function() {
         
           // reload datasets & viz.
         if (type == 'analysis') {
-          //me.reloadDashboard(app, $tab);
-          //app.executed = true;
           var datasets = result['datasets'];
-          //var $dsContainer = $('#' + tabId + '-data', $tab);
-          //$dsContainer.empty();
-          //me.renderDatasets(datasets, $dsContainer);
           console.debug(result)
         } else if (type == 'scraper') {
           var datasets = result['datasets'];
@@ -183,9 +207,10 @@ Editor.prototype.execute = function() {
           //  me.renderDataset(name, data, $dsContainer);
           //}
           
-          me.renderDatasets(datasets, $dsContainer);
+          //me.renderDatasets(datasets, $dsContainer);
         }
         
+        if (callback) callback();
         
       } else {
         console.debug(result);

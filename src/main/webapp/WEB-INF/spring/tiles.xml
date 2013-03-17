@@ -66,5 +66,13 @@
   <definition name="help-r" extends="based-layout">
     <put-attribute name="main-content" value="help-r-content"></put-attribute>
   </definition>
+  
+  <definition name="upload" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/upload.jsp"></put-attribute>
+  </definition>
     
+  <definition name="schema" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/schema.jsp"></put-attribute>
+  </definition>
+  
 </tiles-definitions>

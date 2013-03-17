@@ -5,7 +5,7 @@
   //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
   com.bouncingdata.ActivityStream.init();
 </script>
-<div id="main-content">
+<div id="main-content" class="homepage-container">
   <div class="right-content" style="color: #555555;">
     <div class="right-content-section most-popular-section">
       <div class="right-content-section-title">
@@ -19,6 +19,9 @@
             <div class="side-list-panel" id="most-popular-analysis">
               <c:forEach items="${topAnalyses }" var="anls">
                 <div class="side-item-panel">
+                  <a class="small-avatar-link">
+                    <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
+                  </a>
                   <div class="small-thumbnail">
                     <a href="<c:url value="/anls/${anls.guid}" />">
                       <c:choose>
@@ -35,8 +38,9 @@
                     <a href="<c:url value="/anls/${anls.guid}" />"><strong>${anls.name}</strong></a>
                   </p>
                   <p class="side-item-author">
-                    <span>by ${anls.user.username }</span>
+                    <span>by <a href="#">${anls.user.username }</a></span>
                   </p>
+                  
                   <div class="clear"></div>
                 </div>
               </c:forEach>
@@ -44,7 +48,10 @@
             <div class="side-list-panel" id="most-popular-dataset">
               <c:forEach items="${topDatasets }" var="dts">
                 <div class="side-item-panel">
-                  <div class="small-thumbnal">
+                  <a class="small-avatar-link">
+                    <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
+                  </a>
+                  <div class="small-thumbnail">
                     <a href="<c:url value="/dataset/${dts.guid}" />">
                       <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
                     </a>
@@ -75,6 +82,9 @@
             <div class="side-list-panel" id="staff-pick-analysis">
               <c:forEach items="${topAnalyses }" var="anls">
                 <div class="side-item-panel">
+                  <a class="small-avatar-link">
+                    <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
+                  </a>
                   <div class="small-thumbnail">
                     <a href="<c:url value="/anls/${anls.guid}" />">
                       <c:choose>
@@ -100,6 +110,9 @@
             <div class="side-list-panel" id="staff-pick-dataset">
               <c:forEach items="${topDatasets }" var="dts">
                 <div class="side-item-panel">
+                  <a class="small-avatar-link">
+                    <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
+                  </a>
                   <div class="small-thumbnail">
                     <a href="<c:url value="/dataset/${dts.guid}" />">
                       <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
@@ -128,15 +141,15 @@
           <c:forEach items="${activities }" var="activity">
             <c:if test="${not empty activity.object }">
               <div class="event stream-item" aid="${activity.id }">
-                <div class="event-avatar">
-                  <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
-                </div>
                 <div class="event-content">
-                  <div class="info" aid="${activity.id }">
+                  <!-- div class="info" aid="${activity.id }">
                     <a href="#" class="user"><strong>${activity.user.username }</strong></a>&nbsp;
                     <span class="action">${activity.action }</span>
                     <div class="time">${activity.time}</div> 
-                  </div>
+                  </div-->
+                  <a class="event-avatar-link">
+                    <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
+                  </a>
                   <div class="thumbnail">
                     <a id="evt-thumb-${activity.id }" href="<c:url value="/anls/${activity.object.guid}" />">
                       <c:choose>
@@ -152,9 +165,18 @@
                   <p class="title">
                     <a id="evt-title-${activity.id }" href="<c:url value="/anls/${activity.object.guid}" />"><strong>${activity.object.name}</strong></a>
                   </p>
-                  <p class="description">
-                    <span>${activity.message }</span>
+                  <p class="info">
+                    <span class="author">Author: <a href="#">${activity.user.username }</a></span><br/>
+                    <span class="tag-list">Tags:&nbsp; 
+                      <a class="tag-element" href="javascript:void(0);">Football</a>
+                      <a class="tag-element" href="javascript:void(0);">Money</a>
+                      <a class="tag-element" href="javascript:void(0);">Madrid</a>
+                    </span>
                   </p>
+                  <p class="description">
+                    <span>${activity.object.description }</span>
+                  </p>
+                  
                   <div class="clear"></div>
                   <div class="event-footer">
                     <c:if test="${activity.object.score > 0}">

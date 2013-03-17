@@ -12,35 +12,54 @@
   margin: 20px 0;
 }
 
-#stream .event .event-avatar {
-  float: left;
+#main-content.homepage-container .right-content {
+  width: 300px;
+}
+
+#stream .event .event-avatar-link {
+  float: right;
   cursor: pointer;
+  height: 41px;
+  width: 41px;
+  display: block;
 }
 
 #stream .event img.avatar {
   width: 40px;
   height: 40px;
   border: 1px solid #DDDDDD;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 #stream .event .event-content {
   float: left;
-  border: 1px solid #DDDDDD;
+  border: 1px solid #E2E2E2;
   border-radius: 2px;
-  margin-left: 15px;
-  padding: 5px 10px;
-  width: 480px;
+  padding: 10px;
+  width: 605px;
+  position: relative;
 }
 
 #stream .event .event-content .title {
   color: #0077CC;
   font-size: 13px;
   line-height: 1.2em;
+  margin: 0;
 }
 
+#stream .event .event-content .info {
+  font-size: 11px;
+  color: #999999;
+  margin: 5px 0;
+}
+
+#stream .event .event-content .info .author a {
+  
+}
+
+
 #stream .event-content:hover {
-  border-color: #CCCCCC;
+  border-color: #DDDDDD;
 }
 
 #stream .event a {
@@ -53,7 +72,7 @@
 
 #stream .event .event-content .thumbnail {
   border: 1px solid #EEEEEE;
-  margin: 10px 10px 0 0;
+  margin-right: 10px;
   float: left;
   border-radius: 2px;
 }
@@ -63,8 +82,8 @@
 }
 
 #stream .event .event-content .thumbnail a img {
-  width: 90px;
-  height: 90px;
+  width: 125px;
+  height: 125px;
 }
 
 #stream .event .event-content .time {
@@ -81,7 +100,9 @@
 }
 
 #stream .event .event-footer {
-  float: right;
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
 }
 
 #stream .event .event-score {
@@ -96,6 +117,7 @@
   text-decoration: none;
 }
 
+
 .side-item-panel .small-thumbnail {
   float: left;
   margin-right: 10px;
@@ -106,20 +128,39 @@
   height: 76px;
 }
 
+.side-item-panel a.small-avatar-link {
+  display: block;
+  float: right;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #DDD:
+}
+
+.side-item-panel .small-avatar-link img {
+  width: 30px;
+  height: 30px;
+}
+
 .right-content div.side-list-panel  {
   padding: 5px;
   overflow-y: hidden;
-  min-height: 250px;
+  min-height: 350px;
   height: 250px;
   color: #333333;
+  overflow-x: hidden;
 }
 
 .right-content .side-list-panel .side-item-panel {
-  width: 205px;
+  width: 270px;
 }
 
 .right-content .side-list-panel .side-item-panel p {
   margin: 5px 0;
+}
+
+.side-item-panel .side-item-author {
+  font-size: 11px;
+  color: #999;
 }
 
 .side-list-panel .side-ite-panel .side-item-author {

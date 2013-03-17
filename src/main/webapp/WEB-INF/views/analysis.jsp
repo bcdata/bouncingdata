@@ -6,8 +6,6 @@
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
   var anls = {
     guid: '${anls.guid}',
-    name: '${anls.name}',
-    description: '${anls.description}',
     user: {username: '${anls.user.username}'},
     language: '${anls.language}',
     code: '${anlsCode}'
@@ -24,27 +22,6 @@
 </script>
 <div id="main-content" class="analysis-container">
   <div class="analysis-info right-content">
-    <!-- div class="anls-summary summary">
-      <div class="anls-info-header info-header">
-        <div class="anls-info-title info-title">Analysis Info</div>
-        <div class="anls-info-title-line info-title-line"></div>
-      </div>
-      <p class="line-item">
-        <strong>Analysis: </strong><span>${anls.name }</span>
-      </p>
-      <p class="line-item">
-        <strong>Author: </strong><a href="javascript:void(0)"><span>${anls.user.username }</span></a>
-      </p>
-      <p class="line-item">
-        <strong>Description: </strong><span>${anls.description }</span>
-      </p>
-      <p class="line-item">
-        <strong>Create at: </strong><span>${anls.createAt }</span>
-      </p>
-      <p class="line-item">
-        <strong>Tags: </strong><span>${anls.tags }</span>
-      </p>  
-    </div-->
     <div class="anls-summary">
       <div class="author-summary">       
         <a class="author-avatar" href="javascript:void(0);"><img src="<c:url value="/resources/images/no-avatar.png" />" /></a>       
@@ -111,7 +88,6 @@
           <a href="javascript:void(0)" class="anls-vote-down">Vote down</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
-            <a href="javascript:void(0)" class="anls-edit-button" id="anls-edit-button" title="Edit this analysis in your workbench">Edit</a>&nbsp;&nbsp;
             <a href="javascript:void(0)" class="anls-publish-button" id="anls-publish-button" title="Publish this analysis">Publish</a>&nbsp;&nbsp;
             <a href="<c:url value="/editor/anls/${anls.guid }/size" />" title="Edit this analysis">Edit</a>
           </c:if>&nbsp;&nbsp;

@@ -16,6 +16,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bouncingdata.plfdemo.datastore.pojo.dto.Attachment;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardDetail;
@@ -47,12 +49,7 @@ public class EditorController {
   
   @Autowired
   private ApplicationExecutor appExecutor;
-  
-  @RequestMapping(method = RequestMethod.GET)
-  public String errorPage() {
-    return "error";
-  }
-  
+    
   @RequestMapping(value="/anls/{guid}/{mode}", method = RequestMethod.GET)
   public String openEditor(@PathVariable String guid, @PathVariable String mode, ModelMap model, Principal principal) {
     
@@ -71,7 +68,7 @@ public class EditorController {
       
       User user = (User) ((Authentication)principal).getPrincipal();
       if (user == null || (!user.getUsername().equals(anls.getUser().getUsername()) && !anls.isPublished())) {
-        model.addAttribute("errorMsg", "This analysis is not public!");
+        model.addAttribute("errorMsg", "You have no permission to edit this analysis!");
         return "error";
       }
       
@@ -150,6 +147,22 @@ public class EditorController {
     return "editor";
   }
   
-  
+  @RequestMapping(value = "/anls/{guid}/describe", method = RequestMethod.POST)
+  public @ResponseBody void saveDescription(@PathVariable String guid, @RequestParam(value="name", required=true) String name, @RequestParam(value="description", required=true) String description, ModelMap model, Principal principal) {
+    User user = (User) ((Authentication)principal).getPrincipal();
+    if (user == null) {
+      return;
+    }
+    
+    try {
+      Analysis anls = datastoreService.getAnalysisByGuid(guid);
+      anls.setName(name);
+      anls.setDescription(description);
+      datastoreService.updateAnalysis(anls);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+  }
   
 }

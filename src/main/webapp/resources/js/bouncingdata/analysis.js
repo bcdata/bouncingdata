@@ -121,39 +121,6 @@ Analysis.prototype.init = function(anls, dbDetail) {
       me.updateEmbeddedLink(guid);
     });
 
-    var $edit = $('.anls-action-links a#anls-edit-button');
-    if ($edit.length > 0) {
-
-      $edit.click(function() {
-        // check if the current workbench's cache has contained this analysis already
-        /*if (com.bouncingdata.Main.workbenchSession.tabsInfo
-            && guid in com.bouncingdata.Main.workbenchSession.tabsInfo) {
-          com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
-        } else { // if not, add this analysis then open workbench
-          if (!com.bouncingdata.Main.workbenchSession.tabsInfo) {
-            com.bouncingdata.Main.workbenchSession.tabsInfo = {};
-            com.bouncingdata.Main.workbenchSession.tabsInfo[guid] = {'app': anls};
-            if (!com.bouncingdata.Main.workbenchSession.tabsIndex) {
-              com.bouncingdata.Main.workbenchSession.tabsIndex = [];
-            }
-            com.bouncingdata.Main.workbenchSession.tabsIndex.push({'guid': guid, 'type': 'analysis'});
-            com.bouncingdata.Main.workbenchSession.tabsCounter = com.bouncingdata.Main.workbenchSession.tabsIndex.length;
-            com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
-          } else {
-            com.bouncingdata.Main.workbenchSession.tabsInfo[guid] = {'app': anls};
-            com.bouncingdata.Main.workbenchSession.tabsIndex.push({'guid': guid, 'type': 'analysis'});
-            com.bouncingdata.Main.workbenchSession.tabsCounter = com.bouncingdata.Main.workbenchSession.tabsIndex.length;
-            com.bouncingdata.Main.workbenchSession.currentSelected = {'guid': guid, 'tab': 1};
-          }
-        }*/
-
-        com.bouncingdata.Workbench.callback = function () {
-          com.bouncingdata.Workbench.openApp(anls, null, 'analysis', null, com.bouncingdata.Workbench.STATUS_VIZING);
-        }
-        com.bouncingdata.Nav.openWorkbench();
-      });
-    }
-
     var $publish = $('.anls-action-links a#anls-publish-button');
     if ($publish.length > 0) {
       $publish.click(function() {

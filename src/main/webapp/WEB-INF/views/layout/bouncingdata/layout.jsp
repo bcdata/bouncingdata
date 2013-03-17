@@ -47,6 +47,8 @@
   <script type="text/javascript" src="<c:url value="/resources/js/bouncingdata/workbench.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/bouncingdata/browser.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/bouncingdata/nav.js" />"></script>
+  <script type="text/javascript" src="<c:url value="/resources/js/bouncingdata/editor.js" />"></script>
+  <script type="text/javascript" src="<c:url value="/resources/js/bouncingdata/upload.js" />"></script>
   
   <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shCore.js" />"></script>
   <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shBrushJScript.js" />"></script>

@@ -13,7 +13,7 @@
           <option value="python">Python</option>
         </select>
       </div>
-      <div>
+      <!-- div>
         <label>Privacy</label> 
         <span> 
           <span>Public&nbsp;</span>
@@ -21,7 +21,7 @@
           <span>Private&nbsp;</span>
           <input type="radio" name="anls-privacy" value="private" id="anls-privacy-private" />
         </span>
-      </div>
+      </div-->
     </fieldset>
   </form>
 </div>

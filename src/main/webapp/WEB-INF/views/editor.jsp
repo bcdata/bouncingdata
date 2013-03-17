@@ -27,14 +27,14 @@
     <div class="editor-nav-panel">
       <button class="editor-nav" id="editor-execute">Execute</button>
     </div>
-    <div class="editor-progress">
-      <a href="<c:url value="/editor/anls/${anls.guid }/edit" />" class="editor-step editor-code-link">Code</a>
-      <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="editor-step editor-size-link">Size</a>
-      <a href="<c:url value="/editor/anls/${anls.guid }/describe" />" class="editor-step editor-describe-link">Describe</a>
+    <div class="editor-progress progress">
+      <a class="progress-step editor-step editor-code-link progress-current" style="border-color: red;">Code</a>
+      <a class="progress-step editor-step editor-size-link">Size</a>
+      <a class="progress-step editor-step editor-describe-link">Describe</a>
     </div>
   </div>
   <div class="clear-bar"></div>
-  <div class="editor-container">
+  <div class="editor-container center-content-container">
     <div class="info-area">
       <h3 class="title">${anls.name }</h3>
       <div class="author">

@@ -51,6 +51,7 @@ import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory.FileType;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
+import com.mysql.jdbc.StringUtils;
 
 @Controller
 @RequestMapping("/dataset")
@@ -71,6 +72,86 @@ public class DatasetController {
   
   public void setLogDir(String ld) {
     this.logDir = ld;
+  }
+  
+  @RequestMapping(value={"/upload"}, method = RequestMethod.GET)
+  public String getUploadPage(ModelMap model, Principal principal) {
+    return "upload";
+  }
+  
+  @RequestMapping(value="/upload/schema", method = RequestMethod.GET)
+  public String getUploadPage2() {
+    return "redirect:upload";
+  }
+  
+  @RequestMapping(value="/upload/schema", method = RequestMethod.POST)
+  public String getSchemaPage(@RequestParam(value = "file", required = false) MultipartFile file,
+      @RequestParam(value = "fileUrl", required = false) String fileUrl, ModelMap model, Principal principal) {
+        
+    if (file == null && (fileUrl == null || StringUtils.isEmptyOrWhitespaceOnly(fileUrl))) {
+      model.addAttribute("errorMsg", "Null input file or file address.");
+      return "upload";
+    }
+    
+    String filename = file.getOriginalFilename();
+    int index = filename.lastIndexOf(".");
+    String type = filename.substring(index + 1);
+    filename = filename.substring(0, index);
+    long size = file.getSize();
+    logger.debug("UPLOAD FILE: Received {} file. Size {}", filename, size);
+    if (size <= 0) {
+      model.addAttribute("errorMsg", "Cannot determine file size.");
+      return "upload";
+    }
+    
+    // parse the schema
+    DataParser parser;
+    if (type.equals("xls") || type.equals("xlsx")) {
+      parser = DataParserFactory.getDataParser(FileType.EXCEL);       
+    } else if (type.equals("txt")) {
+      parser = DataParserFactory.getDataParser(FileType.TEXT);
+    } else if (type.equals("csv")) {
+      parser = DataParserFactory.getDataParser(FileType.CSV);
+    } else {
+      model.addAttribute("errorMsg", "Unknown file type.");
+      return "upload";
+    }
+    
+    // temporary store to where? in which format?
+    final String ticket = Utils.getExecutionId();
+    String tempDataFilePath = logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat";
+    File tempDataFile = new File(tempDataFilePath);
+    
+    try {
+      if (!tempDataFile.getParentFile().isDirectory()) {
+        tempDataFile.getParentFile().mkdirs();
+      }
+      
+      List<String[]> data = parser.parse(file.getInputStream());
+      ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
+      for (String[] row : data) {
+        os.writeObject(row);
+      }
+      os.close();
+      
+    } catch (Exception e) {
+      logger.debug("Failed to write to temporary datafile {}", tempDataFilePath);
+      model.addAttribute("errorMsg", "Failed to parse and save your data.");
+      return "upload";
+    }
+    
+    try {
+      // parse schema
+      List<DatasetColumn> schema = parser.parseSchema(file.getInputStream());
+      ObjectMapper mapper = new ObjectMapper();
+      model.addAttribute("schema", mapper.writeValueAsString(schema));
+    } catch(Exception e) {
+      logger.debug("Exception occured when parsing data schema", e);
+      model.addAttribute("errorMsg", "Failed to parse schema.");
+      return "upload";
+    }
+    
+    return "schema";
   }
     
   @SuppressWarnings("rawtypes")
