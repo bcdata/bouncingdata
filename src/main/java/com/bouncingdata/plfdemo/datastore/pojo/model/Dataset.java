@@ -2,8 +2,10 @@ package com.bouncingdata.plfdemo.datastore.pojo.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.Join;
 import javax.jdo.annotations.NullValue;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -18,13 +20,15 @@ public class Dataset {
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   private int id;
   private String name;
-  private String description;
-  private String schema;
+  private String description;  
   @Unique
   private String guid;
   @Persistent(defaultFetchGroup="true", nullValue=NullValue.EXCEPTION)
   private User user;
-  private String tags;
+  
+  private String schema;
+  
+
   private Date createAt;
   private Date lastUpdate;
   private int rowCount;
@@ -34,6 +38,11 @@ public class Dataset {
   private boolean isPublic;
   @Persistent(mappedBy="dataset")
   List<AnalysisDataset> relations;
+	//@Persistent(table="Dataset_tags")
+	//@Join //(column="id_OID")
+	//@Element (column="id_EID")
+  @Join
+  private  Set<Tag> tags;
   
   public int getId() {
     return id;
@@ -71,10 +80,10 @@ public class Dataset {
   public void setAuthor(int author) {
     this.author = author;
   }*/
-  public String getTags() {
+  public  Set<Tag>  getTags() {
     return tags;
   }
-  public void setTags(String tags) {
+  public void setTags( Set<Tag>  tags) {
     this.tags = tags;
   }
   public Date getCreateAt() {
