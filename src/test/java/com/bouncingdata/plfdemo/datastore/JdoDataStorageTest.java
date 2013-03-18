@@ -102,37 +102,33 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
   
   public void testCreateTag() {
 	  Tag tag;
-	  /*tag = new Tag("ZACHMAN");
+	  /*Create tag
+	   * tag = new Tag("ZACHMAN");
 	  jdoDataStorage.createTag(tag);*/
 	 
 	 tag = jdoDataStorage.getTag("EA");	  
 	  assertNotNull(tag);	  	  
-	 /* jdoDataStorage.addAnalysisTag(8, tag.getId());*/	
+		
 	  
 	  
-	  jdoDataStorage.addDataSetTag(1, tag.getId());
-	  
-/* 
-	  jdoDataStorage.getScraperByTag(tag.getId());
-	  jdoDataStorage.getTagByScraper(3);
-	  jdoDataStorage.deleteAnalysisTag(8, tag.getId());
-	  jdoDataStorage.addScraperTag(3, tag.getId());
-	  
-	   jdoDataStorage.addScraperTag(4, tag.getId());	
-	  jdoDataStorage.addScraperTag(5, tag.getId());	
-	  jdoDataStorage.addScraperTag(6, tag.getId());	*/
+	 /* Create dataset tag
+	  * jdoDataStorage.addDataSetTag(1, tag.getId());
+	  jdoDataStorage.addDataSetTag(2, tag.getId());
+	  jdoDataStorage.addDataSetTag(6, tag.getId());
+	  jdoDataStorage.addDataSetTag(7, tag.getId());
+	  jdoDataStorage.addDataSetTag(8, tag.getId());
+	  jdoDataStorage.addDataSetTag(9, tag.getId());*/
 	  
 	
+	 /* Delete dataset tag
+	  * jdoDataStorage.deleteDataSetTag(1, tag.getId());
+	  jdoDataStorage.deleteDataSetTag(2, tag.getId());
+	  jdoDataStorage.deleteDataSetTag(6, tag.getId());*/
 	  
-	  /* jdoDataStorage.getTagByAnalysis(8);
-	   jdoDataStorage.deleteAnalysisTag(8, tag.getId());
-	  jdoDataStorage.addScapperTag(3, tag.getId());
-	  jdoDataStorage.getAnalysisByTag(tag.getId());
-	   jdoDataStorage.addAnalysisTag(10, tag.getId());	
-	  jdoDataStorage.addAnalysisTag(11, tag.getId());	
-	  jdoDataStorage.addAnalysisTag(12, tag.getId());	
-	  jdoDataStorage.addAnalysisTag(13, tag.getId());
-	*/
-	  
+	  /*Queries
+	   * jdoDataStorage.getDataSetByTag(tag.getId());
+	  jdoDataStorage.getTagByDataSet(7);
+	  */
+	  	  
   }
 }

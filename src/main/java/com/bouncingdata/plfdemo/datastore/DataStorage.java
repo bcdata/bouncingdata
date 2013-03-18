@@ -486,7 +486,7 @@ public interface DataStorage {
   public void deleteDataSetTag(int dsId, int tagId);
   /*How many tag for an DataSet*/
   public Set<Tag> getTagByDataSet(int dsId);
-  public List<Analysis> getDataSetByTag(int tagId);
+  public List<Dataset> getDataSetByTag(int tagId);
   
   
   

@@ -1692,20 +1692,50 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	
 	@Override
 	public void deleteDataSetTag(int dsId, int tagId) {
-		// TODO Auto-generated method stub
+		PersistenceManager pm = getPersistenceManager();	    
+		Transaction tx = pm.currentTransaction();
+		try {
+			tx.begin();
+			Dataset dts = pm.getObjectById(Dataset.class, dsId);
+			Tag tag = pm.getObjectById(Tag.class, tagId);
+			dts.getTags().remove(tag);
+			pm.makePersistent(dts);
+			tx.commit();
+		} finally {
+			if (tx.isActive()) tx.rollback();
+			pm.close();
+		}
 		
 	}
 
 	@Override
 	public Set<Tag> getTagByDataSet(int dsId) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Tag> results = null;
+		PersistenceManager pm = getPersistenceManager();	    
+		Transaction tx = pm.currentTransaction();
+		try {
+			tx.begin();
+			Dataset dts = pm.getObjectById(Dataset.class, dsId);
+			results = dts.getTags();
+			System.out.println("Size : " + results.size());
+			tx.commit();
+		} finally {
+			if (tx.isActive()) tx.rollback();
+			pm.close();
+		}
+		return results;
 	}
 
 	@Override
-	public List<Analysis> getDataSetByTag(int tagId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Dataset> getDataSetByTag(int tagId) {
+		PersistenceManager pm = getPersistenceManager();			
+		Query query= pm.newQuery("javax.jdo.query.SQL",
+			    "SELECT t1 . * FROM datasets t1 INNER JOIN Dataset_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
+			Map params = new HashMap();
+			params.put("param", tagId);		
+		List<Dataset> results = (List<Dataset>) query.executeWithMap(params);
+		System.out.println("Size : " + results.size());
+		return results;
 	}
 
 }
