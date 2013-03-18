@@ -19,7 +19,7 @@ public class Analysis extends BcDataScript {
   @Persistent(table="Analysis_tags")
   @Join (column="id_OID")
   @Element (column="id_EID")
-  private  Set<Tag> tags;
+  private   Set<Tag> tags;
   
   @Persistent
   private String thumbnail;

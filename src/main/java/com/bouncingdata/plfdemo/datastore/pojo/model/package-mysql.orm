@@ -24,9 +24,7 @@
       <field name="user">
         <column name="user" jdbc-type="INTEGER" />
       </field>
-      <field name="tags">
-        <column name="tags" jdbc-type="VARCHAR" length="1000" />
-      </field>
+    
       <field name="createAt">
         <column name="create_at" jdbc-type="TIMESTAMP" />
       </field>
