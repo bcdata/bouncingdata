@@ -43,31 +43,46 @@
   height: 1px;
 }
 
-.top-bar .left-buttons {
+.editor-container .top-bar .left-buttons {
   float: left;
 }
 
 .editor-container .top-bar .editor-progress {
-  width: 230px;
+  width: 218px;
   margin: 0 auto;
+  border: 1px solid #DDD;
+  cursor: pointer;
+  height: 25px;
 }
 
-.top-bar .progress a.progress-step {
+.editor-container .top-bar .progress .progress-step {
   background-color: #fff;
-  border: 1px solid green;
   display: inline-block;
   font-weight: bold;
+  font-size: 1.1em;
   padding: 5px;
-  width: 60px;
+  width: 62px;
+  height: 15px;
+  margin: 0;
+  float: left;
   text-align: center;  
+}
+
+.editor-container .top-bar .progress .progress-step:first-child {
+  border-right: 1px solid #DDD;
+}
+
+.editor-container .top-bar .progress .progress-step:last-child {
+  border-left: 1px solid #DDD;
+}
+
+.editor-container .top-bar .progress .progress-current {
+  background-color: #4D90FE;
+  color: #FFFFFF;
 }
 
 .editor-container .top-bar .editor-nav-panel {
   float: right;
-}
-
-.editor-container .top-bar .editor-progress a.editor-step:hover {
-  text-decoration: none;
 }
 
 .editor-container .info-area {
@@ -125,12 +140,15 @@
 }
 
 .editor-container .execution-logs .console-actions {
-  margin-top: 5px;
   height: 30px;
+  float: right;
+  position: relative;
+  z-index: 1;
 }
 
 .editor-container .execution-logs .console-actions input.ui-button {
   float: right;
+  border-color: #BBB;
 }
 
 /* The inner console element. */
@@ -270,14 +288,17 @@
   background: url('../../images/ruler-top.gif') repeat-x scroll left bottom transparent;
 }
 
-.editor-size-area .size-viz .viz-dashboard {
+.editor-size-area .size-viz #viz-dashboard {
   min-height: 450px;
   border: 0 none;
   width: 100%;
   background: url('../../images/grid.gif') repeat scroll left top transparent;
+  position: relative;
+  padding: 0;
+  margin: 0;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container {
+.editor-size-area .size-viz #viz-dashboard .viz-container {
   border: 1px solid #999999;
   background: none repeat scroll left top #FFFFFF;
   border-top-left-radius: 5px;
@@ -289,25 +310,25 @@
   margin: 10px 0;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container-hover {
+.editor-size-area .size-viz #viz-dashboard .viz-container-hover {
   /*border: 1px dotted #888888;*/
   border: 1px dotted #347C17;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container .ui-resizable-handle {
+.editor-size-area .size-viz #viz-dashboard .viz-container .ui-resizable-handle {
   opacity: 0;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container-hover .ui-resizable-handle {
+.editor-size-area .size-viz #viz-dashboard .viz-container-hover .ui-resizable-handle {
   opacity: 1;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container > iframe {
+.editor-size-area .size-viz #viz-dashboard .viz-container > iframe {
   border: 1px dashed #DDDDDD;  
   overflow: hidden;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container .viz-handle {
+.editor-size-area .size-viz #viz-dashboard .viz-container .viz-handle {
   height: 12px;
   display: block;
   margin: 0;
@@ -316,7 +337,7 @@
   background: none repeat scroll left top #C0C0C0;
 }
 
-.editor-size-area .size-viz .viz-dashboard .viz-container .viz-handle-hover {
+.editor-size-area .size-viz #viz-dashboard .viz-container .viz-handle-hover {
   /*background: #BBBBBB no-repeat scroll left top;*/
   cursor: crosshair;
 }

@@ -52,6 +52,13 @@
     <property name="mailConfiguration" ref="mailConfig"></property>
   </bean>
   
+  <mvc:interceptors>
+    <mvc:interceptor>
+      <mvc:mapping path="/editor/**"/>
+      <bean class="com.bouncingdata.plfdemo.interceptor.EditorInterceptor"/>
+    </mvc:interceptor>
+  </mvc:interceptors>
+  
   <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
     <property name="definitions">
       <list>

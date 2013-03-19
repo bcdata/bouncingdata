@@ -144,8 +144,8 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
     var _h = $container.height();
     
     $vizContainer.draggable({ 
-      containment: [_x, _y, _x + _w - w, 140000],
-      //containment: '#dashboard-wrapper-' + $container.attr('tabid'), 
+      //containment: [_x, _y, _x + _w - w, 140000],
+      containment: '#dashboard-wrapper', 
       handle: '.viz-handle', 
       iframeFix: true, 
       grid: [10, 10] 

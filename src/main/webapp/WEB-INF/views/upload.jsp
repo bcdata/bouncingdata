@@ -23,8 +23,8 @@
       <a class="upload-nav" id="upload-submit" href="javascript:void(0)">Submit</a>
     </div>
     <div class="progress upload-progress">
-      <a class="progress-step upload-step upload-file progress-current" style="border-color: red;">File</a>
-      <a class="progress-step upload-step upload-schema">Schema & Description</a>
+      <div class="progress-step upload-step upload-file progress-current">File</div>
+      <div class="progress-step upload-step upload-schema">Schema & Description</div>
     </div>
   </div>
   <div class="clear-bar"></div>
@@ -36,34 +36,34 @@
     </c:if>
     <div class="upload-form-wrapper">
       <form id="upload-form" method="post" action="<c:url value="/dataset/upload/schema" />" enctype="multipart/form-data">
-        <div>
-          <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" style="display: none;" />&nbsp;
-          <span class="upload-status"></span>
+        <div class="file-section">
+          <div>
+            <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" style="display: none;" />&nbsp;
+            <span class="upload-status"></span>
+          </div>
+          <h3>1. File Location</h3>
+          <span>We support the following types: csv, xls, xlsx, txt, rdata</span>
+          <div class="file-inner">
+            <label>Web Address</label>
+            <input type="text" name="fileUrl" id="file-url" />
+            <div style="font-size: 15px; margin: 5px 0; font-weight: bold;">Or</div>         
+            <label>Local File</label>
+            <input type="file" id="file" name="file" />
+          </div>
         </div>
-        <h3>1. File Location</h3>
-        <span>We support the following types: csv, xls, xlsx, txt, rdata</span>
-        <div>
-          <label>Web Address</label>
-          <input type="text" name="fileUrl" id="fileUrl" />
-          <div style="font-size: 15px;">Or</div>         
-          <label>Local File</label>
-          <input type="file" id="file" name="file" />
-        </div>
-      </form>
-    </div>
-    <div class="upload-options-wrapper">
-      <form id="upload-options-form">
-        <h3>2. Loading Options</h3>
-        <div>
-          <label>Header</label>
-          <input type="checkbox" value="First row is header" />
-          <label>Delimiter</label>
-          <select>
-            <option value="comma">Comma</option>
-            <option value="tab">Tab</option>
-            <option value="period">Period</option>
-          </select>
-        </div>
+        <div class="options-section">
+          <h3>2. Loading Options</h3>
+          <div class="options-inner">
+            <label>Header</label>
+            <input type="checkbox" value="First row is header" /><br/><br/>
+            <label>Delimiter</label>
+            <select>
+              <option value="comma">Comma</option>
+              <option value="tab">Tab</option>
+              <option value="period">Period</option>
+            </select>
+          </div>
+        </div>  
       </form>
     </div>
   </div>

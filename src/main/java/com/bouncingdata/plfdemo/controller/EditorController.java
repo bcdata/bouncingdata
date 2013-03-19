@@ -67,15 +67,11 @@ public class EditorController {
       }
       
       User user = (User) ((Authentication)principal).getPrincipal();
-      if (user == null || (!user.getUsername().equals(anls.getUser().getUsername()) && !anls.isPublished())) {
+      if (user == null || !user.getUsername().equals(anls.getUser().getUsername())) {
         model.addAttribute("errorMsg", "You have no permission to edit this analysis!");
         return "error";
       }
-      
-      if (anls.getUser().getUsername().equals(user.getUsername())) {
-        model.addAttribute("isOwner", true);
-      } else model.addAttribute("isOwner", false);
-      
+            
       model.addAttribute("anls", anls);
       
       String code = appStoreService.getScriptCode(guid, null);

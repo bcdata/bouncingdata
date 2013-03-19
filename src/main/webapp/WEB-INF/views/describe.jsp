@@ -29,9 +29,9 @@
       <a class="editor-nav" id="describe-publish" href="javascript:void(0);">Publish</a>
     </div>
     <div class="editor-progress progress">
-      <a class="progress-step editor-step editor-code-link">Code</a>
-      <a class="progress-step editor-step editor-size-link">Size</a>
-      <a class="progress-step editor-step editor-describe-link progress-current" style="border-color: red;">Describe</a>
+      <a class="progress-step editor-step">Code</a>
+      <a class="progress-step editor-step">Size</a>
+      <a class="progress-step editor-step progress-current">Describe</a>
     </div>
   </div>
   <div class="clear-bar"></div>

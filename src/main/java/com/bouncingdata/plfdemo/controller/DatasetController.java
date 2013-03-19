@@ -86,7 +86,8 @@ public class DatasetController {
   
   @RequestMapping(value="/upload/schema", method = RequestMethod.POST)
   public String getSchemaPage(@RequestParam(value = "file", required = false) MultipartFile file,
-      @RequestParam(value = "fileUrl", required = false) String fileUrl, ModelMap model, Principal principal) {
+      @RequestParam(value = "fileUrl", required = false) String fileUrl, WebRequest request, 
+      ModelMap model, Principal principal) {
         
     if (file == null && (fileUrl == null || StringUtils.isEmptyOrWhitespaceOnly(fileUrl))) {
       model.addAttribute("errorMsg", "Null input file or file address.");

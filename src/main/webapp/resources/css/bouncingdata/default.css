@@ -150,6 +150,7 @@ div.clear {
 
 #page .top-page-panel .header-buttons .guide-button-container {
   float: left;
+  border: 1px solid #DDD;
 }
 
 #page .top-page-panel .header-buttons .guide-button-container .guide-button {
@@ -157,9 +158,17 @@ div.clear {
   cursor: pointer;
   padding: 5px;
   text-align: center;
-  width: 38px;
-  border: 1px solid #CCC;
+  width: 40px;
   background-color: #fff;
+  float: left;
+}
+
+#page .top-page-panel .header-buttons .guide-button-container .guide-button:first-child {
+  border-right: 1px solid #DDD;
+}
+
+#page .top-page-panel .header-buttons .guide-button-container .guide-button:last-child {
+  border-left: 1px solid #DDD;
 }
 
 #page .top-page-panel .header-buttons .create-button-container {
@@ -175,17 +184,19 @@ div.clear {
 
 #page .header-container .search-container .search-input-wrapper {
   width: 520px;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #DDD;
   height: 28px;
-  padding: 0 0 0 5px;
+  padding: 0;
   display: inline-block;
   background-color: #FFFFFF;
 }
 
+
+
 #page .header-container .search-container .search-input {
-  width: 510px;
+  width: 515px;
+  padding: 0 0 0 5px;
   border: 0 none;
-  padding: 0;
   height: 28px;
   outline: none;
   font-size: 16px;

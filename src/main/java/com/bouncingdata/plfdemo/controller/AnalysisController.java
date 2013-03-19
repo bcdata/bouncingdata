@@ -60,10 +60,11 @@ public class AnalysisController {
       }
       
       User user = (User) ((Authentication)principal).getPrincipal();
-      if (user == null || (!user.getUsername().equals(anls.getUser().getUsername()) && !anls.isPublished())) {
+      
+      /*if (user == null || (!user.getUsername().equals(anls.getUser().getUsername()) && !anls.isPublished())) {
         model.addAttribute("errorMsg", "This analysis is not public!");
         return "error";
-      }
+      }*/
       
       if (anls.getUser().getUsername().equals(user.getUsername())) {
         model.addAttribute("isOwner", true);

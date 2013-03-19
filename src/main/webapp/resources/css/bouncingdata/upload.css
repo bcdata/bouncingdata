@@ -8,28 +8,75 @@
   height: 1px;
 }
 
-.top-bar .left-buttons {
+.upload-container .top-bar .left-buttons {
   float: left;
 }
 
-.top-bar .progress {
-  width: 230px;
+.upload-container .top-bar .progress {
+  height: 25px;
   margin: 0 auto;
+  border: 1px solid #DDD;
+  cursor: pointer;
 }
 
-.top-bar .progress a.progress-step {
+.upload-container .top-bar .progress .progress-step {
   background-color: #fff;
-  border: 1px solid green;
   display: inline-block;
   font-weight: bold;
+  font-size: 1.1em;
   padding: 5px 10px;
   text-align: center;  
+  height: 15px;
+  float: left;
 }
 
-.top-bar .upload-nav-panel, .top-bar .schema-nav-panel {
+.upload-container .top-bar .upload-progress {
+  width: 205px;
+}
+
+.upload-container .top-bar .upload-progress .progress-step:first-child {
+  border-right: 1px solid #DDD;
+  width: 24px;
+}
+
+.upload-container .top-bar .upload-progress .progress-step:last-child {
+  width: 140px;
+}
+
+.upload-container .top-bar .progress .progress-current {
+  background-color: #4D90FE;
+  color: #FFFFFF;
+}
+
+.upload-container .top-bar .upload-nav-panel, .top-bar .schema-nav-panel {
   float: right;
 }
 
-.top-bar .progress a.progress-step:hover {
+.upload-container .top-bar .progress a.progress-step:hover {
   text-decoration: none;
+}
+
+.upload-container input#file-url {
+  border: 1px solid #DDDDDD;
+  height: 16px;
+  padding: 4px;
+  width: 500px;
+}
+
+.upload-container input#file-url:focus {
+  border-color: #4D90FE;
+} 
+
+.upload-container .file-inner, .upload-container .options-inner {
+  margin: 10px 0;
+}
+
+.upload-container .file-inner label, .upload-container .options-inner label {
+  width: 80px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.upload-container .options-section {
+  margin-top: 20px;
 }

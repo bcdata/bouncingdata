@@ -28,9 +28,9 @@
       <button class="editor-nav" id="editor-execute">Execute</button>
     </div>
     <div class="editor-progress progress">
-      <a class="progress-step editor-step editor-code-link progress-current" style="border-color: red;">Code</a>
-      <a class="progress-step editor-step editor-size-link">Size</a>
-      <a class="progress-step editor-step editor-describe-link">Describe</a>
+      <div class="progress-step editor-step progress-current">Code</div>
+      <div class="progress-step editor-step">Size</div>
+      <div class="progress-step editor-step">Describe</div>
     </div>
   </div>
   <div class="clear-bar"></div>
@@ -59,10 +59,10 @@
       </div>
       <div class="execution-logs-wrapper">
         <div id="execution-logs" class="execution-logs">
-          <div class="console prompt" style="display: block;"></div>
           <div class="console-actions">
             <input class="clear-console" type="button" value="Clear console" />
           </div>
+          <div class="console prompt" style="display: block;"></div>
         </div>
       </div>
     </div>

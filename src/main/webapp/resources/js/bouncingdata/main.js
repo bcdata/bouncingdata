@@ -49,6 +49,14 @@ Main.prototype.init = function() {
       return false;
     });
     
+    $('.search-container input#query').focus(function() {
+      $(this).parent().css('border-color', '#4D90FE');
+    });
+    
+    $('.search-container input#query').blur(function() {
+      $(this).parent().css('border-color', '#DDD');
+    })
+    
     // search form submit
     $('.search-container #search-form').submit(function(e) {
       e.preventDefault();

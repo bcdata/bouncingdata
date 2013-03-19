@@ -1,21 +1,24 @@
 package com.bouncingdata.plfdemo.datastore.pojo.dto;
 
-import java.util.Map;
 
 
 public class ExecutionResult {
   private String output;
-  private Map<String, VisualizationDetail> visualizations;
-  private Map<String, DatasetDetail> datasets;
+  //private Map<String, VisualizationDetail> visualizations;
+  //private Map<String, DatasetDetail> datasets;
+  private int visCount;
+  private int datasetCount;
   private int statusCode;
   private String message;
   
-  public ExecutionResult(String output, Map<String, VisualizationDetail> visualizations, Map<String, DatasetDetail> datasets, int statusCode, String msg) {
+  public ExecutionResult(String output, int visCount, int datasetCount, int statusCode, String msg) {
     this.output = output;
-    this.visualizations = visualizations;
+    //this.visualizations = visualizations;
     this.statusCode = statusCode;
     this.message = msg;
-    this.datasets = datasets;
+    //this.datasets = datasets;
+    this.visCount = visCount;
+    this.datasetCount = datasetCount;
   }
   
   public String getOutput() {
@@ -34,7 +37,23 @@ public class ExecutionResult {
     this.message = message;
   }
 
-  public Map<String, VisualizationDetail> getVisualizations() {
+  public int getVisCount() {
+    return visCount;
+  }
+
+  public void setVisCount(int visCount) {
+    this.visCount = visCount;
+  }
+
+  public int getDatasetCount() {
+    return datasetCount;
+  }
+
+  public void setDatasetCount(int datasetCount) {
+    this.datasetCount = datasetCount;
+  }
+
+  /*public Map<String, VisualizationDetail> getVisualizations() {
     return visualizations;
   }
 
@@ -48,6 +67,6 @@ public class ExecutionResult {
 
   public void setDatasets(Map<String, DatasetDetail> datasets) {
     this.datasets = datasets;
-  }
+  }*/
   
 }

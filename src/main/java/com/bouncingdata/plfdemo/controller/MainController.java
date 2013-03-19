@@ -206,18 +206,18 @@ public class MainController {
       @RequestParam(value="type", required=true) String type, ModelMap model, Principal principal) {
     // invoke executor to execute code, pass the id as parameter
     User user = (User) ((Authentication)principal).getPrincipal();
-    if (user == null) return new ExecutionResult(null, null, null, -1, "User not found.");
+    if (user == null) return null;
     try {
       if ("python".equals(language)) {
         return appExecutor.executePython(null, code, user);
       } else if ("r".equals(language)) {
         return appExecutor.executeR(null, code, user);
       } else {
-        return new ExecutionResult("Not support", null, null, -1, "Not support"); 
+        return new ExecutionResult("Not support", 0, 0, 1, "Not support"); 
       }
     } catch (Exception e) {
-      logger.error("Error occurs when executing analysis code");
-      return new ExecutionResult("Error", null, null, -1, "Error occurs");
+      logger.error("Error occurs when executing analysis code", e);
+      return new ExecutionResult("Error", 0, 0, 1, "Error occurs");
     }
   }
   

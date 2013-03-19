@@ -82,6 +82,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
     pb.redirectErrorStream(true);
     
     String output = null;
+    int exitCode = 0;
     try {
       logger.info("Starting the execution {}, requested user {}, appId: {}", new Object[] { ticket, user.getUsername(), app==null?"-1":app.getId() });
       final Process p = pb.start();
@@ -111,14 +112,15 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       } catch (IOException e) {
         // the stream maybe closed due to timeout or unknown error
         logger.debug("Exception occurs when reading output stream from execution {}. Maybe the process has been terminated.", ticket);
-        return new ExecutionResult("Execution terminated.", null, null, -1, "error");
+        return new ExecutionResult("Execution terminated.", 0, 0, 1, "error");
       }
       output = outputBuilder.toString();
       try {
-        p.exitValue();
+        exitCode = p.exitValue();
       } catch (IllegalThreadStateException e) {
         p.destroy();
         t.cancel();
+        exitCode = 1;
       }
       
     } catch (IOException e) {
@@ -127,23 +129,19 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       e.printStackTrace();
     }
     
-    Map<String, DatasetDetail> datasets = dataPostProcess(ticket, app, user);
-    
+    int datasetCount = dataPostProcess(ticket, app, user);
+    int visCount = 0;
     if (app instanceof Analysis) {
       // copy visuals from log dir to visualizations dir
       try {
-        processVisualizations(ticket, (Analysis) app);
+        visCount = processVisualizations(ticket, (Analysis) app);
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     
-    if (app == null) {
-      Map<String, VisualizationDetail> visuals = getVisualizations(ticket);
-      return new ExecutionResult(output, visuals, datasets, 0, "OK");
-    } else {
-      return new ExecutionResult(output, null, datasets, 0, "OK");
-    }
+    return new ExecutionResult(output, visCount, datasetCount, exitCode, "OK");
+    
   }
     
   @Override
@@ -177,7 +175,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
     pb.directory(temp.getParentFile());
     
     String output = null;
-    
+    int exitCode = 0;
     try {
       logger.info("Starting the execution {}, requested user {}, appId: {}", new Object[] { ticket, user.getUsername(), app==null?"-1":app.getId() });
       final Process p = pb.start();
@@ -207,14 +205,15 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       } catch (IOException e) {
         // the stream maybe closed due to timeout or unknown error
         logger.debug("Exception occurs when reading output stream from execution {}. Maybe the process has been terminated.", ticket);
-        return new ExecutionResult("Execution terminated.", null, null, -1, "error");
+        return new ExecutionResult("Execution terminated.", 0, 0, 1, "error");
       }
       output = outputBuilder.toString();
       try {
-        p.exitValue();
+        exitCode = p.exitValue();
       } catch (IllegalThreadStateException e) {
         p.destroy();
         t.cancel();
+        exitCode = 1;
       }
       
     } catch (IOException e) {
@@ -223,13 +222,13 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       e.printStackTrace();
     }
     
-    Map<String, DatasetDetail> datasets = dataPostProcess(ticket, app, user);
-    
+    int datasetCount = dataPostProcess(ticket, app, user);
+    int visualCount = 0;
     //
     if (app instanceof Analysis) {
       // copy visuals from log dir to visualizations dir
       try {
-        processVisualizations(ticket, (Analysis) app);
+        visualCount = processVisualizations(ticket, (Analysis) app);
       } catch (Exception e) {
         logger.debug("Error occurs when process visualization for analysis {}", app.getName());
         logger.debug("Exception detail", e);
@@ -237,15 +236,23 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
     }
     
     if (app == null) {
-      Map<String, VisualizationDetail> visuals = getVisualizations(ticket);
-      return new ExecutionResult(output, visuals, datasets, 0, "OK");
+      //Map<String, VisualizationDetail> visuals = getVisualizations(ticket);
+      return new ExecutionResult(output, visualCount, datasetCount, exitCode, "OK");
     } else {
-      return new ExecutionResult(output, null, datasets, 0, "OK");
+      return new ExecutionResult(output, visualCount, datasetCount, exitCode, "OK");
     }
     
   }
   
-  private Map<String, DatasetDetail> dataPostProcess(String executionId, BcDataScript script, User user) throws Exception {
+  /**
+   * Post-process phase for generated datasets from script execution
+   * @param executionId
+   * @param script
+   * @param user
+   * @return the number of processed dataset
+   * @throws Exception
+   */
+  private int dataPostProcess(String executionId, BcDataScript script, User user) throws Exception {
     String execLogPath = logDir + Utils.FILE_SEPARATOR + executionId;
     File execLogDir = new File(execLogPath);
     Map<String, DatasetDetail> datasets = null;
@@ -376,19 +383,20 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       
     } else if (script == null) {
       // temporarily ignore the anonymous script
-      return null;
+      return 0;
     }
    
-    return datasets;
+    return datasets.size();
   }
   
   /**
-   * 
+   * Post-process phase of visualizations
    * @param executionId
    * @param anls
+   * @return the number of processed visualizations
    * @throws Exception
    */
-  private void processVisualizations(String executionId, Analysis anls) throws Exception {
+  private int processVisualizations(String executionId, Analysis anls) throws Exception {
     datastoreService.invalidateViz(anls);
     String execLogPath = logDir + Utils.FILE_SEPARATOR + executionId;
     File execLogDir = new File(execLogPath);
@@ -409,6 +417,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
     vDir.mkdirs();
     
     boolean makeThumb = false;
+    int count = 0;
     if (vsFiles != null) {
       for (File f : vsFiles) {
         String filename = f.getName();
@@ -452,6 +461,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
           if (type == VisualizationType.PNG && snapshot.isFile()) {
             FileUtils.copyFile(snapshot, new File(vDir.getAbsoluteFile() + Utils.FILE_SEPARATOR + guid + ".snapshot"));
           }
+          count++;
         } catch (IOException e) {
           logger.debug("Failed to copy visual file " + f.getAbsolutePath() + " to " + vDir.getAbsolutePath());
         }
@@ -462,6 +472,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
         // 
       }
     }
+    return count;
   }
     
   private Map<String, VisualizationDetail> getVisualizations(String executionId) {

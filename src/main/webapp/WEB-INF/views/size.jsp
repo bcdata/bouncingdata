@@ -5,6 +5,7 @@
 
   var anls = {
     guid: '${anls.guid}',
+    username: '${anls.user.username}',
     code: '${anlsCode}'
   };
   var dbDetail = $.parseJSON('${dashboardDetail}');
@@ -32,7 +33,7 @@
     </div>
     <div class="editor-progress progress">
       <a class="progress-step editor-step editor-code-link">Code</a>
-      <a class="progress-step editor-step editor-size-link progress-current" style="border-color: red;">Size</a>
+      <a class="progress-step editor-step editor-size-link progress-current">Size</a>
       <a class="progress-step editor-step editor-describe-link">Describe</a>
     </div>
   </div>

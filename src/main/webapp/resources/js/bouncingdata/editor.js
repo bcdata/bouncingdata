@@ -26,9 +26,12 @@ Editor.prototype.init = function(anls) {
     me.$loading = $(".editor-status .ajax-loading");
     
     $('button#editor-execute').click(function() {
-      me.execute(function() {
-        window.location = ctx + '/editor/anls/' + anls.guid + '/size';
-      });
+      me.execute();
+    });
+    
+    $('#execution-logs button.clear-console').click(function() {
+      me.jqconsole.Reset();
+      me.startPrompt(jqconsole, 'python');
     });
     
   });
@@ -172,7 +175,7 @@ Editor.prototype.initDescribe = function(anls) {
 
 Editor.prototype.loadDashboard = function(visuals, dashboard, $dashboard, anls) {
   $dashboard.attr('guid', anls['guid']).attr('tabid', 1); 
-  com.bouncingdata.Dashboard.load(visuals, dashboard, $dashboard, anls.user.username==com.bouncingdata.Main.username);
+  com.bouncingdata.Dashboard.load(visuals, dashboard, $dashboard, anls.username==com.bouncingdata.Main.username);
 }
 
 Editor.prototype.execute = function(callback) {
@@ -190,15 +193,21 @@ Editor.prototype.execute = function(callback) {
       type: type
     },
     success: function(result) {
-      if (result['statusCode'] >= 0) {
+      if (result['statusCode'] == 0) {
         me.setStatus("finished-running");
         me.jqConsole.Write(result['output'], 'jqconsole-output');
         me.startPrompt(me.jqConsole, 'python');
         
           // reload datasets & viz.
         if (type == 'analysis') {
-          var datasets = result['datasets'];
-          console.debug(result)
+          var visCount = result['visCount'];
+          var datasetCount = result['datasetCount'];
+          console.debug(result);
+          
+          // only redirect to size page if the visualization dashboard is not empty
+          if (visCount > 0) {
+            window.location = ctx + '/editor/anls/' + me.anls.guid + '/size';
+          }
         } else if (type == 'scraper') {
           var datasets = result['datasets'];
           var $dsContainer = $('#' + tabId + '-data', $tab);

@@ -175,7 +175,7 @@ public class AppController {
   public @ResponseBody ExecutionResult executeApp(@PathVariable String appGuid, @RequestParam(value="code", required=true) String code,
       @RequestParam(value="type", required=true) String type, ModelMap model, Principal principal) {
     User user = (User) ((Authentication)principal).getPrincipal();
-    if (user == null) return new ExecutionResult(null, null, null, -1, "User not found.");
+    if (user == null) return null;
     BcDataScript script = null;
     try {
       if (ScriptType.SCRAPER.getType().equals(type)) {
@@ -184,16 +184,16 @@ public class AppController {
         script = datastoreService.getAnalysisByGuid(appGuid);
       }
       
-      if (script == null) return new ExecutionResult(null, null, null, -1, "Application not found.");
+      if (script == null) return new ExecutionResult(null, 0, 0, -1, "Application not found.");
       
       if (script.getUser().getId() != user.getId()) {
-        return new ExecutionResult(null, null, null, -1, "No permission to run this app.");
+        return new ExecutionResult(null, 0, 0, -1, "No permission to run this app.");
       }
       
       try {
         appStoreService.saveApplicationCode(appGuid, script.getLanguage(), code);
       } catch (IOException e) {
-        logger.error("", e);
+        logger.error("Exception occurs when trying to save appliation code", e);
       }
       
       // if analysis is public and this is the first execution
@@ -210,12 +210,12 @@ public class AppController {
       } else if ("r".equals(script.getLanguage())) {
         return appExecutor.executeR(script, code, user);
       } else {
-        return new ExecutionResult(null, null, null, -1, "Not supported language.");
+        return new ExecutionResult(null, 0, 0, 1, "Not supported language.");
       }
       
     } catch (Exception e) {
       logger.error("Execution error", e);
-      return new ExecutionResult(null, null, null, -3, "Unknown error");
+      return new ExecutionResult(null, 0, 0, 999, "Unknown error");
     }
     
   }
