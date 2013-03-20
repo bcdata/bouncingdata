@@ -82,7 +82,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     jdoDataStorage.deleteAnalysis(anls1.getId());
   }
   
-  public void testGetFeed() {
+  public void _testGetFeed() {
     User demo = jdoDataStorage.findUserByUsername("test");
     assertNotNull(demo);
     Calendar calendar = Calendar.getInstance();
@@ -100,7 +100,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
   
 
   
-  public void testCreateTag() {
+  public void _testCreateTag() {
 	  Tag tag;
 	  /*Create tag
 	   * tag = new Tag("ZACHMAN");
@@ -109,6 +109,38 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
 	 //tag = jdoDataStorage.getTag("EA");	  
 	 // assertNotNull(tag);	  	  
 		
+	  
+	  
+	 /* Create dataset tag
+	  * jdoDataStorage.addDataSetTag(1, tag.getId());
+	  jdoDataStorage.addDataSetTag(2, tag.getId());
+	  jdoDataStorage.addDataSetTag(6, tag.getId());
+	  jdoDataStorage.addDataSetTag(7, tag.getId());
+	  jdoDataStorage.addDataSetTag(8, tag.getId());
+	  jdoDataStorage.addDataSetTag(9, tag.getId());*/
+	  
+	
+	 /* Delete dataset tag
+	  * jdoDataStorage.deleteDataSetTag(1, tag.getId());
+	  jdoDataStorage.deleteDataSetTag(2, tag.getId());
+	  jdoDataStorage.deleteDataSetTag(6, tag.getId());*/
+	  
+	  /*Queries
+	   * jdoDataStorage.getDataSetByTag(tag.getId());
+	  jdoDataStorage.getTagByDataSet(7);
+	  */
+	  	  
+  }
+  
+  public void testLogUserAction() {
+	  Tag tag;
+	  /*Create tag
+	   * tag = new Tag("ZACHMAN");
+	  jdoDataStorage.createTag(tag);*/
+	 
+	 tag = jdoDataStorage.getTag("EA");	  
+	 assertNotNull(tag);	  	  
+	 jdoDataStorage.getAnalysisList(31);	
 	  
 	  
 	 /* Create dataset tag
