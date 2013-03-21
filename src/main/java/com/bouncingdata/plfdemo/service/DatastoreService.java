@@ -17,6 +17,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 
@@ -302,4 +303,14 @@ public interface DatastoreService {
   List<Analysis> getStaffPickAnalyses();
 
   List<Dataset> getStaffPickDatasets();
+  
+  Tag getTag(String tag);
+
+  void addAnalysisTags(int anlsId, List<Tag> tags);
+
+  void removeAnalysisTag(int anlsId, Tag tag);
+
+  void removeAnalysisTags(int anlsId, List<Tag> tags);
+
+  boolean hasTag(int anlsId, String tags);
 }

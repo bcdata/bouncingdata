@@ -264,5 +264,5 @@ public class MainController {
     datastoreService.createAnalysisPost(user, analysis, message);
     return new ActionResult(0, "OK");
   }
-    
+      
 }

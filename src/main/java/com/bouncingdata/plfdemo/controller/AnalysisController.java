@@ -1,10 +1,14 @@
 package com.bouncingdata.plfdemo.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.Attachment;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardDetail;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardPosition;
@@ -31,6 +36,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
@@ -243,5 +249,51 @@ public class AnalysisController {
     }
   }
   
+  @RequestMapping(value="/{guid}/tagset", method=RequestMethod.GET)
+  public @ResponseBody List<Tag> getAnalysisTagSet(@PathVariable String guid, ModelMap model) throws Exception {
+    Analysis anls = datastoreService.getAnalysisByGuid(guid);
+    if (anls == null) {
+      return null;
+    }
+    
+    Set<Tag> tagset = anls.getTags();
+    if (tagset != null && tagset.size() > 0) {
+      ArrayList<Tag> sortedResult = new ArrayList<Tag>(tagset);
+      Collections.sort(sortedResult, new Comparator<Tag>() {
   
+        @Override
+        public int compare(Tag o1, Tag o2) {
+          if (o1.getPopularity() > o2.getPopularity()) {
+            return 1;
+          } else if (o1.getPopularity() == o2.getPopularity()) {
+            return o1.getTag().compareTo(o2.getTag());
+          } else return -1;
+        }
+        
+      });
+      return sortedResult;
+    } else return null;
+  }
+  
+  @RequestMapping(value="/{guid}/addtag", method=RequestMethod.POST)
+  public @ResponseBody ActionResult addAnalysisTag(@PathVariable String guid, @RequestParam(value="tag", required=true) String tag, ModelMap model) throws Exception {
+    Analysis anls = datastoreService.getAnalysisByGuid(guid);
+    if (anls == null) {
+      return new ActionResult(-1, "Error: Analysis does not exist");
+    }
+    
+    Tag tagObj = datastoreService.getTag(tag);
+    if (tagObj == null) {
+      return new ActionResult(-1, "Tag does not exist");
+    }
+    
+    if (datastoreService.hasTag(anls.getId(), tag)) {
+      return new ActionResult(-1, "This analysis has been tagged already.");
+    }
+    
+    List<Tag> tagList = new ArrayList<Tag>();
+    tagList.add(tagObj);
+    datastoreService.addAnalysisTags(anls.getId(), tagList);
+    return new ActionResult(0, "OK");
+  }
 }

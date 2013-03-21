@@ -80,3 +80,31 @@
 .upload-container .options-section {
   margin-top: 20px;
 }
+
+.upload-container table#schema-table {
+  width: 100%;
+}
+
+.upload-container table#schema-table thead th {
+  
+}
+
+.upload-container table#schema-table tbody td {
+  padding: 2px 2px 2px 6px;
+  border: 1px solid #DDD;
+}
+
+.upload-container .description-panel #name {
+  border: 1px solid #DDD;
+  width: 300px;
+  padding: 4px;
+  width: 500px;
+}
+
+.upload-container .description-panel #name:focus {
+  border-color: #4D90FE;;
+}
+
+.upload-container .description-panel .tag-set {
+  margin-top: 10px;
+}

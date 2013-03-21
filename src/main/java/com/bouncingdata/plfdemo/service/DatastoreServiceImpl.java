@@ -25,6 +25,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.util.Action;
@@ -531,5 +532,30 @@ public class DatastoreServiceImpl implements DatastoreService {
   @Override
   public List<Dataset> getStaffPickDatasets() {
     return getMostPopularDatasets();
+  }
+
+  @Override
+  public Tag getTag(String tag) {
+    return dataStorage.getTag(tag);
+  }
+  
+  @Override
+  public void addAnalysisTags(int anlsId, List<Tag> tags) {
+    dataStorage.addAnalysisTags(anlsId, tags);
+  }
+  
+  @Override
+  public void removeAnalysisTag(int anlsId, Tag tag) {
+    
+  }
+  
+  @Override
+  public void removeAnalysisTags(int anlsId, List<Tag> tags) {
+    
+  }
+  
+  @Override
+  public boolean hasTag(int anlsId, String tag) {
+    return dataStorage.hasTag(anlsId, tag);
   }
 }

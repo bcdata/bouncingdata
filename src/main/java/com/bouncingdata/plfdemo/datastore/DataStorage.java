@@ -477,16 +477,24 @@ public interface DataStorage {
  
   public void addScraperTag(int scId, int tagId);
   public void deleteScraperTag(int scId, int tagId);
-  /*How many tag for an Scraper*/
+  /*How many tag for a Scraper*/
   public Set<Tag> getTagByScraper(int scId);
   public List<Scraper> getScraperByTag(int tagId);
   
   
   public void addDataSetTag(int dsId, int tagId);
   public void deleteDataSetTag(int dsId, int tagId);
-  /*How many tag for an DataSet*/
+  /*How many tag for a DataSet*/
   public Set<Tag> getTagByDataSet(int dsId);
   public List<Dataset> getDataSetByTag(int tagId);
+
+  Tag getTag(String tagStr);
+
+  void addAnalysisTags(int anlsId, List<Tag> tags);
+
+  void createTags(List<Tag> tags);
+
+  boolean hasTag(int anlsId, String tag);
   
   
   

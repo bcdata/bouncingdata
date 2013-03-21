@@ -1503,239 +1503,278 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		}
 	}
 
-	/*Add for tag features*/
-	@Override
-	public void createTag(Tag tag) {
-		List<Tag> tags = new ArrayList<Tag>();
-		tags.add(tag);
-		persistData(tags);  	
-	}
-	public Tag getTag(String tagStr) {
-		PersistenceManager pm = getPersistenceManager();
-		Query q = pm.newQuery(Tag.class);
-		q.setFilter("tag == \"" + tagStr + "\"");
-		Tag tag = null;
-		try {
-			List<Tag> tags = (List<Tag>) q.execute();
-			tag = tags.size()>0?tags.get(0):null;
-			return tag;
-		} finally {
-			q.closeAll();
-			pm.close();
-		}
-	}
+  /* Add for tag features */
+  @Override
+  public void createTag(Tag tag) {
+    List<Tag> tags = new ArrayList<Tag>();
+    tags.add(tag);
+    persistData(tags);
+  }
+  
+  @Override
+  public void createTags(List<Tag> tags) {
+    persistData(tags);
+  }
 
+  @Override
+  public Tag getTag(String tagStr) {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Tag.class);
+    q.setFilter("tag == \"" + tagStr + "\"");
+    Tag tag = null;
+    try {
+      List<Tag> tags = (List<Tag>) q.execute();
+      tag = tags.size() > 0 ? tags.get(0) : null;
+      if (tag != null) {
+        return pm.detachCopy(tag);
+      } else return null;
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
 
+  @Override
+  public void addAnalysisTag(int anlsId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Analysis anls = pm.getObjectById(Analysis.class, anlsId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      anls.getTags().add(tag);
+      pm.makePersistent(anls);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
+  }
 
+  @Override
+  public void addScraperTag(int scId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Scraper sc = pm.getObjectById(Scraper.class, scId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      sc.getTags().add(tag);
+      pm.makePersistent(sc);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
 
+  }
 
-	@Override
-	public void addAnalysisTag(int anlsId, int tagId) {
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Analysis anls = pm.getObjectById(Analysis.class, anlsId);
-			Tag tag = pm.getObjectById(Tag.class, tagId);
-			anls.getTags().add(tag);
-			pm.makePersistent(anls);
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-	}	
+  @Override
+  public void deleteAnalysisTag(int anlsId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Analysis anls = pm.getObjectById(Analysis.class, anlsId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      anls.getTags().remove(tag);
+      pm.makePersistent(anls);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
 
+  }
 
+  @Override
+  public List<Analysis> getAnalysisByTag(int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Query query = pm.newQuery("javax.jdo.query.SQL",
+        "SELECT t1 . * FROM analyses t1 INNER JOIN Analysis_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
+    Map params = new HashMap();
+    params.put("param", tagId);
+    List<Analysis> results = (List<Analysis>) query.executeWithMap(params);
+    System.out.println("Size : " + results.size());
+    return results;
 
+  }
 
+  @Override
+  public Set<Tag> getTagByAnalysis(int anlsId) {
+    Set<Tag> results = null;
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Analysis anls = pm.getObjectById(Analysis.class, anlsId);
+      results = anls.getTags();
+      System.out.println("Size : " + results.size());
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
+    return results;
+  }
 
+  @Override
+  public void deleteScraperTag(int scId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Scraper scp = pm.getObjectById(Scraper.class, scId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      scp.getTags().remove(tag);
+      pm.makePersistent(scp);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
 
+  }
 
+  @Override
+  public Set<Tag> getTagByScraper(int scId) {
+    Set<Tag> results = null;
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Scraper scp = pm.getObjectById(Scraper.class, scId);
+      results = scp.getTags();
+      System.out.println("Size : " + results.size());
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
+    return results;
+  }
 
+  @Override
+  public List<Scraper> getScraperByTag(int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Query query = pm.newQuery("javax.jdo.query.SQL",
+        "SELECT t1 . * FROM scrapers t1 INNER JOIN Scraper_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
+    Map params = new HashMap();
+    params.put("param", tagId);
+    List<Scraper> results = (List<Scraper>) query.executeWithMap(params);
+    System.out.println("Size : " + results.size());
+    return results;
+  }
 
+  @Override
+  public void addDataSetTag(int dsId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Dataset ds = pm.getObjectById(Dataset.class, dsId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      ds.getTags().add(tag);
+      pm.makePersistent(ds);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
+  }
 
+  @Override
+  public void deleteDataSetTag(int dsId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Dataset dts = pm.getObjectById(Dataset.class, dsId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      dts.getTags().remove(tag);
+      pm.makePersistent(dts);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
 
-	@Override
-	public void addScraperTag(int scId, int tagId) {
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Scraper sc = pm.getObjectById(Scraper.class, scId);
-			Tag tag = pm.getObjectById(Tag.class, tagId);
-			sc.getTags().add(tag);
-			pm.makePersistent(sc);
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
+  }
 
-	}
+  @Override
+  public Set<Tag> getTagByDataSet(int dsId) {
+    Set<Tag> results = null;
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Dataset dts = pm.getObjectById(Dataset.class, dsId);
+      results = dts.getTags();
+      System.out.println("Size : " + results.size());
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
+    return results;
+  }
 
-
-
-	@Override
-	public void deleteAnalysisTag(int anlsId, int tagId) {
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Analysis anls = pm.getObjectById(Analysis.class, anlsId);
-			Tag tag = pm.getObjectById(Tag.class, tagId);
-			anls.getTags().remove(tag);
-			pm.makePersistent(anls);
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-
-	}
-
-	@Override
-	public List<Analysis> getAnalysisByTag(int tagId) {
-		PersistenceManager pm = getPersistenceManager();			
-		Query query= pm.newQuery("javax.jdo.query.SQL",
-			    "SELECT t1 . * FROM analyses t1 INNER JOIN Analysis_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
-			Map params = new HashMap();
-			params.put("param", tagId);		
-		List<Analysis> results = (List<Analysis>) query.executeWithMap(params);
-		System.out.println("Size : " + results.size());
-		return results;
-		
-	}
-
-	@Override
-	public Set<Tag> getTagByAnalysis(int anlsId) {
-		Set<Tag> results = null;
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Analysis anls = pm.getObjectById(Analysis.class, anlsId);
-			results = anls.getTags();
-			System.out.println("Size : " + results.size());
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-		return results;
-	}
-
-	@Override
-	public void deleteScraperTag(int scId, int tagId) {
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Scraper scp = pm.getObjectById(Scraper.class, scId);
-			Tag tag = pm.getObjectById(Tag.class, tagId);
-			scp.getTags().remove(tag);
-			pm.makePersistent(scp);
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-		
-	}
-
-	@Override
-	public Set<Tag> getTagByScraper(int scId) {
-		Set<Tag> results = null;
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Scraper scp = pm.getObjectById(Scraper.class, scId);
-			results = scp.getTags();
-			System.out.println("Size : " + results.size());
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-		return results;
-	}
-
-	@Override
-	public List<Scraper> getScraperByTag(int tagId) {
-		PersistenceManager pm = getPersistenceManager();			
-		Query query= pm.newQuery("javax.jdo.query.SQL",
-			    "SELECT t1 . * FROM scrapers t1 INNER JOIN Scraper_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
-			Map params = new HashMap();
-			params.put("param", tagId);		
-		List<Scraper> results = (List<Scraper>) query.executeWithMap(params);
-		System.out.println("Size : " + results.size());
-		return results;
-	}
-
-	@Override
-	public void addDataSetTag(int dsId, int tagId) {
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Dataset ds = pm.getObjectById(Dataset.class, dsId);
-			Tag tag = pm.getObjectById(Tag.class, tagId);
-			ds.getTags().add(tag);
-			pm.makePersistent(ds);
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void deleteDataSetTag(int dsId, int tagId) {
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Dataset dts = pm.getObjectById(Dataset.class, dsId);
-			Tag tag = pm.getObjectById(Tag.class, tagId);
-			dts.getTags().remove(tag);
-			pm.makePersistent(dts);
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-		
-	}
-
-	@Override
-	public Set<Tag> getTagByDataSet(int dsId) {
-		Set<Tag> results = null;
-		PersistenceManager pm = getPersistenceManager();	    
-		Transaction tx = pm.currentTransaction();
-		try {
-			tx.begin();
-			Dataset dts = pm.getObjectById(Dataset.class, dsId);
-			results = dts.getTags();
-			System.out.println("Size : " + results.size());
-			tx.commit();
-		} finally {
-			if (tx.isActive()) tx.rollback();
-			pm.close();
-		}
-		return results;
-	}
-
-	@Override
-	public List<Dataset> getDataSetByTag(int tagId) {
-		PersistenceManager pm = getPersistenceManager();			
-		Query query= pm.newQuery("javax.jdo.query.SQL",
-			    "SELECT t1 . * FROM datasets t1 INNER JOIN Dataset_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
-			Map params = new HashMap();
-			params.put("param", tagId);		
-		List<Dataset> results = (List<Dataset>) query.executeWithMap(params);
-		System.out.println("Size : " + results.size());
-		return results;
-	}
+  @Override
+  public List<Dataset> getDataSetByTag(int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Query query = pm.newQuery("javax.jdo.query.SQL",
+        "SELECT t1 . * FROM datasets t1 INNER JOIN Dataset_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
+    Map params = new HashMap();
+    params.put("param", tagId);
+    List<Dataset> results = (List<Dataset>) query.executeWithMap(params);
+    System.out.println("Size : " + results.size());
+    return results;
+  }
+  
+  @Override
+  public void addAnalysisTags(int anlsId, List<Tag> tags) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Analysis anls = pm.getObjectById(Analysis.class, anlsId);
+      Set<Tag> tagset = anls.getTags();
+      if (tagset == null) {
+        tagset = new HashSet<Tag>();
+        anls.setTags(tagset);
+      }
+      for (Tag tag : tags) {
+        Tag tagObj = pm.getObjectById(Tag.class, tag.getId());
+        tagset.add(tagObj);
+      }
+      pm.makePersistent(anls);
+      tx.commit();
+    } finally {
+      if (tx.isActive()) tx.rollback();
+      pm.close();
+    }
+  }
+  
+  @Override
+  public boolean hasTag(int anlsId, String tag) {
+    PersistenceManager pm = getPersistenceManager();
+    Analysis anls = pm.getObjectById(Analysis.class, anlsId);
+    Set<Tag> tagset = anls.getTags();
+    if (tagset == null) return false;
+    for (Tag t : tagset) {
+      if (t.getTag().equals(tag)) return true;
+    }
+    return false;
+    
+  }
 
 }

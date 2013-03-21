@@ -16,10 +16,12 @@ public class Analysis extends BcDataScript {
   private int score;
   // 1-N bidirectional relationship, this list should not be added to default fetch group
   @Persistent(mappedBy="analysis") List<Comment> comments;  
-  @Persistent(table="Analysis_tags")
-  @Join (column="id_OID")
-  @Element (column="id_EID")
-  private   Set<Tag> tags;
+  
+  @Persistent(table="Analysis_tags", defaultFetchGroup="true")
+  /*@Join (column="id_OID")
+  @Element (column="id_EID")*/
+  @Join
+  private Set<Tag> tags;
   
   @Persistent
   private String thumbnail;

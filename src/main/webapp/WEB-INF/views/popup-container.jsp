@@ -26,36 +26,6 @@
   </form>
 </div>
 
-<div class="popup upload-data-dialog" id="upload-data-dialog" title="Upload data">
-  <form id="file-upload-form" method="POST" enctype="multipart/form-data">
-    <fieldset>
-      <label>Select your file</label> &nbsp;
-      <input id="file" name="file" type="file" /> &nbsp;
-    </fieldset>
-    <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" />&nbsp;
-    <span class="upload-status"></span>
-  </form>
-  <div class="preview-panel" style="margin-top: 20px;">
-    <div>
-      <label>Dataset name</label>
-      <input type="text" class="dataset-name" />
-    </div>
-    <div class="clear"></div>
-    <table id="schema-table" class="schema-table" border="1" style="width: 100%; margin-top: 10px;">
-      <thead>
-        <tr>
-          <td><strong>No.</strong></td>
-          <td><strong>Column name</strong></td>
-          <td><strong>Data type</strong></td>
-        </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-  </div>
-</div>
-
 <div class="popup publish-dialog" id="publish-dialog" title="Publish your visualization">
   <div class="preview-pane">
     <!--Preview visualization/data-->

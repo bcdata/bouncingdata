@@ -101,7 +101,6 @@ Main.prototype.initPopups = function() {
       "Cancel": function() {
         $(this).dialog('close');
       }
-
     },
     open: function(event, ui) {
       $('form', $(this))[0].reset();
@@ -273,6 +272,7 @@ Main.prototype.submitDataset = function() {
         $schemaTableBody.append($row);
         $('select.column-type-select', $row).val(column['typeName']);
       }
+      
 
       $('.preview-panel', $uploadDataDialog).show();
       $('.preview-panel .dataset-name', this.$uploadDataDialog).val(filename).focus();

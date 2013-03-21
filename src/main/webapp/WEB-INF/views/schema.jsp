@@ -2,14 +2,15 @@
 
 <script type="text/javascript">
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/upload.css", "upload");
-
+  var schema = $.parseJSON('${schema}');
+  var ticket = '${ticket}';
   if (!com.bouncingdata.Upload) {
     $.getScript(ctx + "/resources/js/bouncingdata/upload.js", function() {
       console.debug("upload.js async. loaded!");
-      com.bouncingdata.Upload.initSchema();
+      com.bouncingdata.Upload.initSchema(ticket, schema);
     });  
   } else {
-    com.bouncingdata.Upload.initSchema();
+    com.bouncingdata.Upload.initSchema(ticket, schema);
   }
 </script>
 
@@ -19,6 +20,7 @@
       <button class="close-button">Close</button>
     </div>
     <div class="schema-nav-panel">
+      <a class="schema-nav" id="schema-back" href="<c:url value="/dataset/upload" />">Back</a>
       <a class="schema-nav" id="schema-submit" href="javascript:void(0)">Submit</a>
     </div>
     <div class="progress upload-progress">
@@ -30,28 +32,45 @@
   <div class="schema-container center-content-container">
     <div class="schema-panel-wrapper">
       <h3>1. Schema</h3>
-      <span></span>
-      <div class="schema-panel" id="schema-panel">
+      <div class="schema-panel schema-tabs" id="schema-panel">
         <ul>
-          <li>View</li>
-          <li>Schema</li>
-          <li>Add Reference Doc</li>
+          <li><a href="#schema-tab-view">View</a></li>
+          <li><a href="#schema-tab-schema">Schema</a></li>
+          <li><a href="#schema-tab-reference">Add Reference Doc</a></li>
         </ul>
-        <div id="schema-tab-view"></div>
-        <div id="schema-tab-schema"></div>
-        <div id="schema-tab-reference"></div>
-      </div>
-      <span>${schema }</span>  
+        <div class="clear"></div>
+        <div id="schema-tab-view">
+          Data preview here?
+        </div>
+        <div id="schema-tab-schema">
+          <div class="schema-table-wrapper">
+            <table id="schema-table" ticket="${ticket }">  
+              <thead>
+                <tr>
+                  <th><strong>Column Name</strong></th>
+                  <th><strong>Data Type</strong></th>
+                  <th><strong>Description</strong></th>
+                </tr>
+              </thead>
+              <tbody></tbody>           
+            </table>
+            ${schema}
+          </div>
+        </div>
+        <div id="schema-tab-reference">
+          Add reference here
+        </div>
+          
+      </div>  
     </div>
     <div class="description-panel-wrapper">
       <h3>2. Description</h3>
-      <span></span>
       <div class="description-panel">
         <div>
           <label>Dataset Name</label>
           <input type="text" name="name" id="name" /><br><br>
           <label>Description</label>
-          <textarea name="description" id="description"></textarea>
+          <textarea name="description" id="description" style="width: 100%;"></textarea>
         </div>
         <div class="tag-set" id="tag-set">
           <span class="tag-list">

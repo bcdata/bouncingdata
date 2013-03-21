@@ -36,13 +36,26 @@
     </div>
     <div class="tag-set">
       <div class="tag-list">
-        <a class="tag-element" href="javascript:void(0);">Football</a>
+      <c:if test="${not empty anls.tags }">
+        <c:forEach items="${anls.tags }" var="tag">
+          <a class="tag-element" href="javascript:void(0);">${tag.tag }</a>
+        </c:forEach>  
+      </c:if>
+      
+       <!-- <a class="tag-element" href="javascript:void(0);">Football</a>
         <a class="tag-element" href="javascript:void(0);">Money</a>
-        <a class="tag-element" href="javascript:void(0);">Madrid</a>
+        <a class="tag-element" href="javascript:void(0);">Madrid</a> -->
       </div>
-      <a class="add-tag-button>" href="javascript:void()">
-        Add tag
-      </a>
+      <c:if test="${isOwner }">
+        <a class="add-tag-link" href="javascript:void(0);">
+          Add tag
+        </a>
+        <div class="add-tag-popup" style="display: none;">
+          <input type="text" id="add-tag-input" />
+          <input type="button" value="Add" id="add-tag-button" />
+        </div>
+      </c:if>
+      
     </div>
     <div class="anls-related-info related-info">
       <p><strong>Related:</strong></p>

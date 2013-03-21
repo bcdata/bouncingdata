@@ -168,9 +168,14 @@
                   <p class="info">
                     <span class="author">Author: <a href="#">${activity.user.username }</a></span><br/>
                     <span class="tag-list">Tags:&nbsp; 
-                      <a class="tag-element" href="javascript:void(0);">Football</a>
+                      <c:if test="${not empty activity.object.tags }">
+                        <c:forEach var="tag" items="${activity.object.tags }">
+                          <a class="tag-element" href="javascript:void(0);">${tag.tag }</a>
+                        </c:forEach>
+                      </c:if>
+                      <!-- a class="tag-element" href="javascript:void(0);">Football</a>
                       <a class="tag-element" href="javascript:void(0);">Money</a>
-                      <a class="tag-element" href="javascript:void(0);">Madrid</a>
+                      <a class="tag-element" href="javascript:void(0);">Madrid</a-->
                     </span>
                   </p>
                   <p class="description">

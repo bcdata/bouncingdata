@@ -81,7 +81,7 @@ public class DatasetController {
   
   @RequestMapping(value="/upload/schema", method = RequestMethod.GET)
   public String getUploadPage2() {
-    return "redirect:upload";
+    return "redirect:/dataset/upload";
   }
   
   @RequestMapping(value="/upload/schema", method = RequestMethod.POST)
@@ -152,6 +152,7 @@ public class DatasetController {
       return "upload";
     }
     
+    model.addAttribute("ticket", ticket);
     return "schema";
   }
     
@@ -304,7 +305,8 @@ public class DatasetController {
   @ResponseBody
   public ActionResult persistDataset(@RequestParam(value = "ticket", required = true) String ticket,
       @RequestParam(value = "schema", required = true) String schema,
-      @RequestParam(value = "name", required = true) String name, Principal principal) {
+      @RequestParam(value = "name", required = true) String name, 
+      @RequestParam(value = "description", required = false) String description, Principal principal) {
     
     User user = (User) ((Authentication)principal).getPrincipal();
     
@@ -367,7 +369,7 @@ public class DatasetController {
       Date timestamp = new Date();
       ds.setCreateAt(timestamp);
       ds.setLastUpdate(timestamp);
-      ds.setDescription("Uploaded by " + user.getUsername() + " at " + timestamp.toString());       
+      ds.setDescription(description);       
       ds.setName(dsFName);
       ds.setScraper(null);
       ds.setRowCount(data.size() - 1);
