@@ -11,17 +11,17 @@
         <a class="main-nav-item" href="#">Tags</a>
         <div class="tags-container">
           <ul class="tag-links">
-            <li><a href="#">Economics</a></li>
-            <li><a href="#">Finance</a></li>
-            <li><a href="#">Health</a></li>
-            <li><a href="#">Education</a></li>
-            <li><a href="#">US</a></li>
-            <li><a href="#">Football</a></li>
-            <li><a href="#">Sports</a></li>
-            <li><a href="#">AMZ</a></li>
-            <li><a href="#">World Bank</a></li>
-            <li><a href="#">OCED</a></li>
-            <li><a href="#">Payroll</a></li>
+            <li><a href="<c:url value="/tag/economics" />">Economics</a></li>
+            <li><a href="<c:url value="/tag/finance" />">Finance</a></li>
+            <li><a href="<c:url value="/tag/health" />">Health</a></li>
+            <li><a href="<c:url value="/tag/education" />">Education</a></li>
+            <li><a href="<c:url value="/tag/us" />">US</a></li>
+            <li><a href="<c:url value="/tag/football" />">Football</a></li>
+            <li><a href="<c:url value="/tag/sports" />">Sports</a></li>
+            <li><a href="<c:url value="/tag/amz" />">AMZ</a></li>
+            <li><a href="<c:url value="/tag/worldbank" />">World Bank</a></li>
+            <li><a href="<c:url value="/tag/oced" />">OCED</a></li>
+            <li><a href="<c:url value="/tag/payroll" />">Payroll</a></li>
             <li><a href="#">More..</a></li>
           </ul>
         </div>

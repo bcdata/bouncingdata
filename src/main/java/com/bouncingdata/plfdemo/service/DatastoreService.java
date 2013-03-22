@@ -313,4 +313,6 @@ public interface DatastoreService {
   void removeAnalysisTags(int anlsId, List<Tag> tags);
 
   boolean hasTag(int anlsId, String tags);
+
+  List<Analysis> getAnalysesByTag(String tag);
 }

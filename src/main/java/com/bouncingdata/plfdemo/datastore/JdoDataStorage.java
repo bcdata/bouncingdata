@@ -47,12 +47,12 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 
 	}
 
-	private void FinallizeLogData(UserActionLog actionLog, User user) {
+	/*private void FinallizeLogData(UserActionLog actionLog, User user) {
 		actionLog.setUser(user);
 		actionLog.stopLog();
 		user.setUserActionLog(actionLog);
 	}
-
+*/
 	@Override
 	public List<Dataset> getDatasetList(int userId) {
 		PersistenceManager pm = getPersistenceManager();
@@ -115,7 +115,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 
 	@Override
 	public List<Analysis> getPublicAnalyses(int userId) {
-		UserActionLog actionLog = createUserActionLogger(UserActionLog.ActionType.GETPRIVATEANALYSES);
 
 		PersistenceManager pm = getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
@@ -129,7 +128,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		} finally {
 			tx.begin();
 			User user = pm.getObjectById(User.class, userId);
-			FinallizeLogData(actionLog, user);
 			tx.commit();
 			q.closeAll();
 			pm.close();
@@ -654,7 +652,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public Comment getComment(int commentId) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			return pm.getObjectById(Comment.class, commentId);
+			return pm.detachCopy(pm.getObjectById(Comment.class, commentId));
 		} finally {
 			pm.close();
 		}
@@ -667,7 +665,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			Analysis anls = pm.getObjectById(Analysis.class, analysisId);
 			anls.setCommentCount(anls.getComments() != null ? anls
 					.getComments().size() : 0);
-			return anls;
+			return pm.detachCopy(anls);
 		} finally {
 			pm.close();
 		}
@@ -677,7 +675,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public User getUser(int userId) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			return pm.getObjectById(User.class, userId);
+			return pm.detachCopy(pm.getObjectById(User.class, userId));
 		} finally {
 			pm.close();
 		}
@@ -849,7 +847,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public Activity getActivity(int activityId) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			return pm.getObjectById(Activity.class, activityId);
+			return pm.detachCopy(pm.getObjectById(Activity.class, activityId));
 		} finally {
 			pm.close();
 		}
@@ -1544,7 +1542,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public DataCollection getDataCollection(int collectionId) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			return pm.getObjectById(DataCollection.class, collectionId);
+			return pm.detachCopy(pm.getObjectById(DataCollection.class, collectionId));
 		} finally {
 			pm.close();
 		}
@@ -1689,12 +1687,12 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public Tag getTag(String tagStr) {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Tag.class);
-		q.setFilter("tag == \"" + tagStr + "\"");
+		q.setFilter("tag.toLowerCase() == \"" + tagStr.toLowerCase() + "\"");
 		Tag tag = null;
 		try {
 			List<Tag> tags = (List<Tag>) q.execute();
 			tag = tags.size() > 0 ? tags.get(0) : null;
-			return tag;
+			return pm.detachCopy(tag);
 		} finally {
 			q.closeAll();
 			pm.close();
@@ -1760,16 +1758,20 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	@Override
 	public List<Analysis> getAnalysisByTag(int tagId) {
 		PersistenceManager pm = getPersistenceManager();
-		Query query = pm
+		/*Query query = pm
 				.newQuery(
 						"javax.jdo.query.SQL",
-						"SELECT t1 . * FROM analyses t1 INNER JOIN Analysis_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
+						"SELECT t1 FROM analyses t1 INNER JOIN Analysis_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
 		Map params = new HashMap();
 		params.put("param", tagId);
-		List<Analysis> results = (List<Analysis>) query.executeWithMap(params);
-		System.out.println("Size : " + results.size());
-		return results;
-
+		List<Analysis> results = (List<Analysis>) query.executeWithMap(params);*/
+		
+		Tag tag = pm.getObjectById(Tag.class, tagId);
+		if (tag.getAnalyses() != null) {
+		  List<Analysis> results = new ArrayList<Analysis>(tag.getAnalyses());
+	    return (List<Analysis>) pm.detachCopyAll(results);  
+		}
+		return null;
 	}
 
 	@Override
@@ -1835,7 +1837,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		Query query = pm
 				.newQuery(
 						"javax.jdo.query.SQL",
-						"SELECT t1 . * FROM scrapers t1 INNER JOIN Scraper_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
+						"SELECT t1 FROM scrapers t1 INNER JOIN Scraper_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");
 		Map params = new HashMap();
 		params.put("param", tagId);
 		List<Scraper> results = (List<Scraper>) query.executeWithMap(params);

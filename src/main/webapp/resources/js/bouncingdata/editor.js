@@ -197,6 +197,7 @@ Editor.prototype.initDescribe = function(anls) {
         success: function(res) {
           $('.saving-status .ajax-loading').css('opacity', 0);
           $('.saving-status .status-message').text('Saved').css('color', 'green');
+          window.location.href = ctx + '/anls/' + anls.guid;
         },
         error: function(res) {
           console.debug(res);

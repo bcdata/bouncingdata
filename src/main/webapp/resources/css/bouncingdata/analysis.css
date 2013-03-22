@@ -20,7 +20,7 @@
 }
 */
 
-#main-content.analysis-container .right-content {
+#main-content.analysis-container .right-content, #main-content.datapage-container .right-content  {
   width: 240px;  
 }
 

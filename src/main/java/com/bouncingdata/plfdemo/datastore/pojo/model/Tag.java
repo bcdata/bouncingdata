@@ -1,6 +1,7 @@
 package com.bouncingdata.plfdemo.datastore.pojo.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.Index;
@@ -20,6 +21,13 @@ public class Tag {
   private int popularity;
   private Date createAt;
   
+  @Persistent(mappedBy="tags")
+  Set<Analysis> analyses;
+  
+  public Set<Analysis> getAnalyses() {
+    return analyses;
+  }
+
   public Tag() {
     super();
   }

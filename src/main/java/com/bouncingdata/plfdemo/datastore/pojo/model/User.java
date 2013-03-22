@@ -41,14 +41,14 @@ public class User implements UserDetails {
   private Date joinedDate;
   private Date lastLogin;
   
-  @Persistent(mappedBy="user")
+  /*@Persistent(mappedBy="user")
   UserActionLog actionLog;
   public void setUserActionLog(UserActionLog actionLogIn){
 	   actionLog = actionLogIn;
   }
   public UserActionLog getUserActionLog(){
 	  return actionLog;
-  }
+  }*/
   
   @NotPersistent private Set<GrantedAuthority> authorities;
   

@@ -558,4 +558,11 @@ public class DatastoreServiceImpl implements DatastoreService {
   public boolean hasTag(int anlsId, String tag) {
     return dataStorage.hasTag(anlsId, tag);
   }
+  
+  @Override
+  public List<Analysis> getAnalysesByTag(String tag) {
+    Tag t = dataStorage.getTag(tag);
+    if (t == null) return null;
+    return dataStorage.getAnalysisByTag(t.getId());
+  }
 }

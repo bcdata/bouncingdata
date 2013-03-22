@@ -170,7 +170,7 @@
                     <span class="tag-list">Tags:&nbsp; 
                       <c:if test="${not empty activity.object.tags }">
                         <c:forEach var="tag" items="${activity.object.tags }">
-                          <a class="tag-element" href="javascript:void(0);">${tag.tag }</a>
+                          <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
                         </c:forEach>
                       </c:if>
                       <!-- a class="tag-element" href="javascript:void(0);">Football</a>

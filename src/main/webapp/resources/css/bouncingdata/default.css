@@ -689,3 +689,96 @@ a.tag-element:hover {
   border-right: 1px solid #C4DAE9;
   text-decoration: none;
 }
+
+.analysis-list-item .avatar-link {
+  float: right;
+  cursor: pointer;
+  height: 41px;
+  width: 41px;
+  display: block;
+}
+
+.analysis-list-item img.avatar {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #DDDDDD;
+  border-radius: 2px;
+}
+
+.analysis-list-item .event-content {
+  float: left;
+  border: 1px solid #E2E2E2;
+  border-radius: 2px;
+  padding: 10px;
+  width: 605px;
+  position: relative;
+}
+
+.analysis-list-item .title {
+  color: #0077CC;
+  font-size: 13px;
+  line-height: 1.2em;
+  margin: 0;
+}
+
+.analysis-list-item .info {
+  font-size: 11px;
+  color: #999999;
+  margin: 5px 0;
+}
+
+.analysis-list-item .info .author a {
+  
+}
+
+
+.analysis-list-item .content:hover {
+  border-color: #DDDDDD;
+}
+
+.analysis-list-item a {
+  text-decoration: none;
+}
+
+.analysis-list-item .content:hover a {
+  color: #003366;
+}
+
+.analysis-list-item .thumbnail {
+  border: 1px solid #EEEEEE;
+  margin-right: 10px;
+  float: left;
+  border-radius: 2px;
+}
+
+.analysis-list-item .thumbnail a {
+  display: block;
+}
+
+.analysis-list-item .thumbnail a img {
+  width: 125px;
+  height: 125px;
+}
+
+.analysis-list-item .time {
+  float: right;
+  color: #CCCCCC;
+}
+
+.analysis-list-item .score.score-positive {
+  color: green;
+}
+
+.analysis-list-item .score.score-negative {
+  color: red;
+}
+
+.analysis-list-item .footer {
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+}
+
+.analysis-list-item .score {
+  color: orange;
+}

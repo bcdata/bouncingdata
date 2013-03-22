@@ -38,7 +38,7 @@
       <div class="tag-list">
       <c:if test="${not empty anls.tags }">
         <c:forEach items="${anls.tags }" var="tag">
-          <a class="tag-element" href="javascript:void(0);">${tag.tag }</a>
+          <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
         </c:forEach>  
       </c:if>
       

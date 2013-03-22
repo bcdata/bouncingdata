@@ -18,9 +18,8 @@ public class Analysis extends BcDataScript {
   @Persistent(mappedBy="analysis") List<Comment> comments;  
   
   @Persistent(table="Analysis_tags", defaultFetchGroup="true")
-  /*@Join (column="id_OID")
-  @Element (column="id_EID")*/
-  @Join
+  @Join (column="id_OID")
+  @Element (column="id_EID")
   private Set<Tag> tags;
   
   @Persistent
