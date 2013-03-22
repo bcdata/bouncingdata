@@ -32,9 +32,9 @@
       <a href="<c:url value="/editor/anls/${anls.guid }/describe" />" class="editor-nav" id="size-next">Next</a>
     </div>
     <div class="editor-progress progress">
-      <a class="progress-step editor-step editor-code-link">Code</a>
-      <a class="progress-step editor-step editor-size-link progress-current">Size</a>
-      <a class="progress-step editor-step editor-describe-link">Describe</a>
+      <div class="progress-step editor-step editor-code-link">Code</div>
+      <div class="progress-step editor-step editor-size-link progress-current">Size</div>
+      <div class="progress-step editor-step editor-describe-link">Describe</div>
     </div>
   </div>
   <div class="clear-bar"></div>

@@ -144,6 +144,43 @@ Editor.prototype.initDescribe = function(anls) {
       theme_advanced_resizing : true
     });
     
+    $('a.add-tag-link').click(function() {
+      $(this).next().show().addClass('active');
+      return false;
+    });
+    
+    $('div.add-tag-popup').click(function() {
+      return false;
+    });
+    
+    $(document).click(function() {
+      var $addTagPopup = $('div.add-tag-popup');
+      if ($addTagPopup.hasClass('active')) {
+        $addTagPopup.removeClass('active');
+        $addTagPopup.hide();
+      }
+    });
+    
+    $('.add-tag-popup #add-tag-button').click(function() {
+      var tag = $('#add-tag-input').val();
+      if (!tag) return false;
+      $.ajax({
+        url: ctx + '/anls/' + anls.guid + '/addtag',
+        type: 'post',
+        data: {
+          tag: tag
+        },
+        success: function(res) {
+          console.debug(res);
+          if (res['code'] < 0) return;
+          $('.tag-set .tag-list').append('<a class="tag-element" href="javascript:void(0);">' + tag + '</a>');
+        },
+        error: function(res) {
+          console.debug(res);
+        }
+      });
+    });
+    
         
     $('#describe-publish').click(function() {
       var name = $('#detail-form #name').val();

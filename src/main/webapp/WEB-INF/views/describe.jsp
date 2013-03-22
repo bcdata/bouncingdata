@@ -29,9 +29,9 @@
       <a class="editor-nav" id="describe-publish" href="javascript:void(0);">Publish</a>
     </div>
     <div class="editor-progress progress">
-      <a class="progress-step editor-step">Code</a>
-      <a class="progress-step editor-step">Size</a>
-      <a class="progress-step editor-step progress-current">Describe</a>
+      <div class="progress-step editor-step">Code</div>
+      <div class="progress-step editor-step">Size</div>
+      <div class="progress-step editor-step progress-current">Describe</div>
     </div>
   </div>
   <div class="clear-bar"></div>
@@ -62,13 +62,21 @@
           <strong><label for="tag-set">Tag: </label></strong>
           <div class="tag-set" id="tag-set">
             <span class="tag-list">
-              <a class="tag-element" href="javascript:void(0);">Football</a>
+              <c:if test="${not empty anls.tags }">
+                <c:forEach items="${anls.tags }" var="tag">
+                  <a class="tag-element" href="javascript:void(0);">${tag.tag }</a>
+                </c:forEach>  
+              </c:if>
+              <!-- a class="tag-element" href="javascript:void(0);">Football</a>
               <a class="tag-element" href="javascript:void(0);">Money</a>
-              <a class="tag-element" href="javascript:void(0);">Madrid</a>
+              <a class="tag-element" href="javascript:void(0);">Madrid</a-->
             </span>
-            <a class="add-tag-button>" href="javascript:void()">
+            <a class="add-tag-link" href="javascript:void(0);">
               Add tag
             </a>
+            <div class="add-tag-popup" style="display: none;">
+              <input type="text" id="add-tag-input" /> <input type="button" value="Add" id="add-tag-button" />
+            </div>
           </div>
           <br/>
         </fieldset>
