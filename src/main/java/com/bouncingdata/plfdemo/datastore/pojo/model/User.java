@@ -18,6 +18,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.bouncingdata.plfdemo.datastore.UserActionLog;
+
 @PersistenceCapable
 public class User implements UserDetails {
   
@@ -38,6 +40,15 @@ public class User implements UserDetails {
   private int groupId;
   private Date joinedDate;
   private Date lastLogin;
+  
+  @Persistent(mappedBy="user")
+  UserActionLog actionLog;
+  public void setUserActionLog(UserActionLog actionLogIn){
+	   actionLog = actionLogIn;
+  }
+  public UserActionLog getUserActionLog(){
+	  return actionLog;
+  }
   
   @NotPersistent private Set<GrantedAuthority> authorities;
   
