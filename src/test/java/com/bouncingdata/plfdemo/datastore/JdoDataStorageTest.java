@@ -132,7 +132,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
 	  	  
   }
   
-  public void testLogUserAction() {
+  public void _testLogUserAction() {
 	  Tag tag;
 	  /*Create tag
 	   * tag = new Tag("ZACHMAN");
