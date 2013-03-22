@@ -1692,7 +1692,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		try {
 			List<Tag> tags = (List<Tag>) q.execute();
 			tag = tags.size() > 0 ? tags.get(0) : null;
-			return pm.detachCopy(tag);
+			if (tag != null) {
+			  return pm.detachCopy(tag);
+			} else return null;
 		} finally {
 			q.closeAll();
 			pm.close();
