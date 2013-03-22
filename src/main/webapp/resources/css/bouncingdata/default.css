@@ -462,11 +462,6 @@ body > .popup-container {
   height: 0;
 }
 
-#main-content .center-content .center-content-wrapper .content {
-  padding: 15px;
-  overflow-x: auto;
-}
-
 #main-content .center-content .center-content-wrapper .comments-container {
   padding: 15px;
 }
@@ -705,7 +700,11 @@ a.tag-element:hover {
   border-radius: 2px;
 }
 
-.analysis-list-item .event-content {
+.analysis-list-item {
+  margin: 15px 0;
+}
+
+.analysis-list-item .content {
   float: left;
   border: 1px solid #E2E2E2;
   border-radius: 2px;
@@ -730,7 +729,6 @@ a.tag-element:hover {
 .analysis-list-item .info .author a {
   
 }
-
 
 .analysis-list-item .content:hover {
   border-color: #DDDDDD;
