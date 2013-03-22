@@ -1613,9 +1613,11 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		Query q = pm.newQuery(Analysis.class);
 		q.setOrdering("score DESC");
 		try {
-			List<Analysis> scrapers = (List<Analysis>) q.execute();
-			scrapers = scrapers.subList(0, 10);
-			return (List<Analysis>) pm.detachCopyAll(scrapers);
+			List<Analysis> analyses = (List<Analysis>) q.execute();
+			if (analyses != null) {
+			  analyses = analyses.subList(0,  Math.min(analyses.size(), 10));
+	      return (List<Analysis>) pm.detachCopyAll(analyses);
+			} else return null;			
 		} finally {
 			q.closeAll();
 			pm.close();
@@ -1629,8 +1631,11 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		q.setOrdering("rowCount DESC");
 		try {
 			List<Dataset> datasets = (List<Dataset>) q.execute();
-			datasets = datasets.subList(0, 10);
-			return (List<Dataset>) pm.detachCopyAll(datasets);
+			if (datasets != null) {
+			  datasets = datasets.subList(0, Math.min(datasets.size(), 10));
+	      return (List<Dataset>) pm.detachCopyAll(datasets);
+			} else return null;
+			
 		} finally {
 			q.closeAll();
 			pm.close();
