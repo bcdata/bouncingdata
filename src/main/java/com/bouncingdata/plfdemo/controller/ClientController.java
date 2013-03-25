@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.BcDataScript;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.BcDatastoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
@@ -62,6 +66,18 @@ public class ClientController {
     if (user == null) {
       response.append("ERROR: Cannot find authenticated user.");
     }
+   
+	try {
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"0"});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.TEST,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}		   	 
+    
+    
     return response.toString();
   }
   
@@ -77,6 +93,16 @@ public class ClientController {
       res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized request.");
       return null;
     }
+    
+    try {
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"1",type});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_LIST,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
     
     String[] types = new String[] {"all", "analysis", "dataset"};
     if (type == null) type = "analysis";
@@ -121,6 +147,15 @@ public class ClientController {
       res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authorized!");
       return null;
     }
+    try {
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"1",guid});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ANALYSIS_SOURCE,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
     
     if (guid == null) {
       res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad guid!");
@@ -153,6 +188,16 @@ public class ClientController {
       res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized user!");
       return null;
     }
+    try {
+    	
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"4",code,name,description,type});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.UPLOAD_ANALYSIS,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
         
     if (code == null || code.isEmpty()) {
       res.sendError(HttpServletResponse.SC_NO_CONTENT, "No content!");
@@ -199,17 +244,48 @@ public class ClientController {
   @RequestMapping(value="/data/info/{guid}", method=RequestMethod.GET)
   public @ResponseBody Dataset getDatasetInfo(@PathVariable String guid, Principal principal) throws Exception {
     Dataset ds = datastoreService.getDatasetByGuid(guid);
+    try {
+    	User user = (User) ((Authentication)principal).getPrincipal();
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"1",guid});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_DATASET_INFO,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
     return ds;    
   }
   
   @RequestMapping(value="/data/get/{guid}", method=RequestMethod.GET)
   public @ResponseBody Object getDataset(@PathVariable String guid, Principal principal) throws Exception {
     Dataset ds = datastoreService.getDatasetByGuid(guid);
+    try {
+    	User user = (User) ((Authentication)principal).getPrincipal();
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"1",guid});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_DATASET,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
+    
     return userDataService.getDatasetToList(ds.getName());    
   }
   
   @RequestMapping(value="/data/up", method=RequestMethod.POST)
   public @ResponseBody void uploadData(Principal principal) throws Exception {
+	  try {
+	    	User user = (User) ((Authentication)principal).getPrincipal();
+			 ObjectMapper logmapper = new ObjectMapper();
+			    String data;
+			data = logmapper.writeValueAsString(new String[] {"0"});
+			datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.UPLOAD_DATA,data);
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     return;
   }
 }

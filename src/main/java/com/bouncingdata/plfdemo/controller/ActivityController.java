@@ -3,6 +3,7 @@ package com.bouncingdata.plfdemo.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 
 @Controller
@@ -32,6 +34,10 @@ public class ActivityController {
   public String getActivityStream(ModelMap model, Principal principal) {
     try {
       User user = (User) ((Authentication)principal).getPrincipal();
+      ObjectMapper logmapper = new ObjectMapper();
+      String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      
       List<Activity> activities = datastoreService.getRecentFeed(user.getId());
       model.addAttribute("activities", activities);
       
@@ -50,6 +56,10 @@ public class ActivityController {
   public @ResponseBody List<Activity> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
     try {
       User user = (User) ((Authentication)principal).getPrincipal();
+      ObjectMapper logmapper = new ObjectMapper();
+      String data = logmapper.writeValueAsString(new String[] {"1",Integer.toString(lastId)});		   	 
+      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
+      
       List<Activity> activities = datastoreService.getMoreFeed(user.getId(), lastId);
       return activities;
     } catch (Exception e) {

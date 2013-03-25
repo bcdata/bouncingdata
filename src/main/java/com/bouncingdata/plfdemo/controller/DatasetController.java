@@ -42,6 +42,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.BcDatastoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
@@ -76,6 +77,16 @@ public class DatasetController {
   
   @RequestMapping(value={"/upload"}, method = RequestMethod.GET)
   public String getUploadPage(ModelMap model, Principal principal) {
+	  try {
+	    	User user = (User) ((Authentication)principal).getPrincipal();
+			 ObjectMapper logmapper = new ObjectMapper();
+			    String data;
+			data = logmapper.writeValueAsString(new String[] {"0"});
+			datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_UPLOAD_PAGE,data);
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     return "upload";
   }
   
@@ -88,7 +99,17 @@ public class DatasetController {
   public String getSchemaPage(@RequestParam(value = "file", required = false) MultipartFile file,
       @RequestParam(value = "fileUrl", required = false) String fileUrl, WebRequest request, 
       ModelMap model, Principal principal) {
-        
+	  try {
+	    	User user = (User) ((Authentication)principal).getPrincipal();
+			 ObjectMapper logmapper = new ObjectMapper();
+			    String data;
+			data = logmapper.writeValueAsString(new String[] {"1",fileUrl});
+			datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_SCHEMA_PAGE,data);
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  
     if (file == null && (fileUrl == null || StringUtils.isEmptyOrWhitespaceOnly(fileUrl))) {
       model.addAttribute("errorMsg", "Null input file or file address.");
       return "upload";
@@ -249,6 +270,18 @@ public class DatasetController {
       @RequestParam(value = "type", required = true) String type, ModelMap model, Principal principal) {
     
     User user = (User) ((Authentication)principal).getPrincipal();
+    
+    try {
+    	
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"1",type});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.SUBMIT_DATASDET,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
     String filename = file.getOriginalFilename();    
     filename = filename.substring(0, filename.lastIndexOf("."));
     long size = file.getSize();
@@ -309,7 +342,16 @@ public class DatasetController {
       @RequestParam(value = "description", required = false) String description, Principal principal) {
     
     User user = (User) ((Authentication)principal).getPrincipal();
-    
+    try {
+    	
+		 ObjectMapper logmapper = new ObjectMapper();
+		    String data;
+		data = logmapper.writeValueAsString(new String[] {"4",ticket,schema,name,description});
+		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.PERSIST_DATASET,data);
+	}catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     // check if the guid is valid and temp. file exists
     File tempDataFile = new File(logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat");
     if (!tempDataFile.isFile()) {
@@ -454,6 +496,17 @@ public class DatasetController {
         model.addAttribute("errorMsg", "Dataset not found!");
         return "error";
       }
+      
+      try {
+    	  User user = (User) ((Authentication)principal).getPrincipal();
+ 		 ObjectMapper logmapper = new ObjectMapper();
+ 		    String data;
+ 		data = logmapper.writeValueAsString(new String[] {"1",guid});
+ 		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VIEW_DATAPAGE,data);
+ 	}catch (Exception e) {
+ 		// TODO Auto-generated catch block
+ 		e.printStackTrace();
+ 	}
       
       model.addAttribute("dataset", ds);
       ObjectMapper mapper = new ObjectMapper();

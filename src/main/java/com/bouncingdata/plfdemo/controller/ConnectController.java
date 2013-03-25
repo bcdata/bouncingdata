@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bouncingdata.plfdemo.datastore.pojo.dto.UserInfo;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 
 @Controller
@@ -40,7 +42,11 @@ public class ConnectController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return null;
     try {
-      final List<UserInfo> followers = datastoreService.getFollowers(user.getId());
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_CONNECTION,data);
+    
+    	final List<UserInfo> followers = datastoreService.getFollowers(user.getId());
       final List<UserInfo> followings = datastoreService.getFollowingUsers(user.getId());
       return new HashMap<String, List<UserInfo>>() {{
         put("followers", followers);
@@ -57,6 +63,10 @@ public class ConnectController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return null;
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.FIND_FOLLOWERS,data);
+    
       return datastoreService.getFollowers(user.getId());
     } catch (Exception e) {
       logger.debug("", e);
@@ -69,6 +79,10 @@ public class ConnectController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return null;
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.FIND_FOLLOWINGS,data);
+    
       return datastoreService.getFollowingUsers(user.getId());
     } catch (Exception e) {
       logger.debug("", e);
@@ -81,6 +95,10 @@ public class ConnectController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return null;
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"1",query});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.FIND_USER,data);
+    
       return datastoreService.findFriends(user, query);
     } catch (Exception e) {
       logger.debug("", e);
@@ -92,6 +110,12 @@ public class ConnectController {
   public @ResponseBody int follow(@RequestParam(value="target", required=true) int target, @RequestParam(value="follow", required=true) boolean follow, ModelMap model, Principal principal) throws Exception {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return -1;
+    
+    ObjectMapper logmapper = new ObjectMapper();
+	String data = logmapper.writeValueAsString(new String[] {"2",Integer.toString(target),Boolean.toString(follow)});		   	 
+	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.FOLLOW,data);
+
+	
     if (target < 0) return -1;
     User tarUser = datastoreService.getUser(target);
     if (tarUser == null) return -1;

@@ -15,10 +15,11 @@ import javax.jdo.annotations.Unique;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.bouncingdata.plfdemo.datastore.UserActionLog;
+
 
 @PersistenceCapable
 public class User implements UserDetails {
@@ -41,14 +42,15 @@ public class User implements UserDetails {
   private Date joinedDate;
   private Date lastLogin;
   
-  /*@Persistent(mappedBy="user")
+  @Persistent(mappedBy="user")
   UserActionLog actionLog;
-  public void setUserActionLog(UserActionLog actionLogIn){
-	   actionLog = actionLogIn;
+  public void logAction(int actionCode,String data){
+	   actionLog = new UserActionLog(actionCode,this,data);	   
   }
+ 
   public UserActionLog getUserActionLog(){
 	  return actionLog;
-  }*/
+  }
   
   @NotPersistent private Set<GrantedAuthority> authorities;
   

@@ -38,6 +38,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
@@ -67,10 +68,9 @@ public class AnalysisController {
       
       User user = (User) ((Authentication)principal).getPrincipal();
       
-      /*if (user == null || (!user.getUsername().equals(anls.getUser().getUsername()) && !anls.isPublished())) {
-        model.addAttribute("errorMsg", "This analysis is not public!");
-        return "error";
-      }*/
+      ObjectMapper logmapper = new ObjectMapper();
+      String data = logmapper.writeValueAsString(new String[] {"1", guid});		   	 
+      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VIEW_ANALYSIS,data);
       
       if (anls.getUser().getUsername().equals(user.getUsername())) {
         model.addAttribute("isOwner", true);
@@ -162,6 +162,10 @@ public class AnalysisController {
       logger.debug("User not found!");
       return null;
     }
+    ObjectMapper logmapper = new ObjectMapper();
+    String data = logmapper.writeValueAsString(new String[] {"3", guid, message,Integer.toBinaryString(parentId)});		   	 
+    datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.POST_COMMENT,data);
+    
     Analysis analysis = datastoreService.getAnalysisByGuid(guid);
     if (analysis == null) {
       logger.debug("The analysis {} does not exist anymore.", guid);
@@ -193,6 +197,10 @@ public class AnalysisController {
     if (user == null) {
       return;
     }
+    ObjectMapper logmapper = new ObjectMapper();
+    String data = logmapper.writeValueAsString(new String[] {"2", guid, Integer.toBinaryString(vote)});		   	 
+    datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VOTE,data);
+
 
     Analysis anls = datastoreService.getAnalysisByGuid(guid);
     if (anls == null) {
@@ -226,10 +234,14 @@ public class AnalysisController {
     if (user == null) {
       return;
     }
-    
+   
     vote = vote>=0?1:-1;
     
     try {
+    	 ObjectMapper logmapper = new ObjectMapper();
+    	 String data = logmapper.writeValueAsString(new String[] {"2", guid, Integer.toBinaryString(commentId),Integer.toBinaryString(vote)});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VOTE_COMMENT,data);
+
       Comment comment = datastoreService.getComment(commentId);
       if (comment == null) {
         // logging

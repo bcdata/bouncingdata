@@ -496,7 +496,7 @@ public interface DataStorage {
 
   boolean hasTag(int anlsId, String tag);
   
-  
+  public void logUserAction(int userId,int actionCode,String data);
   
   
 }

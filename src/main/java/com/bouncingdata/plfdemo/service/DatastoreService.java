@@ -315,4 +315,7 @@ public interface DatastoreService {
   boolean hasTag(int anlsId, String tags);
 
   List<Analysis> getAnalysesByTag(String tag);
+  
+
+  public void logUserAction(int userId, int action,String data);
 }
