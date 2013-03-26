@@ -34,6 +34,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationExecutor;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
@@ -58,9 +59,15 @@ public class MainController {
   public @ResponseBody Map<String,List> getMyStuff(ModelMap model, Principal principal) {
     User user = (User) ((Authentication) principal).getPrincipal();
     if (user == null) return null;
+   
+    
     int userId = user.getId();
     Map<String,List> stuffs = new HashMap<String, List>();
     try {
+    	 ObjectMapper logmapper = new ObjectMapper();
+    	 String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+    	 datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.MY_STUFF,data);
+    	    
       stuffs.put("analyses", datastoreService.getAnalysisList(userId));
       stuffs.put("scrapers", datastoreService.getScraperList(userId));
       stuffs.put("datasets", datastoreService.getDatasetList(userId));
@@ -77,6 +84,9 @@ public class MainController {
     try {
       if (user == null) return null;
       int userId = user.getId();
+      ObjectMapper logmapper = new ObjectMapper();
+ 	 String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+ 	 datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.DATASET,data);
       return datastoreService.getDatasetList(userId);
     } catch (Exception e) {
       logger.error("Failed to retrieve dataset list for user " + user.getUsername(), e);
@@ -97,6 +107,9 @@ public class MainController {
     try {
       if (user == null) return null;
       int userId = user.getId();
+      ObjectMapper logmapper = new ObjectMapper();
+  	 String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+  	 datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.APPLICATION,data);
       return datastoreService.getAnalysisList(userId);
     } catch (Exception e) {
       logger.error("Failed to retrieve application list for user " + user.getUsername(), e);
@@ -118,6 +131,17 @@ public class MainController {
       logger.debug("Can't get the user. Skip application creation.");
       return null;
     }
+    
+    ObjectMapper logmapper = new ObjectMapper();
+	 String data = logmapper.writeValueAsString(new String[] {"7",
+			 													appname,
+			 													language,
+			 													description,
+			 													code,
+			 													String.valueOf(isPublic),
+			 													tags,
+			 													type});		   	 
+	 datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.CREATE_APP,data);
     
     int userId = user.getId();
     
@@ -208,6 +232,9 @@ public class MainController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return null;
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"3", code, language,type});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.EXECUTE,data);
       if ("python".equals(language)) {
         return appExecutor.executePython(null, code, user);
       } else if ("r".equals(language)) {
@@ -226,6 +253,10 @@ public class MainController {
     SearchResult result = null;
     User user = (User) ((Authentication)principal).getPrincipal();
     try {
+    	  
+	ObjectMapper mapper = new ObjectMapper();
+	String data = mapper.writeValueAsString(new String[] {"2", query, criteria});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.SEARCH,data);
       if ("global".equals(criteria)) {
         result = datastoreService.search(query.toLowerCase());
       } else if ("mystuff".equals(criteria)) {
@@ -245,6 +276,10 @@ public class MainController {
     SearchResult result = null;
     User user = (User) ((Authentication)principal).getPrincipal();
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"2", query, criteria});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.BROWSE_SEARCH,data);
+    	
       if ("global".equals(criteria)) {
         result = datastoreService.search(query.toLowerCase());
       } else if ("mystuff".equals(criteria)) {
@@ -259,6 +294,12 @@ public class MainController {
   @RequestMapping(value="/main/publish", method = RequestMethod.POST)
   public @ResponseBody ActionResult publish(@RequestParam(value="guid", required=true) String guid, @RequestParam(value="message", required=true) String message, Principal principal) throws Exception {
     User user = (User) ((Authentication)principal).getPrincipal();
+    
+    ObjectMapper logmapper = new ObjectMapper();
+	String data = logmapper.writeValueAsString(new String[] {"2", guid, message});		   	 
+	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.PUBLISH,data);
+	
+	
     Analysis analysis = datastoreService.getAnalysisByGuid(guid);
     if (analysis == null) return new ActionResult(-1, "Analysis not found");
     datastoreService.createAnalysisPost(user, analysis, message);

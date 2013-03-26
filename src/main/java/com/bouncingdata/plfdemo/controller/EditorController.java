@@ -28,6 +28,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationExecutor;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
@@ -71,8 +72,15 @@ public class EditorController {
         model.addAttribute("errorMsg", "You have no permission to edit this analysis!");
         return "error";
       }
-            
-      model.addAttribute("anls", anls);
+      
+      
+      ObjectMapper logmapper = new ObjectMapper();
+      String data = logmapper.writeValueAsString(new String[] {"2", guid, mode});		   	 
+      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.OPEN_EDITOR,data);      
+    
+      	
+      	
+      	model.addAttribute("anls", anls);
       
       String code = appStoreService.getScriptCode(guid, null);
       model.addAttribute("anlsCode", StringEscapeUtils.escapeJavaScript(code));
@@ -152,6 +160,11 @@ public class EditorController {
     }
     
     try {
+    	  ObjectMapper logmapper = new ObjectMapper();
+          String data = logmapper.writeValueAsString(new String[] {"3", guid, name,description});		   	 
+          datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.SAVE_DESCRIPTION,data);      
+        
+          	
       Analysis anls = datastoreService.getAnalysisByGuid(guid);
       anls.setName(name);
       anls.setDescription(description);

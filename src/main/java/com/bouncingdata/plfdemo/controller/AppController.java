@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.BcDataScript;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationExecutor;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
@@ -178,6 +180,9 @@ public class AppController {
     if (user == null) return null;
     BcDataScript script = null;
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"3", appGuid, code,type});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.EXECUTE_APP,data);
       if (ScriptType.SCRAPER.getType().equals(type)) {
         script = datastoreService.getScraperByGuid(appGuid);
       } else if (ScriptType.ANALYSIS.getType().equals(type)) {
@@ -229,6 +234,9 @@ public class AppController {
     if (user == null) return null;
     
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"4", guid, code,type,language});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.SAVE_APP,data);
       BcDataScript script;
       if ("analysis".equals(type)) {
         script = datastoreService.getAnalysisByGuid(guid);
@@ -265,6 +273,9 @@ public class AppController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return "KO";
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"3", guid, status,cause});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.UPDATE_DASHBOARD,data);
       Analysis app = datastoreService.getAnalysisByGuid(guid);
       if (app == null) return "KO";
       
@@ -301,6 +312,9 @@ public class AppController {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) return;
     try {
+    	ObjectMapper logmapper = new ObjectMapper();
+    	String data = logmapper.writeValueAsString(new String[] {"2", Boolean.toString(value), guid});		   	 
+    	datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.UPDATE_DASHBOARD,data);
       Analysis analysis = datastoreService.getAnalysisByGuid(guid);
       if (analysis == null) return;
       if (analysis.isPublished() == value) {

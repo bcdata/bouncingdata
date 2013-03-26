@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
+import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 
@@ -61,7 +63,17 @@ public class VisualizationController {
   
   @RequestMapping(value="/replot/{guid}/{vGuid}/{type}", method = RequestMethod.GET)
   public @ResponseBody void resizeViz(@PathVariable String guid, @PathVariable String vGuid, @PathVariable String type, WebRequest request, ModelMap model, Principal principal) {
-    if (!"png".equalsIgnoreCase(type)) {
+	  User user = (User) ((Authentication)principal).getPrincipal();
+	  
+	  try {
+		  ObjectMapper logmapper = new ObjectMapper();
+		  String data = logmapper.writeValueAsString(new String[] {"2", vGuid, type});		   	 
+		  datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.RESIZE_VIZ,data);
+	  } catch (Exception e) {	     
+	     
+	  }
+	  
+	  if (!"png".equalsIgnoreCase(type)) {
       return;
     }
     
@@ -70,9 +82,10 @@ public class VisualizationController {
       return;
     }
     
-    User user = (User) ((Authentication)principal).getPrincipal();
+    
     Analysis anls;
     try {
+      
       anls = datastoreService.getAnalysisByGuid(guid);
       if (anls.getUser().getId() != user.getId()) {
         return;

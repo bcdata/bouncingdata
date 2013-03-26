@@ -319,4 +319,7 @@ public interface DatastoreService {
   List<Analysis> getMostRecentAnalyses();
 
   List<Analysis> getMoreRecentAnalyses(int lastId);
+  
+  public void logUserAction(int userId, int action,String data);
+
 }

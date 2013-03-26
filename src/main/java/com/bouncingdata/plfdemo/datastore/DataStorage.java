@@ -500,7 +500,7 @@ public interface DataStorage {
 
   List<Analysis> getMoreRecentAnalyses(int lastId, int maxNumber);
   
-  
+  public void logUserAction(int userId,int actionCode,String data);
   
   
 }

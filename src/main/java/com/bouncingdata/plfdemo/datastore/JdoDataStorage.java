@@ -39,20 +39,8 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 @SuppressWarnings({ "unchecked", "deprecation" })
 public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 
-	private UserActionLog createUserActionLogger(int actionType) {
-		/* Start log */
-		UserActionLog actionLog = new UserActionLog(actionType);
-		actionLog.startLog();
-		return actionLog;
 
-	}
 
-	/*private void FinallizeLogData(UserActionLog actionLog, User user) {
-		actionLog.setUser(user);
-		actionLog.stopLog();
-		user.setUserActionLog(actionLog);
-	}
-*/
 	@Override
 	public List<Dataset> getDatasetList(int userId) {
 		PersistenceManager pm = getPersistenceManager();
@@ -1965,6 +1953,24 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   @Override
   public void createTags(List<Tag> tags) {
     persistData(tags);
+  }
+  
+
+  @Override
+  public void logUserAction(int userId,int actionCode,String data) {
+  	PersistenceManager pm = getPersistenceManager();	
+  	Transaction tx = pm.currentTransaction();
+  	try {
+  		tx.begin();  		
+  		User user = pm.getObjectById(User.class, userId);
+  		user.logAction(actionCode,data);  		
+  		tx.commit();
+  	} finally {
+  		if (tx.isActive())
+  			tx.rollback();
+  		pm.close();
+  	}
+  	
   }
 
 }

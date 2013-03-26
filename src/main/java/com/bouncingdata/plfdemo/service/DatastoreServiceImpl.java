@@ -575,4 +575,10 @@ public class DatastoreServiceImpl implements DatastoreService {
     if (t == null) return null;
     return dataStorage.getAnalysisByTag(t.getId());
   }
+
+@Override
+public void logUserAction(int userId, int action, String data) {
+	 dataStorage.logUserAction(userId, action,data);
+	
+}
 }
