@@ -17,9 +17,10 @@ ActivityStream.prototype.init = function() {
     
     $('.right-content #staff-pick-content-tabs').tabs();
     
-    $('#stream .event').each(function() {
+    // remove all ajax loads
+    /*$('#stream .event').each(function() {
       com.bouncingdata.ActivityStream.loadAnalysisByAjax($(this));
-    });
+    });*/
 
     $('.more-feed').click(function() {
       var $lastEvent = $('#stream .event:last');
@@ -90,7 +91,7 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
   for (index in feedList) {
     var feed = feedList[index];
     var $feed = $.tmpl(this.$feedTemplate, {
-      id: feed.id,
+      /*id: feed.id,
       action: feed.action,
       guid: feed.object.guid,
       username: feed.user.username,
@@ -99,14 +100,30 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
       time: new Date(feed.time),
       score: feed.object.score,
       thumbnail: feed.object.thumbnail,
-      commentCount: feed.object.commentCount
+      commentCount: feed.object.commentCount*/
+      
+      id: feed.id,
+      guid: feed.guid,
+      username: feed.user.username,
+      description: feed.description,
+      name: feed.name,
+      score: feed.score,
+      thumbnail: feed.thumbnail,
+      commentCount: feed.commentCount
     });
     
-    if (feed.object.score > 0) {
+    if (feed.score > 0) {
       $('.event-score', $feed).addClass('event-score-positive');
       $('.event-score', $feed).text('+' + $('.event-score', $feed).text());
-    } else if (feed.object.score < 0) {
+    } else if (feed.score < 0) {
       $('.event-score', $feed).addClass('event-score-negative');
+    }
+    
+    if (feed.tags) {
+      for (idx in feed.tags) {
+        var tag = feed.tags[idx];
+        $('.info .tag-list', $feed).append('<a class="tag-element" href="' + ctx + '/tag/' + tag + '">' + tag + '</a>'); 
+      }
     }
         
     htmlToAdd[index] = $feed.outerHtml();

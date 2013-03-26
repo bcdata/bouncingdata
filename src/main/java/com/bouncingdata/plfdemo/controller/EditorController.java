@@ -144,7 +144,8 @@ public class EditorController {
   }
   
   @RequestMapping(value = "/anls/{guid}/describe", method = RequestMethod.POST)
-  public @ResponseBody void saveDescription(@PathVariable String guid, @RequestParam(value="name", required=true) String name, @RequestParam(value="description", required=true) String description, ModelMap model, Principal principal) {
+  public @ResponseBody void saveDescription(@PathVariable String guid, @RequestParam(value="name", required=true) String name, @RequestParam(value="description", required=true) String description, 
+      @RequestParam(value="isPublic", required=true) boolean isPublic, ModelMap model, Principal principal) {
     User user = (User) ((Authentication)principal).getPrincipal();
     if (user == null) {
       return;
@@ -154,6 +155,7 @@ public class EditorController {
       Analysis anls = datastoreService.getAnalysisByGuid(guid);
       anls.setName(name);
       anls.setDescription(description);
+      anls.setPublished(isPublic);
       datastoreService.updateAnalysis(anls);
     } catch (Exception e) {
       e.printStackTrace();

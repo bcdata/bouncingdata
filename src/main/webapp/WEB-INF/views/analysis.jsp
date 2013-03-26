@@ -97,13 +97,19 @@
         </div>
         <div class="anls-action-links">
           <h3 class="anls-score">${anls.score}</h3>&nbsp;
-          <a href="javascript:void(0)" class="anls-vote-up">Vote up</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="anls-vote-down">Vote down</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
-            <a href="javascript:void(0)" class="anls-publish-button" id="anls-publish-button" title="Publish this analysis">Publish</a>&nbsp;&nbsp;
-            <a href="<c:url value="/editor/anls/${anls.guid }/size" />" title="Edit this analysis">Edit</a>
+            <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="anls-action" title="Edit this analysis">Edit</a>
           </c:if>&nbsp;&nbsp;
+          <a href="javascript:void(0);" class="anls-action anls-download">Download</a>
+          <div class="anls-action-hidden-menu" style="display: none;">
+            <div>Download analysis</div>
+            <div>Download dataset</div>
+            <div>Download script</div>
+          </div>
+          
         </div>
         <div class="embedded-link" id="embedded-link" style="display: none;">
           <textarea id="embedded-link-text" spellcheck='false' style="float: left;"></textarea>

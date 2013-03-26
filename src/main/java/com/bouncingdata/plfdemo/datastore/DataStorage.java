@@ -495,6 +495,10 @@ public interface DataStorage {
   void createTags(List<Tag> tags);
 
   boolean hasTag(int anlsId, String tag);
+
+  List<Analysis> getMostRecentAnalyses(int maxNumber);
+
+  List<Analysis> getMoreRecentAnalyses(int lastId, int maxNumber);
   
   
   

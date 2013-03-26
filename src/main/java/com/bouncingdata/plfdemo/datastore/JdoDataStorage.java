@@ -1621,6 +1621,41 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			pm.close();
 		}
 	}
+	
+	@Override
+  public List<Analysis> getMostRecentAnalyses(int maxNumber) {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Analysis.class);
+    q.setOrdering("createAt DESC");
+    q.setRange(0, maxNumber);
+    try {
+      List<Analysis> analyses = (List<Analysis>) q.execute();
+      if (analyses != null) {
+        return (List<Analysis>) pm.detachCopyAll(analyses);
+      } else return null;     
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
+	
+	@Override
+	public List<Analysis> getMoreRecentAnalyses(int lastId, int maxNumber) {
+	  PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Analysis.class);
+    q.setOrdering("createAt DESC");
+    q.setRange(0, maxNumber);
+    q.setFilter("id < " + lastId + " && published == true");
+    try {
+      List<Analysis> analyses = (List<Analysis>) q.execute();
+      if (analyses != null) {
+        return (List<Analysis>) pm.detachCopyAll(analyses);
+      } else return null;
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+	}
 
 	@Override
 	public List<Dataset> getMostPopularDatasets() {
@@ -1754,7 +1789,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 				tx.rollback();
 			pm.close();
 		}
-
 	}
 
 	@Override

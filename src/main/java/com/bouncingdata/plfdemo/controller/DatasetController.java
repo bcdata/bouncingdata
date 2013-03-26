@@ -123,12 +123,14 @@ public class DatasetController {
     String tempDataFilePath = logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat";
     File tempDataFile = new File(tempDataFilePath);
     
+    ObjectMapper mapper = new ObjectMapper();
     try {
       if (!tempDataFile.getParentFile().isDirectory()) {
         tempDataFile.getParentFile().mkdirs();
       }
       
       List<String[]> data = parser.parse(file.getInputStream());
+      model.addAttribute("data", mapper.writeValueAsString(data));
       ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
       for (String[] row : data) {
         os.writeObject(row);
@@ -144,7 +146,6 @@ public class DatasetController {
     try {
       // parse schema
       List<DatasetColumn> schema = parser.parseSchema(file.getInputStream());
-      ObjectMapper mapper = new ObjectMapper();
       model.addAttribute("schema", mapper.writeValueAsString(schema));
     } catch(Exception e) {
       logger.debug("Exception occured when parsing data schema", e);

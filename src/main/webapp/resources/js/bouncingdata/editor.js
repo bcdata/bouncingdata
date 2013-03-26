@@ -129,6 +129,11 @@ Editor.prototype.initDescribe = function(anls) {
   $(function() {
     com.bouncingdata.Main.toggleLeftNav();
     $('.editor-nav').button();
+    
+    if (anls.published) {
+      $('#describe-ispublic').prop('checked', 'checked');
+    }
+    
     tinyMCE.init({
       mode : "textareas",
       theme : "simple",
@@ -185,6 +190,7 @@ Editor.prototype.initDescribe = function(anls) {
     $('#describe-publish').click(function() {
       var name = $('#detail-form #name').val();
       var description = tinymce.editors[0].getContent(); //$('#detail-form #description').val();
+      var isPublic = $('#describe-ispublic').prop('checked');
       $('.saving-status .ajax-loading').css('opacity', 1);
       $('.saving-status .status-message').text('Saving..').css('color', 'green');
       $.ajax({
@@ -192,7 +198,8 @@ Editor.prototype.initDescribe = function(anls) {
         type: 'post',
         data: {
           'name': name,
-          'description': description
+          'description': description,
+          'isPublic': isPublic
         },
         success: function(res) {
           $('.saving-status .ajax-loading').css('opacity', 0);

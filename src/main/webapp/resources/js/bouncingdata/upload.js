@@ -54,6 +54,13 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     
     $('#schema-table tr').each(function() {
       $('select.column-type-select', $(this)).val($(this).attr('detected'));
+      $('select.column-type-select option:selected', $(this)).css('color', 'green');
+    });
+    
+    $('#recommended-schema').click(function() {
+      $('#schema-table tr').each(function() {
+        $('select.column-type-select', $(this)).val($(this).attr('detected'));
+      });
     });
 
     $('#schema-submit').click(function() {

@@ -315,7 +315,7 @@
   	</div>
   </script>
   
-  <script id="feed-item-template" type="text/x-jquery-tmpl">
+  <script id="feed-item-template_old" type="text/x-jquery-tmpl">
     <div class="event stream-item" aid="\${id }">
       <div class="event-avatar">
         <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.jpg" />">
@@ -341,6 +341,38 @@
         <div class="event-footer">
             <strong class="event-score">\${score }</strong>    
           &nbsp;<a id="evt-comment-\${id }" class="comments-link" href="<c:url value="/anls/\${guid}#comments" />"><strong>\${commentCount }</strong>&nbsp;comments</a>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </script>
+  <script id="feed-item-template_old" type="text/x-jquery-tmpl">  
+    <div class="event stream-item" aid=\${id }>
+      <div class="event-content">
+        <a class="event-avatar-link"> <img class="avatar no-avatar"
+          src="<c:url value="/resources/images/no-avatar.png" />">
+        </a>
+        <div class="thumbnail">
+          <a href="<c:url value="/anls/\${guid}" />">
+            <img class="thumb-img" src="<c:url value="/thumbnails/\${thumbnail}.jpg" />"
+              onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+          </a>
+        </div>
+        <p class="title">
+          <a id="evt-title-\${id }" href="<c:url value="/anls/\${guid}" />"><strong>\${name}</strong></a>
+        </p>
+        <p class="info">
+          <span class="author">Author: <a href="#">\${username}</a></span><br /> 
+          <span class="tag-list">Tags:&nbsp;          
+          </span>
+        </p>
+        <p class="description">
+          <span>\${description }</span>
+        </p>   
+        <div class="clear"></div>
+        <div class="event-footer">
+          <strong class="event-score">\${score}</strong>&nbsp;
+          <a id="evt-comment-\${id }" class="comments-link" href="<c:url value="/anls/\${guid}#comments" />"><strong>\${commentCount}</strong>&nbsp;comments</a>
         </div>
       </div>
       <div class="clear"></div>

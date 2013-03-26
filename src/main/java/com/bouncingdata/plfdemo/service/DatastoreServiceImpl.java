@@ -533,6 +533,16 @@ public class DatastoreServiceImpl implements DatastoreService {
   public List<Dataset> getStaffPickDatasets() {
     return getMostPopularDatasets();
   }
+  
+  @Override
+  public List<Analysis> getMostRecentAnalyses() {
+    return dataStorage.getMostRecentAnalyses(20);
+  }
+  
+  @Override
+  public List<Analysis> getMoreRecentAnalyses(int lastId) {
+    return dataStorage.getMoreRecentAnalyses(lastId, 20);
+  }
 
   @Override
   public Tag getTag(String tag) {

@@ -315,4 +315,8 @@ public interface DatastoreService {
   boolean hasTag(int anlsId, String tags);
 
   List<Analysis> getAnalysesByTag(String tag);
+
+  List<Analysis> getMostRecentAnalyses();
+
+  List<Analysis> getMoreRecentAnalyses(int lastId);
 }

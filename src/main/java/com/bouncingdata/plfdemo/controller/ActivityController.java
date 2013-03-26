@@ -32,13 +32,16 @@ public class ActivityController {
   public String getActivityStream(ModelMap model, Principal principal) {
     try {
       User user = (User) ((Authentication)principal).getPrincipal();
-      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
-      model.addAttribute("activities", activities);
+      /*List<Activity> activities = datastoreService.getRecentFeed(user.getId());
+      model.addAttribute("activities", activities);*/
       
-      List<Analysis> analyses = datastoreService.getMostPopularAnalyses();
-      model.addAttribute("topAnalyses", analyses);
-      List<Dataset> datasets = datastoreService.getMostPopularDatasets();
-      model.addAttribute("topDatasets", datasets);
+      List<Analysis> mostRecentAnalyses = datastoreService.getMostRecentAnalyses();
+      model.addAttribute("recentAnalyses", mostRecentAnalyses);
+      
+      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", mostPopularAnalyses);
+      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", mostPopularDatasets);
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -47,11 +50,13 @@ public class ActivityController {
   }
   
   @RequestMapping(value="/a/more/{lastId}", method=RequestMethod.GET)
-  public @ResponseBody List<Activity> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
+  public @ResponseBody List<Analysis> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
     try {
       User user = (User) ((Authentication)principal).getPrincipal();
-      List<Activity> activities = datastoreService.getMoreFeed(user.getId(), lastId);
-      return activities;
+      //List<Activity> activities = datastoreService.getMoreFeed(user.getId(), lastId);
+      //return activities;
+      List<Analysis> analyses = datastoreService.getMoreRecentAnalyses(lastId);
+      return analyses;
     } catch (Exception e) {
       logger.debug("Failed to load more activity", e);
       return null;

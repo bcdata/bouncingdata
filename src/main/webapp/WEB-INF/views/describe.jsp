@@ -27,6 +27,9 @@
     <div class="editor-nav-panel">
       <a class="editor-nav" id="describe-back" href="<c:url value="/editor/anls/${anls.guid }/size" />">Back</a>
       <a class="editor-nav" id="describe-publish" href="javascript:void(0);">Publish</a>
+      <div style="text-align: right;">
+        <input type="checkbox" id="describe-ispublic" /> &nbsp;Public
+      </div>
     </div>
     <div class="editor-progress progress">
       <div class="progress-step editor-step">Code</div>
@@ -67,9 +70,6 @@
                   <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
                 </c:forEach>  
               </c:if>
-              <!-- a class="tag-element" href="javascript:void(0);">Football</a>
-              <a class="tag-element" href="javascript:void(0);">Money</a>
-              <a class="tag-element" href="javascript:void(0);">Madrid</a-->
             </span>
             <a class="add-tag-link" href="javascript:void(0);">
               Add tag

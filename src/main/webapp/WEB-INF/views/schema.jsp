@@ -54,11 +54,17 @@
               </thead>
               <tbody></tbody>           
             </table>
-            ${schema}
           </div>
+          <button id="recommended-schema">Recommended schema</button>
         </div>
         <div id="schema-tab-reference">
-          Add reference here
+          <div class="reference-form">
+            <label>Web</label>
+            <input type="text" name="web-ref" id="web-ref" />
+            <h3>Or</h3>
+            <label>Local</label>
+            <input type="file" name="file-ref" id="file-ref" />
+          </div>
         </div>
           
       </div>  
