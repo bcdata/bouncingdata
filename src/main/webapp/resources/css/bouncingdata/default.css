@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll; 
+}
+
 body, html>body {
   margin: 0 auto;
   font-size: 12px;
@@ -59,8 +63,9 @@ div.clear {
 }
 
 .header-container .header {
-  margin: 0 45px;
-  position: relative;  
+  margin: 0 auto;
+  position: relative;
+  width: 1200px;  
 }
 
 .header-container .header-content {
@@ -76,7 +81,7 @@ div.clear {
 .header-container .top-page-panel {
   position: absolute;
   left: 180px;
-  width: 925px;
+  width: 1020px;
 }
 
 .header-container .search-container {
@@ -86,7 +91,7 @@ div.clear {
 }
 
 .top-page-panel .header-buttons {
-  float: left;
+  float: right;
   margin-left: 30px;
 }
 
@@ -241,7 +246,7 @@ div.clear {
 
 #page > .main-container {
   width: 1200px;
-  margin-left: 45px;
+  margin: 0 auto;
 }
 
 #page .main-content-container {
@@ -276,8 +281,10 @@ body > .popup-container {
 }
 
 .footer-container {
-  width: 100%;
+  width: 1200px;
   background-color: transparent;
+  margin: 0 auto;
+  clear: both;
 }
 
 .footer-container .footer {
@@ -423,7 +430,7 @@ body > .popup-container {
   background: none repeat scroll 0 0 transparent;
   float: right;
   min-height: 500px;
-  padding: 0 15px;
+  padding: 0 0 0 15px;
 }
 
 #main-content .center-content {
