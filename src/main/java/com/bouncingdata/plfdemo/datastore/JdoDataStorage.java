@@ -478,7 +478,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			// anls.setUser(user);
 			anls.setLastUpdate(new Date());
 			anls.setPublished(analysis.isPublished());
-			anls.setTags(analysis.getTags());
 			anls.setLineCount(analysis.getLineCount());
 			anls.setThumbnail(analysis.getThumbnail());
 			//
@@ -1239,7 +1238,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		User user = pm.getObjectById(User.class, script.getUser().getId());
 		Transaction tx = pm.currentTransaction();
 		script.setUser(user);
-		Set<Tag> tags = script.getTags();
+		/*Set<Tag> tags = script.getTags();
 		if (tags != null) {
 			Set<Tag> tagSet = new HashSet<Tag>();
 			for (Tag t : tags) {
@@ -1251,7 +1250,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 				}
 			}
 			script.setTags(tagSet);
-		}
+		}*/
 
 		try {
 			tx.begin();
@@ -1677,27 +1676,19 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       }
       for (Tag tag : tags) {
         Tag tagObj = pm.getObjectById(Tag.class, tag.getId());
-        tagset.add(tagObj);
-      }
-      pm.makePersistent(anls);
+        if (tagObj != null) {
+          tagset.add(tagObj);
+          if (tagObj.getAnalyses() == null) tagObj.setAnalyses(new HashSet<Analysis>());
+          tagObj.getAnalyses().add(anls);
+          //pm.makePersistent(tagObj);
+        }
+      }  
+      //pm.makePersistent(anls);
       tx.commit();
     } finally {
       if (tx.isActive()) tx.rollback();
       pm.close();
     }
-  }
-  
-  @Override
-  public boolean hasTag(int anlsId, String tag) {
-    PersistenceManager pm = getPersistenceManager();
-    Analysis anls = pm.getObjectById(Analysis.class, anlsId);
-    Set<Tag> tagset = anls.getTags();
-    if (tagset == null) return false;
-    for (Tag t : tagset) {
-      if (t.getTag().equals(tag)) return true;
-    }
-    return false;
-    
   }
 
 	@Override

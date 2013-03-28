@@ -140,7 +140,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       }
     }
     
-    return new ExecutionResult(output, visCount, datasetCount, exitCode, "OK");
+    return new ExecutionResult(output, visCount, datasetCount, 0, "OK");
     
   }
     
@@ -237,9 +237,9 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
     
     if (app == null) {
       //Map<String, VisualizationDetail> visuals = getVisualizations(ticket);
-      return new ExecutionResult(output, visualCount, datasetCount, exitCode, "OK");
+      return new ExecutionResult(output, visualCount, datasetCount, 0, "OK");
     } else {
-      return new ExecutionResult(output, visualCount, datasetCount, exitCode, "OK");
+      return new ExecutionResult(output, visualCount, datasetCount, 0, "OK");
     }
     
   }

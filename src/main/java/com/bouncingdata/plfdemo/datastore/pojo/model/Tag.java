@@ -27,6 +27,10 @@ public class Tag {
   public Set<Analysis> getAnalyses() {
     return analyses;
   }
+  
+  public void setAnalyses(Set<Analysis> analyses) {
+    this.analyses = analyses;
+  }
 
   public Tag() {
     super();

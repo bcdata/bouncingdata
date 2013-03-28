@@ -299,13 +299,21 @@ public class AnalysisController {
       return new ActionResult(-1, "Tag does not exist");
     }
     
-    if (datastoreService.hasTag(anls.getId(), tag)) {
-      return new ActionResult(-1, "This analysis has been tagged already.");
+    Set<Tag> tagset = anls.getTags();
+    if (tagset != null) {
+      for (Tag t : tagset) {
+        if (t.getTag().equals(tag)) return new ActionResult(-1, "This analysis has been tagged already.");
+      }
     }
-    
+        
     List<Tag> tagList = new ArrayList<Tag>();
     tagList.add(tagObj);
-    datastoreService.addAnalysisTags(anls.getId(), tagList);
-    return new ActionResult(0, "OK");
+    try {
+      datastoreService.addAnalysisTags(anls.getId(), tagList);
+      return new ActionResult(0, "OK");
+    } catch (Exception e) {
+      logger.debug("Failed to add tag", e);
+      return new ActionResult(-1, "Failed");
+    }
   }
 }
