@@ -172,6 +172,28 @@ Analysis.prototype.init = function(anls, dbDetail) {
         }
       });
     });
+    
+    $('.tag-element-outer .tag-remove').click(function() {
+      if (anls.user != com.bouncingdata.Main.username) return;
+      var tag = $(this).prev().text();
+      $.ajax({
+        url: ctx + '/anls' + guid + '/removetag',
+        type: 'post',
+        data: {
+          tag: tag
+        },
+        success: function(res) {
+          if (res['code'] < 0) {
+            console.debug(res);
+            return;
+          }
+          $(this).parent().remove();
+        },
+        error: function(res) {
+          console.debug(res);
+        }
+      });
+    });
   });
 
 }

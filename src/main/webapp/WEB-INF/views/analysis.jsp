@@ -39,7 +39,12 @@
       <div class="tag-list">
       <c:if test="${not empty anls.tags }">
         <c:forEach items="${anls.tags }" var="tag">
-          <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+          <span class="tag-element-outer">
+            <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+            <c:if test="${isOwner }">
+              <span class="tag-remove">x</span>
+            </c:if>
+          </span>
         </c:forEach>  
       </c:if>
       
