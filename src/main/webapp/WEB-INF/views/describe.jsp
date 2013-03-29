@@ -4,7 +4,9 @@
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/editor.css", "editor");
 
   var anls = {
-    guid: '${anls.guid}'
+    guid: '${anls.guid}',
+    name: '${anls.name}',
+    code: '${anlsCode}'
   };
   
   // supports async. load js but we really should pre-load workbench.js from the layout.jsp

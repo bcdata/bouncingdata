@@ -77,10 +77,8 @@ public class EditorController {
       ObjectMapper logmapper = new ObjectMapper();
       String data = logmapper.writeValueAsString(new String[] {"2", guid, mode});		   	 
       datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.OPEN_EDITOR,data);      
-    
-      	
-      	
-      	model.addAttribute("anls", anls);
+     	
+      model.addAttribute("anls", anls);
       
       String code = appStoreService.getScriptCode(guid, null);
       model.addAttribute("anlsCode", StringEscapeUtils.escapeJavaScript(code));

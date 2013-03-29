@@ -139,9 +139,9 @@ public class LoginController {
     user.setLastName(lastName);
     
     try {
-    	 ObjectMapper logmapper = new ObjectMapper();
+    	 /*ObjectMapper logmapper = new ObjectMapper();
          String data = logmapper.writeValueAsString(new String[] {"5", username, email,password,firstName,lastName});		   	 
-         datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.REGISTER,data);      
+         datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.REGISTER,data);      */
        
       datastoreService.createUser(user);
       result.setStatusCode(0);

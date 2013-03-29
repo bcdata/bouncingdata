@@ -44,7 +44,16 @@ Editor.prototype.init = function(anls) {
     });
     
     $('button#editor-clone').click(function() {
-      com.bouncingdata.Main.newAnalysis(anls.name + '_clone', 'r', false, true);
+      var data = {
+        name : anls.name + '_clone',
+        language : 'r',
+        description : 'Cloned from ' + anls.name,
+        code : anls.code,
+        isPublic : false,
+        tags : '',
+        type : 'analysis'
+      };
+      com.bouncingdata.Main.newAnalysis(data, true);
     });
     
   });
@@ -144,7 +153,16 @@ Editor.prototype.initSize = function(anls, dbDetail) {
     });
     
     $('button#editor-clone').click(function() {
-      com.bouncingdata.Main.newAnalysis(anls.name + '_clone', 'r', false, true);
+      var data = {
+        name : anls.name + '_clone',
+        language : 'r',
+        description : 'Cloned from ' + anls.name,
+        code : anls.code,
+        isPublic : false,
+        tags : '',
+        type : 'analysis'
+      };
+      com.bouncingdata.Main.newAnalysis(data, true);
     });
     
   });
@@ -250,7 +268,16 @@ Editor.prototype.initDescribe = function(anls) {
     });
     
     $('button#editor-clone').click(function() {
-      com.bouncingdata.Main.newAnalysis(anls.name + '_clone', 'r', false, true);
+      var data = {
+        name : anls.name + '_clone',
+        language : 'r',
+        description : 'Cloned from ' + anls.name,
+        code : anls.code,
+        isPublic : false,
+        tags : '',
+        type : 'analysis'
+      };
+      com.bouncingdata.Main.newAnalysis(data, true);
     });
   }); 
 }
