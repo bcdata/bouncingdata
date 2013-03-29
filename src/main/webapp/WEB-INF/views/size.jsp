@@ -51,7 +51,7 @@
     </div>
     <div class="clear"></div>
     <div class="editor-size-area">
-      <div class="size-tabs" id="size-tabs">
+      <div class="size-tabs ui-tabs" id="size-tabs">
         <ul>
           <li><a href="#size-viz">Visualization</a></li>
           <li><a href="#size-data">Data</a></li>

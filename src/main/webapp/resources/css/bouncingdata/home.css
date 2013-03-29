@@ -1,5 +1,5 @@
 #main-content .center-content-main {
-  padding: 10px 15px;
+  padding: 0 15px;
 }
 
 #main-content .center-content-side {
@@ -17,6 +17,7 @@
 }
 
 .homepage-container .stream-filter {
+  margin-top: 15px;
 }
 
 .homepage-container .stream-filter a:hover {

@@ -21,8 +21,8 @@
 <div id="main-content" class="editor-container">
   <div class="top-bar">
     <div class="left-buttons">
-      <button>Clone</button>
-      <button>Cancel</button>
+      <button id="editor-clone">Clone</button>
+      <button id="editor-cancel">Cancel</button>
     </div>
     <div class="editor-nav-panel">
       <button class="editor-nav" id="editor-execute">Execute</button>

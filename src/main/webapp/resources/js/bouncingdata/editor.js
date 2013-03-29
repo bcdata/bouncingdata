@@ -34,6 +34,15 @@ Editor.prototype.init = function(anls) {
       me.startPrompt(jqconsole, 'python');
     });
     
+    $('button#editor-cancel').click(function() {
+      var code = me.editor.getSession().getDocument().getValue();
+      if (!code) {
+        // remove anls
+        
+      }
+      window.location.href = ctx + '/stream';
+    });
+    
   });
 }
 

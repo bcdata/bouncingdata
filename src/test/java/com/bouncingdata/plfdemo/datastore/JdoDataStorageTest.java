@@ -35,7 +35,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     if (demo != null) jdoDataStorage.deleteUser(demo.getId());
   }
   
-  public void _testJdoDataStorage() {
+  public void testJdoDataStorage() {
     assertNotNull(jdoDataStorage);
     
     User demo = jdoDataStorage.findUserByUsername("test");

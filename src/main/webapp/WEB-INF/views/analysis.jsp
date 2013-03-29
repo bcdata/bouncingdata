@@ -8,7 +8,8 @@
     guid: '${anls.guid}',
     user: {username: '${anls.user.username}'},
     language: '${anls.language}',
-    code: '${anlsCode}'
+    code: '${anlsCode}',
+    name: '${anls.name}'
   };
   var dbDetail = $.parseJSON('${dashboardDetail}');
   if (!com.bouncingdata.Analysis) {
@@ -59,15 +60,15 @@
     </div>
     <div class="anls-related-info related-info">
       <p><strong>Related:</strong></p>
-      <div class="related-tabs" id="related-tabs">
+      <div class="related-tabs ui-tabs" id="related-tabs">
         <ul>
           <li><a href="#related-dataset">Dataset</a></li>
           <li><a href="#related-author">Author</a></li>
           <li><a href="#related-voters">Voters</a></li>
         </ul>
-        <div id="related-dataset"></div>
-        <div id="related-author"></div>
-        <div id="related-voters"></div>
+        <div id="related-dataset" class="ui-tabs-hide"></div>
+        <div id="related-author" class="ui-tabs-hide"></div>
+        <div id="related-voters" class="ui-tabs-hide"></div>
       </div>
       
     </div>
@@ -99,6 +100,7 @@
           <h3 class="anls-score">${anls.score}</h3>&nbsp;
           <a href="javascript:void(0)" class="anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="anls-action anls-clone">Clone</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
             <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="anls-action" title="Edit this analysis">Edit</a>
@@ -133,7 +135,7 @@
         <div class="clear"></div>
       </div>
       <div class="anls-header-rule"></div>
-      <div class="anls-content anls-tab-container" id="anls-content">
+      <div class="anls-content anls-tab-container ui-tabs" id="anls-content">
         <ul class="anls-tabs">
           <li class="anls-tab"><a href="#anls-dashboard">Dashboard</a></li>
           <li class="anls-tab"><a href="#anls-code">Code</a></li>
@@ -141,8 +143,8 @@
         </ul>
         <div class="clear"></div>
         <div class="anls-tabs-content-wrapper">
-          <div class="anls-dashboard" id="anls-dashboard"></div>
-          <div class="anls-code" id="anls-code">
+          <div class="anls-dashboard ui-tabs-hide" id="anls-dashboard"></div>
+          <div class="anls-code ui-tabs-hide" id="anls-code">
             <div class="code-block" id="code-block">
               <pre class="brush: py"></pre>
             </div>
@@ -151,7 +153,7 @@
             </div>
             <div class="clear"></div>
           </div>
-          <div class="anls-data" id="anls-data">
+          <div class="anls-data ui-tabs-hide" id="anls-data">
             <c:if test="${empty datasetList and empty attachments }">
               <span>No dataset</span>
             </c:if>

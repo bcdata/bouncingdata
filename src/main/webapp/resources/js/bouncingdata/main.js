@@ -420,7 +420,8 @@ Main.prototype.newAnalysis = function(name, language, isPublic) {
       window.location = ctx + '/editor/anls/' + anls.guid + '/edit';
     },
     error: function(res) {
-      console.debug(res)
+      alert('Failed to create new analysis. Please try again.');
+      console.debug(res);
     }
   });
 }

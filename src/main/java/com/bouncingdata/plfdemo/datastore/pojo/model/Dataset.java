@@ -21,22 +21,17 @@ public class Dataset {
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   private int id;
-  @Persistent(table="Dataset_tags")
-	@Join (column="id_OID")	
-	@Element (column="id_EID")
-
-private  Set<Tag> tags;
-  
-  
-  
+  @Persistent(table = "Dataset_tags")
+  @Join(column = "id_OID")
+  @Element(column = "id_EID")
+  private Set<Tag> tags;
   private String name;
-  private String description;  
+  private String description;
   @Index
   @Unique
   private String guid;
   @Persistent(defaultFetchGroup="true", nullValue=NullValue.EXCEPTION)
   private User user;
-  
   private String schema;
   private Date createAt;
   private Date lastUpdate;

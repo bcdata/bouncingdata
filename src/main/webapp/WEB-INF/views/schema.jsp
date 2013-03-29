@@ -32,14 +32,14 @@
   <div class="schema-container center-content-container">
     <div class="schema-panel-wrapper">
       <h3>1. Schema</h3>
-      <div class="schema-panel schema-tabs" id="schema-panel">
+      <div class="schema-panel schema-tabs ui-tabs" id="schema-panel">
         <ul>
           <li><a href="#schema-tab-view">View</a></li>
           <li><a href="#schema-tab-schema">Schema</a></li>
           <li><a href="#schema-tab-reference">Add Reference Doc</a></li>
         </ul>
         <div class="clear"></div>
-        <div id="schema-tab-view">
+        <div id="schema-tab-view" class="ui-tabs-hide">
           <div class="data-preview-wrapper">
             <table id="data-preview"></table>
             <c:choose>
@@ -65,7 +65,7 @@
             </c:choose>
           </div>
         </div>
-        <div id="schema-tab-schema">
+        <div id="schema-tab-schema" class="ui-tabs-hide">
           <div class="schema-table-wrapper">
             <table id="schema-table" ticket="${ticket }">  
               <thead>
@@ -80,7 +80,7 @@
           </div>
           <button id="recommended-schema">Recommended schema</button>
         </div>
-        <div id="schema-tab-reference">
+        <div id="schema-tab-reference" class="ui-tabs-hide">
           <div class="reference-form">
             <label>Web</label>
             <input type="text" name="web-ref" id="web-ref" />

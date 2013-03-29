@@ -521,7 +521,7 @@ public class DatastoreServiceImpl implements DatastoreService {
   
   @Override
   public List<Dataset> getMostPopularDatasets() {
-    return null;
+    return dataStorage.getMostPopularDatasets();
   }
 
   @Override

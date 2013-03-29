@@ -9,7 +9,8 @@ ActivityStream.prototype.init = function() {
   me.$feedTemplate = $('#feed-item-template').template();
   var main = com.bouncingdata.Main;
 
-  com.bouncingdata.Nav.setSelected('page', 'stream');
+  //com.bouncingdata.Nav.setSelected('page', 'stream');
+  $('#page>.main-container>.main-navigation ul.main-nav-links li:first-child a').addClass('nav-selected');
 
   $(function() {
 

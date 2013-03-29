@@ -94,7 +94,11 @@ Analysis.prototype.init = function(anls, dbDetail) {
       me.voteAnalysis(guid, -1);
       return false;
     });
-
+    
+    $('.anls-header a.anls-clone').click(function() {
+      com.bouncingdata.Main.newAnalysis(anls.name + '_clone', 'r', false);
+      return false;
+    });
 
     // embedded
     var $embedded = $('#embedded-link');
@@ -105,7 +109,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
       var embedded = '<iframe src="http://' + host + ctx + '/public/embed/' + guid + '" style="border: 0" width="800" height="600" frameborder="0"></iframe>';
       $('#embedded-link-text', $embedded).val(embedded).click(function() {
         $(this).select();
-        $(this).attr('title', 'CTRL-C to copy embedded code');
+        $(this).attr('title', 'Press CTRL-C to copy embedded code');
       });
 
       // reset options

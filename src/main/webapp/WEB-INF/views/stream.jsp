@@ -11,12 +11,12 @@
       <div class="right-content-section-title">
         <h4>Most Popular</h4>   
         <div class="most-popular-content">
-          <div id="most-popular-content-tabs" class="most-popular-content-tabs">
+          <div id="most-popular-content-tabs" class="most-popular-content-tabs ui-tabs">
             <ul>
               <li><a href="#most-popular-analysis">Analysis</a></li>
               <li><a href="#most-popular-dataset">Dataset</a></li>
             </ul>
-            <div class="side-list-panel" id="most-popular-analysis">
+            <div class="side-list-panel ui-tabs-hide" id="most-popular-analysis">
               <c:forEach items="${topAnalyses }" var="anls">
                 <div class="side-item-panel">
                   <a class="small-avatar-link">
@@ -45,7 +45,7 @@
                 </div>
               </c:forEach>
             </div>
-            <div class="side-list-panel" id="most-popular-dataset">
+            <div class="side-list-panel ui-tabs-hide" id="most-popular-dataset">
               <c:forEach items="${topDatasets }" var="dts">
                 <div class="side-item-panel">
                   <a class="small-avatar-link">
@@ -74,12 +74,12 @@
       <div class="right-content-section-title">
         <h4>Staff's Pick</h4>    
         <div class="staff-pick-content">
-          <div id="staff-pick-content-tabs">
+          <div id="staff-pick-content-tabs" class="staff-pick-content-tabs ui-tabs">
             <ul>
               <li><a href="#staff-pick-analysis">Analysis</a></li>
               <li><a href="#staff-pick-dataset">Dataset</a></li>
             </ul>
-            <div class="side-list-panel" id="staff-pick-analysis">
+            <div class="side-list-panel ui-tabs-hide" id="staff-pick-analysis">
               <c:forEach items="${topAnalyses }" var="anls">
                 <div class="side-item-panel">
                   <a class="small-avatar-link">
@@ -107,7 +107,7 @@
                 </div>
               </c:forEach>
             </div>
-            <div class="side-list-panel" id="staff-pick-dataset">
+            <div class="side-list-panel ui-tabs-hide"  id="staff-pick-dataset">
               <c:forEach items="${topDatasets }" var="dts">
                 <div class="side-item-panel">
                   <a class="small-avatar-link">

@@ -138,6 +138,7 @@ a.tag-element:hover {
   height: 0;
   border-top: 0 none;
   border-bottom: 1px solid #E2E2E2;
+  margin: 0 15px;
 }
 
 .anls-header .anls-title h2 {

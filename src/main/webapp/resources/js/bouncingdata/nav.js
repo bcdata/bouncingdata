@@ -4,7 +4,7 @@ function Nav() {
 
 Nav.prototype.init = function() {
   var $mainNav = $('#page>.main-container>.main-navigation');
-
+  
   // binds Ajax actions, history
   this.bindAjaxActions();
 
