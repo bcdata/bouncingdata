@@ -80,8 +80,8 @@ div.clear {
 
 .header-container .top-page-panel {
   position: absolute;
-  left: 180px;
-  width: 1020px;
+  left: 195px;
+  width: 1005px;
 }
 
 .header-container .search-container {
@@ -96,7 +96,7 @@ div.clear {
 }
 
 .top-page-panel .create-button {
-  float: left;
+  float: right;
 }
 
 .top-page-panel .create-button a#create-button-link {
@@ -112,7 +112,7 @@ div.clear {
 }
 
 .top-page-panel .create-button a#create-button-link.active {
-  background-position: -141px -94px;
+  /*background-position: -141px -94px;*/
   position: relative;
   z-index: 501;
 }
@@ -121,21 +121,35 @@ div.clear {
   background-position: -45px -61px;
 }
 
+.top-page-panel .create-button-container .create-submenu ul {
+  margin: 0;  
+}
+
+.top-page-panel .create-button-container .create-submenu {
+  background-color: #FFF;
+  color: #333;
+  z-index: 1;
+  position: relative;
+  border: 1px solid #CCC;
+}
+
 .top-page-panel .create-button-container a.create-sub-item {
-  background-color: #272727;
+  /*background-color: #272727;*/
   border: medium none;
-  color: #CCCCCC;
+  /*color: #CCCCCC;*/
   display: block;
   float: none;
   font-size: 12px;
   font-weight: normal;
   height: 25px;
   line-height: 26px;
-  margin: 0 4px 0 2px;
-  padding: 0;
-  position: relative;
-  z-index: 1;
-  margin: 0 3px;
+  margin: 0;
+  padding: 2px 6px;
+}
+
+.top-page-panel .create-button-container a.create-sub-item:hover {
+  background-color: #555555;
+  color: #FFF;
 }
 
 .top-page-panel .create-button-container .create-submenu {
@@ -161,11 +175,17 @@ div.clear {
 #page .top-page-panel .header-buttons .guide-button-container .guide-button {
   display: inline-block;
   cursor: pointer;
-  padding: 5px;
+  padding: 6px;
   text-align: center;
-  width: 40px;
+  width: 48px;
   background-color: #fff;
   float: left;
+  font-weight: bold;
+}
+
+#page .top-page-panel .header-buttons .guide-button-container .guide-button:hover {
+  background-color: #555;
+  color: #FFF;
 }
 
 #page .top-page-panel .header-buttons .guide-button-container .guide-button:first-child {
@@ -188,7 +208,7 @@ div.clear {
 }
 
 #page .header-container .search-container .search-input-wrapper {
-  width: 520px;
+  width: 620px;
   border: 1px solid #DDD;
   height: 28px;
   padding: 0;
@@ -199,7 +219,7 @@ div.clear {
 
 
 #page .header-container .search-container .search-input {
-  width: 515px;
+  width: 615px;
   padding: 0 0 0 5px;
   border: 0 none;
   height: 28px;
@@ -239,7 +259,7 @@ div.clear {
 }
 
 #page .header-container .header-content .header-logo {
-  margin: 0;
+  margin: 0 0 0 4px;
   float: left; 
   display: inline-block;
 }
@@ -328,11 +348,16 @@ body > .popup-container {
   text-decoration: none;
 }
 
+#page .main-navigation .tags-container ul.tag-links {
+  list-style: none;
+  padding: 0;  
+}
+
 #page .main-navigation ul.main-nav-links > li {
   line-height: 24px;
 }
 
-#page .main-navigation ul.main-nav-links .main-nav-item {
+#page .main-navigation ul.main-nav-links a.main-nav-item {
   line-height: 24px;
   padding-left: 4px;
   display: block;
@@ -340,7 +365,15 @@ body > .popup-container {
   background: none repeat scroll 0 0 transparent;
 }
 
-#page .main-navigation ul.main-nav-links a.main-nav-item:hover {
+#page .main-navigation ul.main-nav-links a.sub-nav-item {
+  line-height: 24px;
+  padding-left: 20px;
+  display: block;
+  color: #555555;
+  background: none repeat scroll 0 0 transparent;
+}
+
+#page .main-navigation ul.main-nav-links a.main-nav-item:hover, #page .main-navigation ul.main-nav-links a.sub-nav-item:hover {
   background-color: #555555;
   color: #fff;
   text-decoration: none;
@@ -436,7 +469,7 @@ body > .popup-container {
 #main-content .center-content {
   background: none repeat scroll 0 0 #FFFFFF;
   overflow: hidden;
-  border: 1px solid #E2E2E2;
+  border: 0 none;
   border-top: 0 none;
 }
 

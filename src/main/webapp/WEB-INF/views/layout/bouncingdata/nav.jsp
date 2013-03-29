@@ -11,18 +11,18 @@
         <a class="main-nav-item" href="#">Tags</a>
         <div class="tags-container">
           <ul class="tag-links">
-            <li><a href="<c:url value="/tag/economics" />">Economics</a></li>
-            <li><a href="<c:url value="/tag/finance" />">Finance</a></li>
-            <li><a href="<c:url value="/tag/health" />">Health</a></li>
-            <li><a href="<c:url value="/tag/education" />">Education</a></li>
-            <li><a href="<c:url value="/tag/us" />">US</a></li>
-            <li><a href="<c:url value="/tag/football" />">Football</a></li>
-            <li><a href="<c:url value="/tag/sports" />">Sports</a></li>
-            <li><a href="<c:url value="/tag/amz" />">AMZ</a></li>
-            <li><a href="<c:url value="/tag/worldbank" />">World Bank</a></li>
-            <li><a href="<c:url value="/tag/oced" />">OCED</a></li>
-            <li><a href="<c:url value="/tag/payroll" />">Payroll</a></li>
-            <li><a href="#">More..</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/economics" />">Economics</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/finance" />">Finance</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/health" />">Health</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/education" />">Education</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/us" />">US</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/football" />">Football</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/sports" />">Sports</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/amz" />">AMZ</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/worldbank" />">World Bank</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/oced" />">OCED</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/payroll" />">Payroll</a></li>
+            <li><a class="sub-nav-item" href="#">More..</a></li>
           </ul>
         </div>
       </li>

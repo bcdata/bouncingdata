@@ -77,16 +77,17 @@ public class DatasetController {
   
   @RequestMapping(value={"/upload"}, method = RequestMethod.GET)
   public String getUploadPage(ModelMap model, Principal principal) {
-	  try {
-	    	User user = (User) ((Authentication)principal).getPrincipal();
-			 ObjectMapper logmapper = new ObjectMapper();
-			    String data;
-			data = logmapper.writeValueAsString(new String[] {"0"});
-			datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_UPLOAD_PAGE,data);
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    try {
+      User user = (User) ((Authentication) principal).getPrincipal();
+      ObjectMapper logmapper = new ObjectMapper();
+      String data;
+      data = logmapper.writeValueAsString(new String[] { "0" });
+
+      datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.GET_UPLOAD_PAGE, data);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     return "upload";
   }
   
@@ -99,16 +100,17 @@ public class DatasetController {
   public String getSchemaPage(@RequestParam(value = "file", required = false) MultipartFile file,
       @RequestParam(value = "fileUrl", required = false) String fileUrl, WebRequest request, 
       ModelMap model, Principal principal) {
-	  try {
-	    	User user = (User) ((Authentication)principal).getPrincipal();
-			 ObjectMapper logmapper = new ObjectMapper();
-			    String data;
-			data = logmapper.writeValueAsString(new String[] {"1",fileUrl});
-			datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_SCHEMA_PAGE,data);
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    
+    try {
+      User user = (User) ((Authentication) principal).getPrincipal();
+      ObjectMapper logmapper = new ObjectMapper();
+      String data;
+      data = logmapper.writeValueAsString(new String[] { "1", fileUrl });
+      datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.GET_SCHEMA_PAGE, data);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 	  
     if (file == null && (fileUrl == null || StringUtils.isEmptyOrWhitespaceOnly(fileUrl))) {
       model.addAttribute("errorMsg", "Null input file or file address.");
@@ -151,7 +153,20 @@ public class DatasetController {
       }
       
       List<String[]> data = parser.parse(file.getInputStream());
-      model.addAttribute("data", mapper.writeValueAsString(data));
+      List<Map> dataMapList = new ArrayList<Map>();
+      String[] header = data.get(0);
+      int maxRow = Math.min(100, data.size() - 1);
+      for (int i = 1; i <= maxRow; i++) {
+        HashMap<String, Object> row = new HashMap<String, Object>();
+        for (int j = 0; j < header.length; j++) {
+          String col = header[j];
+          Object val = data.get(i)[j];
+          row.put(col, val);
+        }
+        dataMapList.add(row);
+      }
+      model.addAttribute("data", mapper.writeValueAsString(dataMapList));
+      
       ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
       for (String[] row : data) {
         os.writeObject(row);
@@ -499,15 +514,15 @@ public class DatasetController {
       }
       
       try {
-    	  User user = (User) ((Authentication)principal).getPrincipal();
- 		 ObjectMapper logmapper = new ObjectMapper();
- 		    String data;
- 		data = logmapper.writeValueAsString(new String[] {"1",guid});
- 		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VIEW_DATAPAGE,data);
- 	}catch (Exception e) {
- 		// TODO Auto-generated catch block
- 		e.printStackTrace();
- 	}
+        User user = (User) ((Authentication) principal).getPrincipal();
+        ObjectMapper logmapper = new ObjectMapper();
+        String data;
+        data = logmapper.writeValueAsString(new String[] { "1", guid });
+        datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.VIEW_DATAPAGE, data);
+      } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
       
       model.addAttribute("dataset", ds);
       ObjectMapper mapper = new ObjectMapper();

@@ -42,11 +42,16 @@ Main.prototype.init = function() {
     });
     
     $('.top-page-panel a#create-analysis').click(function() {
-      me.$newDialog.dialog("open");
+      /*me.$newDialog.dialog("open");
       var $createButton = $('.top-page-panel .create-button a#create-button-link');
       $createButton.removeClass('active');
       $('.top-page-panel .create-submenu').hide();
-      return false;
+      return false;*/
+      var $createButton = $('.top-page-panel .create-button a#create-button-link');
+      $createButton.removeClass('active');
+      $('.top-page-panel .create-submenu').hide();
+      
+      me.newAnalysis('Untitled Analysis', 'r', false);
     });
     
     $('.search-container input#query').focus(function() {

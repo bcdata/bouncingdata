@@ -40,7 +40,30 @@
         </ul>
         <div class="clear"></div>
         <div id="schema-tab-view">
-          Data preview here?
+          <div class="data-preview-wrapper">
+            <table id="data-preview"></table>
+            <c:choose>
+              <c:when test="${not empty data }">
+                <script>
+                  var data = ${data};
+                  var $table = $('#data-preview');
+                  com.bouncingdata.Workbench.renderDatatable(data, $table);
+                </script>
+              </c:when>
+              <c:otherwise>
+                <!-- script>
+                $(function() {
+                  console.debug("Load datatable by Ajax...");
+                  var guid = '${guid}';
+                  var columns = ${columns};
+                  var $table = $('#data-table');
+                  com.bouncingdata.Workbench.loadDatatableByAjax(guid, columns, $table);               
+                });
+                </script-->
+                <span>Unable to load data preview</span>  
+              </c:otherwise>
+            </c:choose>
+          </div>
         </div>
         <div id="schema-tab-schema">
           <div class="schema-table-wrapper">

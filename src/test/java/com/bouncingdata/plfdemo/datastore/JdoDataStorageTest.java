@@ -35,7 +35,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     if (demo != null) jdoDataStorage.deleteUser(demo.getId());
   }
   
-  public void testJdoDataStorage() {
+  public void _testJdoDataStorage() {
     assertNotNull(jdoDataStorage);
     
     User demo = jdoDataStorage.findUserByUsername("test");
@@ -45,7 +45,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     System.out.println("Number of application by demo: " + apps.size());
   }
     
-  public void testCreateAnalysis() {
+  public void _testCreateAnalysis() {
     Analysis anls = new Analysis();
     anls.setName("testAnalysis");
     anls.setLanguage("python");
@@ -62,7 +62,7 @@ public class JdoDataStorageTest extends AbstractJUnit38SpringContextTests {
     jdoDataStorage.deleteAnalysis(anls1.getId());
   }
   
-  public void testUpdateApplication() {
+  public void _testUpdateApplication() {
     Analysis anls = new Analysis();
     anls.setName("testAnalysis");
     anls.setLanguage("python");

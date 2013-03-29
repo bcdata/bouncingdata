@@ -16,6 +16,13 @@
   width: 300px;
 }
 
+.homepage-container .stream-filter {
+}
+
+.homepage-container .stream-filter a:hover {
+  color: #0077CC;
+}
+
 #stream .event .event-avatar-link {
   float: right;
   cursor: pointer;
@@ -36,7 +43,7 @@
   border: 1px solid #E2E2E2;
   border-radius: 2px;
   padding: 10px;
-  width: 605px;
+  width: 655px;
   position: relative;
 }
 

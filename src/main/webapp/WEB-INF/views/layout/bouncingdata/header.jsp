@@ -2,7 +2,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <div class="header-content">
-  <div class="header-login">
+  <div class="header-login" style="display: none;">
     <sec:authorize access="isAuthenticated()">
       <div>Welcome back <span style="font-weight: bold;"> 
           <sec:authentication property="principal.username" />

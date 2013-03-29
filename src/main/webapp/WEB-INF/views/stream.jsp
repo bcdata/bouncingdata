@@ -136,7 +136,18 @@
   <div class="center-content">
     <div class="center-content-wrapper">
       <div class="stream-container center-content-main">
-        <h3>Activity stream</h3>
+        <div class="stream-filter">
+          <span class="" style="float: left;">
+            <a href="#">All</a>&nbsp;&nbsp;|
+            <a href="#">Analysis</a>&nbsp;&nbsp;|
+            <a href="#">Dataset</a>
+          </span>
+          <span style="float: right;">
+            <a href="#">Recent</a>&nbsp;&nbsp;|
+            <a href="#">Popular</a>
+          </span>
+        </div>
+        <div class="clear"></div>
         <div class="stream main-activity-stream" id="stream">
           <c:if test="${not empty recentAnalyses }">
             <c:forEach items="${recentAnalyses }" var="anls">         

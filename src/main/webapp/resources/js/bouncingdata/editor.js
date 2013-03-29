@@ -226,6 +226,9 @@ Editor.prototype.loadDashboard = function(visuals, dashboard, $dashboard, anls) 
 Editor.prototype.execute = function(callback) {
   var me = this;
   var code = me.editor.getSession().getDocument().getValue();
+  if (!code) {
+    return;
+  }
   var type = 'analysis';
   me.setStatus("running");
   

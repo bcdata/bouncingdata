@@ -36,6 +36,7 @@
       <div class="progress-step editor-step">Size</div>
       <div class="progress-step editor-step progress-current">Describe</div>
     </div>
+    <div class="clear"></div>
   </div>
   <div class="clear-bar"></div>
   

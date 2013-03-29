@@ -1613,6 +1613,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   public List<Analysis> getMostRecentAnalyses(int maxNumber) {
     PersistenceManager pm = getPersistenceManager();
     Query q = pm.newQuery(Analysis.class);
+    q.setFilter("published == true");
     q.setOrdering("createAt DESC");
     q.setRange(0, maxNumber);
     try {
