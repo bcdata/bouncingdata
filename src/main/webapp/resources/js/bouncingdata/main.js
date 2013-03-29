@@ -51,7 +51,17 @@ Main.prototype.init = function() {
       $createButton.removeClass('active');
       $('.top-page-panel .create-submenu').hide();
       
-      me.newAnalysis('Untitled Analysis', 'r', false);
+      var data = {
+        name : 'Untitled Analysis',
+        language : 'r',
+        description : '',
+        code : '',
+        isPublic : false,
+        tags : '',
+        type : 'analysis'
+      };
+      
+      me.newAnalysis(data, false);
     });
     
     $('.search-container input#query').focus(function() {
@@ -399,30 +409,33 @@ Main.prototype.toggleLeftNav = function() {
   }
 }
 
-Main.prototype.newAnalysis = function(name, language, isPublic) {
-  var data = {
-    appname : name,
+Main.prototype.newAnalysis = function(appData, newTab) {
+  /*var data = {
+    name : name,
     language : language,
     description : '',
     code : '',
     isPublic : isPublic,
     tags : '',
     type : 'analysis'
-  };
+  };*/
   
   var me = this;
   
   $.ajax({
     url: ctx + "/main/createapp",
-    data: data,
+    data: appData,
     type: "post",
     success: function(anls) {
-      window.location = ctx + '/editor/anls/' + anls.guid + '/edit';
+      if (newTab) {
+        window.open(ctx + '/editor/anls/' + anls.guid + '/edit', '_blank');
+      } else window.location = ctx + '/editor/anls/' + anls.guid + '/edit';
     },
     error: function(res) {
       alert('Failed to create new analysis. Please try again.');
       console.debug(res);
-    }
+    },
+    async: false
   });
 }
 

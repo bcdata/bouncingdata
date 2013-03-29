@@ -288,10 +288,18 @@ public class AnalysisController {
   }
   
   @RequestMapping(value="/{guid}/addtag", method=RequestMethod.POST)
-  public @ResponseBody ActionResult addAnalysisTag(@PathVariable String guid, @RequestParam(value="tag", required=true) String tag, ModelMap model) throws Exception {
+  public @ResponseBody ActionResult addAnalysisTag(@PathVariable String guid, @RequestParam(value="tag", required=true) String tag, ModelMap model, Principal principal) throws Exception {
+    User user = (User) ((Authentication)principal).getPrincipal();
+    if (user == null) {
+      return new ActionResult(-1, "Error: User does not exist");
+    }
     Analysis anls = datastoreService.getAnalysisByGuid(guid);
     if (anls == null) {
       return new ActionResult(-1, "Error: Analysis does not exist");
+    }
+    
+    if (!user.getUsername().equals(anls.getUser().getUsername())) {
+      return new ActionResult(-1, "Error: User does not have permission to add tag");
     }
     
     Tag tagObj = datastoreService.getTag(tag);
@@ -313,6 +321,36 @@ public class AnalysisController {
       return new ActionResult(0, "OK");
     } catch (Exception e) {
       logger.debug("Failed to add tag", e);
+      return new ActionResult(-1, "Failed");
+    }
+  }
+  
+  @RequestMapping(value="/{guid}/removetag", method=RequestMethod.POST)
+  public @ResponseBody ActionResult removeAnalysisTag(@PathVariable String guid, @RequestParam(value="tag", required=true) String tag, ModelMap model, Principal principal) throws Exception {
+    User user = (User) ((Authentication)principal).getPrincipal();
+    if (user == null) {
+      return new ActionResult(-1, "Error: User does not exist");
+    }  
+  
+    Analysis anls = datastoreService.getAnalysisByGuid(guid);
+    if (anls == null) {
+      return new ActionResult(-1, "Error: Analysis does not exist");
+    }
+    
+    if (!user.getUsername().equals(anls.getUser().getUsername())) {
+      return new ActionResult(-1, "Error: User does not have permission to remove tag");
+    }
+    
+    Tag tagObj = datastoreService.getTag(tag);
+    if (tagObj == null) {
+      return new ActionResult(-1, "Tag does not exist");
+    }
+    
+    try {
+      datastoreService.removeAnalysisTag(anls, tagObj);
+      return new ActionResult(0, "OK");
+    } catch (Exception e) {
+      logger.debug("Failed to remove tag", e);
       return new ActionResult(-1, "Failed");
     }
   }

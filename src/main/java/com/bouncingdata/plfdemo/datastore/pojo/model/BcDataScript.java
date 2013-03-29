@@ -135,4 +135,16 @@ public abstract class BcDataScript {
     return df.format(lastUpdate);
   }
   
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    final Analysis another = (Analysis) obj;
+    return (another.getId() == id);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 4 * ("bouncingdata".hashCode()) * id;
+  }
 }

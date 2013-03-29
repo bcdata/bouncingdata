@@ -96,7 +96,16 @@ Analysis.prototype.init = function(anls, dbDetail) {
     });
     
     $('.anls-header a.anls-clone').click(function() {
-      com.bouncingdata.Main.newAnalysis(anls.name + '_clone', 'r', false);
+      var data = {
+        name : anls.name + '_clone',
+        language : 'r',
+        description : 'Cloned from ' + anls.name,
+        code : anls.code,
+        isPublic : false,
+        tags : '',
+        type : 'analysis'
+      };
+      com.bouncingdata.Main.newAnalysis(data, true);
       return false;
     });
 
@@ -165,7 +174,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
         success: function(res) {
           console.debug(res);
           if (res['code'] < 0) return;
-          $('.tag-set .tag-list').append('<a class="tag-element" href="javascript:void(0);">' + tag + '</a>');
+          $('.tag-set .tag-list').append('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
         },
         error: function(res) {
           console.debug(res);
@@ -174,10 +183,11 @@ Analysis.prototype.init = function(anls, dbDetail) {
     });
     
     $('.tag-element-outer .tag-remove').click(function() {
+      var self = this;
       if (anls.user != com.bouncingdata.Main.username) return;
       var tag = $(this).prev().text();
       $.ajax({
-        url: ctx + '/anls' + guid + '/removetag',
+        url: ctx + '/anls/' + guid + '/removetag',
         type: 'post',
         data: {
           tag: tag
@@ -187,7 +197,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
             console.debug(res);
             return;
           }
-          $(this).parent().remove();
+          $(self).parent().remove();
         },
         error: function(res) {
           console.debug(res);

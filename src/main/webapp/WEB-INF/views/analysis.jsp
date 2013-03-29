@@ -6,7 +6,7 @@
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
   var anls = {
     guid: '${anls.guid}',
-    user: {username: '${anls.user.username}'},
+    user: '${anls.user.username}',
     language: '${anls.language}',
     code: '${anlsCode}',
     name: '${anls.name}'
@@ -39,18 +39,15 @@
       <div class="tag-list">
       <c:if test="${not empty anls.tags }">
         <c:forEach items="${anls.tags }" var="tag">
-          <span class="tag-element-outer">
+          <div class="tag-element-outer">
             <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
             <c:if test="${isOwner }">
-              <span class="tag-remove">x</span>
+              <span class="tag-remove" title="Remove tag from this analysis">x</span>
             </c:if>
-          </span>
+          </div>
         </c:forEach>  
       </c:if>
       
-       <!-- <a class="tag-element" href="javascript:void(0);">Football</a>
-        <a class="tag-element" href="javascript:void(0);">Money</a>
-        <a class="tag-element" href="javascript:void(0);">Madrid</a> -->
       </div>
       <c:if test="${isOwner }">
         <a class="add-tag-link" href="javascript:void(0);">

@@ -24,8 +24,8 @@
 <div id="main-content" class="editor-container">
   <div class="top-bar">
     <div class="left-buttons">
-      <button class="editor-button">Clone</button>
-      <button class="editor-button">Cancel</button>
+      <button class="editor-button" id="editor-clone">Clone</button>
+      <button class="editor-button" id="editor-cancel">Cancel</button>
     </div>
     <div class="editor-nav-panel">
       <a href="<c:url value="/editor/anls/${anls.guid }/edit" />" class="editor-nav" id="size-back">Back</a>

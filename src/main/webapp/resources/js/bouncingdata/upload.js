@@ -12,6 +12,10 @@ Upload.prototype.init = function() {
       me.submitDataset();
       return false;
     });
+    
+    $('button#upload-close').click(function() {
+      window.location.href = ctx + '/stream';
+    });
   });
 }
 
@@ -20,6 +24,10 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
   $(function() {
     com.bouncingdata.Main.toggleLeftNav();
     $('.schema-nav').button();
+    
+    $('button#upload-close').click(function() {
+      window.location.href = ctx + '/stream';
+    });
     
     $('#schema-panel').tabs().tabs('select', 1);
     

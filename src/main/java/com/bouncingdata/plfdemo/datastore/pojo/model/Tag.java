@@ -75,4 +75,17 @@ public class Tag {
   public void setCreateAt(Date createAt) {
     this.createAt = createAt;
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    final Tag another = (Tag) obj;
+    return (tag.equalsIgnoreCase(another.getTag()));
+  }
+  
+  @Override
+  public int hashCode() {
+    return 4 * tag.hashCode();
+  }
 }

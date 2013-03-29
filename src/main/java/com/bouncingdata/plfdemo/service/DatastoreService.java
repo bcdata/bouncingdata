@@ -308,9 +308,9 @@ public interface DatastoreService {
 
   void addAnalysisTags(int anlsId, List<Tag> tags);
 
-  void removeAnalysisTag(int anlsId, Tag tag);
+  void removeAnalysisTag(Analysis anls, Tag tag);
 
-  void removeAnalysisTags(int anlsId, List<Tag> tags);
+  void removeAnalysisTags(Analysis anls, List<Tag> tags);
 
   List<Analysis> getAnalysesByTag(String tag);
 

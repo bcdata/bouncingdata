@@ -5,7 +5,8 @@
 
   var anls = {
     guid: '${anls.guid}',
-    code: '${anlsCode}'
+    code: '${anlsCode}',
+    name: '${anls.name}'
   }
   // supports async. load js but we really should pre-load workbench.js from the layout.jsp
   if (!com.bouncingdata.Editor) {

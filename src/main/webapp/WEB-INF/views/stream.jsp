@@ -181,12 +181,11 @@
                     <span class="tag-list">Tags:&nbsp; 
                       <c:if test="${not empty anls.tags }">
                         <c:forEach var="tag" items="${anls.tags }">
-                          <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+                          <div class="tag-element-outer">
+                            <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+                          </div>
                         </c:forEach>
                       </c:if>
-                      <!-- a class="tag-element" href="javascript:void(0);">Football</a>
-                      <a class="tag-element" href="javascript:void(0);">Money</a>
-                      <a class="tag-element" href="javascript:void(0);">Madrid</a-->
                     </span>
                   </p>
                   <p class="description">

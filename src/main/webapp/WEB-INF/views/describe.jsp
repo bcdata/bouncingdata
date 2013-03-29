@@ -21,8 +21,8 @@
 <div id="main-content" class="editor-container">  
   <div class="top-bar">
     <div class="left-buttons">
-      <button class="editor-button">Clone</button>
-      <button class="editor-button">Cancel</button>
+      <button class="editor-button" id="editor-clone">Clone</button>
+      <button class="editor-button" id="editor-cancel">Cancel</button>
     </div>
     <div class="editor-nav-panel">
       <a class="editor-nav" id="describe-back" href="<c:url value="/editor/anls/${anls.guid }/size" />">Back</a>
@@ -68,7 +68,9 @@
             <span class="tag-list">
               <c:if test="${not empty anls.tags }">
                 <c:forEach items="${anls.tags }" var="tag">
-                  <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+                  <div class="tag-element-outer">
+                    <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+                  </div>
                 </c:forEach>  
               </c:if>
             </span>

@@ -1596,6 +1596,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public List<Analysis> getMostPopularAnalyses() {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Analysis.class);
+		q.setFilter("published == true");
 		q.setOrdering("score DESC");
 		try {
 			List<Analysis> analyses = (List<Analysis>) q.execute();
@@ -1725,7 +1726,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			Analysis anls = pm.getObjectById(Analysis.class, anlsId);
 			Tag tag = pm.getObjectById(Tag.class, tagId);
 			anls.getTags().add(tag);
-			pm.makePersistent(anls);
+			//pm.makePersistent(anls);
 			tx.commit();
 		} finally {
 			if (tx.isActive())
@@ -1762,7 +1763,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			Analysis anls = pm.getObjectById(Analysis.class, anlsId);
 			Tag tag = pm.getObjectById(Tag.class, tagId);
 			anls.getTags().remove(tag);
-			pm.makePersistent(anls);
+			tag.getAnalyses().remove(anls);
 			tx.commit();
 		} finally {
 			if (tx.isActive())

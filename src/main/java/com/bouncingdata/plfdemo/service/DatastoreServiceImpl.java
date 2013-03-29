@@ -555,12 +555,12 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   @Override
-  public void removeAnalysisTag(int anlsId, Tag tag) {
-    
+  public void removeAnalysisTag(Analysis anls, Tag tag) {
+    dataStorage.deleteAnalysisTag(anls.getId(), tag.getId());
   }
   
   @Override
-  public void removeAnalysisTags(int anlsId, List<Tag> tags) {
+  public void removeAnalysisTags(Analysis anls, List<Tag> tags) {
     
   }
   
@@ -571,9 +571,9 @@ public class DatastoreServiceImpl implements DatastoreService {
     return dataStorage.getAnalysisByTag(t.getId());
   }
 
-@Override
-public void logUserAction(int userId, int action, String data) {
-	 dataStorage.logUserAction(userId, action,data);
-	
-}
+  @Override
+  public void logUserAction(int userId, int action, String data) {
+    dataStorage.logUserAction(userId, action, data);
+
+  }
 }

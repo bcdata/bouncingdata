@@ -119,7 +119,7 @@ public class MainController {
   
   @RequestMapping(value = "/main/createapp", method = RequestMethod.POST)
   @ResponseBody
-  public BcDataScript createApplication(@RequestParam(value = "appname", required = true) String appname,
+  public BcDataScript createApplication(@RequestParam(value = "name", required = true) String name,
       @RequestParam(value = "language", required = true) String language,
       @RequestParam(value = "description", required = true) String description,
       @RequestParam(value = "code", required = true) String code, 
@@ -131,18 +131,11 @@ public class MainController {
       logger.debug("Can't get the user. Skip application creation.");
       return null;
     }
-    
+
     ObjectMapper logmapper = new ObjectMapper();
-	 String data = logmapper.writeValueAsString(new String[] {"7",
-			 													appname,
-			 													language,
-			 													description,
-			 													code,
-			 													String.valueOf(isPublic),
-			 													tags,
-			 													type});		   	 
-	 datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.CREATE_APP,data);
-    
+    String data = logmapper.writeValueAsString(new String[] { "7", name, language, description, code, String.valueOf(isPublic), tags, type });
+    datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.CREATE_APP, data);
+
     int userId = user.getId();
     
     Set<Tag> tagSet = null;
@@ -170,7 +163,7 @@ public class MainController {
         }
         
       } catch (IOException e) {
-        logger.debug("Can't parse the tags for analysis name {}, user id {}", appname, userId);
+        logger.debug("Can't parse the tags for analysis name {}, user id {}", name, userId);
         logger.debug("Exception details", e);
       }
     }
@@ -185,7 +178,7 @@ public class MainController {
       script.setType("analysis");
     } else return null;
     
-    script.setName(appname);
+    script.setName(name);
     script.setDescription(description);
     script.setLanguage(language);
     script.setLineCount(Utils.countLines(code));
@@ -201,11 +194,11 @@ public class MainController {
     try { 
       guid = datastoreService.createBcDataScript(script, type);
     } catch (Exception e) {
-      logger.error("Failed to create application " + appname + " for user " + user.getUsername(), e);
+      logger.error("Failed to create application " + name + " for user " + user.getUsername(), e);
     }
     
     if (guid == null) {
-      logger.error("Can't get the guid of application {} so the code cannot saved", appname);
+      logger.error("Can't get the guid of application {} so the code cannot saved", name);
       return null;
     }
     

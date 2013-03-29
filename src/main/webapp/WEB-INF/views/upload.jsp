@@ -17,7 +17,7 @@
 <div id="main-content" class="upload-container">
   <div class="top-bar">
     <div class="left-buttons">
-      <button class="close-button">Close</button>
+      <button class="close-button" id="upload-close">Close</button>
     </div>
     <div class="upload-nav-panel">
       <a class="upload-nav" id="upload-submit" href="javascript:void(0)">Submit</a>

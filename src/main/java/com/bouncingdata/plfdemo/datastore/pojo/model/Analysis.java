@@ -67,5 +67,4 @@ public class Analysis extends BcDataScript {
     this.thumbnail = thumbnail;
   }
   
-  
 }
