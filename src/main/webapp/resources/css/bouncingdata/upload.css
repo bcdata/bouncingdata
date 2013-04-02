@@ -108,3 +108,13 @@
 .upload-container .description-panel .tag-set {
   margin-top: 10px;
 }
+
+#schema-table .column-description, #schema-table .column-name {
+  border: 1px solid #CCC;
+  padding: 2px;
+  width: 95%;
+}
+
+#schema-table td input:focus {
+  border-color: #4D90FE;
+}

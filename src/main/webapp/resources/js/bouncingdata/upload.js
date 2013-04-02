@@ -51,8 +51,8 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     var tableHtml = [];
     for (index in detectedSchema) {
       var column = detectedSchema[index];
-      tableHtml[index] = '<tr detected="' + column['typeName'] + '"><td>' + column['name'] + '</td><td>'
-          + '<select class="column-type-select"><option value="Boolean">Boolean</option>'
+      tableHtml[index] = '<tr colname="' + column['name'] + '" detected="' + column['typeName'] + '"><td><input type="text" class="column-name" value="' 
+          + column['name'] + '"/></td><td><select class="column-type-select"><option value="Boolean">Boolean</option>'
           + '<option value="Integer">Integer</option><option value="Long">Long</option>'
           + '<option value="Double">Double</option><option value="String">String</option>'
           + '</select></td><td><input type="text" class="column-description" /></td></tr>'
@@ -65,8 +65,9 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
       $('select.column-type-select option:selected', $(this)).css('color', 'green');
     });
     
-    $('#recommended-schema').click(function() {
+    $('#reset-schema').click(function() {
       $('#schema-table tr').each(function() {
+        $('intput.column-name', $(this)).val($(this).attr('colname'));
         $('select.column-type-select', $(this)).val($(this).attr('detected'));
       });
     });

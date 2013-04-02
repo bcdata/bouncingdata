@@ -3,7 +3,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <script>
-  com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
+  //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
   var anls = {
     guid: '${anls.guid}',
     user: '${anls.user.username}',

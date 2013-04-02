@@ -47,7 +47,7 @@
                 <script>
                   var data = ${data};
                   var $table = $('#data-preview');
-                  com.bouncingdata.Workbench.renderDatatable(data, $table);
+                  com.bouncingdata.Utils.renderDatatable(data, $table);
                 </script>
               </c:when>
               <c:otherwise>
@@ -70,15 +70,16 @@
             <table id="schema-table" ticket="${ticket }">  
               <thead>
                 <tr>
-                  <th><strong>Column Name</strong></th>
+                  <th width="30%"><strong>Column Name</strong></th>
                   <th><strong>Data Type</strong></th>
-                  <th><strong>Description</strong></th>
+                  <th width="55%"><strong>Description</strong></th>
                 </tr>
               </thead>
               <tbody></tbody>           
             </table>
           </div>
-          <button id="recommended-schema">Recommended schema</button>
+          <br/>
+          <button id="reset-schema">Reset schema</button>
         </div>
         <div id="schema-tab-reference" class="ui-tabs-hide">
           <div class="reference-form">

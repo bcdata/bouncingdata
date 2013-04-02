@@ -52,12 +52,12 @@
                     <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
                   </a>
                   <div class="small-thumbnail">
-                    <a href="<c:url value="/dataset/${dts.guid}" />">
+                    <a href="<c:url value="/dataset/view/${dts.guid}" />">
                       <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
                     </a>
                   </div>
                   <p class="side-item-title">
-                    <a href="<c:url value="/dataset/${dts.guid}" />"><strong>${dts.name}</strong></a>
+                    <a href="<c:url value="/dataset/view/${dts.guid}" />"><strong>${dts.name}</strong></a>
                   </p>
                   <p class="side-item-author">
                     <span>by ${dts.user.username }</span>
@@ -114,12 +114,12 @@
                     <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
                   </a>
                   <div class="small-thumbnail">
-                    <a href="<c:url value="/dataset/${dts.guid}" />">
+                    <a href="<c:url value="/dataset/view/${dts.guid}" />">
                       <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
                     </a>
                   </div>
                   <p class="side-item-title">
-                    <a href="<c:url value="/dataset/${dts.guid}" />"><strong>${dts.name}</strong></a>
+                    <a href="<c:url value="/dataset/view/${dts.guid}" />"><strong>${dts.name}</strong></a>
                   </p>
                   <p class="side-item-author">
                     <span>by ${dts.user.username }</span>

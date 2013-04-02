@@ -358,16 +358,20 @@ public class DatasetController {
       @RequestParam(value = "description", required = false) String description, Principal principal) {
     
     User user = (User) ((Authentication)principal).getPrincipal();
+    
     try {
-    	
-		 ObjectMapper logmapper = new ObjectMapper();
-		    String data;
-		data = logmapper.writeValueAsString(new String[] {"4",ticket,schema,name,description});
-		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.PERSIST_DATASET,data);
-	}catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+
+      ObjectMapper logmapper = new ObjectMapper();
+      String data;
+      data = logmapper.writeValueAsString(new String[] { "4", ticket, schema,
+          name, description });
+      datastoreService.logUserAction(user.getId(),
+          UserActionLog.ActionCode.PERSIST_DATASET, data);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
     // check if the guid is valid and temp. file exists
     File tempDataFile = new File(logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat");
     if (!tempDataFile.isFile()) {

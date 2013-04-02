@@ -34,7 +34,7 @@ a:hover {
 }
 
 #page .ui-widget input, #page .ui-widget select, .ui-widget textarea, .ui-widget button {
-  font-size: 0.9em;
+  /*font-size: 0.9em;*/
 }
 
 div.clear {
@@ -56,7 +56,7 @@ div.clear {
 #page .header-container {
   background: none repeat top left #F1F1F1;
   clear: both;  
-  height: 50px;
+  height: 44px;
   width: 100%;
   z-index: 1000;
   border-bottom: 1px solid #E2E2E2;
@@ -69,7 +69,7 @@ div.clear {
 }
 
 .header-container .header-content {
-  padding: 10px 0;
+  padding: 8px 0;
   font-family: Verdana, Arial, sans-serif;
 }
 
