@@ -80,6 +80,10 @@
   border: 1px solid #E2E2E2;
 }
 
+.analysis-container#main-content .right-content #related-tabs {
+  border: 1px solid #E2E2E2;
+}
+
 .anls-dashboard .viz-container {
   border: 1px none;
   background: none repeat scroll left top #FFFFFF;

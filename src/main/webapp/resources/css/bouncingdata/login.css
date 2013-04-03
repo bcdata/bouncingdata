@@ -57,6 +57,10 @@ div.clear {
   color: #333333; 
 }
 
+.login-form form input#username:focus, .login-form form input#password:focus , .register-form form input.input-field:focus {
+  border-color: #4D90FE;
+}
+
 .login-form .login-actions input.ui-button, .register-form .reg-actions input.ui-button {
   padding: 0.3em 1.4em;
 }

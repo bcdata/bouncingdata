@@ -97,15 +97,17 @@ public class DatasetController {
   }
   
   @RequestMapping(value="/upload/schema", method = RequestMethod.POST)
-  public String getSchemaPage(@RequestParam(value = "file", required = false) MultipartFile file,
-      @RequestParam(value = "fileUrl", required = false) String fileUrl, WebRequest request, 
-      ModelMap model, Principal principal) {
+  public String getSchemaPage(@RequestParam(value="file", required=false) MultipartFile file,
+      @RequestParam(value="fileUrl", required=false) String fileUrl, 
+      @RequestParam(value="firstRowAsHeader", required=false) String firstRowAsHeader,
+      @RequestParam(value="delimiter", required=false) String delimiter, ModelMap model, Principal principal) {
+    
+    User user = (User) ((Authentication) principal).getPrincipal();
+    ObjectMapper mapper = new ObjectMapper();
     
     try {
-      User user = (User) ((Authentication) principal).getPrincipal();
-      ObjectMapper logmapper = new ObjectMapper();
       String data;
-      data = logmapper.writeValueAsString(new String[] { "1", fileUrl });
+      data = mapper.writeValueAsString(new String[] { "1", fileUrl });
       datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.GET_SCHEMA_PAGE, data);
     } catch (Exception e) {
       // TODO Auto-generated catch block
@@ -146,7 +148,7 @@ public class DatasetController {
     String tempDataFilePath = logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat";
     File tempDataFile = new File(tempDataFilePath);
     
-    ObjectMapper mapper = new ObjectMapper();
+    
     try {
       if (!tempDataFile.getParentFile().isDirectory()) {
         tempDataFile.getParentFile().mkdirs();
@@ -288,15 +290,14 @@ public class DatasetController {
     User user = (User) ((Authentication)principal).getPrincipal();
     
     try {
-    	
-		 ObjectMapper logmapper = new ObjectMapper();
-		    String data;
-		data = logmapper.writeValueAsString(new String[] {"1",type});
-		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.SUBMIT_DATASDET,data);
-	}catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+      ObjectMapper logmapper = new ObjectMapper();
+      String data;
+      data = logmapper.writeValueAsString(new String[] { "1", type });
+      datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.SUBMIT_DATASDET, data);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     
     String filename = file.getOriginalFilename();    
     filename = filename.substring(0, filename.lastIndexOf("."));
@@ -358,15 +359,11 @@ public class DatasetController {
       @RequestParam(value = "description", required = false) String description, Principal principal) {
     
     User user = (User) ((Authentication)principal).getPrincipal();
+    ObjectMapper mapper = new ObjectMapper();
     
     try {
-
-      ObjectMapper logmapper = new ObjectMapper();
-      String data;
-      data = logmapper.writeValueAsString(new String[] { "4", ticket, schema,
-          name, description });
-      datastoreService.logUserAction(user.getId(),
-          UserActionLog.ActionCode.PERSIST_DATASET, data);
+      String data = mapper.writeValueAsString(new String[] { "4", ticket, schema, name, description });
+      datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.PERSIST_DATASET, data);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -403,7 +400,6 @@ public class DatasetController {
     
     // parse the schema string
     try {
-      ObjectMapper mapper = new ObjectMapper();
       JsonNode schemaArray = mapper.readTree(schema);
       for (int i = 0; i < schemaArray.size(); i++) {
         JsonNode element = schemaArray.get(i);

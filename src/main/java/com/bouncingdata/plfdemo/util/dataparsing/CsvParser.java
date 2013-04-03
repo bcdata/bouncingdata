@@ -21,6 +21,20 @@ public class CsvParser implements DataParser {
   
   private Logger logger = LoggerFactory.getLogger(CsvParser.class);
   
+  /**
+   * Custom options for CSV Parser
+   */
+  private boolean firstRowAsHeader;
+  private String delimiter;
+  
+  public void setFirstRowAsHeader(boolean header) {
+    this.firstRowAsHeader = header;
+  }
+  
+  public void setDelimiter(String delimiter) {
+    this.delimiter = delimiter;
+  }
+  
   protected CsvParser() {}
 
   @Override

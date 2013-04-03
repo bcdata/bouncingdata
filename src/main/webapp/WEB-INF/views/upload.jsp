@@ -44,20 +44,20 @@
           <h3>1. File Location</h3>
           <span>We support the following types: csv, xls, xlsx, txt, rdata</span>
           <div class="file-inner">
-            <label>Web Address</label>
+            <label for="file-url">Web Address</label>
             <input type="text" name="fileUrl" id="file-url" />
             <div style="font-size: 15px; margin: 5px 0; font-weight: bold;">Or</div>         
-            <label>Local File</label>
+            <label for="file">Local File</label>
             <input type="file" id="file" name="file" />
           </div>
         </div>
         <div class="options-section">
           <h3>2. Loading Options</h3>
           <div class="options-inner">
-            <label>Header</label>
-            <input type="checkbox" value="First row is header" /><br/><br/>
-            <label>Delimiter</label>
-            <select>
+            <label for="first-row-as-header">Header</label>
+            <input type="checkbox" id="first-row-as-header" checked="checked" name="firstRowAsHeader" />&nbsp;First row is header<br/><br/>
+            <label for="delimiter">Delimiter</label>
+            <select id="delimiter" name="delimiter">
               <option value="comma">Comma</option>
               <option value="tab">Tab</option>
               <option value="period">Period</option>

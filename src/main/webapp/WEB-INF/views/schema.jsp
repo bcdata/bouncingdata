@@ -82,32 +82,31 @@
           <button id="reset-schema">Reset schema</button>
         </div>
         <div id="schema-tab-reference" class="ui-tabs-hide">
-          <div class="reference-form">
-            <label>Web</label>
+          <form class="reference-form">
+            <label for="web-ref">Web</label>
             <input type="text" name="web-ref" id="web-ref" />
             <h3>Or</h3>
-            <label>Local</label>
+            <label for="file-ref">Local</label>
             <input type="file" name="file-ref" id="file-ref" />
-          </div>
-        </div>
-          
+          </form>
+        </div>         
       </div>  
     </div>
     <div class="description-panel-wrapper">
       <h3>2. Description</h3>
       <div class="description-panel">
         <div>
-          <label>Dataset Name</label>
+          <label for="name">Dataset Name</label>
           <input type="text" name="name" id="name" /><br><br>
-          <label>Description</label>
+          <label for="description">Description</label>
           <textarea name="description" id="description" style="width: 100%;"></textarea>
         </div>
         <div class="tag-set" id="tag-set">
-          <span class="tag-list">
-            <a class="tag-element" href="javascript:void(0);">Football</a>
-            <a class="tag-element" href="javascript:void(0);">Money</a>
-            <a class="tag-element" href="javascript:void(0);">Madrid</a>
-          </span>
+          <div class="tag-list">
+            <div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">Football</a></div>
+            <div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">Money</a></div>
+            <div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">Madrid</a></div>
+          </div>&nbsp;
           <a class="add-tag-button>" href="javascript:void()">
             Add tag
           </a>

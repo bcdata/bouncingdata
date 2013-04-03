@@ -57,15 +57,11 @@
 }
 
 .upload-container input#file-url {
-  border: 1px solid #DDDDDD;
+  border: 1px solid #CCC;
   height: 16px;
   padding: 4px;
   width: 500px;
 }
-
-.upload-container input#file-url:focus {
-  border-color: #4D90FE;
-} 
 
 .upload-container .file-inner, .upload-container .options-inner {
   margin: 10px 0;
@@ -94,15 +90,16 @@
   border: 1px solid #DDD;
 }
 
-.upload-container .description-panel #name {
-  border: 1px solid #DDD;
+.upload-container .schema-panel .reference-form input#web-ref {
+  border: 1px solid #CCC;
   width: 300px;
-  padding: 4px;
-  width: 500px;
+  padding: 3px;
 }
 
-.upload-container .description-panel #name:focus {
-  border-color: #4D90FE;;
+.upload-container .description-panel #name {
+  border: 1px solid #CCC;
+  padding: 3px;
+  width: 500px;
 }
 
 .upload-container .description-panel .tag-set {
@@ -115,6 +112,20 @@
   width: 95%;
 }
 
-#schema-table td input:focus {
+.upload-container input#file-url:focus, #schema-table td input:focus, .upload-container .schema-panel input#web-ref:focus, .upload-container .description-panel #name:focus {
   border-color: #4D90FE;
+}
+
+.upload-container .schema-panel ul.ui-tabs-nav {
+  float: right;
+}
+
+.upload-container .description-panel label {
+  display: inline-block;
+  width: 90px;
+}
+
+.upload-container .schema-panel .reference-form label {
+  display: inline-block;
+  width: 60px;
 }

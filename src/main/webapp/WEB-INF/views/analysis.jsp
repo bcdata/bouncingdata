@@ -48,7 +48,7 @@
         </c:forEach>  
       </c:if>
       
-      </div>
+      </div>&nbsp;
       <c:if test="${isOwner }">
         <a class="add-tag-link" href="javascript:void(0);">
           Add tag

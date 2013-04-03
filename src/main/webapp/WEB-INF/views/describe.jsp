@@ -30,7 +30,7 @@
       <a class="editor-nav" id="describe-back" href="<c:url value="/editor/anls/${anls.guid }/size" />">Back</a>
       <a class="editor-nav" id="describe-publish" href="javascript:void(0);">Publish</a>
       <div style="text-align: right;">
-        <input type="checkbox" id="describe-ispublic" /> &nbsp;Public
+        <input type="checkbox" id="describe-ispublic" /> &nbsp;<label for="describe-ispublic">Public</label>
       </div>
     </div>
     <div class="editor-progress progress">
@@ -61,13 +61,13 @@
     <div class="detail-area">
       <form id="detail-form" class="detail-form" action="">
         <fieldset>
-          <strong><label for="name">Analysis name</label></strong>
-          <input type="text" name="name" id="name" value="${anls.name }">
-          <strong><label for="description">Description</label></strong>
-          <textarea name="description" id="description">${anls.description }</textarea>
-          <strong><label for="tag-set">Tag: </label></strong>
+          <label for="name"><strong>Analysis name</strong></label>
+          <input type="text" name="name" id="name" value="${anls.name }"><br>
+          <label for="description"><strong>Description</strong></label>
+          <textarea name="description" id="description">${anls.description }</textarea><br>
+          <label for="tag-set"><strong>Tag: </strong></label>
           <div class="tag-set" id="tag-set">
-            <span class="tag-list">
+            <div class="tag-list">
               <c:if test="${not empty anls.tags }">
                 <c:forEach items="${anls.tags }" var="tag">
                   <div class="tag-element-outer">
@@ -75,7 +75,7 @@
                   </div>
                 </c:forEach>  
               </c:if>
-            </span>
+            </div>&nbsp; 
             <a class="add-tag-link" href="javascript:void(0);">
               Add tag
             </a>

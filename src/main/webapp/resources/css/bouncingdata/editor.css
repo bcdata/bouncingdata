@@ -368,9 +368,10 @@ body>div.resizable-iframe-fix, body>div.ui-draggable-iframeFix {
 }
 
 .editor-describe-container .detail-area .detail-form label {
-  display: block;
+  display: inline-block;
   margin-top: 10px;
   margin-botton: 4px;
+  width: 90px;
 }
 
 .editor-describe-container .detail-area .detail-form textarea#description {
@@ -381,8 +382,12 @@ body>div.resizable-iframe-fix, body>div.ui-draggable-iframeFix {
 }
 
 .editor-describe-container .detail-area .detail-form input#name {
-  border: 1px solid #DDD;
+  border: 1px solid #CCC;
   padding: 3px;
+}
+
+.editor-describe-container .detail-area .detail-form input#name:focus {
+  border-color: #4D90FE;
 }
 
 .editor-describe-container .detail-area .tag-set {

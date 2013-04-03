@@ -285,7 +285,7 @@ div.clear {
   float: left;
   width: 175px;
   height: 100%;
-  padding-top: 13px;
+  padding-top: 18px;
   z-index: 1001;
 }
 
@@ -504,10 +504,6 @@ body > .popup-container {
 
 #main-content .center-content .center-content-wrapper .comments-container {
   padding: 15px;
-}
-
-#main-content .right-content .ui-tabs {
-  border: 1px solid #E2E2E2;
 }
 
 .ui-tabs .ui-state-disabled { 
