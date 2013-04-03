@@ -85,7 +85,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
       var schema = [];
       $('tr', $schemaTableBody).each(function() {
         var $tds = $('td', $(this));
-        schema.push([$.trim($($tds[0]).text()), $('select.column-type-select', $tds[1]).val()])
+        schema.push([$.trim($('input', $tds[0]).val()), $('select.column-type-select', $tds[1]).val()])
       });
 
       var schemaStr = JSON.stringify(schema);
