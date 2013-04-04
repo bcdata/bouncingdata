@@ -90,16 +90,19 @@
   border: 1px solid #DDD;
 }
 
-.upload-container .schema-panel .reference-form input#web-ref {
-  border: 1px solid #CCC;
-  width: 300px;
-  padding: 3px;
-}
-
-.upload-container .description-panel #name {
+.upload-container .description-panel input#name, .upload-container .schema-panel .reference-form input#web-ref {
   border: 1px solid #CCC;
   padding: 3px;
   width: 500px;
+}
+
+.upload-container #schema-panel {
+  border: 0 none;
+  padding: 0;
+}
+
+.upload-container #schema-panel .ui-tabs-panel {
+  padding: 20px 0;
 }
 
 .upload-container .description-panel .tag-set {
@@ -120,12 +123,7 @@
   float: right;
 }
 
-.upload-container .description-panel label {
+.upload-container .description-panel label, .upload-container .schema-panel .reference-form label {
   display: inline-block;
   width: 90px;
-}
-
-.upload-container .schema-panel .reference-form label {
-  display: inline-block;
-  width: 60px;
 }

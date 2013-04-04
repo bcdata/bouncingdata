@@ -21,15 +21,19 @@ public class Dataset {
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   private int id;
+  
   @Persistent(table = "Dataset_tags")
   @Join(column = "id_OID")
   @Element(column = "id_EID")
   private Set<Tag> tags;
+  
   private String name;
   private String description;
+  
   @Index
   @Unique
   private String guid;
+  
   @Persistent(defaultFetchGroup="true", nullValue=NullValue.EXCEPTION)
   private User user;
   private String schema;
@@ -37,12 +41,16 @@ public class Dataset {
   private Date lastUpdate;
   private int rowCount;
   private boolean isActive;
+  
   @Persistent(defaultFetchGroup="true")
   private Scraper scraper;
   private boolean isPublic;
+  
   @Persistent(mappedBy="dataset")
   List<AnalysisDataset> relations;
-	
+  
+  @Persistent(defaultFetchGroup="true")
+  List<ReferenceDocument> refDocuments;
   
   public int getId() {
     return id;
@@ -134,6 +142,12 @@ public class Dataset {
   }
   public void setPublic(boolean isPublic) {
     this.isPublic = isPublic;
+  }
+  public List<ReferenceDocument> getRefDocuments() {
+    return refDocuments;
+  }
+  public void setRefDocuments(List<ReferenceDocument> refDocuments) {
+    this.refDocuments = refDocuments;
   }
     
 }

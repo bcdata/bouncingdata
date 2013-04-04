@@ -71,6 +71,29 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
         $('select.column-type-select', $(this)).val($(this).attr('detected'));
       });
     });
+    
+    var $refForm = $('#schema-tab-reference form.reference-form');
+    $('#file-ref', $refForm).change(function() {
+      var refFile = $(this).val();
+      if (!refFile) {
+        return;
+      }
+      // determine file type
+      if (refFile.indexOf('/') > -1) refFile = refFile.substring(refFile.lastIndexOf('/') + 1);
+      else if (refFile.indexOf('\\') > -1) refFile = refFile.substring(refFile.lastIndexOf('\\') + 1);
+
+      if (refFile.indexOf('.') < 0) {
+        alert('Only pdf file is supported');
+        $(this).val('');
+      }
+
+      var extension = refFile.substring(refFile.lastIndexOf('.') + 1);
+      if (extension.toLowerCase() != 'pdf') {
+        alert('Only pdf file is supported');
+        $(this).val('');
+      }
+    });
+    
 
     $('#schema-submit').click(function() {
       // submit schema to server to persist data
@@ -81,7 +104,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
         return;
       }
       var description = tinymce.editors[0].getContent();
-      
+      var isPublic = $('#dataset-ispublic').prop('checked');
       var schema = [];
       $('tr', $schemaTableBody).each(function() {
         var $tds = $('td', $(this));
@@ -98,7 +121,8 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
           ticket: ticket,
           name: name,
           schema: schemaStr,
-          description: description
+          description: description,
+          isPublic: isPublic
         },
         success: function(res) {
           console.debug(res);
@@ -107,10 +131,33 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
             return;
           }
           var guid = res['object'];
-          if (window.confirm("Your dataset \"" + name + "\" has been uploaded successfully. Open it now?")) {
-            //com.bouncingdata.Nav.fireAjaxLoad(ctx + '/dataset/view/' + guid, false);
-            window.location.href = ctx + '/dataset/view/' + guid; 
+          
+          // submit reference document
+          var refFile = $('#file-ref', $refForm).val();
+          
+          if (!refFile) {
+            window.alert("Your dataset \"" + name + "\" has been uploaded successfully.");
+            window.location.href = ctx + '/dataset/view/' + guid;
+          } else {
+            console.debug("Uploading reference document..");
+            $refForm.ajaxSubmit({
+              url: ctx + '/dataset/upload/ref/' + guid,
+              type: 'post',
+              success: function(res) {
+                if (res['code'] >= 0) {
+                  window.alert("Your dataset \"" + name + "\" has been uploaded successfully.");
+                } else {
+                  window.alert("Successfully upload dataset but failed to upload reference document.");                 
+                }
+                window.location.href = ctx + '/dataset/view/' + guid; 
+              },
+              error: function(res) {
+                window.alert("Successfully upload dataset but failed to upload reference document.");
+                window.location.href = ctx + '/dataset/view/' + guid;
+              }
+            });
           }
+          
         },
         error: function(msg) {
           console.debug('Failed to make request to persist data');

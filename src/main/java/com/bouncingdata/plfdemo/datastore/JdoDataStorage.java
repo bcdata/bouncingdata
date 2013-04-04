@@ -31,6 +31,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.ExecutionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Group;
 import com.bouncingdata.plfdemo.datastore.pojo.model.GroupAuthority;
+import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
@@ -339,12 +340,11 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 
 	@Override
 	public void createAnalysis(Analysis analysis) {
-		/* Start log */
 		PersistenceManager pm = getPersistenceManager();
 		User user = pm.getObjectById(User.class, analysis.getUser().getId());
 		Transaction tx = pm.currentTransaction();
 		analysis.setUser(user);
-		Set<Tag> tags = analysis.getTags();
+		/*Set<Tag> tags = analysis.getTags();
 		if (tags != null) {
 			Set<Tag> tagSet = new HashSet<Tag>();
 			for (Tag t : tags) {
@@ -356,15 +356,14 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 				}
 			}
 			analysis.setTags(tagSet);
-		}
+		}*/
 
 		try {
 			tx.begin();
 			pm.makePersistent(analysis);
 			tx.commit();
 		} finally {
-			if (tx.isActive())
-				tx.rollback();
+			if (tx.isActive()) tx.rollback();
 			pm.close();
 		}
 	}
@@ -373,31 +372,27 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public void deleteAnalysis(int analysisId) {
 		PersistenceManager pm = getPersistenceManager();
 		Analysis anls = pm.getObjectById(Analysis.class, analysisId);
-
 		Transaction tx = pm.currentTransaction();
 		try {
 			tx.begin();
 			pm.deletePersistent(anls);
 			tx.commit();
 		} finally {
-			if (tx.isActive())
-				tx.rollback();
+			if (tx.isActive()) tx.rollback();
 			pm.close();
 		}
 	}
 
 	private <T> void persistData(Collection<T> collection) {
 		if (collection != null && collection.size() > 0) {
-			PersistenceManager pm = getPersistenceManager();
-			
+			PersistenceManager pm = getPersistenceManager();			
 			Transaction tx = pm.currentTransaction();
 			try {
 				tx.begin();
 				pm.makePersistentAll(collection);
 				tx.commit();
 			} finally {
-				if (tx.isActive())
-					tx.rollback();
+				if (tx.isActive()) tx.rollback();
 				pm.close();
 			}
 		}
@@ -493,11 +488,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	@Override
 	public void createVisualization(Visualization visualization) {
 		PersistenceManager pm = getPersistenceManager();
-		User user = pm.getObjectById(User.class, visualization.getUser()
-				.getId());
+		User user = pm.getObjectById(User.class, visualization.getUser().getId());
 		visualization.setUser(user);
-		Analysis anls = pm.getObjectById(Analysis.class, visualization
-				.getAnalysis().getId());
+		Analysis anls = pm.getObjectById(Analysis.class, visualization.getAnalysis().getId());
 		visualization.setAnalysis(anls);
 		Transaction tx = pm.currentTransaction();
 		try {
@@ -505,8 +498,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			pm.makePersistent(visualization);
 			tx.commit();
 		} finally {
-			if (tx.isActive())
-				tx.rollback();
+			if (tx.isActive()) tx.rollback();
 			pm.close();
 		}
 	}
@@ -1103,8 +1095,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		Transaction tx = pm.currentTransaction();
 		User followerUser = pm.getObjectById(User.class, follower);
 		User targetUser = pm.getObjectById(User.class, target);
-		if (followerUser == null || targetUser == null)
-			return;
+		if (followerUser == null || targetUser == null) return;
 		Following f = new Following(targetUser, followerUser, new Date());
 		try {
 			tx.begin();
@@ -1170,8 +1161,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		try {
 			tx.begin();
 			pm.makePersistent(dataset);
-			if (scraper != null)
-				pm.makePersistent(scraper);
+			if (scraper != null) pm.makePersistent(scraper);
 			tx.commit();
 		} finally {
 			if (tx.isActive())
@@ -1189,8 +1179,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			User user = pm.getObjectById(User.class, ds.getUser().getId());
 			ds.setUser(user);
 			if (ds.getScraper() != null) {
-				Scraper scraper = pm.getObjectById(Scraper.class, ds
-						.getScraper().getId());
+				Scraper scraper = pm.getObjectById(Scraper.class, ds.getScraper().getId());
 				ds.setScraper(scraper);
 				scraper.getDatasets().add(ds);
 				scrapers.add(scraper);
@@ -1650,6 +1639,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	public List<Dataset> getMostPopularDatasets() {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Dataset.class);
+		q.setFilter("isPublic == true");
 		q.setOrdering("rowCount DESC");
 		try {
 			List<Dataset> datasets = (List<Dataset>) q.execute();
@@ -1962,8 +1952,24 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   		if (tx.isActive())
   			tx.rollback();
   		pm.close();
-  	}
-  	
+  	}  	
+  }
+  
+  @Override
+  public void addDatasetRefDocument(int dsId, ReferenceDocument refDoc) {
+    PersistenceManager pm = getPersistenceManager();  
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      pm.makePersistent(refDoc);
+      Dataset ds = pm.getObjectById(Dataset.class, dsId);
+      if (ds.getRefDocuments() == null) ds.setRefDocuments(new ArrayList<ReferenceDocument>());
+      ds.getRefDocuments().add(refDoc);
+      tx.commit();
+    } finally {
+      if (tx.isActive()) tx.rollback();
+      pm.close();
+    }
   }
 
 }

@@ -3,6 +3,7 @@ package com.bouncingdata.plfdemo.service;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +18,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bouncingdata.plfdemo.datastore.pojo.dto.Attachment;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.ExecutionResult;
@@ -273,6 +275,15 @@ public class ApplicationStoreService {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  public void storeReferenceDocument(String guid, String name, MultipartFile file) throws IOException {
+    File dir = new File(storePath + Utils.FILE_SEPARATOR + guid);
+    if (!dir.isDirectory()) {
+      dir.mkdirs(); 
+    }
+    File refFile = new File(storePath + Utils.FILE_SEPARATOR + guid + Utils.FILE_SEPARATOR + name);
+    FileUtils.writeByteArrayToFile(refFile, file.getBytes());
   }
   
 }

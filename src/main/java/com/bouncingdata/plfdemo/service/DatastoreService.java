@@ -16,6 +16,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
@@ -319,5 +320,7 @@ public interface DatastoreService {
   List<Analysis> getMoreRecentAnalyses(int lastId);
   
   public void logUserAction(int userId, int action,String data);
+  
+  public void addDatasetRefDocument(int datasetId, ReferenceDocument refDoc);
 
 }

@@ -41,6 +41,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.dto.QueryResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
@@ -356,7 +357,8 @@ public class DatasetController {
   public ActionResult persistDataset(@RequestParam(value = "ticket", required = true) String ticket,
       @RequestParam(value = "schema", required = true) String schema,
       @RequestParam(value = "name", required = true) String name, 
-      @RequestParam(value = "description", required = false) String description, Principal principal) {
+      @RequestParam(value = "description", required = false) String description, 
+      @RequestParam(value = "isPublic", required = true) boolean isPublic, Principal principal) {
     
     User user = (User) ((Authentication)principal).getPrincipal();
     ObjectMapper mapper = new ObjectMapper();
@@ -432,6 +434,7 @@ public class DatasetController {
       ds.setRowCount(data.size() - 1);
       ds.setGuid(guid);      
       ds.setSchema(datasetSchema);
+      ds.setPublic(isPublic);
       datastoreService.createDataset(ds);
     } catch (Exception e) {
       logger.debug("Failed to store datafile {} to datastore as {}", tempDataFile.getAbsolutePath(), dsFName);
@@ -680,6 +683,57 @@ public class DatasetController {
     } catch (Exception e) {
       res.sendError(500, "Sorry, we can't fulfil your download request due to internal error.");
     }
+  }
+  
+  /**
+   * Upload reference document, attach to dataset
+   * @param guid
+   * @param refFile
+   * @param refUrl
+   * @return
+   * @throws Exception
+   */
+  @RequestMapping(value="/upload/ref/{guid}", method=RequestMethod.POST)
+  public @ResponseBody ActionResult uploadReferenceDoc(@PathVariable String guid, @RequestParam(value="file-ref", required=false) MultipartFile refFile, 
+      @RequestParam(value="web-ref", required=false) String refUrl) throws Exception {
+    
+    if (refFile == null) {
+      return new ActionResult(0, "No reference file upload");
+    }
+    
+    Dataset dataset = datastoreService.getDatasetByGuid(guid);
+    if (dataset == null) {
+      return new ActionResult(-1, "Dataset not found");
+    }
+    
+    String filename = refFile.getOriginalFilename();
+    int index = filename.lastIndexOf(".");
+    String type = filename.substring(index + 1);
+    filename = filename.substring(0, index);
+    long size = refFile.getSize();
+    logger.debug("UPLOAD FILE: Received reference file {}. Size {}", filename, size);
+    if (size <= 0) {
+      return new ActionResult(-1, "Unknown file size or empty file.");
+    }
+    
+    if (!"pdf".equalsIgnoreCase(type)) {
+      return new ActionResult(-1, "Not PDF file");
+    }
+    
+    String refGuid = Utils.generateGuid();
+    
+    try {
+      appStoreService.storeReferenceDocument(guid, refGuid + ".pdf", refFile);
+    } catch (IOException e) {
+      logger.debug("Cannot store reference document file", e);
+      return new ActionResult(-1, "Failed to store file");
+    }
+    
+    // save to datastore
+    ReferenceDocument ref = new ReferenceDocument(filename, "pdf", refGuid, null);
+    datastoreService.addDatasetRefDocument(dataset.getId(), ref);
+    
+    return new ActionResult(0, "OK");
   }
   
 }

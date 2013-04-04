@@ -20,6 +20,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ExecutionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Group;
+import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
@@ -499,6 +500,8 @@ public interface DataStorage {
   List<Analysis> getMoreRecentAnalyses(int lastId, int maxNumber);
   
   public void logUserAction(int userId,int actionCode,String data);
+
+  void addDatasetRefDocument(int dsId, ReferenceDocument refDoc);
   
   
 }

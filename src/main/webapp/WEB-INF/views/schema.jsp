@@ -22,11 +22,15 @@
     <div class="schema-nav-panel">
       <a class="schema-nav" id="schema-back" href="<c:url value="/dataset/upload" />">Back</a>
       <a class="schema-nav" id="schema-submit" href="javascript:void(0)">Submit</a>
+      <div style="text-align: right;">
+        <input type="checkbox" id="dataset-ispublic" checked="checked" /> &nbsp;<label for="dataset-ispublic">Public</label>
+      </div>
     </div>
     <div class="progress upload-progress">
       <div class="progress-step upload-step upload-file">File</div>
       <div class="progress-step upload-step upload-schema progress-current">Schema & Description</div>
     </div>
+    <div class="clear"></div>
   </div>
   <div class="clear-bar"></div>
   <div class="schema-container center-content-container">
