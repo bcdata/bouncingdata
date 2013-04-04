@@ -449,11 +449,46 @@ Utils.prototype.getConsoleCaret = function(language) {
 }
 
 /**
+ * 
+ */
+Utils.prototype.renderDatatable = function(data, $table) {
+  if (!data || data.length <= 0) return;
+
+  //prepare data
+  var first = data[0];
+  var aoColumns = [];
+  for (index in first) {
+    aoColumns.push({ "sTitle": first[index]});
+  }
+
+  var aaData = [];
+  for (index in data) {
+    if (index == 0) continue;
+    var item = data[index];
+    var arr = [];
+    for (colIndex in item) {
+      arr.push(item[colIndex]);
+    }
+    aaData.push(arr);
+  }
+  var datatable = $table.dataTable({
+    "aaData": aaData,
+    "aoColumns": aoColumns,
+    "bJQueryUI": true,
+    "sPaginationType": "full_numbers"
+  });
+  var keys = new KeyTable( {
+    "table": $table[0],
+    "datatable": datatable
+  });
+}
+
+/**
  * Leverages the datatable plugin
  * @param data
  * @param $table
  */
-Utils.prototype.renderDatatable = function(data, $table) {
+Utils.prototype.renderDatatable_ = function(data, $table) {
   if (!data || data.length <= 0) return;
 
   //prepare data

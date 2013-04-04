@@ -112,6 +112,30 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
     }  
   }
   
+  public List<Object[]> getDatasetToListOfArray(String dataset) throws DataAccessException {
+    String sql = "SELECT * FROM `" + dataset + "`";
+    Connection conn = null;
+    Statement st = null;
+    ResultSet rs = null;
+    try {
+      conn = getDataSource().getConnection();
+      st = conn.createStatement();
+      rs = st.executeQuery(sql);
+      return Utils.resultSetToListOfArray(rs);
+      
+    } catch (SQLException e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Error when retrieved dataset {}", dataset);
+        logger.debug("Exception detail: ", e);
+      }
+      return null;
+    } finally {
+      if (rs != null) try { rs.close(); } catch (Exception e) {}
+      if (st != null) try { st.close(); } catch (Exception e) {}
+      if (conn != null) try { conn.close(); } catch (Exception e) {}
+    }  
+  }
+  
   public List<Object[]> getDatasetToListOfArray(String dataset, int begin, int maxNumber) throws DataAccessException {
     String sql = "SELECT * FROM `" + dataset + "` LIMIT " + begin + "," + maxNumber;
     Connection conn = null;
@@ -187,7 +211,7 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
    * 
    */
   @Override
-  public void persistDataset(String tableName, String[] headers, List<String[]> data) {
+  public void persistDataset(String tableName, String[] headers, List<Object[]> data) {
     Connection conn = null;
     Statement st = null;
     PreparedStatement pst = null;
@@ -228,7 +252,7 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       sql = insertSql.substring(0, insertSql.length() - 1);
       pst = conn.prepareStatement(sql);
       for (int i = 0; i < data.size(); i++) {
-        String[] rowData = data.get(i);
+        String[] rowData = (String[]) data.get(i);
         for (int j = 0; j < columnNum; j++) {
           pst.setString(i*columnNum + j + 1, rowData[j]);
         }

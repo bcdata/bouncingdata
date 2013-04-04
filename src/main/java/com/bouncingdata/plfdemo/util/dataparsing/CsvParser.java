@@ -38,12 +38,12 @@ public class CsvParser implements DataParser {
   protected CsvParser() {}
 
   @Override
-  public List<String[]> parse(InputStream is) throws Exception {
+  public List<Object[]> parse(InputStream is) throws Exception {
     CSVParser parser = new CSVParser(new InputStreamReader(is), CSVFormat.DEFAULT);
     List<CSVRecord> records = parser.getRecords();
     long lineNumber = parser.getLineNumber();
     logger.info("Reading CSV file: {} rows found.", lineNumber);
-    List<String[]> results = new ArrayList<String[]>();
+    List<Object[]> results = new ArrayList<Object[]>();
     boolean isFirst = true;
     int columnNum = 0;
     for (CSVRecord record : records) {

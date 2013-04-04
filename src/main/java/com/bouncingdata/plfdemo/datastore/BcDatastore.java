@@ -19,7 +19,7 @@ public interface BcDatastore {
    * @param headers
    * @param data
    */
-  void persistDataset(String tableName, String[] headers, List<String[]> data);
+  void persistDataset(String tableName, String[] headers, List<Object[]> data);
 
   /**
    * @param sql

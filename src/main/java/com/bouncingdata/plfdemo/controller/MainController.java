@@ -104,13 +104,18 @@ public class MainController {
   @ResponseBody
   public List<Analysis> getApplications(ModelMap model, Principal principal) {
     User user = (User) ((Authentication) principal).getPrincipal();
+    if (user == null) return null;
+    
     try {
-      if (user == null) return null;
-      int userId = user.getId();
       ObjectMapper logmapper = new ObjectMapper();
-  	 String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-  	 datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.APPLICATION,data);
-      return datastoreService.getAnalysisList(userId);
+      String data = logmapper.writeValueAsString(new String[] {"0"});         
+      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.APPLICATION,data);
+    } catch (Exception e) {
+      logger.debug("Failed to log action", e);
+    }
+
+    try {
+      return datastoreService.getAnalysisList(user.getId());
     } catch (Exception e) {
       logger.error("Failed to retrieve application list for user " + user.getUsername(), e);
       return null;
@@ -131,17 +136,22 @@ public class MainController {
       logger.debug("Can't get the user. Skip application creation.");
       return null;
     }
-
-    ObjectMapper logmapper = new ObjectMapper();
-    String data = logmapper.writeValueAsString(new String[] { "7", name, language, description, code, String.valueOf(isPublic), tags, type });
-    datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.CREATE_APP, data);
-
+    
+    ObjectMapper mapper = new ObjectMapper();
+    
+    try {  
+      String data = mapper.writeValueAsString(new String[] { "7", name, language, description, code, String.valueOf(isPublic), tags, type });
+      datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.CREATE_APP, data);
+    } catch (Exception e) {
+      logger.debug("Failed to log action", e);
+    }
+    
     int userId = user.getId();
     
     Set<Tag> tagSet = null;
     if (tags != null && !tags.isEmpty()) {
       tagSet = new HashSet<Tag>();
-      ObjectMapper mapper = new ObjectMapper();
+      
       try {
         
         ArrayNode tagArr = mapper.readValue(tags, ArrayNode.class);

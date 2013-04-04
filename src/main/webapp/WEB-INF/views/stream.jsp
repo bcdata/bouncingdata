@@ -133,12 +133,12 @@
       <div class="stream-container center-content-main">
         <div class="stream-filter">
           <span class="" style="float: left;">
-            <a href="#">All</a>&nbsp;&nbsp;|
-            <a href="#">Analysis</a>&nbsp;&nbsp;|
+            <a href="#">All</a>&nbsp;|&nbsp;
+            <a href="#">Analysis</a>&nbsp;|&nbsp;
             <a href="#">Dataset</a>
           </span>
           <span style="float: right;">
-            <a href="#">Recent</a>&nbsp;&nbsp;|
+            <a href="#">Recent</a>&nbsp;|&nbsp;
             <a href="#">Popular</a>
           </span>
         </div>

@@ -35,7 +35,7 @@ public class JdbcBcDatastoreTest extends AbstractJUnit38SpringContextTests {
   public void testPersistData() throws Exception {
     String tableName = "demo.testTable";
     String[] headers = {"username", "age", "job"};
-    List<String[]> data = new ArrayList<String[]>();
+    List<Object[]> data = new ArrayList<Object[]>();
     data.add(new String[] {"khi'em", "25", "developer"});
     data.add(new String[] {"adriano", "30", "striker"});
     data.add(new String[] {"sneijder", "28", "attacking midfielder"});
@@ -54,9 +54,9 @@ public class JdbcBcDatastoreTest extends AbstractJUnit38SpringContextTests {
     if (!file.isFile()) return;
     InputStream is = new FileInputStream(file);
     DataParser parser = DataParserFactory.getDataParser(FileType.EXCEL);
-    List<String[]> data = parser.parse(is);
+    List<Object[]> data = parser.parse(is);
     try {
-      jdbcBcDatastore.persistDataset(tableName, data.get(0), data.subList(1, data.size()));
+      jdbcBcDatastore.persistDataset(tableName, (String[])data.get(0), data.subList(1, data.size()));
     } catch (Exception e) {
       e.printStackTrace();
     }

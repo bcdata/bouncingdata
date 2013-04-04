@@ -26,10 +26,18 @@
       </form>
     </div>
     <div class="header-buttons">
-      <div class="guide-button-container">
-        <div class="guide-button">Learn</div>
-        <div class="guide-button">Help</div>
-        <div class="guide-button">Me</div>
+      <ul class="guide-button-container">
+        <li class="guide-button"><a href="javascript:void(0);">Learn</a></li>
+        <li class="guide-button"><a href="javascript:void(0);">Help</a></li>
+        <li class="guide-button"><a href="javascript:void(0);">Me</a></li>
+      </ul>
+      <div class="guide-button-submenu">
+        <div class="header-hidden-menu me-submenu" style="display: none;">
+          <ul>
+            <li>Profile</li>
+            <li>Logout</li>
+          </ul>
+        </div>
       </div>
       <div class="create-button-container">
         <div id="create-button" class="create-button">

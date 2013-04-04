@@ -20,5 +20,5 @@ public interface DataParser {
    * @return
    * @throws Exception
    */
-  public List<String[]> parse(InputStream is) throws Exception;
+  public List<Object[]> parse(InputStream is) throws Exception;
 }

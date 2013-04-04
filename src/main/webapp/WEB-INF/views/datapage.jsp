@@ -89,7 +89,7 @@
                 <script>
                   var data = ${data};
                   var $table = $('#data-table');
-                  com.bouncingdata.Workbench.renderDatatable(data, $table);
+                  com.bouncingdata.Utils.renderDatatable(data, $table);
                 </script>
               </c:when>
               <c:otherwise>

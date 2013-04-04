@@ -21,7 +21,7 @@ class ExcelParser implements DataParser {
   protected ExcelParser() {}
 
   @Override
-  public List<String[]> parse(InputStream is) throws Exception {
+  public List<Object[]> parse(InputStream is) throws Exception {
     // read excel file
     Workbook wb = WorkbookFactory.create(is);
     Sheet sheet = wb.getSheetAt(0);
@@ -35,13 +35,13 @@ class ExcelParser implements DataParser {
 
     int columnNum = lastCellNum - firstCellNum + 1;
     String[] headers = new String[columnNum];
-    List<String[]> result = null;
+    List<Object[]> result = null;
     for (int i = firstCellNum; i <= lastCellNum; i++) {
       Cell headerCell = firstRow.getCell(i);
       headers[i - firstCellNum] = getCellStringValue(headerCell);
     }
 
-    result = new ArrayList<String[]>();
+    result = new ArrayList<Object[]>();
     result.add(headers);
 
     // now the data range is from [firstRow+1, firstCell] -> [lastRow, lastCell]

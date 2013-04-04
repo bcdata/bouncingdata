@@ -54,8 +54,8 @@
         <div class="options-section">
           <h3>2. Loading Options</h3>
           <div class="options-inner">
-            <label for="first-row-as-header">Header</label>
-            <input type="checkbox" id="first-row-as-header" checked="checked" name="firstRowAsHeader" />&nbsp;First row is header<br/><br/>
+            <label for="first-row-as-header">First row is header</label>
+            <input type="checkbox" id="first-row-as-header" checked="checked" name="firstRowAsHeader" /><br/><br/>
             <label for="delimiter">Delimiter</label>
             <select id="delimiter" name="delimiter">
               <option value="comma">Comma</option>

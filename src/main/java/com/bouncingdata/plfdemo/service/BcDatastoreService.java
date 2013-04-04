@@ -28,6 +28,10 @@ public class BcDatastoreService {
     return jdbcBcDatastore.getDatasetToList(dataset);
   }
   
+  public List<Object[]> getDatasetToListOfArray(String dataset) throws Exception {
+    return jdbcBcDatastore.getDatasetToListOfArray(dataset);
+  }
+  
   public List<Map> getDatasetToList(String dataset, int begin, int maxNumber) throws Exception {
     return jdbcBcDatastore.getDatasetToList(dataset, begin, maxNumber);
   }
@@ -52,7 +56,7 @@ public class BcDatastoreService {
     return jdbcBcDatastore.query(query);
   }
   
-  public void storeData(String dsFullName, String[] headers, List<String[]> data) throws Exception {
+  public void storeData(String dsFullName, String[] headers, List<Object[]> data) throws Exception {
     for (int i = 0; i < headers.length; i++) {
       headers[i] = headers[i].trim();
     }

@@ -1,6 +1,7 @@
 package com.bouncingdata.plfdemo.controller;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,14 +31,23 @@ public class ActivityController {
   @Autowired
   private DatastoreService datastoreService;
   
-  @RequestMapping(value={"/", "/stream", "/home"}, method=RequestMethod.GET)
-  public String getActivityStream(ModelMap model, Principal principal) {
+  @RequestMapping(value={"/", "/{filter}"}, method=RequestMethod.GET)
+  public String getActivityStream(@PathVariable String filter, ModelMap model, Principal principal) {
     try {
+      
+      if (!Arrays.asList(new String[] {"stream", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
+        return "error";
+      }
+      
       User user = (User) ((Authentication)principal).getPrincipal();
       
-      ObjectMapper logmapper = new ObjectMapper();
-      String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
       
       List<Activity> activities = datastoreService.getRecentFeed(user.getId());
       model.addAttribute("activities", activities);

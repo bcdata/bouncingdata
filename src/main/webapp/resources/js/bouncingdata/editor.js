@@ -144,11 +144,6 @@ Editor.prototype.initSize = function(anls, dbDetail) {
     });
     
     $('button#editor-cancel').click(function() {
-      var code = me.editor.getSession().getDocument().getValue();
-      if (!code) {
-        // remove anls
-        
-      }
       window.location.href = ctx + '/stream';
     });
     
@@ -259,11 +254,6 @@ Editor.prototype.initDescribe = function(anls) {
     });
     
     $('button#editor-cancel').click(function() {
-      var code = me.editor.getSession().getDocument().getValue();
-      if (!code) {
-        // remove anls
-        
-      }
       window.location.href = ctx + '/stream';
     });
     

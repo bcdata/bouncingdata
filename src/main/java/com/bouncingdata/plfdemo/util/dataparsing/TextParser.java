@@ -22,9 +22,9 @@ public class TextParser implements DataParser {
   protected TextParser() {};
 
   @Override
-  public List<String[]> parse(InputStream is) throws Exception {
+  public List<Object[]> parse(InputStream is) throws Exception {
     Scanner scanner = new Scanner(is);
-    List<String[]> results = new ArrayList<String[]>();
+    List<Object[]> results = new ArrayList<Object[]>();
     boolean isFirst = true;
     int columnNum = 0;
     while (scanner.hasNextLine()) {
@@ -57,7 +57,7 @@ public class TextParser implements DataParser {
   public static void main(String[] args) throws Exception {
     File file = new File("/home/khiem/Downloads/NASDAQ.txt");
     TextParser parser = new TextParser();
-    List<String[]> results = parser.parse(new FileInputStream(file));
+    List<Object[]> results = parser.parse(new FileInputStream(file));
     System.out.println("Number of line: " + results.size());
   }
 

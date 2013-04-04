@@ -106,12 +106,10 @@ public class DatasetController {
     ObjectMapper mapper = new ObjectMapper();
     
     try {
-      String data;
-      data = mapper.writeValueAsString(new String[] { "1", fileUrl });
+      String data = mapper.writeValueAsString(new String[] { "1", fileUrl });
       datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.GET_SCHEMA_PAGE, data);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.debug("Failed to log action", e);
     }
 	  
     if (file == null && (fileUrl == null || StringUtils.isEmptyOrWhitespaceOnly(fileUrl))) {
@@ -148,14 +146,13 @@ public class DatasetController {
     String tempDataFilePath = logDir + Utils.FILE_SEPARATOR + ticket + Utils.FILE_SEPARATOR + ticket + ".dat";
     File tempDataFile = new File(tempDataFilePath);
     
-    
     try {
       if (!tempDataFile.getParentFile().isDirectory()) {
         tempDataFile.getParentFile().mkdirs();
       }
       
-      List<String[]> data = parser.parse(file.getInputStream());
-      List<Map> dataMapList = new ArrayList<Map>();
+      List<Object[]> data = parser.parse(file.getInputStream());
+      /*List<Map> dataMapList = new ArrayList<Map>();
       String[] header = data.get(0);
       int maxRow = Math.min(100, data.size() - 1);
       for (int i = 1; i <= maxRow; i++) {
@@ -167,13 +164,15 @@ public class DatasetController {
         }
         dataMapList.add(row);
       }
-      model.addAttribute("data", mapper.writeValueAsString(dataMapList));
+      model.addAttribute("data", mapper.writeValueAsString(dataMapList));*/
       
       ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
-      for (String[] row : data) {
+      for (Object[] row : data) {
         os.writeObject(row);
       }
       os.close();
+      
+      model.addAttribute("data", mapper.writeValueAsString(data));
       
     } catch (Exception e) {
       logger.debug("Failed to write to temporary datafile {}", tempDataFilePath);
@@ -283,6 +282,7 @@ public class DatasetController {
     return results;
   }
   
+  @Deprecated
   @RequestMapping(value="/up", method = RequestMethod.POST)
   public @ResponseBody ActionResult submitDataset(@RequestParam(value = "file", required = true) MultipartFile file,
       @RequestParam(value = "type", required = true) String type, ModelMap model, Principal principal) {
@@ -326,9 +326,9 @@ public class DatasetController {
         tempDataFile.getParentFile().mkdirs();
       }
       
-      List<String[]> data = parser.parse(file.getInputStream());
+      List<Object[]> data = parser.parse(file.getInputStream());
       ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
-      for (String[] row : data) {
+      for (Object[] row : data) {
         os.writeObject(row);
       }
       os.close();
@@ -365,8 +365,7 @@ public class DatasetController {
       String data = mapper.writeValueAsString(new String[] { "4", ticket, schema, name, description });
       datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.PERSIST_DATASET, data);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.debug("Failed to log action", e);
     }
     
     // check if the guid is valid and temp. file exists
@@ -505,6 +504,8 @@ public class DatasetController {
   @SuppressWarnings("rawtypes")
   @RequestMapping(value="/view/{guid}", method = RequestMethod.GET)
   public String viewDataPage(@PathVariable String guid, ModelMap model, Principal principal) {
+    User user = (User) ((Authentication) principal).getPrincipal();
+    ObjectMapper mapper = new ObjectMapper();
     try {
       Dataset ds = datastoreService.getDatasetByGuid(guid);
       if (ds == null) {
@@ -514,29 +515,28 @@ public class DatasetController {
       }
       
       try {
-        User user = (User) ((Authentication) principal).getPrincipal();
-        ObjectMapper logmapper = new ObjectMapper();
-        String data;
-        data = logmapper.writeValueAsString(new String[] { "1", guid });
+        String data = mapper.writeValueAsString(new String[] { "1", guid });
         datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.VIEW_DATAPAGE, data);
       } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        logger.debug("Failed to log action", e);
       }
       
       model.addAttribute("dataset", ds);
-      ObjectMapper mapper = new ObjectMapper();
+      
       if (ds.getRowCount() < 1000) {
-        List<Map> data = userDataService.getDatasetToList(ds.getName());
-          
+        //List<Map> data = userDataService.getDatasetToList(ds.getName());
+        List<Object[]> data = new ArrayList<Object[]>();
+        data.add(userDataService.getColumnNames(ds.getName()));
+        data.addAll(userDataService.getDatasetToListOfArray(ds.getName()));
         model.addAttribute("data", mapper.writeValueAsString(data));
       } else {
-        Map row = userDataService.getDatasetToList(ds.getName(), 0, 1).get(0);
+        /*Map row = userDataService.getDatasetToList(ds.getName(), 0, 1).get(0);
         String[] columns = new String[row.keySet().size()];
         int i = 0;
         for (Object s : row.keySet()) {
           columns[i++] = (String) s;
-        }
+        }*/
+        String[] columns = userDataService.getColumnNames(ds.getName());
         model.addAttribute("columns", mapper.writeValueAsString(columns));
         model.addAttribute("data", null);
         model.addAttribute("guid", guid);
