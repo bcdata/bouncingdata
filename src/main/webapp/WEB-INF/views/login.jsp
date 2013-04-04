@@ -49,7 +49,7 @@
             </c:if>
           </div>
           <div class="login-form">
-            <form name='f' action="<c:url value='/auth/j_spring_security_check' />" method='post'> 
+            <form name='f' action="<c:url value='/auth/security_check' />" method='post'> 
                 <label>Username</label>
                 <input class="input-field" type='text' name='j_username' id='username' maxlength="40"></input>
                 <label>Password</label>

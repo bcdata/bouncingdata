@@ -7,7 +7,7 @@
       <div>Welcome back <span style="font-weight: bold;"> 
           <sec:authentication property="principal.username" />
         </span>
-        <a style="color: blue;" href="<c:url value="/auth/j_spring_security_logout" />"> Logout</a>
+        <a style="color: blue;" href="<c:url value="/auth/j_spring_security_logout" />">Logout</a>
       </div>
     </sec:authorize>
   </div>
@@ -27,15 +27,14 @@
     </div>
     <div class="header-buttons">
       <ul class="guide-button-container">
-        <li class="guide-button"><a href="javascript:void(0);">Learn</a></li>
-        <li class="guide-button"><a href="javascript:void(0);">Help</a></li>
-        <li class="guide-button"><a href="javascript:void(0);">Me</a></li>
+        <li><a class="guide-button learn-button">Learn</a></li>
+        <li><a class="guide-button help-button">Help</a></li>
+        <li><a class="guide-button me-button">Me</a></li>
       </ul>
       <div class="guide-button-submenu">
-        <div class="header-hidden-menu me-submenu" style="display: none;">
+        <div class="header-hidden-menu me-menu">
           <ul>
-            <li>Profile</li>
-            <li>Logout</li>
+            <li><a class="header-submenu-item" href="<c:url value="/auth/security_logout" />">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -43,16 +42,16 @@
         <div id="create-button" class="create-button">
           <a id="create-button-link" class="create-button-link" href="javascript:void(0);">Create</a>
         </div>
-        <div class="create-submenu" style="display: none;">
+        <div class="create-submenu header-hidden-menu" style="display: none;">
           <ul>
             <li>
-              <a id="create-analysis" class="create-sub-item" href="javascript:void(0);">
+              <a id="create-analysis" class="create-sub-item header-submenu-item" href="javascript:void(0);">
                 <span class="sub-item-icon"></span>
               Analysis
               </a>
             </li>
-            <li><a id="create-dataset" class="create-sub-item" href="<c:url value="/dataset/upload" />"><span class="sub-item-icon"></span>Dataset</a></li>
-            <li><a id="create-scraper" class="create-sub-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
+            <li><a id="create-dataset" class="create-sub-item header-submenu-item" href="<c:url value="/dataset/upload" />"><span class="sub-item-icon"></span>Dataset</a></li>
+            <li><a id="create-scraper" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
           </ul>
         </div>
       </div>

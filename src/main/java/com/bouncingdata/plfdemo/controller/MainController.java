@@ -54,13 +54,17 @@ public class MainController {
   
   @Autowired
   private ApplicationExecutor appExecutor;
-        
+  
+  @RequestMapping(value="/", method=RequestMethod.GET)
+  public String defaultPage(ModelMap model, Principal principal) {
+    return "redirect:/stream";
+  }
+  
   @RequestMapping(value="/main/mystuff", method=RequestMethod.GET)
   public @ResponseBody Map<String,List> getMyStuff(ModelMap model, Principal principal) {
     User user = (User) ((Authentication) principal).getPrincipal();
     if (user == null) return null;
-   
-    
+     
     int userId = user.getId();
     Map<String,List> stuffs = new HashMap<String, List>();
     try {

@@ -27,8 +27,8 @@
     <sec:intercept-url pattern="/**" access="isAuthenticated()" />
     
     <sec:form-login login-page="/auth/login" default-target-url="/"
-      authentication-failure-url="/auth/failed" login-processing-url="/auth/j_spring_security_check"  />
-    <sec:logout logout-success-url="/auth/logout" logout-url="/auth/j_spring_security_logout" />  
+      authentication-failure-url="/auth/failed" login-processing-url="/auth/security_check"  />
+    <sec:logout logout-success-url="/auth/logout" logout-url="/auth/security_logout" />  
      
   </sec:http>
   

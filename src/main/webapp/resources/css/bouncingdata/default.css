@@ -75,7 +75,6 @@ div.clear {
 
 .header-container .header-content a, .header-container .header-content a:active, .header-container .header-content a:visited {
   text-decoration: none;
-  color: #000000;
 }
 
 .header-container .top-page-panel {
@@ -124,22 +123,8 @@ div.clear {
   background-position: -45px -61px;
 }
 
-.top-page-panel .create-button-container .create-submenu ul {
-  margin: 0;  
-}
-
-.top-page-panel .create-button-container .create-submenu {
-  background-color: #FFF;
-  color: #333;
-  z-index: 1;
-  position: relative;
-  border: 1px solid #CCC;
-}
-
-.top-page-panel .create-button-container a.create-sub-item {
-  /*background-color: #272727;*/
+.top-page-panel .header-buttons a.header-submenu-item {
   border: medium none;
-  /*color: #CCCCCC;*/
   display: block;
   float: none;
   font-size: 12px;
@@ -147,33 +132,67 @@ div.clear {
   height: 25px;
   line-height: 26px;
   margin: 0;
-  padding: 2px 6px;
+  padding: 2px 16px;
+  cursor: pointer;
+  min-width: 80px;
+  width: 80px; 
 }
 
-.top-page-panel .create-button-container a.create-sub-item:hover {
+.top-page-panel .header-buttons a.header-submenu-item:hover {
   background-color: #555555;
   color: #FFF;
 }
 
-.top-page-panel .create-button-container .create-submenu {
-  clear: both;  
+.top-page-panel .header-buttons .header-hidden-menu {
+  display: none;  
+  background-color: #FFF;
+  color: #333;
+  z-index: 1;
+  position: absolute;
+  border: 1px solid #CCC;
 }
 
-.top-page-panel .create-button-container .create-submenu ul {
-  list-style: none;
-  padding-left: 0px;
+.top-page-panel .header-buttons .me-menu.header-hidden-menu {
+  position: absolute;
+  right: 132px;
+  background-color: #FFF;
+  top: 30px;
+} 
+
+.top-page-panel .header-buttons a.guide-button.active {
+  background-color: #555555;
+  color: #FFF;  
+}
+
+.top-page-panel .header-buttons .header-hidden-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.top-page-panel .create-button-container .create-submenu {
+  clear: both;  
+  position: absolute;
+  top: 30px;
+  right: 0;
 }
 
 .top-page-panel .create-button-container .create-submenu span.sub-item-icon {
   width: 15px;
   height: 12px;
-  margin: 7px 7px 0 6px;
+  /*margin: 7px 7px 0 6px;*/
+  margin: 0;
 }
 
 #page .top-page-panel .header-buttons ul.guide-button-container {
   float: left;
   margin: 0;
   padding: 0;
+  list-style-type: none;
+}
+
+#page .top-page-panel .header-buttons ul.guide-button-container li {
+  display: inline;
 }
 
 #page .top-page-panel .header-buttons .guide-button-container .guide-button {
@@ -191,22 +210,12 @@ div.clear {
   color: #FFF;
 }
 
-#page .top-page-panel .header-buttons .guide-button-container .guide-button:first-child span {
-  border-right: 1px solid #DDD;
-  display: inline-block;
-}
-
-#page .top-page-panel .header-buttons .guide-button-container .guide-button:last-child span {
-  border-left: 1px solid #DDD;
-  display: inline-block;
-}
-
 #page .top-page-panel .header-buttons .create-button-container {
   /*float: left;
   margin-left: 20px;*/
   position: absolute; 
   right: 0;
-} 
+}
 
 #page .header-container .search-container .search-form {
   height: 30px;

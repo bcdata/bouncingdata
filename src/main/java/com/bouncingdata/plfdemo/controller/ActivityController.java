@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
@@ -31,11 +33,13 @@ public class ActivityController {
   @Autowired
   private DatastoreService datastoreService;
   
-  @RequestMapping(value={"/", "/{filter}"}, method=RequestMethod.GET)
-  public String getActivityStream(@PathVariable String filter, ModelMap model, Principal principal) {
-    try {
+  @RequestMapping(value={"/stream"}, method=RequestMethod.GET)
+  public String getActivityStream(WebRequest request, ModelMap model, Principal principal) {
+    try {    
+      String filter = request.getParameter("filter");
+      if (StringUtils.isEmpty(filter)) filter = "all";
       
-      if (!Arrays.asList(new String[] {"stream", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
+      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
         return "error";
       }
       

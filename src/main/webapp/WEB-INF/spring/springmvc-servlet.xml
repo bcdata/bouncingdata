@@ -17,8 +17,8 @@
   <context:annotation-config />
   <mvc:annotation-driven />
  
-  <!-- Forwards requests to the "/" resource to the "create" view -->
-  <mvc:view-controller path="/" view-name="home" />
+  <!-- Forwards requests to the "/" resource to the default view -->
+  <mvc:view-controller path="/" view-name="stream" />
   
   <!-- Resources mapping -->
   <mvc:resources mapping="/resources/**" location="/resources/, classpath:/META-INF/web-resources/" />
