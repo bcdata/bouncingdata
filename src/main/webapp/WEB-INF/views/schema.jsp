@@ -45,6 +45,7 @@
         <div class="clear"></div>
         <div id="schema-tab-view" class="ui-tabs-hide">
           <div class="data-preview-wrapper">
+            <span><strong>Note: </strong>This preview just show maximum first 100 rows from dataset.</span>
             <table id="data-preview"></table>
             <c:choose>
               <c:when test="${not empty data }">

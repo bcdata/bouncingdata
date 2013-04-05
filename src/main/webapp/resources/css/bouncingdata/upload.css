@@ -127,3 +127,7 @@
   display: inline-block;
   width: 90px;
 }
+
+.upload-container #schema-tab-view table#data-preview {
+  margin-top: 10px;
+}

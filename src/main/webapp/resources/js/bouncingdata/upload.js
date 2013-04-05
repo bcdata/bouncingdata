@@ -67,7 +67,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     
     $('#reset-schema').click(function() {
       $('#schema-table tr').each(function() {
-        $('intput.column-name', $(this)).val($(this).attr('colname'));
+        $('input.column-name', $(this)).val($(this).attr('colname'));
         $('select.column-type-select', $(this)).val($(this).attr('detected'));
       });
     });

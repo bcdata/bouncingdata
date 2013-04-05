@@ -173,7 +173,7 @@ public class DatasetController {
       }
       os.close();
       
-      model.addAttribute("data", mapper.writeValueAsString(data));
+      model.addAttribute("data", mapper.writeValueAsString(data.subList(0, Math.min(100, data.size()))));
       
     } catch (Exception e) {
       logger.debug("Failed to write to temporary datafile {}", tempDataFilePath);

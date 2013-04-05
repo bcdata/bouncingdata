@@ -58,7 +58,7 @@
                   <a href="<c:url value="/dataset/view/${dts.guid}" />"><strong>${dts.name}</strong></a>
                 </p>
                 <p class="side-item-author">
-                  <span>by ${dts.user.username }</span>
+                  <span>by <a href="#">${dts.user.username }</a></span>
                 </p>
                 <div class="clear"></div>
               </div>
@@ -97,7 +97,7 @@
                   <a href="<c:url value="/anls/${anls.guid}" />"><strong>${anls.name}</strong></a>
                 </p>
                 <p class="side-item-author">
-                  <span>by ${anls.user.username }</span>
+                  <span>by <a href="#">${anls.user.username }</a></span>
                 </p>
                 <div class="clear"></div>
               </div>
@@ -118,7 +118,7 @@
                   <a href="<c:url value="/dataset/view/${dts.guid}" />"><strong>${dts.name}</strong></a>
                 </p>
                 <p class="side-item-author">
-                  <span>by ${dts.user.username }</span>
+                  <span>by <a href="#">${dts.user.username }</a></span>
                 </p>
                 <div class="clear"></div>
               </div>
