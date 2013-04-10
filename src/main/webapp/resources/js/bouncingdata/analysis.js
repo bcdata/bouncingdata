@@ -76,26 +76,26 @@ Analysis.prototype.init = function(anls, dbDetail) {
 
     me.loadCommentList(guid);
 
-    var $score = $('.anls-header .anls-score');
+    var $score = $('.header .score');
     var score = $score.text();
     if (score > 0) {
-      $score.attr('class', 'anls-score anls-score-positive');
+      $score.attr('class', 'score score-positive');
     } else {
-      if (score == 0) $score.attr('class', 'anls-score');
-      else $score.attr('class', 'anls-score anls-score-negative');
+      if (score == 0) $score.attr('class', 'score');
+      else $score.attr('class', 'score score-negative');
     }
 
-    $('.anls-header a.anls-vote-up').click(function() {
+    $('.header a.anls-vote-up').click(function() {
       me.voteAnalysis(guid, 1);
       return false;
     });
 
-    $('.anls-header a.anls-vote-down').click(function() {
+    $('.header a.anls-vote-down').click(function() {
       me.voteAnalysis(guid, -1);
       return false;
     });
     
-    $('.anls-header a.anls-clone').click(function() {
+    $('.header a.anls-clone').click(function() {
       var data = {
         name : anls.name + '_clone',
         language : 'r',
@@ -174,7 +174,30 @@ Analysis.prototype.init = function(anls, dbDetail) {
         success: function(res) {
           console.debug(res);
           if (res['code'] < 0) return;
-          $('.tag-set .tag-list').append('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
+          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
+          $('.tag-set .tag-list').append($newTag);
+          $('.tag-remove', $newTag).click(function() {
+            var self = this;
+            if (anls.user != com.bouncingdata.Main.username) return;
+            var tag = $(this).prev().text();
+            $.ajax({
+              url: ctx + '/anls/' + guid + '/removetag',
+              type: 'post',
+              data: {
+                tag: tag
+              },
+              success: function(res) {
+                if (res['code'] < 0) {
+                  console.debug(res);
+                  return;
+                }
+                $(self).parent().remove();
+              },
+              error: function(res) {
+                console.debug(res);
+              }
+            });
+          });
         },
         error: function(res) {
           console.debug(res);

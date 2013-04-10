@@ -503,6 +503,11 @@ public interface DataStorage {
 
   void addDatasetRefDocument(int dsId, ReferenceDocument refDoc);
   
+  void addDatasetTags(int dtsId, List<Tag> tags);
+
+  void removeDatasetTag(int dtsId, int tagId);
+
+  void removeDatasetTags(int dtsId, List<Tag> tags);
   
 }
 

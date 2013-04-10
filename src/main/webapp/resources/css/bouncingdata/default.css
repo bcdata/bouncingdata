@@ -150,6 +150,7 @@ div.clear {
   z-index: 1;
   position: absolute;
   border: 1px solid #CCC;
+  padding: 4px 0;
 }
 
 .top-page-panel .header-buttons .me-menu.header-hidden-menu {
@@ -516,6 +517,7 @@ body > .popup-container {
   border-bottom: 1px solid #E2E2E2;
   border-top: 0 none;
   height: 0;
+  margin: 0 15px;
 }
 
 #main-content .center-content .center-content-wrapper .comments-container {

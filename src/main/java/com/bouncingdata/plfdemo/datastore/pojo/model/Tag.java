@@ -24,12 +24,23 @@ public class Tag {
   @Persistent(mappedBy="tags")
   Set<Analysis> analyses;
   
+  @Persistent(mappedBy="tags")
+  Set<Dataset> datasets;
+  
   public Set<Analysis> getAnalyses() {
     return analyses;
   }
   
   public void setAnalyses(Set<Analysis> analyses) {
     this.analyses = analyses;
+  }
+
+  public Set<Dataset> getDatasets() {
+    return datasets;
+  }
+
+  public void setDatasets(Set<Dataset> datasets) {
+    this.datasets = datasets;
   }
 
   public Tag() {

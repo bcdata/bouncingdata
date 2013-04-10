@@ -1972,4 +1972,55 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     }
   }
 
+  @Override
+  public void addDatasetTags(int dtsId, List<Tag> tags) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Dataset dts = pm.getObjectById(Dataset.class, dtsId);
+      Set<Tag> tagset = dts.getTags();
+      if (tagset == null) {
+        tagset = new HashSet<Tag>();
+        dts.setTags(tagset);
+      }
+      for (Tag tag : tags) {
+        Tag tagObj = pm.getObjectById(Tag.class, tag.getId());
+        if (tagObj != null) {
+          tagset.add(tagObj);
+          if (tagObj.getAnalyses() == null) tagObj.setAnalyses(new HashSet<Analysis>());
+          tagObj.getDatasets().add(dts);
+        }
+      }  
+      tx.commit();
+    } finally {
+      if (tx.isActive()) tx.rollback();
+      pm.close();
+    }
+  }
+
+  @Override
+  public void removeDatasetTag(int dtsId, int tagId) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Dataset dts = pm.getObjectById(Dataset.class, dtsId);
+      Tag tag = pm.getObjectById(Tag.class, tagId);
+      dts.getTags().remove(tag);
+      tag.getAnalyses().remove(dts);
+      tx.commit();
+    } finally {
+      if (tx.isActive())
+        tx.rollback();
+      pm.close();
+    }
+  }
+
+  @Override
+  public void removeDatasetTags(int dtsId, List<Tag> tags) {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

@@ -1,5 +1,6 @@
 package com.bouncingdata.plfdemo.datastore.pojo.model;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -148,6 +149,29 @@ public class Dataset {
   }
   public void setRefDocuments(List<ReferenceDocument> refDocuments) {
     this.refDocuments = refDocuments;
+  }
+  
+  public String getShortCreateAt() {
+    DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    return df.format(createAt);
+  }
+  
+  public String getShortLastUpdate() {
+    DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    return df.format(lastUpdate);
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    final Dataset another = (Dataset) obj;
+    return (another.getId() == id);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 7 * ("bouncingdata".hashCode()) * id;
   }
     
 }

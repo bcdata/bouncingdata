@@ -14,10 +14,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -42,6 +44,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
@@ -526,6 +529,10 @@ public class DatasetController {
       
       model.addAttribute("dataset", ds);
       
+      if (ds.getUser().getUsername().equals(user.getUsername())) {
+        model.addAttribute("isOwner", true);
+      } else model.addAttribute("isOwner", false);
+      
       if (ds.getRowCount() < 1000) {
         //List<Map> data = userDataService.getDatasetToList(ds.getName());
         List<Object[]> data = new ArrayList<Object[]>();
@@ -533,12 +540,6 @@ public class DatasetController {
         data.addAll(userDataService.getDatasetToListOfArray(ds.getName()));
         model.addAttribute("data", mapper.writeValueAsString(data));
       } else {
-        /*Map row = userDataService.getDatasetToList(ds.getName(), 0, 1).get(0);
-        String[] columns = new String[row.keySet().size()];
-        int i = 0;
-        for (Object s : row.keySet()) {
-          columns[i++] = (String) s;
-        }*/
         String[] columns = userDataService.getColumnNames(ds.getName());
         model.addAttribute("columns", mapper.writeValueAsString(columns));
         model.addAttribute("data", null);
@@ -735,5 +736,94 @@ public class DatasetController {
     
     return new ActionResult(0, "OK");
   }
+  
+  @RequestMapping(value="/{guid}/addtag", method=RequestMethod.POST)
+  public @ResponseBody ActionResult addTag(@PathVariable String guid, @RequestParam(value="tag", required=true) String tag, ModelMap model, Principal principal) throws Exception {
+    User user = (User) ((Authentication)principal).getPrincipal();
+    if (user == null) {
+      return new ActionResult(-1, "Error: User does not exist");
+    }
+    Dataset dts = datastoreService.getDatasetByGuid(guid);
+    if (dts == null) {
+      return new ActionResult(-1, "Error: Dataset does not exist");
+    }
+    
+    if (!user.getUsername().equals(dts.getUser().getUsername())) {
+      return new ActionResult(-1, "Error: User does not have permission to add tag");
+    }
+    
+    Tag tagObj = datastoreService.getTag(tag);
+    if (tagObj == null) {
+      return new ActionResult(-1, "Tag does not exist");
+    }
+    
+    Set<Tag> tagset = dts.getTags();
+    if (tagset != null) {
+      for (Tag t : tagset) {
+        if (t.getTag().equals(tag)) return new ActionResult(-1, "This dataset has been tagged already.");
+      }
+    }
+        
+    List<Tag> tagList = new ArrayList<Tag>();
+    tagList.add(tagObj);
+    try {
+      datastoreService.addDatasetTags(dts.getId(), tagList);
+      return new ActionResult(0, "OK");
+    } catch (Exception e) {
+      logger.debug("Failed to add tag", e);
+      return new ActionResult(-1, "Failed");
+    }
+  }
+  
+  @RequestMapping(value="/{guid}/removetag", method=RequestMethod.POST)
+  public @ResponseBody ActionResult removeTag(@PathVariable String guid, @RequestParam(value="tag", required=true) String tag, ModelMap model, Principal principal) throws Exception {
+    User user = (User) ((Authentication)principal).getPrincipal();
+    if (user == null) {
+      return new ActionResult(-1, "Error: User does not exist");
+    }  
+  
+    Dataset dts = datastoreService.getDatasetByGuid(guid);
+    if (dts == null) {
+      return new ActionResult(-1, "Error: Dataset does not exist");
+    }
+    
+    if (!user.getUsername().equals(dts.getUser().getUsername())) {
+      return new ActionResult(-1, "Error: User does not have permission to remove tag");
+    }
+    
+    Tag tagObj = datastoreService.getTag(tag);
+    if (tagObj == null) {
+      return new ActionResult(-1, "Tag does not exist");
+    }
+    
+    try {
+      datastoreService.removeDatasetTag(dts, tagObj);
+      return new ActionResult(0, "OK");
+    } catch (Exception e) {
+      logger.debug("Failed to remove tag", e);
+      return new ActionResult(-1, "Failed");
+    }
+  }
+  
+  @RequestMapping(value="/ref/{guid}", method=RequestMethod.GET)
+  public void getReferenceDocument(@PathVariable String guid, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    Dataset dataset = datastoreService.getDatasetByGuid(guid);
+    if (dataset == null) {
+      response.getWriter().write("Failed to load reference document. Error: Dataset not found.");
+      return;
+    }
+    
+    String refGuid = request.getParameter("ref");
+    
+    File refFile = appStoreService.getReferenceDocument(guid, refGuid + ".pdf");
+    if (refFile == null) {
+      response.getWriter().write("Failed to load reference document. Error: Reference file not found.");
+      return;
+    }
+    
+    IOUtils.copy(new FileInputStream(refFile), response.getOutputStream());
+    return;
+  }
+  
   
 }

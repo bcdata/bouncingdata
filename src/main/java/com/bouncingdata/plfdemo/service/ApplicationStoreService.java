@@ -286,4 +286,10 @@ public class ApplicationStoreService {
     FileUtils.writeByteArrayToFile(refFile, file.getBytes());
   }
   
+  public File getReferenceDocument(String guid, String name) throws IOException {
+    File refFile = new File(storePath + Utils.FILE_SEPARATOR + guid + Utils.FILE_SEPARATOR + name);
+    if (!refFile.isFile()) return null;
+    return refFile;
+  }
+  
 }

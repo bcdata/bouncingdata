@@ -23,7 +23,7 @@
 </script>
 <div id="main-content" class="analysis-container">
   <div class="analysis-info right-content">
-    <div class="anls-summary">
+    <div class="anls-summary summary">
       <div class="author-summary">       
         <a class="author-avatar" href="javascript:void(0);"><img src="<c:url value="/resources/images/no-avatar.png" />" /></a>       
         <p class="author-name"><a href="javascript:void(0);"><strong>${anls.user.username }</strong></a></p>
@@ -78,7 +78,7 @@
     
   <div class="analysis-main center-content">
     <div class="center-content-wrapper">
-      <div class="anls-header">
+      <div class="anls-header header">
         <div class="anls-title main-title"><h2>${anls.name}</h2></div>
         <div class="share-panel" style="float: right;">
           <!-- AddThis Button BEGIN -->
@@ -98,17 +98,17 @@
           <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-512cd44d6cd449d2"></script>
           <!-- AddThis Button END -->
         </div>
-        <div class="anls-action-links">
-          <h3 class="anls-score">${anls.score}</h3>&nbsp;
-          <a href="javascript:void(0)" class="anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="anls-action anls-clone">Clone</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
+        <div class="anls-action-links action-links">
+          <h3 class="score anls-score">${anls.score}</h3>&nbsp;
+          <a href="javascript:void(0)" class="action anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="action anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="action anls-action anls-clone">Clone</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="action anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
-            <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="anls-action" title="Edit this analysis">Edit</a>
-          </c:if>&nbsp;&nbsp;
-          <a href="javascript:void(0);" class="anls-action anls-download">Download</a>
-          <div class="anls-action-hidden-menu" style="display: none;">
+            <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="action anls-action" title="Edit this analysis">Edit</a>&nbsp;&nbsp;
+          </c:if>
+          <a href="javascript:void(0);" class="action anls-action anls-download">Download</a>
+          <div class="action-hidden-menu anls-action-hidden-menu" style="display: none;">
             <div>Download analysis</div>
             <div>Download dataset</div>
             <div>Download script</div>

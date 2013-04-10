@@ -3,16 +3,16 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <script>
-	com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
-	$(function() {
-	  $('#dataset-content').tabs();  
-	  //SyntaxHighlighter.highlight();
-	  com.bouncingdata.Nav.setSelected('data', '${dataset.guid}');
-	});
+	var dataset = {
+      guid: '${dataset.guid}',
+      user: '${dataset.user.username}',
+      name: '${dataset.name}'
+	};
+	com.bouncingdata.Dataset.init(dataset);
 </script>
 <div id="main-content" class="datapage-container">
   <div class="data-info right-content">
-    <div class="dataset-summary summary">
+    <!-- div class="dataset-summary summary">
       <div class="data-info-header info-header">
         <div class="data-info-title info-title">Dataset Info</div>
         <div class="data-info-title-line info-title-line"></div>
@@ -56,28 +56,99 @@
           });
       	</script>
       </c:if>
-    </div>  
+    </div-->  
+    
+    
+    <div class="dataset-summary summary">
+      <div class="author-summary">       
+        <a class="author-avatar" href="javascript:void(0);"><img src="<c:url value="/resources/images/no-avatar.png" />" /></a>       
+        <p class="author-name"><a href="javascript:void(0);"><strong>${dataset.user.username }</strong></a></p>
+        <p class="published-date">Published on ${dataset.shortCreateAt }</p>
+        <div class="clear"></div>
+      </div>
+      <p><strong>Reference: </strong><a href="#">http://www.economist.com/football</a></p>
+      <p><strong>Dataset Collection: </strong><a href="#">NFL 2000-2010</a></p>
+      <p><strong>Source: </strong><a href="#">http://www.footballdata.com/gamedata</a></p>
+      <p><strong>License: </strong><a href="#">X</a></p>
+      <p><strong>Last updated: </strong>${dataset.shortLastUpdate }</p>
+    </div>
+    <div class="tag-set">
+      <div class="tag-list">
+      <c:if test="${not empty dataset.tags }">
+        <c:forEach items="${dataset.tags }" var="tag">
+          <div class="tag-element-outer">
+            <a class="tag-element" href="<c:url value="/tag/${dataset.tag }" />">${dataset.tag }</a>
+            <c:if test="${isOwner }">
+              <span class="tag-remove" title="Remove tag from this dataset">x</span>
+            </c:if>
+          </div>
+        </c:forEach>  
+      </c:if>
+      
+      </div>&nbsp;
+      <c:if test="${isOwner }">
+        <a class="add-tag-link" href="javascript:void(0);">
+          Add tag
+        </a>
+        <div class="add-tag-popup" style="display: none;">
+          <input type="text" id="add-tag-input" />
+          <input type="button" value="Add" id="add-tag-button" />
+        </div>
+      </c:if>
+      
+    </div>
+    <div class="dataset-related-info related-info">
+      <p><strong>Related:</strong></p>
+      <div class="related-tabs ui-tabs" id="related-tabs">
+        <ul>
+          <li><a href="#related-dataset">Dataset</a></li>
+          <li><a href="#related-author">Author</a></li>
+          <li><a href="#related-voters">Voters</a></li>
+        </ul>
+        <div id="related-dataset" class="ui-tabs-hide"></div>
+        <div id="related-author" class="ui-tabs-hide"></div>
+        <div id="related-voters" class="ui-tabs-hide"></div>
+      </div>
+      
+    </div>
   </div>
   <div class="center-content">
     <div class="center-content-wrapper">
       <div class="dataset-header header">
         <div class="dataset-title main-title"><h2>${dataset.name}</h2></div>
-        <!-- div class="dataset-vote">
-          <h3 class="datset-score">${anls.score}</h3>&nbsp;
-          <a href="#" class="anls-vote-up">Vote up</a>&nbsp;
-          <a href="#" class="anls-vote-down">Vote down</a>
-        </div-->
-        <div class="dataset-actions" style="margin-top: 4px;">
-          <a href="<c:url value="/dataset/dl/csv/${dataset.guid}"/>" style="color: block; text-decoration: none;">Download CSV</a>&nbsp;&nbsp;
-          <a href="<c:url value="/dataset/dl/json/${dataset.guid}"/>" style="color: block; text-decoration: none;">Download JSON</a>
+        <div class="share-panel" style="float: right;">
+          <!-- AddThis Button BEGIN -->
+          <div class="addthis_toolbox addthis_default_style ">
+          <a class="addthis_button_preferred_1"></a>
+          <a class="addthis_button_preferred_2"></a>
+          <a class="addthis_button_preferred_3"></a>
+          <a class="addthis_button_preferred_4"></a>
+          <a class="addthis_button_compact"></a>
+          <a class="addthis_counter addthis_bubble_style"></a>
+          </div>
+          <script type="text/javascript">
+            var addthis_config = addthis_config||{};
+            addthis_config.data_track_addressbar = false;
+            //var addthis_config = {"data_track_addressbar":true};
+          </script>
+          <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-512cd44d6cd449d2"></script>
+          <!-- AddThis Button END -->
+        </div>
+        <div class="action-links dataset-action-links" style="margin-top: 4px;">
+          <h3 class="dataset-score score">0</h3>&nbsp;
+          <a href="javascript:void(0);" class="action vote-up dataset-vote-up">Vote up</a>&nbsp;&nbsp;
+          <a href="javascript:void(0);" class="action vote-down dataset-vote-down">Vote down</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="action dataset-action dataset-embed-button" id="dataset-embed-button">Embed</a>&nbsp;&nbsp;
+          <a href="<c:url value="/dataset/dl/csv/${dataset.guid}"/>" class="action dataset-action">Download CSV</a>&nbsp;&nbsp;
+          <a href="<c:url value="/dataset/dl/json/${dataset.guid}"/>" class="action dataset-action">Download JSON</a>
         </div>
       </div>
       <div class="header-rule"></div>
       <div class="data-content data-tab-container" id="dataset-content">
         <ul>
-          <li><a href="#data">Data</a></li>
+          <li><a href="#data">View</a></li>
           <li><a href="#schema">Schema</a></li>
-          <li><a href="#description">Description</a></li>
+          <li><a href="#ref-doc">Reference Doc</a></li>
         </ul>
         <div class="clear"></div>
         <div class="dataset-content-wrapper">
@@ -108,9 +179,36 @@
         </div>
         <div id="schema">
           <!-- pre style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre-->
-          <pre class="brush: sql" style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre>
+          <pre class="brush: sql" style="white-space: pre-wrap; word-wrap: break-word;">${dataset.schema }</pre>
         </div>
-        <div id="description">
+        <div id="ref-doc">
+          <c:choose>
+            <c:when test="${not empty dataset.refDocuments }">
+              <c:forEach items="${dataset.refDocuments }" var="ref">
+                <c:if test="${ref.type == 'url' }">
+                  <p>
+                    <a>${ref.url }</a>
+                  </p>
+                </c:if>
+                <c:if test="${ref.type == 'pdf' }">
+                  <div>
+                    <h4>${ref.name }</h4>
+                    <p>
+                      <iframe src="http://docs.google.com/viewer?url=<c:url value="/dataset/ref/${dataset.guid }?ref=${ref.guid }" />&embedded=true" style="width: 100%; height: 460px;" frameborder="0"></iframe>
+                    </p>
+                  </div>
+                </c:if>
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+              <span>No reference document.</span>
+            </c:otherwise>
+          </c:choose>
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div class="description">
+        <h3 style="margin: 0 0 10px; cursor: pointer">Description</h3>
         <c:choose>
           <c:when test="${not empty dataset.description }">
             <span>${dataset.description }</span>
@@ -119,11 +217,8 @@
             <span>No description</span>
           </c:otherwise>
         </c:choose>
-        </div>
-        
       </div>
-      <div class="clear"></div>
-      <!-- div class="comments-container">
+      <!-- <div class="comments-container">
         <h3 class="comments-title">
           <a href="javascript:void(0);" onclick="$('#comment-form').toggle('slow');">Comment</a>
         </h3>
@@ -146,7 +241,7 @@
           <ul id="comment-list" class="comment-list">
           </ul>
         </div>
-      </div-->
+      </div> -->
     </div>
   </div>
 </div>

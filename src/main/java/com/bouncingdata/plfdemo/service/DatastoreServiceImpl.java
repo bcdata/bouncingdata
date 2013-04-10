@@ -582,4 +582,20 @@ public class DatastoreServiceImpl implements DatastoreService {
   public void addDatasetRefDocument(int datasetId, ReferenceDocument refDoc) {
     dataStorage.addDatasetRefDocument(datasetId, refDoc);  
   }
+
+  @Override
+  public void addDatasetTags(int dtsId, List<Tag> tags) {
+    dataStorage.addDatasetTags(dtsId, tags);
+  }
+
+  @Override
+  public void removeDatasetTag(Dataset dts, Tag tag) {
+    dataStorage.removeDatasetTag(dts.getId(), tag.getId());
+  }
+
+  @Override
+  public void removeDatasetTags(Dataset dts, List<Tag> tags) {
+    dataStorage.removeDatasetTags(dts.getId(), tags);
+    
+  }
 }

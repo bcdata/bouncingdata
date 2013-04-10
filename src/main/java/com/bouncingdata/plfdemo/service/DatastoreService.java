@@ -322,5 +322,12 @@ public interface DatastoreService {
   public void logUserAction(int userId, int action,String data);
   
   public void addDatasetRefDocument(int datasetId, ReferenceDocument refDoc);
+  
+  void addDatasetTags(int dtsId, List<Tag> tags);
+
+  void removeDatasetTag(Dataset dts, Tag tag);
+
+  void removeDatasetTags(Dataset dts, List<Tag> tags);
+
 
 }
