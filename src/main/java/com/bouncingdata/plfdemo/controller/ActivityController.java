@@ -70,6 +70,7 @@ public class ActivityController {
     return "stream";
   }
   
+  
   @RequestMapping(value="/a/more/{lastId}", method=RequestMethod.GET)
   public @ResponseBody List<Analysis> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
     try {
