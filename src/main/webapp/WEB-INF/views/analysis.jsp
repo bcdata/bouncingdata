@@ -194,7 +194,7 @@
         </div>
       </div>
       <div class="clear"></div>
-      <div class="anls-description">
+      <div class="description anls-description">
         <h3 style="margin: 0 0 10px; cursor: pointer">Description</h3>
         <span>${anls.description }</span>
       </div>
