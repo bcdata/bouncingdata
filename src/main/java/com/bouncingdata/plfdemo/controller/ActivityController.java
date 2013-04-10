@@ -74,11 +74,13 @@ public class ActivityController {
   public @ResponseBody List<Analysis> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
     try {
       User user = (User) ((Authentication)principal).getPrincipal();
-      
-      ObjectMapper logmapper = new ObjectMapper();
-      String data = logmapper.writeValueAsString(new String[] {"1",Integer.toString(lastId)});		   	 
-      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
-      
+      try{
+	      ObjectMapper logmapper = new ObjectMapper();
+	      String data = logmapper.writeValueAsString(new String[] {"1",Integer.toString(lastId)});		   	 
+	      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
+      }catch (Exception e) {
+          logger.debug("Failed to log action", e);
+        }
       List<Analysis> analyses = datastoreService.getMoreRecentAnalyses(lastId);
       return analyses;
     } catch (Exception e) {
