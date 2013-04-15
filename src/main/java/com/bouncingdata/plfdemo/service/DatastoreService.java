@@ -298,7 +298,23 @@ public interface DatastoreService {
   void createAnalysisPost(User user, Analysis analysis, String message) throws Exception;
 
   List<Analysis> getMostPopularAnalyses();
+  
+  //----- Vinhpq : adding temporary functions for left menu ----
+  
+  List<Analysis> getAllAnalysesBySelf(int userId);
+  
+  List<Analysis> getAllAnalysesPublished();
+  
+  List<Analysis> getAnalysesStaffPick();
 
+  List<Dataset> getAllDatasetsBySelf(int userId);
+  
+  List<Dataset> getAllDatasetsPublished();
+  
+  List<Tag> get10Tags();
+  
+  //------------------
+  
   List<Dataset> getMostPopularDatasets();
 
   List<Analysis> getStaffPickAnalyses();

@@ -3,12 +3,12 @@
   <div class="main-nav-content">
     <ul class="main-nav-links">
       <li><a class="main-nav-item" href="<c:url value="/stream" />">Timeline</a></li>
-      <li><a class="main-nav-item" href="#">Created By Me</a></li>
-      <li><a class="main-nav-item" href="#">All</a></li>
-      <li><a class="main-nav-item" href="#">Staff's Picks</a></li>
-      <li><a class="main-nav-item" href="#">Popular Authors</a></li>
+      <li><a class="main-nav-item" href="<c:url value="/streambyself" />">Created By Me</a></li>
+      <li><a class="main-nav-item" href="<c:url value="/streamall" />">All</a></li>
+      <li><a class="main-nav-item" href="<c:url value="/staffpicks" />">Staff's Picks</a></li>
+      <li><a class="main-nav-item" href="<c:url value="/popularAuthors" />">Popular Authors</a></li>
       <li>
-        <a class="main-nav-item" href="#">Tags</a>
+        <a class="main-nav-item" href="<c:url value="/tags" />">Tags</a>
         <div class="tags-container">
           <ul class="tag-links">
             <li><a class="sub-nav-item" href="<c:url value="/tag/economics" />">Economics</a></li>
@@ -22,7 +22,7 @@
             <li><a class="sub-nav-item" href="<c:url value="/tag/worldbank" />">World Bank</a></li>
             <li><a class="sub-nav-item" href="<c:url value="/tag/oced" />">OCED</a></li>
             <li><a class="sub-nav-item" href="<c:url value="/tag/payroll" />">Payroll</a></li>
-            <li><a class="sub-nav-item" href="#">More..</a></li>
+            <li><a class="sub-nav-item" href="<c:url value="/tag/more" />">More..</a></li>
           </ul>
         </div>
       </li>

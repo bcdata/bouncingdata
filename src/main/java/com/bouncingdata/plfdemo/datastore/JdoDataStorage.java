@@ -40,8 +40,6 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 @SuppressWarnings({ "unchecked", "deprecation" })
 public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 
-
-
 	@Override
 	public List<Dataset> getDatasetList(int userId) {
 		PersistenceManager pm = getPersistenceManager();
@@ -1598,7 +1596,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			pm.close();
 		}
 	}
-	
+
 	@Override
   public List<Analysis> getMostRecentAnalyses(int maxNumber) {
     PersistenceManager pm = getPersistenceManager();
@@ -1619,20 +1617,20 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	
 	@Override
 	public List<Analysis> getMoreRecentAnalyses(int lastId, int maxNumber) {
-	  PersistenceManager pm = getPersistenceManager();
-    Query q = pm.newQuery(Analysis.class);
-    q.setOrdering("createAt DESC");
-    q.setRange(0, maxNumber);
-    q.setFilter("id < " + lastId + " && published == true");
-    try {
-      List<Analysis> analyses = (List<Analysis>) q.execute();
-      if (analyses != null) {
-        return (List<Analysis>) pm.detachCopyAll(analyses);
-      } else return null;
-    } finally {
-      q.closeAll();
-      pm.close();
-    }
+		PersistenceManager pm = getPersistenceManager();
+	    Query q = pm.newQuery(Analysis.class);
+	    q.setOrdering("createAt DESC");
+	    q.setRange(0, maxNumber);
+	    q.setFilter("id < " + lastId + " && published == true");
+	    try {
+	      List<Analysis> analyses = (List<Analysis>) q.execute();
+	      if (analyses != null) {
+	        return (List<Analysis>) pm.detachCopyAll(analyses);
+	      } else return null;
+	    } finally {
+	      q.closeAll();
+	      pm.close();
+	    }
 	}
 
 	@Override
@@ -1653,7 +1651,118 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			pm.close();
 		}
 	}
-  
+	
+    // ----------Vinhpq: Add functions for left menu-------- 
+	@Override
+	public List<Analysis> getAllAnalysesBySelf(int userId) {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Analysis.class);
+		q.setFilter("user.id == " + userId);
+		q.setOrdering("score DESC");
+		try {
+			List<Analysis> analyses = (List<Analysis>) q.execute();
+			if (analyses != null) 
+				return (List<Analysis>) pm.detachCopyAll(analyses);
+			else 
+				return null;			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	@Override
+	public List<Analysis> getAllAnalysesPublished() {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Analysis.class);
+		q.setFilter("published == true");
+		q.setOrdering("score DESC");
+		try {
+			List<Analysis> analyses = (List<Analysis>) q.execute();
+			if (analyses != null) 
+				return (List<Analysis>) pm.detachCopyAll(analyses);
+			else 
+				return null;			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	@Override
+	public List<Analysis> getAnalysesStaffPick() {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Analysis.class);
+		q.setFilter("published == true");
+		q.setOrdering("score DESC");
+		try {
+			List<Analysis> analyses = (List<Analysis>) q.execute();
+			if (analyses != null) {
+			  analyses = analyses.subList(0,  Math.min(analyses.size(), 10));
+	      return (List<Analysis>) pm.detachCopyAll(analyses);
+			} else return null;			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	@Override
+	public List<Dataset> getAllDatasetsBySelf(int userId) {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Dataset.class);
+		q.setFilter("user.id == "  + userId);
+		q.setOrdering("rowCount DESC");
+		try {
+			List<Dataset> datasets = (List<Dataset>) q.execute();
+			if (datasets != null)
+				return (List<Dataset>) pm.detachCopyAll(datasets);
+			else 
+				return null;
+			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	@Override
+	public List<Dataset> getAllDatasetsPublished() {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Dataset.class);
+		q.setFilter("isPublic == true");
+		q.setOrdering("rowCount DESC");
+		try {
+			List<Dataset> datasets = (List<Dataset>) q.execute();
+			if (datasets != null)
+				return (List<Dataset>) pm.detachCopyAll(datasets);
+			else 
+				return null;
+			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	public List<Tag> get10Tags() {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Tag.class);
+		
+		try {
+			List<Tag> tags = (List<Tag>) q.execute();
+
+			if (tags != null) {
+				tags = tags.subList(0, Math.min(tags.size(),10));
+			  return (List<Tag>) pm.detachCopyAll(tags);
+			} else return null;
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	//-----------------End adding functions----------------------
+	
   @Override
   public void addAnalysisTags(int anlsId, List<Tag> tags) {
     PersistenceManager pm = getPersistenceManager();

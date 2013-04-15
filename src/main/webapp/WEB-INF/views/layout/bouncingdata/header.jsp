@@ -27,8 +27,8 @@
     </div>
     <div class="header-buttons">
       <ul class="guide-button-container">
-        <li><a class="guide-button learn-button">Learn</a></li>
-        <li><a class="guide-button help-button">Help</a></li>
+        <li><a href="<c:url value="/learn"/>" class="guide-button learn-button">Learn</a></li>
+        <li><a href="<c:url value="/help/python"/>" class="guide-button help-button">Help</a></li>
         <li><a class="guide-button me-button">Me</a></li>
       </ul>
       <div class="guide-button-submenu">
