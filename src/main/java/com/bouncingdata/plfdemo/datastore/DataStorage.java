@@ -464,7 +464,23 @@ public interface DataStorage {
   public void addDatasetToCollection(int datasetId, int collectionId);
   
   public List<Analysis> getMostPopularAnalyses();
-    
+  
+  //----- Vinhpq : adding temporary functions for left menu ----
+  
+  public List<Analysis> getAllAnalysesBySelf(int userId);
+  
+  public List<Analysis> getAllAnalysesPublished();
+  
+  public List<Analysis> getAnalysesStaffPick();
+
+  public List<Dataset> getAllDatasetsBySelf(int userId);
+  
+  public List<Dataset> getAllDatasetsPublished();
+  
+  public List<Tag> get10Tags();
+  
+  //-----
+  
   public List<Dataset> getMostPopularDatasets();
 
   /*Add for tag features*/

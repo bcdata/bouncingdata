@@ -520,11 +520,46 @@ public class DatastoreServiceImpl implements DatastoreService {
     return dataStorage.getMostPopularAnalyses();
   }
   
+  //----- Vinhpq : adding temporary functions for left menu ----  
+  
+  @Override
+  public List<Analysis> getAllAnalysesBySelf(int userId) {
+    return dataStorage.getAllAnalysesBySelf(userId);
+  }
+  
+  @Override
+  public List<Analysis> getAllAnalysesPublished() {
+    return dataStorage.getAllAnalysesPublished();
+  }
+  
+  @Override
+  public List<Analysis> getAnalysesStaffPick() {
+    return dataStorage.getAnalysesStaffPick();
+  }
+  
+  @Override
+  public List<Dataset> getAllDatasetsBySelf(int userId) {
+    return dataStorage.getAllDatasetsBySelf(userId);
+  }
+  
+  @Override
+  public List<Dataset> getAllDatasetsPublished() {
+    return dataStorage.getAllDatasetsPublished();
+  }
+  
+  @Override
+  public List<Tag> get10Tags() {
+    return dataStorage.get10Tags();
+  }
+  
+  //-----
+  
   @Override
   public List<Dataset> getMostPopularDatasets() {
     return dataStorage.getMostPopularDatasets();
   }
 
+  
   @Override
   public List<Analysis> getStaffPickAnalyses() {
     return getMostPopularAnalyses();

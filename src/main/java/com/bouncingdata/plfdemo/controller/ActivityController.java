@@ -21,6 +21,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.DatastoreService;
@@ -61,6 +62,7 @@ public class ActivityController {
       
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
       model.addAttribute("topAnalyses", mostPopularAnalyses);
+      
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
     } catch (Exception e) {
@@ -69,7 +71,6 @@ public class ActivityController {
     }
     return "stream";
   }
-  
   
   @RequestMapping(value="/a/more/{lastId}", method=RequestMethod.GET)
   public @ResponseBody List<Analysis> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
@@ -89,4 +90,195 @@ public class ActivityController {
       return null;
     }
   }
+
+  /*
+   * Vinhpq: Adding function for top and left menu
+   */
+  @RequestMapping(value={"/tags"}, method=RequestMethod.GET)
+  public String get10TopTags(WebRequest request, ModelMap model, Principal principal) {
+	  
+	  try {
+		  User user = (User) ((Authentication)principal).getPrincipal();
+	      
+	      try {
+	        ObjectMapper logmapper = new ObjectMapper();
+	        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+	        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+	      } catch (Exception e) {
+	        logger.debug("Failed to log action", e);
+	      }
+		  
+	      List<Tag> top10Tags = datastoreService.get10Tags();
+	      model.addAttribute("_tags", top10Tags);
+	      
+	      //---
+	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+	      model.addAttribute("topAnalyses", mostPopularAnalyses);
+	      
+	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+	      model.addAttribute("topDatasets", mostPopularDatasets);
+	      
+	  } catch (Exception e) {
+	      logger.debug("Failed to load activity stream", e);
+	      model.addAttribute("errorMsg", "Failed to load the activity stream");
+      
+	  }
+	  return "tags";
+  }
+  
+  @RequestMapping(value={"/streambyself"}, method=RequestMethod.GET)
+  public String getActivityStreamBySelf(WebRequest request, ModelMap model, Principal principal) {
+    try {    
+      String filter = request.getParameter("filter");
+      if (StringUtils.isEmpty(filter)) filter = "all";
+      
+      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
+        return "error";
+      }
+      
+      User user = (User) ((Authentication)principal).getPrincipal();
+      
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
+      
+      List<Analysis> allAnalysesBySelf = datastoreService.getAllAnalysesBySelf(user.getId());
+      model.addAttribute("recentAnalyses", allAnalysesBySelf);
+
+//      List<Dataset> allDatasetsBySelf = datastoreService.getAllDatasetsBySelf(user.getId());
+//      model.addAttribute("topDatasets", allDatasetsBySelf);
+      
+      //---
+      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", mostPopularAnalyses);
+      
+      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", mostPopularDatasets);
+      
+    } catch (Exception e) {
+      logger.debug("Failed to load activity stream", e);
+      model.addAttribute("errorMsg", "Failed to load the activity stream");
+    }
+    return "stream";
+  }
+  
+  @RequestMapping(value={"/streamall"}, method=RequestMethod.GET)
+  public String getActivitystreamall(WebRequest request, ModelMap model, Principal principal) {
+    try {    
+      String filter = request.getParameter("filter");
+      if (StringUtils.isEmpty(filter)) filter = "all";
+      
+      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
+        return "error";
+      }
+      
+      User user = (User) ((Authentication)principal).getPrincipal();
+      
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
+      
+      List<Analysis> allAnalyses = datastoreService.getAllAnalysesPublished();
+      model.addAttribute("recentAnalyses", allAnalyses);
+
+//      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
+//      model.addAttribute("topDatasets", allDatasets);
+      
+      //---
+      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", mostPopularAnalyses);
+      
+      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", mostPopularDatasets);
+      
+    } catch (Exception e) {
+      logger.debug("Failed to load activity stream", e);
+      model.addAttribute("errorMsg", "Failed to load the activity stream");
+    }
+    return "stream";
+  }
+  
+  @RequestMapping(value={"/staffpicks"}, method=RequestMethod.GET)
+  public String getstaffpicks(WebRequest request, ModelMap model, Principal principal) {
+    try {    
+      String filter = request.getParameter("filter");
+      if (StringUtils.isEmpty(filter)) filter = "all";
+      
+      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
+        return "error";
+      }
+      
+      User user = (User) ((Authentication)principal).getPrincipal();
+      
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
+      
+      List<Analysis> allAnalyses = datastoreService.getAnalysesStaffPick();
+      model.addAttribute("recentAnalyses", allAnalyses);
+
+//      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
+//      model.addAttribute("topDatasets", allDatasets);
+      
+      //---
+      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", mostPopularAnalyses);
+      
+      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", mostPopularDatasets);
+      
+    } catch (Exception e) {
+      logger.debug("Failed to load activity stream", e);
+      model.addAttribute("errorMsg", "Failed to load the activity stream");
+    }
+    return "stream";
+  }
+  
+  @RequestMapping(value={"/popularAuthors"}, method=RequestMethod.GET)
+  public String getPopularAuthors(WebRequest request, ModelMap model, Principal principal) {
+    
+	  try {    
+	      String filter = request.getParameter("filter");
+	      if (StringUtils.isEmpty(filter)) filter = "all";
+	      
+	      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
+	        return "error";
+	      }
+	      
+	      User user = (User) ((Authentication)principal).getPrincipal();
+	      
+	      try {
+	        ObjectMapper logmapper = new ObjectMapper();
+	        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+	        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+	      } catch (Exception e) {
+	        logger.debug("Failed to log action", e);
+	      }
+	     
+	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+	      model.addAttribute("topAnalyses", mostPopularAnalyses);
+	      
+	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+	      model.addAttribute("topDatasets", mostPopularDatasets);
+	      
+	    } catch (Exception e) {
+	      logger.debug("Failed to load activity stream", e);
+	      model.addAttribute("errorMsg", "Failed to load the activity stream");
+	    }
+	  
+    return "author";
+  }
+  
 }

@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <script>
-  //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
   com.bouncingdata.ActivityStream.init();
 </script>
 <div id="main-content" class="homepage-container">
@@ -131,86 +130,22 @@
   <div class="center-content">
     <div class="center-content-wrapper">
       <div class="stream-container center-content-main">
-        <div class="stream-filter">
-          <span class="" style="float: left;">
-            <a href="#">All</a>&nbsp;|&nbsp;
-            <a href="#">Analysis</a>&nbsp;|&nbsp;
-            <a href="#">Dataset</a>
-          </span>
-          <span style="float: right;">
-            <a href="#">Recent</a>&nbsp;|&nbsp;
-            <a href="#">Popular</a>
-          </span>
-        </div>
         <div class="clear"></div>
         <div class="stream main-activity-stream" id="stream">
-          <c:if test="${not empty recentAnalyses }">
-            <c:forEach items="${recentAnalyses }" var="anls">         
-              <div class="event stream-item" aid=${anls.id }>
-                <div class="event-content">
-                  <!-- div class="info" aid="${activity.id }">
-                    <a href="#" class="user"><strong>${activity.user.username }</strong></a>&nbsp;
-                    <span class="action">${activity.action }</span>
-                    <div class="time">${activity.time}</div> 
-                  </div-->
-                  <a class="event-avatar-link">
-                    <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
-                  </a>
-                  <div class="thumbnail">
-                    <a href="<c:url value="/anls/${anls.guid}" />">
-                      <c:choose>
-                        <c:when test="${not empty anls.thumbnail }">
-                          <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
-                        </c:when>
-                        <c:otherwise>
-                          <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
-                        </c:otherwise>
-                      </c:choose>
-                    </a>
-                  </div>
-                  <p class="title">
-                    <a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}" />"><strong>${anls.name}</strong></a>
-                  </p>
-                  <p class="info">
-                    <span class="author">Author: <a href="#">${anls.user.username }</a></span><br/>
-                    <span class="tag-list">Tags:&nbsp; 
-                      <c:if test="${not empty anls.tags }">
-                        <c:forEach var="tag" items="${anls.tags }">
-                          <div class="tag-element-outer">
-                            <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
-                          </div>
-                        </c:forEach>
-                      </c:if>
-                    </span>
-                  </p>
-                  <p class="description">
-                    <span>${anls.description }</span>
-                  </p>
-                  
-                  <div class="clear"></div>
-                  <div class="event-footer">
-                    <c:if test="${anls.score > 0}">
-                      <strong class="event-score event-score-positive">+${anls.score }</strong>    
-                    </c:if>
-                    <c:if test="${anls.score == 0}">
-                      <strong class="event-score">0</strong>    
-                    </c:if>
-                    <c:if test="${anls.score < 0}">
-                      <strong class="event-score event-score-negative">${anls.score }</strong>    
-                    </c:if>
-                    &nbsp;<a id="evt-comment-${anls.id }" class="comments-link" href="<c:url value="/anls/${anls.guid}#comments" />"><strong>${anls.commentCount }</strong>&nbsp;comments</a>
-                  </div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            
-            </c:forEach>
-          </c:if>      
-          
-          <div class="stream-footer">
-            <a href="javascript:void(0);" class="more-feed">More</a> &nbsp;&nbsp;
-            <img style="display: none;" class="feed-loading" src="<c:url value="/resources/images/loader32.gif" />" />
-          </div>    
+           <div class="event stream-item" aid=${anls.id }>
+             <div class="event-content">
+               <p class="info">
+                 <c:if test="${not empty _tags }">
+                   <c:forEach var="tag" items="${_tags }">
+                     <div class="tag-element-outer">
+                       <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+                     </div>
+                   </c:forEach>
+                 </c:if>
+               </p>
+             </div>
+             <div class="clear"></div>
+           </div>
         </div>
       </div>
     </div>
