@@ -79,4 +79,8 @@
     <put-attribute name="main-content" value="/WEB-INF/views/tag.jsp"></put-attribute>
   </definition>
   
+  <definition name="filter" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/filter.jsp"></put-attribute>
+  </definition>
+  
 </tiles-definitions>

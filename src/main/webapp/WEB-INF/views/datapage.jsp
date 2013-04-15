@@ -194,7 +194,7 @@
                   <div>
                     <h4>${ref.name }</h4>
                     <p>
-                      <iframe src="http://docs.google.com/viewer?url=<c:url value="/dataset/ref/${dataset.guid }?ref=${ref.guid }" />&embedded=true" style="width: 100%; height: 460px;" frameborder="0"></iframe>
+                      <iframe src="http://docs.google.com/viewer?url=<c:url value="/public/ref/${dataset.guid }?ref=${ref.guid }" />&embedded=true" style="width: 100%; height: 460px;" frameborder="0"></iframe>
                     </p>
                   </div>
                 </c:if>

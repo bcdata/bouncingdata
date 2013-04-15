@@ -1,5 +1,7 @@
 package com.bouncingdata.plfdemo.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -271,5 +275,25 @@ public class PublicController {
   @RequestMapping(value="/test", method = RequestMethod.GET)
   public @ResponseBody void test() {
     mailService.printConfiguration();
+  }
+  
+  @RequestMapping(value = "/ref/{guid}", method = RequestMethod.GET)
+  public void getReferenceDocument(@PathVariable String guid, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    Dataset dataset = datastoreService.getDatasetByGuid(guid);
+    if (dataset == null) {
+      response.getWriter().write("Failed to load reference document. Error: Dataset not found.");
+      return;
+    }
+
+    String refGuid = request.getParameter("ref");
+
+    File refFile = appStoreService.getReferenceDocument(guid, refGuid + ".pdf");
+    if (refFile == null) {
+      response.getWriter().write("Failed to load reference document. Error: Reference file not found.");
+      return;
+    }
+
+    IOUtils.copy(new FileInputStream(refFile), response.getOutputStream());
+    return;
   }
 }
