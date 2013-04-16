@@ -150,10 +150,10 @@
   color: #444444;
 }
 
-.analysis-container .anls-content, .datapage-container .data-content {
+.analysis-container .anls-content, .datapage-container #dataset-content {
   border: 0 none;
 }
-.analysis-container .anls-content ul.anls-tabs, .data-content ul {
+.analysis-container .anls-content ul.anls-tabs, #dataset-content ul {
   float: right;
 }
 
@@ -161,7 +161,7 @@
   width: 204px;
 }
 
-.analysis-container .anls-content .anls-tabs-content-wrapper > .ui-tabs-panel, .datapage-container .data-content #data.ui-tabs-panel {
+.analysis-container .anls-content .anls-tabs-content-wrapper > .ui-tabs-panel, .datapage-container #dataset-content > .ui-tabs-panel {
   padding: 0;
   margin-top: 10px;
 } 

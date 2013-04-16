@@ -144,46 +144,47 @@
         </div>
       </div>
       <div class="header-rule"></div>
-      <div class="data-content data-tab-container" id="dataset-content">
+      <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">
         <ul>
           <li><a href="#data">View</a></li>
           <li><a href="#schema">Schema</a></li>
           <li><a href="#ref-doc">Reference Doc</a></li>
         </ul>
         <div class="clear"></div>
-        <div class="dataset-content-wrapper">
-          <div id="data">
-            <table class="data-table" id="data-table">
-            </table>
-            <c:choose>
-              <c:when test="${not empty data }">
-                <script>
-                  var data = ${data};
-                  var $table = $('#data-table');
-                  com.bouncingdata.Utils.renderDatatable(data, $table);
-                </script>
-              </c:when>
-              <c:otherwise>
-                <script>
-                $(function() {
-                  console.debug("Load datatable by Ajax...");
-                  var guid = '${guid}';
-                  var columns = ${columns};
-                  var $table = $('#data-table');
-                  com.bouncingdata.Workbench.loadDatatableByAjax(guid, columns, $table);               
-                });
-                </script>  
-              </c:otherwise>
-            </c:choose>
-          </div>
+        <div id="data" class="ui-tabs-hide">
+          <table class="data-table" id="data-table">
+          </table>
+          <c:choose>
+            <c:when test="${not empty data }">
+              <script>
+                var data = ${data};
+                var $table = $('#data-table');
+                com.bouncingdata.Utils.renderDatatable(data, $table, 
+                    {	"sScrollY": "400px", "bPaginate": false, "bFilter": false }
+                );
+              </script>
+            </c:when>
+            <c:otherwise>
+              <script>
+              $(function() {
+                console.debug("Load datatable by Ajax...");
+                var guid = '${guid}';
+                var columns = ${columns};
+                var $table = $('#data-table');
+                com.bouncingdata.Workbench.loadDatatableByAjax(guid, columns, $table);               
+              });
+              </script>  
+            </c:otherwise>
+          </c:choose>
         </div>
-        <div id="schema">
+        <div id="schema" class="ui-tabs-hide">
           <!-- pre style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre-->
           <pre class="brush: sql" style="white-space: pre-wrap; word-wrap: break-word;">${dataset.schema }</pre>
         </div>
-        <div id="ref-doc">
+        <div id="ref-doc" class="ui-tabs-hide">
           <c:choose>
             <c:when test="${not empty dataset.refDocuments }">
+              <c:set var="baseURL" value="${fn:replace(pageContext.request.requestURL, pageContext.request.requestURI, pageContext.request.contextPath)}" />
               <c:forEach items="${dataset.refDocuments }" var="ref">
                 <c:if test="${ref.type == 'url' }">
                   <p>
@@ -194,7 +195,7 @@
                   <div>
                     <h4>${ref.name }</h4>
                     <p>
-                      <iframe src="http://docs.google.com/viewer?url=<c:url value="/public/ref/${dataset.guid }?ref=${ref.guid }" />&embedded=true" style="width: 100%; height: 460px;" frameborder="0"></iframe>
+                      <iframe src="http://docs.google.com/viewer?url=${baseURL }/public/ref/${dataset.guid }?ref=${ref.guid }&embedded=true" style="width: 100%; height: 460px;" frameborder="0"></iframe>
                     </p>
                   </div>
                 </c:if>

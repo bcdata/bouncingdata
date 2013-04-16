@@ -123,7 +123,7 @@ Editor.prototype.initSize = function(anls, dbDetail) {
                 var $table = $('table', $(this));
                 var data = result[dsguid].data;
                 if (data) {
-                  com.bouncingdata.Workbench.renderDatatable($.parseJSON(data), $table);
+                  com.bouncingdata.Utils.renderDatatable($.parseJSON(data), $table, { "sScrollY": "400px", "bPaginate": false, "bFilter": false });
                 } else if (result[dsguid].size > 0) {
                   console.debug("Load datatable by Ajax...");
                   var columns = result[dsguid].columns;

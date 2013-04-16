@@ -472,7 +472,7 @@ Utils.prototype.getConsoleCaret = function(language) {
 /**
  * 
  */
-Utils.prototype.renderDatatable = function(data, $table) {
+Utils.prototype.renderDatatable = function(data, $table, options) {
   if (!data || data.length <= 0) return;
 
   //prepare data
@@ -481,8 +481,10 @@ Utils.prototype.renderDatatable = function(data, $table) {
   for (index in first) {
     aoColumns.push({ "sTitle": first[index]});
   }
+  
+  var aaData = data.slice(1);
 
-  var aaData = [];
+  /*var aaData = [];
   for (index in data) {
     if (index == 0) continue;
     var item = data[index];
@@ -491,13 +493,27 @@ Utils.prototype.renderDatatable = function(data, $table) {
       arr.push(item[colIndex]);
     }
     aaData.push(arr);
+  }*/
+  var dataTableOptions = {
+    "aaData": aaData,
+    "aoColumns": aoColumns,
+    "bFilter": false,
+    "bJQueryUI": true
   }
-  var datatable = $table.dataTable({
+  
+  if (options) {
+    for (op in options) {
+      dataTableOptions[op] = options[op];
+    }
+  }
+  
+  var datatable = $table.dataTable(dataTableOptions);
+  /*var datatable = $table.dataTable({
     "aaData": aaData,
     "aoColumns": aoColumns,
     "bJQueryUI": true,
     "sPaginationType": "full_numbers"
-  });
+  });*/
   var keys = new KeyTable( {
     "table": $table[0],
     "datatable": datatable

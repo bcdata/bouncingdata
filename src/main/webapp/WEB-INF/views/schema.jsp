@@ -52,7 +52,7 @@
                 <script>
                   var data = ${data};
                   var $table = $('#data-preview');
-                  com.bouncingdata.Utils.renderDatatable(data, $table);
+                  com.bouncingdata.Utils.renderDatatable(data, $table,  {	"sScrollY": "400px", "bPaginate": false, "bFilter": false } );
                 </script>
               </c:when>
               <c:otherwise>

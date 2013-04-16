@@ -1225,24 +1225,36 @@ Workbench.prototype.renderDatatable = function(data, $table) {
   com.bouncingdata.Utils.renderDatatable(data, $table);
 }
 
+/**
+ * Load data table by making Ajax request to server-side. This is used when we need to load large dataset
+ */
 Workbench.prototype.loadDatatableByAjax = function(dsGuid, columns, $table) {
   var aoColumns = [];
   for (idx in columns) {
-    aoColumns.push({ "mDataProp": columns[idx], "sTitle": columns[idx] });
+    aoColumns.push({ "sTitle": columns[idx] });
   }
   var datatable = $table.dataTable({
     "bServerSide": true,
     "bProcessing": true,
     "sAjaxSource": ctx + "/dataset/ajax/" + dsGuid,
     "aoColumns": aoColumns,
-    "bJQueryUI": true,
-    "sPaginationType": "full_numbers"
+    "iDisplayLength": 200,
+    "sScrollY": "400px",
+    /*"sDom": "frtiS",
+    "oScroller": {
+      "loadingIndicator": true
+    }*/
+    "bScrollInfinite" :true,
+    "bScrollCollapse": true,
+    "bFilter": false,
+    "bJQueryUI": true
   });
   
-  var keys = new KeyTable( {
+  // temporarily disable this due to the incompability of KeyTable with server-side processing
+  /*var keys = new KeyTable( {
     "table": $table[0],
     "datatable": datatable
-  });
+  });*/
 }
 
 
