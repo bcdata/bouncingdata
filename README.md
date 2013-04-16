@@ -7,4 +7,4 @@ The bouncingdata.com web application
 - BugTracker: https://dataprj.atlassian.net
 - CI: https://bcdata.ci.cloudbees.com/job/bouncingdata/  
       https://bcdata.ci.cloudbees.com/job/bouncingdata-minimal/
-- Public artifacts: https://repository-bcdata.forge.cloudbees.com/snapshot/com/bouncingdata/bouncingdata/
+- Public artifacts: https://repository-bcdata.forge.cloudbees.com/snapshot/dataprj/com/bouncingdata/bouncingdata
