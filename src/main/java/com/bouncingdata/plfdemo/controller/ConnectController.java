@@ -38,8 +38,7 @@ public class ConnectController {
 
 	@SuppressWarnings("serial")
 	@RequestMapping(value = "/connections", method = RequestMethod.GET)
-	public @ResponseBody
-	Object getConnections(ModelMap model, Principal principal) throws Exception {
+	public @ResponseBody Object getConnections(ModelMap model, Principal principal) throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();
 		if (user == null)
 			return null;
@@ -71,8 +70,7 @@ public class ConnectController {
 	}
 
 	@RequestMapping(value = "/followers", method = RequestMethod.GET)
-	public @ResponseBody
-	List<UserInfo> findFollowers(ModelMap model, Principal principal)
+	public @ResponseBody List<UserInfo> findFollowers(ModelMap model, Principal principal)
 			throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();
 		if (user == null)
@@ -91,8 +89,7 @@ public class ConnectController {
 	}
 
 	@RequestMapping(value = "/followings", method = RequestMethod.GET)
-	public @ResponseBody
-	List<UserInfo> findFollowings(ModelMap model, Principal principal)
+	public @ResponseBody List<UserInfo> findFollowings(ModelMap model, Principal principal)
 			throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();
 		if (user == null)
@@ -111,8 +108,7 @@ public class ConnectController {
 	}
 
 	@RequestMapping(value = "/find/{query}", method = RequestMethod.GET)
-	public @ResponseBody
-	List<UserInfo> findUser(@PathVariable String query, ModelMap model,
+	public @ResponseBody List<UserInfo> findUser(@PathVariable String query, ModelMap model,
 			Principal principal) throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();
 		if (user == null)
@@ -132,8 +128,7 @@ public class ConnectController {
 	}
 
 	@RequestMapping(value = "/friendship", method = RequestMethod.POST)
-	public @ResponseBody
-	int follow(@RequestParam(value = "target", required = true) int target,
+	public @ResponseBody int follow(@RequestParam(value = "target", required = true) int target,
 			@RequestParam(value = "follow", required = true) boolean follow,
 			ModelMap model, Principal principal) throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();

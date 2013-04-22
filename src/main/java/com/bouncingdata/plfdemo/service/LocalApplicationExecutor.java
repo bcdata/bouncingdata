@@ -112,7 +112,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       } catch (IOException e) {
         // the stream maybe closed due to timeout or unknown error
         logger.debug("Exception occurs when reading output stream from execution {}. Maybe the process has been terminated.", ticket);
-        return new ExecutionResult("Execution terminated.", 0, 0, 1, "error");
+        return new ExecutionResult(ticket, "Execution terminated.", 0, 0, 1, "error");
       }
       output = outputBuilder.toString();
       try {
@@ -140,7 +140,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       }
     }
     
-    return new ExecutionResult(output, visCount, datasetCount, 0, "OK");
+    return new ExecutionResult(ticket, output, visCount, datasetCount, 0, "OK");
     
   }
     
@@ -205,7 +205,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       } catch (IOException e) {
         // the stream maybe closed due to timeout or unknown error
         logger.debug("Exception occurs when reading output stream from execution {}. Maybe the process has been terminated.", ticket);
-        return new ExecutionResult("Execution terminated.", 0, 0, 1, "error");
+        return new ExecutionResult(ticket, "Execution terminated.", 0, 0, 1, "error");
       }
       output = outputBuilder.toString();
       try {
@@ -237,9 +237,9 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
     
     if (app == null) {
       //Map<String, VisualizationDetail> visuals = getVisualizations(ticket);
-      return new ExecutionResult(output, visualCount, datasetCount, 0, "OK");
+      return new ExecutionResult(ticket, output, visualCount, datasetCount, 0, "OK");
     } else {
-      return new ExecutionResult(output, visualCount, datasetCount, 0, "OK");
+      return new ExecutionResult(ticket, output, visualCount, datasetCount, 0, "OK");
     }
     
   }

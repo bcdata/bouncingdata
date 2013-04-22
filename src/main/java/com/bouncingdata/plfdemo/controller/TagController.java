@@ -16,22 +16,22 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 
 @Controller
-@RequestMapping(value="/tag")
+@RequestMapping(value = "/tag")
 public class TagController {
-  
-  private Logger logger = LoggerFactory.getLogger(AnalysisController.class);
+
+  private Logger           logger = LoggerFactory.getLogger(AnalysisController.class);
 
   @Autowired
   private DatastoreService datastoreService;
-  
-  @RequestMapping(value="/{tag}", method=RequestMethod.GET)
+
+  @RequestMapping(value = "/{tag}", method = RequestMethod.GET)
   public String getTagPage(@PathVariable String tag, ModelMap model) {
     Tag t = datastoreService.getTag(tag);
     if (t == null) {
       model.addAttribute("errorMsg", "Tag \"" + tag + "\" does not exist.");
       return "error";
     }
-    
+
     List<Analysis> analyses = datastoreService.getAnalysesByTag(tag);
     model.addAttribute("anlsList", analyses);
     model.addAttribute("tag", tag);

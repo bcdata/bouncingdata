@@ -28,7 +28,14 @@
       <button class="editor-button" id="editor-cancel">Cancel</button>
     </div>
     <div class="editor-nav-panel">
-      <a href="<c:url value="/editor/anls/${anls.guid }/edit" />" class="editor-nav" id="size-back">Back</a>
+      <c:choose>
+        <c:when test="${not empty execId }">
+          <a href="<c:url value="/editor/anls/${anls.guid }/edit?feature=edit&execid=${execId }" />" class="editor-nav" id="size-back">Back</a>
+        </c:when>
+        <c:otherwise>
+          <a href="<c:url value="/editor/anls/${anls.guid }/edit?feature=edit" />" class="editor-nav" id="size-back">Back</a>
+        </c:otherwise>
+      </c:choose>
       <a href="<c:url value="/editor/anls/${anls.guid }/describe" />" class="editor-nav" id="size-next">Next</a>
     </div>
     <div class="editor-progress progress">

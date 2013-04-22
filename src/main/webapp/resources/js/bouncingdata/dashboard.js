@@ -239,9 +239,10 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
     .bind('resizestop', function(event, ui) {
       me.hideSnapLines($container);
       $info.hide();
+      var cw = $(this).width(), ch = $(this).height(); 
       
-      if (ui.position.top + $(this).height() >= $container.height()) {
-        $container.css('heigth', (ui.position.top + $(this).height() + 10) + "px");
+      if (ui.position.top + ch >= $container.height()) {
+        $container.css('heigth', (ui.position.top + ch + 10) + "px");
         me.updateRuler($container);
       }
       
@@ -261,11 +262,18 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
           url: ctx + "/visualize/replot/" + anlsGuid + "/" + vizGuid + "/png",
           type: "get",
           data: {
-            w: $vizContainer.width() - 10,
-            h: $vizContainer.height() - 15
+            "w": cw - 10,
+            "h": ch - 15
           },
           success: function(res) {
-            console.debug("Successfully replay plot.");
+            // reload plot
+            if (res) {       
+              $inner.attr('src', 'data:image/png;base64,' + res).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+              console.debug("Successfully replay plot.");
+            } else {
+              console.debug("Failed to replay plot");
+            }
+            
           }, 
           error: function(res) {
             console.debug("Failed to replot viz.");
@@ -287,7 +295,7 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
 
 }
 
-Dashboard.prototype.refresh = function() {
+Dashboard.prototype.refreshPlot = function(vizGuid, $vizContainer) {
   
 }
 

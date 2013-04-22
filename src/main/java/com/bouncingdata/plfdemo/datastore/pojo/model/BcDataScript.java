@@ -34,7 +34,8 @@ public abstract class BcDataScript {
   private boolean isExecuted;
   private String type;
   private String createSource;
-   
+  private String lastOutput;
+  
   public int getId() {
     return id;
   }
@@ -146,5 +147,11 @@ public abstract class BcDataScript {
   @Override
   public int hashCode() {
     return 4 * ("bouncingdata".hashCode()) * id;
+  }
+  public String getLastOutput() {
+    return lastOutput;
+  }
+  public void setLastOutput(String lastOutput) {
+    this.lastOutput = lastOutput;
   }
 }

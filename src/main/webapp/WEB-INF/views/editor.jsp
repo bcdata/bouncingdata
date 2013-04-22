@@ -8,14 +8,16 @@
     code: '${anlsCode}',
     name: '${anls.name}'
   }
+  
+  var feature = '${feature}';
   // supports async. load js but we really should pre-load workbench.js from the layout.jsp
   if (!com.bouncingdata.Editor) {
     $.getScript(ctx + "/resources/js/bouncingdata/editor.js", function() {
       console.debug("editor.js async. loaded!");
-      com.bouncingdata.Editor.init(anls);
+      com.bouncingdata.Editor.init(anls, feature);
     });  
   } else {
-    com.bouncingdata.Editor.init(anls);
+    com.bouncingdata.Editor.init(anls, feature);
   }
 </script>
 

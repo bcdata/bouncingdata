@@ -2,14 +2,21 @@ function Editor() {
   
 }
 
-Editor.prototype.init = function(anls) {
+/**
+ * Initializes the editor, also step 1 of analysis creation process
+ */
+Editor.prototype.init = function(anls, feature) {
   var me = this;
   me.anls = anls;
-  
+  var executeAction = 'execute';
   $(function() {    
     com.bouncingdata.Main.toggleLeftNav();
-    
-    $('.editor-nav').button();
+    var $executeButton = $('#editor-execute');
+    $executeButton.button();
+    if (feature == 'edit') {
+      $('span',$executeButton).text('Next');
+      executeAction = 'next';
+    }
     
     //initialize ace editor
     var editorDom = $('.editor-container .code-editor')[0];
@@ -17,6 +24,13 @@ Editor.prototype.init = function(anls) {
     me.editor.getSession().setMode('ace/mode/python');
     
     me.editor.getSession().getDocument().setValue(anls.code);
+    
+    me.editor.on('change', function(e) {
+      if (feature == 'edit') {
+        $('span',$executeButton).text('Execute');
+        executeAction = 'execute';
+      }
+    }); 
     
     // logs
     me.jqConsole = $('.editor-container .execution-logs .console').jqconsole('Welcome to our console\n', Utils.getConsoleCaret('python'));
@@ -26,7 +40,15 @@ Editor.prototype.init = function(anls) {
     me.$loading = $(".editor-status .ajax-loading");
     
     $('button#editor-execute').click(function() {
-      me.execute();
+      if (executeAction == 'execute') {
+        me.execute();
+      } else if (executeAction == 'next') {
+        // just go to next step
+        window.location.href = ctx + '/editor/anls/' + me.anls.guid + '/size';
+      } else {
+        // do nothing
+        console.debug('Unknown action!');
+      }     
     });
     
     $('#execution-logs button.clear-console').click(function() {
@@ -84,6 +106,9 @@ Editor.prototype.startPrompt = function(jqconsole, language) {
   });
 }
 
+/**
+ * Sizing step (step 2) in analysis creation process
+ */
 Editor.prototype.initSize = function(anls, dbDetail) {
   var me = this;
   me.anls = anls;
@@ -163,6 +188,9 @@ Editor.prototype.initSize = function(anls, dbDetail) {
   });
 }
 
+/**
+ * Last step in analysis creation process. In this step, user can add information and publish analysis
+ */
 Editor.prototype.initDescribe = function(anls) {
   $(function() {
     com.bouncingdata.Main.toggleLeftNav();
@@ -282,6 +310,7 @@ Editor.prototype.execute = function(callback) {
   var me = this;
   var code = me.editor.getSession().getDocument().getValue();
   if (!code) {
+    console.debug('No code to execute!');
     return;
   }
   var type = 'analysis';
@@ -305,11 +334,12 @@ Editor.prototype.execute = function(callback) {
         if (type == 'analysis') {
           var visCount = result['visCount'];
           var datasetCount = result['datasetCount'];
+          var execId = result['executionId'];
           console.debug(result);
           
           // only redirect to size page if the visualization dashboard is not empty
           if (visCount > 0) {
-            window.location = ctx + '/editor/anls/' + me.anls.guid + '/size';
+            window.location = ctx + '/editor/anls/' + me.anls.guid + '/size?execid=' + execId;
           }
         } else if (type == 'scraper') {
           var datasets = result['datasets'];

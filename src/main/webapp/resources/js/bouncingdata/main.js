@@ -449,11 +449,11 @@ Main.prototype.newAnalysis = function(appData, newTab) {
     type: "post",
     success: function(anls) {
       if (newTab) {
-        window.open(ctx + '/editor/anls/' + anls.guid + '/edit', '_blank');
-      } else window.location = ctx + '/editor/anls/' + anls.guid + '/edit';
+        window.open(ctx + '/editor/anls/' + anls.guid + '/edit?feature=new', '_blank');
+      } else window.location = ctx + '/editor/anls/' + anls.guid + '/edit?feature=new';
     },
     error: function(res) {
-      alert('Failed to create new analysis. Please try again.');
+      window.alert('Failed to create new analysis. Please try again.');
       console.debug(res);
     },
     async: false

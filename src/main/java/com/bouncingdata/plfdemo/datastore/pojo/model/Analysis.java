@@ -65,6 +65,5 @@ public class Analysis extends BcDataScript {
   }
   public void setThumbnail(String thumbnail) {
     this.thumbnail = thumbnail;
-  }
-  
+  }  
 }

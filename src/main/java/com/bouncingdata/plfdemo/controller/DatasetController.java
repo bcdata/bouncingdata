@@ -234,8 +234,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/query", method = RequestMethod.POST)
-  public @ResponseBody
-  QueryResult queryDataset(@RequestParam(value = "guid", required = true) String guid,
+  public @ResponseBody QueryResult queryDataset(@RequestParam(value = "guid", required = true) String guid,
       @RequestParam(value = "query", required = true) String query) {
     try {
       Dataset ds = datastoreService.getDatasetByGuid(guid);
@@ -252,8 +251,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/m/{guids}", method = RequestMethod.GET)
-  public @ResponseBody
-  Map<String, DatasetDetail> getDataMap(@PathVariable String guids) {
+  public @ResponseBody Map<String, DatasetDetail> getDataMap(@PathVariable String guids) {
     Map<String, DatasetDetail> results = new HashMap<String, DatasetDetail>();
     String[] guidArr = guids.split(",");
     for (String guid : guidArr) {
@@ -269,12 +267,11 @@ public class DatasetController {
         if (ds.getRowCount() < 100) {
           data = userDataService.getDatasetToString(ds.getName());
         } else {
-          /*Map row = userDataService.getDatasetToList(ds.getName(), 0, 1).get(0);
-          columns = new String[row.keySet().size()];
-          int i = 0;
-          for (Object s : row.keySet()) {
-            columns[i++] = (String) s;
-          }*/
+          /*
+           * Map row = userDataService.getDatasetToList(ds.getName(), 0,
+           * 1).get(0); columns = new String[row.keySet().size()]; int i = 0;
+           * for (Object s : row.keySet()) { columns[i++] = (String) s; }
+           */
           columns = userDataService.getColumnNames(ds.getName());
         }
         DatasetDetail detail = new DatasetDetail(guid, ds.getName(), ds.getRowCount(), columns, data);
@@ -289,8 +286,7 @@ public class DatasetController {
 
   @Deprecated
   @RequestMapping(value = "/up", method = RequestMethod.POST)
-  public @ResponseBody
-  ActionResult submitDataset(@RequestParam(value = "file", required = true) MultipartFile file,
+  public @ResponseBody ActionResult submitDataset(@RequestParam(value = "file", required = true) MultipartFile file,
       @RequestParam(value = "type", required = true) String type, ModelMap model, Principal principal) {
 
     User user = (User) ((Authentication) principal).getPrincipal();
@@ -319,7 +315,8 @@ public class DatasetController {
       parser = DataParserFactory.getDataParser(FileType.TEXT);
     } else if (type.equals("csv")) {
       parser = DataParserFactory.getDataParser(FileType.CSV);
-    } else return new ActionResult(-1, "Unknown type");
+    } else
+      return new ActionResult(-1, "Unknown type");
 
     // temporary store to where? in which format?
     final String ticket = Utils.getExecutionId();
@@ -356,8 +353,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/persist", method = RequestMethod.POST)
-  @ResponseBody
-  public ActionResult persistDataset(@RequestParam(value = "ticket", required = true) String ticket,
+  @ResponseBody public ActionResult persistDataset(@RequestParam(value = "ticket", required = true) String ticket,
       @RequestParam(value = "schema", required = true) String schema,
       @RequestParam(value = "name", required = true) String name,
       @RequestParam(value = "description", required = false) String description,
@@ -517,8 +513,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/ajax/{guid}", method = RequestMethod.GET)
-  public @ResponseBody
-  Map<String, Object> loadDatatable(@PathVariable String guid, WebRequest request) {
+  public @ResponseBody Map<String, Object> loadDatatable(@PathVariable String guid, WebRequest request) {
     try {
       Dataset ds = datastoreService.getDatasetByGuid(guid);
       if (ds == null) {
@@ -534,7 +529,8 @@ public class DatasetController {
       Map<String, Object> result = new HashMap<String, Object>();
       result.put("sEcho", sEcho);
 
-      //List<Map> data = userDataService.getDatasetToList(ds.getName(), displayStart, displayLength);
+      // List<Map> data = userDataService.getDatasetToList(ds.getName(),
+      // displayStart, displayLength);
       List<Object[]> data = userDataService.getDatasetToListOfArray(ds.getName(), displayStart, displayLength);
       // int totalDisplayRecords = data.size();
       int totalRecords = ds.getRowCount();
@@ -558,14 +554,16 @@ public class DatasetController {
   /**
    * Streams the dataset as CSV file format
    * 
-   * @param guid dataset guid
-   * @param req the <code>HttpServletRequest</code> object
-   * @param res the <code>HttpServletResponse</code> object
+   * @param guid
+   *          dataset guid
+   * @param req
+   *          the <code>HttpServletRequest</code> object
+   * @param res
+   *          the <code>HttpServletResponse</code> object
    * @throws IOException
    */
   @RequestMapping(value = "/dl/{type}/{guid}", method = RequestMethod.GET)
-  public @ResponseBody
-  void download(@PathVariable String type, @PathVariable String guid, HttpServletRequest req, HttpServletResponse res)
+  public @ResponseBody void download(@PathVariable String type, @PathVariable String guid, HttpServletRequest req, HttpServletResponse res)
       throws IOException {
 
     if (!("csv".equalsIgnoreCase(type) || "json".equalsIgnoreCase(type))) {
@@ -600,8 +598,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/att/{type}/{appGuid}/{attName}", method = RequestMethod.GET)
-  public @ResponseBody
-  void downloadAttachment(@PathVariable String type, @PathVariable String appGuid, @PathVariable String attName,
+  public @ResponseBody void downloadAttachment(@PathVariable String type, @PathVariable String appGuid, @PathVariable String attName,
       HttpServletRequest req, HttpServletResponse res) throws IOException {
     if (!("csv".equalsIgnoreCase(type) || "json".equalsIgnoreCase(type))) {
       res.sendError(400, "Unknown datatype.");
@@ -652,8 +649,7 @@ public class DatasetController {
    * @throws Exception
    */
   @RequestMapping(value = "/upload/ref/{guid}", method = RequestMethod.POST)
-  public @ResponseBody
-  ActionResult uploadReferenceDoc(@PathVariable String guid,
+  public @ResponseBody ActionResult uploadReferenceDoc(@PathVariable String guid,
       @RequestParam(value = "file-ref", required = false) MultipartFile refFile,
       @RequestParam(value = "web-ref", required = false) String refUrl) throws Exception {
 
@@ -697,8 +693,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/{guid}/addtag", method = RequestMethod.POST)
-  public @ResponseBody
-  ActionResult addTag(@PathVariable String guid, @RequestParam(value = "tag", required = true) String tag,
+  public @ResponseBody ActionResult addTag(@PathVariable String guid, @RequestParam(value = "tag", required = true) String tag,
       ModelMap model, Principal principal) throws Exception {
     User user = (User) ((Authentication) principal).getPrincipal();
     if (user == null) {
@@ -738,8 +733,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = "/{guid}/removetag", method = RequestMethod.POST)
-  public @ResponseBody
-  ActionResult removeTag(@PathVariable String guid, @RequestParam(value = "tag", required = true) String tag,
+  public @ResponseBody ActionResult removeTag(@PathVariable String guid, @RequestParam(value = "tag", required = true) String tag,
       ModelMap model, Principal principal) throws Exception {
     User user = (User) ((Authentication) principal).getPrincipal();
     if (user == null) {

@@ -3,6 +3,7 @@ package com.bouncingdata.plfdemo.datastore.pojo.dto;
 
 
 public class ExecutionResult {
+  private String executionId;
   private String output;
   //private Map<String, VisualizationDetail> visualizations;
   //private Map<String, DatasetDetail> datasets;
@@ -11,7 +12,8 @@ public class ExecutionResult {
   private int statusCode;
   private String message;
   
-  public ExecutionResult(String output, int visCount, int datasetCount, int statusCode, String msg) {
+  public ExecutionResult(String executionId, String output, int visCount, int datasetCount, int statusCode, String msg) {
+    this.executionId = executionId;
     this.output = output;
     //this.visualizations = visualizations;
     this.statusCode = statusCode;
@@ -51,6 +53,14 @@ public class ExecutionResult {
 
   public void setDatasetCount(int datasetCount) {
     this.datasetCount = datasetCount;
+  }
+
+  public String getExecutionId() {
+    return executionId;
+  }
+
+  public void setExecutionId(String executionId) {
+    this.executionId = executionId;
   }
 
   /*public Map<String, VisualizationDetail> getVisualizations() {

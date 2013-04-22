@@ -13,7 +13,7 @@ public class ExecutionLog {
   @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
   private int id;
   private String executionId;
-  private int appId;
+  private Analysis analysis;
   private Date startedTime;
   private Date endedTime;
   private int persistedRowCount;
@@ -32,12 +32,7 @@ public class ExecutionLog {
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
-  public int getAppId() {
-    return appId;
-  }
-  public void setAppId(int appId) {
-    this.appId = appId;
-  }
+ 
   public Date getStartedTime() {
     return startedTime;
   }

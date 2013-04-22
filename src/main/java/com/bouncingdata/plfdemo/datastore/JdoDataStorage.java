@@ -1273,6 +1273,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			scr.setLastUpdate(new Date());
 			// scr.setTags(script.getTags());
 			scr.setExecuted(script.isExecuted());
+			scr.setLastOutput(script.getLastOutput());
 			tx.commit();
 		} finally {
 			if (tx.isActive())

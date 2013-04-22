@@ -66,14 +66,14 @@ public class AnalysisController {
         return "error";
       }
       
-      User user = (User) ((Authentication)principal).getPrincipal();
-      try{
-	      ObjectMapper logmapper = new ObjectMapper();
-	      String data = logmapper.writeValueAsString(new String[] {"1", guid});		   	 
-	      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VIEW_ANALYSIS,data);
-      }catch (Exception e) {
-          logger.debug("Failed to log action", e);
-        }
+      User user = (User) ((Authentication) principal).getPrincipal();
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] { "1", guid });
+        datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.VIEW_ANALYSIS, data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
       if (anls.getUser().getUsername().equals(user.getUsername())) {
         model.addAttribute("isOwner", true);
       } else model.addAttribute("isOwner", false);
@@ -143,8 +143,7 @@ public class AnalysisController {
 	 * @return
 	 */
 	@RequestMapping(value = "/commentlist/{guid}", method = RequestMethod.GET)
-	public @ResponseBody
-	List<Comment> getCommentList(@PathVariable String guid) {
+	public @ResponseBody List<Comment> getCommentList(@PathVariable String guid) {
 		try {
 			Analysis anls = datastoreService.getAnalysisByGuid(guid);
 			if (anls == null)
@@ -243,8 +242,7 @@ public class AnalysisController {
 	 * @param principal
 	 */
 	@RequestMapping(value = "/commentvote/{guid}", method = RequestMethod.POST)
-	public @ResponseBody
-	void voteComment(@PathVariable String guid,
+	public @ResponseBody void voteComment(@PathVariable String guid,
 			@RequestParam(value = "commentId", required = true) int commentId,
 			@RequestParam(value = "vote", required = true) int vote,
 			ModelMap model, Principal principal) {
@@ -290,9 +288,7 @@ public class AnalysisController {
 	}
 
 	@RequestMapping(value = "/{guid}/tagset", method = RequestMethod.GET)
-	public @ResponseBody
-	List<Tag> getAnalysisTagSet(@PathVariable String guid, ModelMap model)
-			throws Exception {
+	public @ResponseBody List<Tag> getAnalysisTagSet(@PathVariable String guid, ModelMap model)	throws Exception {
 		Analysis anls = datastoreService.getAnalysisByGuid(guid);
 		if (anls == null) {
 			return null;
@@ -320,8 +316,7 @@ public class AnalysisController {
 	}
 
 	@RequestMapping(value = "/{guid}/addtag", method = RequestMethod.POST)
-	public @ResponseBody
-	ActionResult addAnalysisTag(@PathVariable String guid,
+	public @ResponseBody ActionResult addAnalysisTag(@PathVariable String guid,
 			@RequestParam(value = "tag", required = true) String tag,
 			ModelMap model, Principal principal) throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();
@@ -364,8 +359,7 @@ public class AnalysisController {
 	}
 
 	@RequestMapping(value = "/{guid}/removetag", method = RequestMethod.POST)
-	public @ResponseBody
-	ActionResult removeAnalysisTag(@PathVariable String guid,
+	public @ResponseBody ActionResult removeAnalysisTag(@PathVariable String guid,
 			@RequestParam(value = "tag", required = true) String tag,
 			ModelMap model, Principal principal) throws Exception {
 		User user = (User) ((Authentication) principal).getPrincipal();

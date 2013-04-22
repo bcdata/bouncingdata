@@ -60,8 +60,7 @@ public class ClientController {
 	 * @return
 	 */
 	@RequestMapping(value = "/test")
-	public @ResponseBody
-	String test(Principal principal) {
+	public @ResponseBody String test(Principal principal) {
 		StringBuilder response = new StringBuilder(
 				"Your request has been authenticated.");
 		User user = (User) ((Authentication) principal).getPrincipal();
@@ -89,8 +88,7 @@ public class ClientController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody
-	Map getList(@RequestParam(value = "type", required = false) String type,
+	public @ResponseBody Map getList(@RequestParam(value = "type", required = false) String type,
 			Principal principal, HttpServletResponse res) throws IOException {
 		User user = (User) ((Authentication) principal).getPrincipal();
 		if (user == null) {
@@ -140,8 +138,7 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/anls/info/{guid}", method = RequestMethod.GET)
-	public @ResponseBody
-	Analysis getAnalysisInfo(@PathVariable String guid, Principal principal)
+	public @ResponseBody Analysis getAnalysisInfo(@PathVariable String guid, Principal principal)
 			throws Exception {
 		Analysis anls = datastoreService.getAnalysisByGuid(guid);
 		return anls;
@@ -189,8 +186,7 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/anls/up", method = RequestMethod.POST)
-	public @ResponseBody
-	String uploadAnalysis(
+	public @ResponseBody String uploadAnalysis(
 			@RequestParam(value = "code", required = true) String code,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "description", required = false) String description,
@@ -264,8 +260,7 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/data/info/{guid}", method = RequestMethod.GET)
-	public @ResponseBody
-	Dataset getDatasetInfo(@PathVariable String guid, Principal principal)
+	public @ResponseBody Dataset getDatasetInfo(@PathVariable String guid, Principal principal)
 			throws Exception {
 		Dataset ds = datastoreService.getDatasetByGuid(guid);
 		try {
@@ -283,8 +278,7 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/data/get/{guid}", method = RequestMethod.GET)
-	public @ResponseBody
-	Object getDataset(@PathVariable String guid, Principal principal)
+	public @ResponseBody Object getDataset(@PathVariable String guid, Principal principal)
 			throws Exception {
 		Dataset ds = datastoreService.getDatasetByGuid(guid);
 		try {
@@ -302,8 +296,7 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/data/up", method = RequestMethod.POST)
-	public @ResponseBody
-	void uploadData(Principal principal) throws Exception {
+	public @ResponseBody void uploadData(Principal principal) throws Exception {
 		try {
 			User user = (User) ((Authentication) principal).getPrincipal();
 			ObjectMapper logmapper = new ObjectMapper();
