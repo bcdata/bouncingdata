@@ -10,6 +10,15 @@
 	};
 	com.bouncingdata.Dataset.init(dataset);
 </script>
+
+<style>
+	#q{
+		width: 99%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
+	}
+	#divQuery{
+		border-color: rgb(77, 144, 254);float: left;width: 66%; border: 1px solid #DDD; height: 28px; padding: 0; display: inline-block; background-color: #FFFFFF;
+	}
+</style>
 <div id="main-content" class="datapage-container">
   <div class="data-info right-content">
     <!-- div class="dataset-summary summary">
@@ -145,6 +154,13 @@
       </div>
       <div class="header-rule"></div>
       <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">
+        <form id="search-query" method="post" action="<c:url value="/dataset/squery"/>">
+	        <div id="divQuery">
+	          <input type="text" id="q" name="q" value="Search query ..." onblur="if(value=='') value = 'Search query ...'" onfocus="if(value=='Search query ...') value = ''" title="Syntax: [* || `colname1`,`colname2`,...], condition clause (Column name must be quote in ``)"/>
+	          <input type="hidden" id="oq" name="oq" value="${dataset.guid}"/>
+			</div>
+        </form>	
+        
         <ul>
           <li><a href="#data">View</a></li>
           <li><a href="#schema">Schema</a></li>
@@ -160,8 +176,11 @@
                 var data = ${data};
                 var $table = $('#data-table');
                 com.bouncingdata.Utils.renderDatatable(data, $table, 
-                    {	"sScrollY": "400px", "bPaginate": false, "bFilter": false }
-                );
+                     {
+                	   "sScrollY": "400px", "bPaginate": false, "bFilter": false 
+                	 //"bFilter": false ,"sPaginationType": "full_numbers" 
+                     });
+                     
               </script>
             </c:when>
             <c:otherwise>

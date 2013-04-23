@@ -1234,7 +1234,7 @@ Workbench.prototype.loadDatatableByAjax = function(dsGuid, columns, $table) {
     aoColumns.push({ "sTitle": columns[idx] });
   }
   var datatable = $table.dataTable({
-    "bServerSide": true,
+	"bServerSide": true,
     "bProcessing": true,
     "sAjaxSource": ctx + "/dataset/ajax/" + dsGuid,
     "aoColumns": aoColumns,
@@ -1247,7 +1247,7 @@ Workbench.prototype.loadDatatableByAjax = function(dsGuid, columns, $table) {
     "bScrollInfinite" :true,
     "bScrollCollapse": true,
     "bFilter": false,
-    "bJQueryUI": true
+//    "bJQueryUI": false
   });
   
   // temporarily disable this due to the incompability of KeyTable with server-side processing

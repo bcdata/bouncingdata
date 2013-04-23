@@ -103,7 +103,7 @@ function loadDatasetByAjax(dataPanelId) {
               "bProcessing": true,
               "sAjaxSource": ctx + "/public/data/ajax/" + dsguid,
               "aoColumns": aoColumns,
-              "bJQueryUI": true,
+//              "bJQueryUI": true,
               "sPaginationType": "full_numbers"
             });
             
@@ -146,7 +146,7 @@ function renderDatatable(data, $table) {
   var datatable = $table.dataTable({
     "aaData": aaData, 
     "aoColumns": aoColumns, 
-    "bJQueryUI": true,
+//    "bJQueryUI": true,
     "sPaginationType": "full_numbers"
   });
   var keys = new KeyTable( {

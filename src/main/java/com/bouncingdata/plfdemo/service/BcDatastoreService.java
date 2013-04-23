@@ -44,6 +44,12 @@ public class BcDatastoreService {
     return jdbcBcDatastore.getDatasetToListOfArray(dataset, begin, maxNumber);
   }
   
+  //--- vinhpq : custom for search query
+  public List<Object[]> getDatasetSearchQuery(String dataset, String cols, String condition) throws Exception {
+    return jdbcBcDatastore.getDatasetSearchQuery( dataset,  cols,  condition);
+  }
+  //--- end of search function
+  
   public String getDatasetToString(String dataset, int begin, int maxNumber) throws Exception {
     return jdbcBcDatastore.getDataset(dataset, begin, maxNumber);
   }

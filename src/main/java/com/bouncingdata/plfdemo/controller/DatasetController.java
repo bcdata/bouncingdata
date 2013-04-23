@@ -250,6 +250,78 @@ public class DatasetController {
     }
   }
 
+  @RequestMapping(value = "/squery", method = RequestMethod.POST)
+	public String searchQuery(
+			@RequestParam(value = "q", required = true) String query,
+			@RequestParam(value = "oq", required = true) String oid,
+			ModelMap model, Principal principal) {
+		User user = (User) ((Authentication) principal).getPrincipal();
+	    ObjectMapper mapper = new ObjectMapper();
+	      	    
+	    try {
+	      Dataset ds = datastoreService.getDatasetByGuid(oid);
+	      if (ds == null) {
+	        logger.debug("Can't find the dataset {}", oid);
+	        model.addAttribute("errorMsg", "Dataset not found!");
+	        return "error";
+	      }
+
+	      try {
+	        String data = mapper.writeValueAsString(new String[] { "1", oid });
+	        datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.VIEW_DATAPAGE, data);
+	      } catch (Exception e) {
+	        logger.debug("Failed to log action", e);
+	      }
+
+	      model.addAttribute("dataset", ds);
+	      
+	      //---
+	      if (ds.getUser().getUsername().equals(user.getUsername())) {
+	        model.addAttribute("isOwner", true);
+	      } else
+	        model.addAttribute("isOwner", false);
+	      
+	      //get column query
+	      String[] columns = userDataService.getColumnNames(ds.getName());
+	      
+	      String scol_w_quote = query.substring(query.indexOf("[") +1, query.indexOf("]"))	,
+	      		 scol_wno_quote = scol_w_quote.replace("`", "");
+	      
+	      String sCondition = query.substring(query.indexOf("]") + 2,query.length());
+	      		 sCondition = (sCondition.trim().length() > 0) ? (" Where " + sCondition):("");
+	      		 
+//	      if (ds.getRowCount() < 1000) {
+	        List<Object[]> data = new ArrayList<Object[]>();
+	        data.add((!scol_w_quote.equals("*"))?scol_wno_quote.split(","):columns);
+	        data.addAll(userDataService.getDatasetSearchQuery(ds.getName(), scol_w_quote, sCondition));
+	        model.addAttribute("data", mapper.writeValueAsString(data));
+//	      } else {
+//	        model.addAttribute("columns", mapper.writeValueAsString(columns));
+//	        model.addAttribute("data", null);
+//	        model.addAttribute("guid", oid);
+//	      }
+
+	      List<AnalysisDataset> relations = datastoreService.getRelatedAnalysis(ds.getId());
+	      if (relations != null) {
+	        List<Analysis> relatedAnls = new ArrayList<Analysis>();
+	        for (AnalysisDataset ad : relations) {
+	          if (ad.isActive()) {
+	            Analysis anls = ad.getAnalysis();
+	            relatedAnls.add(anls);
+	          }
+	        }
+	        model.addAttribute("relatedAnls", relatedAnls);
+	      }
+	      //---
+	      
+	    } catch (Exception e) {
+	      logger.debug("", e);
+	      model.addAttribute("errorMsg", "Column information is not found.");
+	      return "error";
+	    }
+	    
+		return "datapage";
+	}
   @RequestMapping(value = "/m/{guids}", method = RequestMethod.GET)
   public @ResponseBody Map<String, DatasetDetail> getDataMap(@PathVariable String guids) {
     Map<String, DatasetDetail> results = new HashMap<String, DatasetDetail>();
