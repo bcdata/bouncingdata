@@ -268,7 +268,10 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
           success: function(res) {
             // reload plot
             if (res) {       
-              $inner.attr('src', 'data:image/png;base64,' + res).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+              $inner.attr('src', 'data:image/png;base64,' + res);
+              $inner.bind('load', function() {
+                $(this).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+              });
               console.debug("Successfully replay plot.");
             } else {
               console.debug("Failed to replay plot");
