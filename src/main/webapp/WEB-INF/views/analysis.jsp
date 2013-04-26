@@ -8,8 +8,7 @@
     guid: '${anls.guid}',
     user: '${anls.user.username}',
     language: '${anls.language}',
-    code: '${anlsCode}',
-    name: '${anls.name}'
+    code: '${anlsCode}'
   };
   var dbDetail = $.parseJSON('${dashboardDetail}');
   if (!com.bouncingdata.Analysis) {

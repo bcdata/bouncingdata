@@ -96,10 +96,11 @@ Analysis.prototype.init = function(anls, dbDetail) {
     });
     
     $('.header a.anls-clone').click(function() {
+      var name = $('.anls-header .anls-title h2').text();
       var data = {
-        name : anls.name + '_clone',
+        name : name + '_clone',
         language : 'r',
-        description : 'Cloned from ' + anls.name,
+        description : 'Cloned from ' + name,
         code : anls.code,
         isPublic : false,
         tags : '',
