@@ -117,21 +117,6 @@ Main.prototype.init = function() {
 		    return false; 
 		  }
 		});
-	
-	
-//	$('.dataset-content #search-query').submit(
-//		function(e) {
-//			e.preventDefault();
-//			var query = $('#q', $(this)).val();
-//			var oid = $('#oq', $(this)).val();
-//			//var oid = $('#srchQuery', $(this)).attr('oid');
-//			
-//			if (!query && !oid && query=='Search query ...')
-//				return false;
-//			
-//			com.bouncingdata.Nav.fireAjaxLoad(ctx
-//					+ '/dataset/squery' , false);
-//	});
 
     // inits. history stack with the first state
     window.history.pushState({linkId: window.location.href}, null, window.location.href);
@@ -622,3 +607,4 @@ com.bouncingdata.Main.init();
     return $(this).clone().wrap('<div></div>').parent().html();
   }
 })(jQuery);
+

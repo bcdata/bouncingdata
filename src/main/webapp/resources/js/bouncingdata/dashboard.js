@@ -268,7 +268,10 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
           success: function(res) {
             // reload plot
             if (res) {       
-              $inner.attr('src', 'data:image/png;base64,' + res).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+              $inner.attr('src', 'data:image/png;base64,' + res);
+              $inner.bind('load', function() {
+                $(this).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+              });
               console.debug("Successfully replay plot.");
             } else {
               console.debug("Failed to replay plot");
@@ -350,15 +353,25 @@ Dashboard.prototype.postback = function($container, cause) {
 Dashboard.prototype.view = function(vizList, dashboardPos, $container) {
   var count = 0, defaultSize = 380;
   $container.empty();
-  for (v in vizList) {
-    var viz = vizList[v];
-    viz.name = v;
-    var pos = dashboardPos[viz.guid];
-    if (pos) {
-      this.addViz(pos.x, pos.y, pos.w, pos.h, viz, $container, false);
+  if (!dashboardPos) {
+    // the vizList will be positioned automatically
+    for (v in vizList) {
+      var viz = vizList[v];
+      viz.name = v;    
+      this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, false);
+      count++;
     }
-    else this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, false);
-    count++;
+  }  else {
+    for (v in vizList) {
+      var viz = vizList[v];
+      viz.name = v;
+      var pos = dashboardPos[viz.guid];
+      if (pos) {
+        this.addViz(pos.x, pos.y, pos.w, pos.h, viz, $container, false);
+      }
+      else this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, false);
+      count++;
+    }
   }
 }
 
