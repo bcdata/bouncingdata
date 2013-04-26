@@ -3,6 +3,8 @@ package com.bouncingdata.plfdemo.util;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.codehaus.jackson.JsonNode;
@@ -25,6 +29,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardPosition;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
+import com.bouncingdata.plfdemo.service.DTMailSender;
+
+
 
 public class Utils {
   
@@ -73,6 +80,106 @@ public class Utils {
     }
     return result;
   }
+  
+  // --- Vinhpq : add new functions 
+   
+  public static String RandomString(){
+	SecureRandom random = new SecureRandom();  
+	String str = new BigInteger(130, random).toString(32);  
+	return (str);
+  }
+  
+  /**
+	 * send new password to user's mail address
+	 * @param derivaName
+	 * @param sEmail
+	 * @param password
+	 * @return : true if send mail success
+	 */
+  public static boolean sendMailPassword(String username, String sEmail, String password) {
+		
+	String title = "Bouncing Data: Reset password!";
+
+	String content = "<table cellpadding='0' cellspacing='0' border='0' width='620'>" +
+			  "<tbody> " +
+				"<tr> " +
+					"<td style='background: #3b5998; font-weight: bold; vertical-align: middle; padding: 10px 8px;'> " +
+						"<a style='color: #ffffff; text-decoration: none;font-size: 15px;' href='#' target='_blank'>Bouncing Data</a> " +
+					"</td>" +
+				"</tr>" +
+				"<tr>" +
+					"<td style='border-right: 1px solid #cccccc;" + 
+							   "border-bottom: 1px solid #3b5998; " +
+							   "border-left: 1px solid #cccccc;" +
+							   "padding: 15px;font-size: 12px;'>" +
+						"<div style='margin-bottom: 15px;'>Hi " + username + ",</div>" +
+						"<div style='margin-bottom: 15px'>This is your new password:</div>" +
+						"<div style='margin-bottom: 15px; width: 180px; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'>" +
+							"<b style='color: #3b5998; text-decoration: none; font-weight: bold; font-size: 13px'>" + password + "</b>" +
+						"</div>" +
+						"<div style='margin-bottom: 15px; margin: 0'>Thanks &amp; Best Regards!<br>Bouncing Data System</div>" +
+					"</td>" +
+				 "</tr>" +
+				"</tbody>" +
+			  "</table>" ;
+	
+	DTMailSender sender = new DTMailSender(title, content);
+	boolean process = sender.sendEmail(sEmail);
+	
+	return (process);
+  }
+  
+  public static boolean sendMailLoginFail(String username, String email){
+	  String title = "Bouncing Data: Login fail!";
+	  
+	  String content = "<table cellpadding='0' cellspacing='0' border='0' width='620'>" +
+						  "<tbody> " +
+							"<tr> " +
+								"<td style='background: #3b5998; font-weight: bold; vertical-align: middle; padding: 10px 8px;'> " +
+									"<a style='color: #ffffff; text-decoration: none;font-size: 15px;' href='#' target='_blank'>Bouncing Data</a> " +
+								"</td>" +
+							"</tr>" +
+							"<tr>" +
+								"<td style='border-right: 1px solid #cccccc;" + 
+										   "border-bottom: 1px solid #3b5998; " +
+										   "border-left: 1px solid #cccccc;" +
+										   "padding: 15px;font-size: 12px;'>" +
+									"<div style='margin-bottom: 15px;'>Hi " + username + ",</div>" +
+									"<div style='margin-bottom: 15px'>Sorry, are you having trouble logging in to your Bouncing Data account?</div>" +
+									"<div style='margin-bottom: 15px; width: 170px; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'>" +
+										"<a href='http://www.bouncingdata.com' style='color: #3b5998; text-decoration: none; font-weight: bold; font-size: 13px' target='_blank'>Click to get new password!</a>" +
+									"</div>" +
+									"<div style='margin-bottom: 15px; margin: 0'>Thanks &amp; Best Regards!<br>Bouncing Data System</div>" +
+								"</td>" +
+							 "</tr>" +
+							"</tbody>" +
+						  "</table>" ;
+	  DTMailSender sender = new DTMailSender(title, content);
+	  boolean process = sender.sendEmail(email);
+		
+	  return (process);
+  }
+  
+  public static String getClientIpAddr(HttpServletRequest request) {  
+      String ip = request.getHeader("X-Forwarded-For");  
+      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+          ip = request.getHeader("Proxy-Client-IP");  
+      }  
+      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+          ip = request.getHeader("WL-Proxy-Client-IP");  
+      }  
+      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+          ip = request.getHeader("HTTP_CLIENT_IP");  
+      }  
+      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+          ip = request.getHeader("HTTP_X_FORWARDED_FOR");  
+      }  
+      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+          ip = request.getRemoteAddr();  
+      }  
+      return ip;  
+  }  
+  // --- End
   
   public static String resultSetToJson(ResultSet rs) throws Exception {
     

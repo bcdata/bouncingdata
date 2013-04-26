@@ -17,7 +17,7 @@
     <sec:http-basic/>  
   </sec:http>
   
-  <sec:http use-expressions="true">
+  <sec:http use-expressions="true" auto-config="true">
     <sec:intercept-url pattern="/auth/*" access="permitAll" />
     <sec:intercept-url pattern="/plfdemo/*" access="permitAll" />
     <sec:intercept-url pattern="/resources/**" access="permitAll" />
@@ -25,12 +25,15 @@
     <sec:intercept-url pattern="/favicon.ico" access="permitAll"/>
     <sec:intercept-url pattern="/public/**" access="permitAll" />
     <sec:intercept-url pattern="/**" access="isAuthenticated()" />
-    
-    <sec:form-login login-page="/auth/login" default-target-url="/"
-      authentication-failure-url="/auth/failed" login-processing-url="/auth/security_check"  />
+    <sec:form-login login-page="/auth/login" 
+    				default-target-url="/"
+      				authentication-failure-url="/auth/failed" 
+      				login-processing-url="/auth/security_check"  
+      				authentication-failure-handler-ref="myAuthErrorHandler"/>
     <sec:logout logout-success-url="/auth/logout" logout-url="/auth/security_logout" />  
-     
   </sec:http>
+  
+  <bean id="myAuthErrorHandler" class="com.bouncingdata.plfdemo.controller.LoginController"/>
   
   <bean id="customUserDetailsService" class="com.bouncingdata.plfdemo.service.CustomUserDetailsService">
     <property name="dataStorage" ref="dataStorage">

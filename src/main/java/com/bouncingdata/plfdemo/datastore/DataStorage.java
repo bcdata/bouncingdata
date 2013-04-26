@@ -479,6 +479,8 @@ public interface DataStorage {
   
   public List<Tag> get10Tags();
   
+  public void resetPassword(int userId, String newpass);
+  
   //-----
   
   public List<Dataset> getMostPopularDatasets();

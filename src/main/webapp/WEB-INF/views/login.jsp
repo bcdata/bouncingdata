@@ -20,7 +20,118 @@
       border: 0 none;
       padding: 8px;  
     }
+    label, input { display:block; }
+    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    fieldset { padding:0; border:0; margin-top:25px; }
+    .validateTips { border: 1px solid transparent; padding: 0.3em; }
+    .ui-dialog .ui-state-error { padding: .3em; }
+    
   </style>
+    <script>
+	  $(function() {
+	    var name = $( "#name" ),
+	      email = $( "#email" ),
+	      allFields = $( [] ).add( name ).add( email ),
+	      tips = $( ".validateTips" );
+	 
+	    function updateTips( t ) {
+	      tips
+	        .text( t )
+	        .addClass( "ui-state-highlight" );
+	      setTimeout(function() {
+	        tips.removeClass( "ui-state-highlight", 1500 );
+	      }, 500 );
+	    }
+	 
+	    function checkLength( o, n, min, max ) {
+	      if ( o.val().length > max || o.val().length < min ) {
+	        o.addClass( "ui-state-error" );
+	        updateTips( "Length of " + n + " must be between " +
+	          min + " and " + max + "." );
+	        return false;
+	      } else {
+	        return true;
+	      }
+	    }
+	 
+	    function checkRegexp( o, regexp, n ) {
+	      if ( !( regexp.test( o.val() ) ) ) {
+	        o.addClass( "ui-state-error" );
+	        updateTips( n );
+	        return false;
+	      } else {
+	        return true;
+	      }
+	    }
+	 
+	    $( "#dialog-form" ).dialog({
+	      autoOpen: false,
+	      height: 300,
+	      width: 350,
+	      modal: true,
+	      buttons: {
+	        "Get password": function() {
+	          var bValid = true;
+	          allFields.removeClass( "ui-state-error" );
+	 
+	          bValid = bValid && checkLength( name, "username", 3, 16 );
+	          bValid = bValid && checkLength( email, "email", 6, 80 );
+	 
+	          bValid = bValid && checkRegexp( name, /^[a-z]([0-9a-z_])+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter." );
+	          // From jquery.validate.js (by joern), contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+	          bValid = bValid && checkRegexp( email, /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i, "eg. exam@gmail.com" );
+	 
+	          if ( bValid ) {
+	        	  $("#progress-stt").show();
+	        	  $.ajax({
+						type : "post",
+						url : '<c:url value="/auth/resetpasswd"/>' ,
+						data : {
+							"user-email" : email.val(),
+							"user-name" : name.val()
+						},
+						success : function(res) {
+							$( "#dialog-form" ).dialog( "close" );
+							$("#progress-stt").hide();
+							
+							if (res['code'] < 0) {
+								window.alert("Failed to reset password.\nError: " + res['message']);
+						        return;
+							}else{
+								$("#email-text").html(res['message']);
+								$( "#dialog-message" ).dialog( "open" );
+							}
+						}
+					});
+	          }
+	        },
+	        Cancel: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      },
+	      close: function() {
+	        allFields.val( "" ).removeClass( "ui-state-error" );
+	      }
+	    });
+	 
+	    $( "#forgot-user-password" ).click(function() {
+	        $( "#dialog-form" ).dialog( "open" );
+	    });
+	    
+	    $("#dialog-message").dialog({
+	   	  autoOpen: false,
+	      modal: true,
+	      buttons: {
+	        Ok: function() {
+        	  $("#email-text").html("");
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+	  });
+	  
+	 
+  </script>
 </head>
 <body onload='document.f.j_username.focus();'>
   <div class="page" id="page">
@@ -56,7 +167,8 @@
                 <input class="input-field" type='password' name='j_password' id='password' maxlength="100"></input>
                 <div class="login-actions">
                   <input type="submit" name="submit" value="Login" onclick="if ($('#username').val().length <= 0 || $('#password').val().length <= 0) return false; else return true;" />
-                  <a href="#">Forgot your password?</a>
+                  <!-- vinhpq : send new password to email function (active: adding id property -> id="forgot-user-password" ) -->
+                  <a href="#" >Forgot your password?</a>
                 </div>            
               <div class="clear"></div>
             </form>
@@ -108,6 +220,7 @@
             </form>
           </div>
         </div>
+    <!-- vinhpq  
         <div id="forgot-password" style="display: none;">
           <h4>Reset your password</h4>
           <div class="message">
@@ -122,6 +235,7 @@
             </form>
           </div>
         </div>
+    -->
       </div>
     </div>
     <div class="footer">
@@ -135,5 +249,31 @@
       </div>
     </div>
   </div>  
+  
+  	<div id="dialog-form" title="Reset your password">
+	  <p class="validateTips">All form fields are required.</p>
+	  <form>
+	  <fieldset>
+	    <label for="name">Name</label>
+	    <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
+	    <label for="email">Email</label>
+	    <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />	    
+	  	
+	  	<div id="progress-stt" name="progress-stt" style="display: none;">
+	  		<img src="<c:url value="/resources/images/ajax-loader.gif"/>" height="25" width="25">
+	  	</div>
+	  	 
+	  </fieldset>
+	  </form>
+	</div>
+	<div id="dialog-message" title="Reset your password">
+	  <p>
+	    <span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>
+	    Your password have sent successfully to your email. 
+	  </p>
+	  <p>
+	    Check email <u><b id="email-text">...</b></u> to get new password.
+	  </p>
+	</div>
 </body>
 </html>

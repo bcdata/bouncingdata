@@ -552,6 +552,11 @@ public class DatastoreServiceImpl implements DatastoreService {
     return dataStorage.get10Tags();
   }
   
+  @Override
+  public void resetPassword(int userId, String newpass) {
+    dataStorage.resetPassword(userId, newpass);
+  }
+  
   //-----
   
   @Override

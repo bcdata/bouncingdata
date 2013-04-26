@@ -101,6 +101,37 @@ Main.prototype.init = function() {
       if (!query || !criteria) return false;
       com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);
     });
+    
+    // search query textbox
+	$('.dataset-content #q').keypress(function (e) {
+		  
+		  if (e.which == 13) {
+			e.preventDefault();
+			var query = $('#q', $(this)).val();
+			var oid = $('#oq', $(this)).val();
+			
+			if (!query && !oid && query=='Search query ...')
+				return false;
+			
+			$('.dataset-content form#search-query').submit();
+		    return false; 
+		  }
+		});
+	
+	
+//	$('.dataset-content #search-query').submit(
+//		function(e) {
+//			e.preventDefault();
+//			var query = $('#q', $(this)).val();
+//			var oid = $('#oq', $(this)).val();
+//			//var oid = $('#srchQuery', $(this)).attr('oid');
+//			
+//			if (!query && !oid && query=='Search query ...')
+//				return false;
+//			
+//			com.bouncingdata.Nav.fireAjaxLoad(ctx
+//					+ '/dataset/squery' , false);
+//	});
 
     // inits. history stack with the first state
     window.history.pushState({linkId: window.location.href}, null, window.location.href);
@@ -498,7 +529,7 @@ Utils.prototype.renderDatatable = function(data, $table, options) {
     "aaData": aaData,
     "aoColumns": aoColumns,
     "bFilter": false,
-    "bJQueryUI": true
+//    "bJQueryUI": true
   }
   
   if (options) {
@@ -547,7 +578,7 @@ Utils.prototype.renderDatatable_ = function(data, $table) {
   var datatable = $table.dataTable({
     "aaData": aaData,
     "aoColumns": aoColumns,
-    "bJQueryUI": true,
+//    "bJQueryUI": true,
     "sPaginationType": "full_numbers"
   });
   var keys = new KeyTable( {

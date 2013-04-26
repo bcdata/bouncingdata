@@ -1655,6 +1655,24 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	
     // ----------Vinhpq: Add functions for left menu-------- 
 	@Override
+	public void resetPassword(int userId, String newpass){
+		PersistenceManager pm = getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		
+		try {
+			tx.begin();
+			User user = pm.getObjectById(User.class, userId);
+			user.setPassword(newpass);
+			tx.commit();
+		} finally {
+			if (tx.isActive()) {
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}
+	
+	@Override
 	public List<Analysis> getAllAnalysesBySelf(int userId) {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Analysis.class);

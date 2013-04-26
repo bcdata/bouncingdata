@@ -1,5 +1,110 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<style>
+    label, input { display:block; }
+    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    fieldset { padding:0; border:0; margin-top:25px; }
+    .validateTips-password { border: 1px solid transparent; padding: 0.3em; }
+    .ui-dialog .ui-state-error { padding: .3em; }
+</style>
+ <script>
+ $(function() {
+	    var npass = $( "#change-p-input" ),
+	      cpass = $( "#confirm-p-input" ),
+	      allFields = $( [] ).add(npass).add(cpass),
+	      tips = $( ".validateTips-password" );
+	 
+	    function updateTips( t ) {
+	      tips
+	        .text( t )
+	        .addClass( "ui-state-highlight" );
+	      setTimeout(function() {
+	        tips.removeClass( "ui-state-highlight", 1500 );
+	      }, 500 );
+	    }
+	 
+	    function checkLength( o, n, min, max ) {
+	      if ( o.val().length > max || o.val().length < min ) {
+	        o.addClass( "ui-state-error" );
+	        updateTips( "Length of " + n + " must be between " +
+	          min + " and " + max + "." );
+	        return false;
+	      } else {
+	        return true;
+	      }
+	    }
+	    
+	    function checkValue( np, cp ) {
+	      if ( np.val()!=cp.val() ) {
+	    	np.addClass( "ui-state-error" );
+	        updateTips( "The passwords do not match." );
+	        return false;
+	      } else {
+	        return true;
+	      }
+	    }
+	 
+	    $( "#dialog-form-change-password" ).dialog({
+	      autoOpen: false,
+	      height: 300,
+	      width: 350,
+	      modal: true,
+	      buttons: {
+	        "Change": function() {
+	          var bValid = true;
+	          allFields.removeClass( "ui-state-error" );
+	 
+	          bValid = bValid && checkLength( npass, "new password", 6, 80 );
+	          bValid = bValid && checkLength( cpass, "confirm password", 6, 80 );
+	          bValid = bValid && checkValue( npass, cpass );
+	          
+	          if ( bValid ) {
+	        	  $("#progress-p-change").show();
+	        	  $.ajax({
+						type : "post",
+						url : '<c:url value="/auth/changepasswd"/>' ,
+						data : {
+							"npassword" : npass.val(),
+						},
+						success : function(res) {
+							$( "#dialog-form-change-password" ).dialog( "close" );
+							$("#progress-p-change").hide();
+							
+							if (res['code'] < 0) {
+								window.alert("Failed to change password.\nError: " + res['message']);
+						        return;
+							}else{
+								$( "#dialog-message-c-password" ).dialog("open");
+							}
+						}
+					});
+	          }
+	        },
+	        Cancel: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      },
+	      close: function() {
+	        allFields.val( "" ).removeClass( "ui-state-error" );
+	      }
+	    });
+	 
+	    $( "#change-password" ).click(function() {
+	        $( "#dialog-form-change-password" ).dialog( "open" );
+	    });
+	    
+	    $("#dialog-message-c-password").dialog({
+		   	  autoOpen: false,
+		      modal: true,
+		      buttons: {
+		        Ok: function() {
+		          $( this ).dialog( "close" );
+		        }
+		      }
+	    });
+	  });
+ </script>
+
 
 <div class="header-content">
   <div class="header-login" style="display: none;">
@@ -34,6 +139,9 @@
       <div class="guide-button-submenu">
         <div class="header-hidden-menu me-menu">
           <ul>
+           	<!-- vinhpq : change password function
+            <li><a id="change-password" name="change-password" class="header-submenu-item" href="#">Change password</a></li>
+            -->
             <li><a class="header-submenu-item" href="<c:url value="/auth/security_logout" />">Logout</a></li>
           </ul>
         </div>
@@ -58,6 +166,29 @@
     </div>
   </div>
 </div>
+
+<!-- vinhpq : popup change password -->
+<div id="dialog-form-change-password" title="Change password" style="display: none;">
+  <p class="validateTips-password">All form fields are required.</p>
+  <form>
+  <fieldset>
+    <label for="name">New password:</label>
+    <input type="password" name="change-p-input" id="change-p-input" class="text ui-widget-content ui-corner-all" />
+    <label for="email">Confirm new password:</label>
+    <input type="password" name="confirm-p-input" id="confirm-p-input" value="" class="text ui-widget-content ui-corner-all" />	    
+  	<div id="progress-p-change" name="progress-p-change" style="display: none;">
+  		<img src="<c:url value="/resources/images/ajax-loader.gif"/>" height="25" width="25">
+  	</div>
+  </fieldset>
+  </form>
+</div>
+<div id="dialog-message-c-password" title="Change password complete" style="display: none;">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>
+    Change password successfully !  
+  </p>
+</div>
+	
 <jqtemplate>
   <!-- Comment templates -->
   <script id="comment-template" type="text/x-jquery-tmpl">

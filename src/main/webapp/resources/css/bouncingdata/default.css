@@ -134,8 +134,8 @@ div.clear {
   margin: 0;
   padding: 2px 16px;
   cursor: pointer;
-  min-width: 80px;
-  width: 80px; 
+  min-width: 100px;
+  width: 100px; 
 }
 
 .top-page-panel .header-buttons a.header-submenu-item:hover {

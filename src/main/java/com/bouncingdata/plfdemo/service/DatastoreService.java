@@ -313,6 +313,8 @@ public interface DatastoreService {
   
   List<Tag> get10Tags();
   
+  void resetPassword(int userId, String newpass);
+  
   //------------------
   
   List<Dataset> getMostPopularDatasets();
