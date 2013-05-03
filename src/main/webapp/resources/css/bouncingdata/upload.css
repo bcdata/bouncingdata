@@ -77,24 +77,55 @@
   margin-top: 20px;
 }
 
+.upload-container .panel-wrapper {
+  position: relative;
+}
+
+.upload-container .panel-wrapper .guideline {
+  position: absolute;
+  left: -150px;
+  border: 2px solid #555;
+  background-color: #DDD;
+  border-radius: 2px;
+  padding: 2px 4px;
+}
+
 .upload-container table#schema-table {
   width: 100%;
+  border-collapse: collapse;
 }
 
-.upload-container table#schema-table thead th {
-  
-}
-
-.upload-container table#schema-table tbody td {
-  padding: 2px 2px 2px 6px;
+.upload-container table#schema-table, .upload-container table#schema-table thead th, .upload-container table#schema-table td {
   border: 1px solid #DDD;
 }
 
-.upload-container .description-panel input#name, .upload-container .schema-panel .reference-form input#web-ref {
+.upload-container table#schema-table thead th, .upload-container table#schema-table td {
+  padding: 4px;
+}
+
+.upload-container table#schema-table thead th {
+  background-color: #EEE;
+}
+
+.upload-container .schema-panel .reference-form input#web-ref {
   border: 1px solid #CCC;
   padding: 3px;
   width: 500px;
 }
+
+.upload-container div.input-wrapper {
+  border: 1px solid #DDD;
+  line-height: 1.6em;
+  height: 1.6em;
+  padding: 2px;
+  margin-top: 4px;
+}
+
+.upload-container .description-panel input#name, .upload-container .description-panel input#source {
+  width: 100%;
+  border: 0 none;
+  padding: 0;
+} 
 
 .upload-container #schema-panel {
   border: 0 none;
@@ -109,10 +140,18 @@
   margin-top: 10px;
 }
 
-#schema-table .column-description, #schema-table .column-name {
-  border: 1px solid #CCC;
+#schema-table span.column-description, #schema-table span.column-name {
+  border: 1px solid #FFF;
   padding: 2px;
   width: 95%;
+  display: inline-block;
+  height: 1.3em;
+  line-height: 1.3em;
+}
+
+#schema-table span.column-description:hover, #schema-table span.column-name:hover {
+  border: 1px solid #CCC;
+  cursor: text;
 }
 
 .upload-container input#file-url:focus, #schema-table td input:focus, .upload-container .schema-panel input#web-ref:focus, .upload-container .description-panel #name:focus {
@@ -130,4 +169,8 @@
 
 .upload-container #schema-tab-view table#data-preview {
   margin-top: 10px;
+}
+
+.upload-container .description-panel table.mceLayout {
+  margin-top: 4px;
 }

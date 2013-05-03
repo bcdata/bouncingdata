@@ -8,6 +8,7 @@ import javax.jdo.annotations.Join;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.Unique;
 
 @PersistenceCapable
 public class Analysis extends BcDataScript {
@@ -27,7 +28,7 @@ public class Analysis extends BcDataScript {
   
   @NotPersistent
   private int commentCount;
-  
+    
   public String getStatus() {
     return status;
   }

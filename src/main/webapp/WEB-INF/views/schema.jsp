@@ -34,7 +34,8 @@
   </div>
   <div class="clear-bar"></div>
   <div class="schema-container center-content-container">
-    <div class="schema-panel-wrapper">
+    <div class="schema-panel-wrapper panel-wrapper">
+      <div class="guideline">Recommended</div>
       <h3>1. Schema</h3>
       <div class="schema-panel schema-tabs ui-tabs" id="schema-panel">
         <ul>
@@ -97,12 +98,17 @@
         </div>         
       </div>  
     </div>
-    <div class="description-panel-wrapper">
+    <div class="description-panel-wrapper panel-wrapper">
+      <div class="guideline">Required</div>
       <h3>2. Description</h3>
       <div class="description-panel">
-        <div>
+        <div class="dataset-info">
           <label for="name">Dataset Name</label>
-          <input type="text" name="name" id="name" /><br><br>
+          <div class="input-wrapper"><input type="text" name="name" id="name" /></div>
+          <br/>
+          <label for="source">Source</label>
+          <div class="input-wrapper"><input type="text" name="source" id="source"></div>
+          <br/>
           <label for="description">Description</label>
           <textarea name="description" id="description" style="width: 100%;"></textarea>
         </div>

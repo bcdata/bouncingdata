@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,8 +107,12 @@ public class CsvParser implements DataParser {
     
     List<DatasetColumn> dsColumns = new ArrayList<DatasetColumn>();
     
+    int untitledCount = 1;
     for (int i = 0; i < fieldNumber; i++) {
       String column = header.get(i).trim();
+      if (StringUtils.isEmpty(column)) {
+        column = "Untitled column " + untitledCount++;
+      }
       DatasetColumn dsCol = new DatasetColumn(column);
       boolean isBoolean = true;
       boolean isInt = true;

@@ -1,12 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<style>
+<!-- style>
     label, input { display:block; }
     input.text { margin-bottom:12px; width:95%; padding: .4em; }
     fieldset { padding:0; border:0; margin-top:25px; }
     .validateTips-password { border: 1px solid transparent; padding: 0.3em; }
     .ui-dialog .ui-state-error { padding: .3em; }
-</style>
+</style-->
  <script>
  $(function() {
 	    var npass = $( "#change-p-input" ),

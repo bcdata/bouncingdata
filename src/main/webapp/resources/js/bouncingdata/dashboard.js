@@ -271,6 +271,7 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
               $inner.attr('src', 'data:image/png;base64,' + res);
               $inner.bind('load', function() {
                 $(this).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+                $vizContainer.css('width', cw + 'px').css('height', ch + 'px');
               });
               console.debug("Successfully replay plot.");
             } else {
