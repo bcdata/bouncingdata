@@ -81,13 +81,18 @@
   position: relative;
 }
 
-.upload-container .panel-wrapper .guideline {
+.upload-container .panel-wrapper .guideline-wrapper {
   position: absolute;
-  left: -150px;
+  left: -200px;
+  width: 150px;
+}
+
+.upload-container .panel-wrapper .guideline {
   border: 2px solid #555;
   background-color: #DDD;
   border-radius: 2px;
   padding: 2px 4px;
+  float: right;
 }
 
 .upload-container table#schema-table {
@@ -119,6 +124,10 @@
   height: 1.6em;
   padding: 2px;
   margin-top: 4px;
+}
+
+.upload-container div.input-wrapper input {
+  border: 0 none;
 }
 
 .upload-container .description-panel input#name, .upload-container .description-panel input#source {

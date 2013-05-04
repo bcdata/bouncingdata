@@ -1239,7 +1239,8 @@ Workbench.prototype.loadDatatableByAjax = function(dsGuid, columns, $table) {
     "sAjaxSource": ctx + "/dataset/ajax/" + dsGuid,
     "aoColumns": aoColumns,
     "iDisplayLength": 200,
-    "sScrollY": "400px",
+    "sScrollY": "500px",
+    "sScrollX": "735px",
     /*"sDom": "frtiS",
     "oScroller": {
       "loadingIndicator": true

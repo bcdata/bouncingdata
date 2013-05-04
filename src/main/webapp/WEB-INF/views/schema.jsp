@@ -17,7 +17,7 @@
 <div id="main-content" class="upload-container">
   <div class="top-bar">
     <div class="left-buttons">
-      <button class="close-button" id="upload-close">Close</button>
+      <button class="close-button" id="upload-close">Discard</button>
     </div>
     <div class="schema-nav-panel">
       <a class="schema-nav" id="schema-back" href="<c:url value="/dataset/upload" />">Back</a>
@@ -35,7 +35,9 @@
   <div class="clear-bar"></div>
   <div class="schema-container center-content-container">
     <div class="schema-panel-wrapper panel-wrapper">
-      <div class="guideline">Recommended</div>
+      <div class="guideline-wrapper">
+        <div class="guideline">Recommended</div>
+      </div>
       <h3>1. Schema</h3>
       <div class="schema-panel schema-tabs ui-tabs" id="schema-panel">
         <ul>
@@ -53,7 +55,7 @@
                 <script>
                   var data = ${data};
                   var $table = $('#data-preview');
-                  com.bouncingdata.Utils.renderDatatable(data, $table,  {	"sScrollY": "400px", "bPaginate": false, "bFilter": false } );
+                  com.bouncingdata.Utils.renderDatatable(data, $table,  { "sScrollX": "840px", "sScrollY": "400px", "bPaginate": false, "bFilter": false } );
                 </script>
               </c:when>
               <c:otherwise>
@@ -99,7 +101,9 @@
       </div>  
     </div>
     <div class="description-panel-wrapper panel-wrapper">
-      <div class="guideline">Required</div>
+      <div class="guideline-wrapper">
+        <div class="guideline">Required</div>
+      </div>
       <h3>2. Description</h3>
       <div class="description-panel">
         <div class="dataset-info">

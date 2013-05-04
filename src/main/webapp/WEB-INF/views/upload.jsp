@@ -36,10 +36,13 @@
     </c:if>
     <div class="upload-form-wrapper">
       <form id="upload-form" method="post" action="<c:url value="/dataset/upload/schema" />" enctype="multipart/form-data">
-        <div class="file-section">
-          <div>
-            <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" style="display: none;" />&nbsp;
-            <span class="upload-status"></span>
+        <div>
+          <img alt="Uploading" src="<c:url value="/resources/images/loader32.gif" />" class="upload-in-progress" style="display: none;" />&nbsp;
+          <span class="upload-status"></span>
+        </div>
+        <div class="file-section panel-wrapper">
+          <div class="guideline-wrapper">
+            <div class="guideline">Required</div>
           </div>
           <h3>1. File Location</h3>
           <span>We support the following types: csv, xls, xlsx, txt, rdata</span>
@@ -51,7 +54,10 @@
             <input type="file" id="file" name="file" />
           </div>
         </div>
-        <div class="options-section">
+        <div class="options-section panel-wrapper">
+          <div class="guideline-wrapper">
+            <div class="guideline">Optional</div>
+          </div>
           <h3>2. Loading Options</h3>
           <div class="options-inner">
             <label for="first-row-as-header">First row is header</label>

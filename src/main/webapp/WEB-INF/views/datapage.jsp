@@ -175,11 +175,7 @@
               <script>
                 var data = ${data};
                 var $table = $('#data-table');
-                com.bouncingdata.Utils.renderDatatable(data, $table, 
-                     {
-                	   "sScrollY": "400px", "bPaginate": false, "bFilter": false 
-                	 //"bFilter": false ,"sPaginationType": "full_numbers" 
-                     });
+                com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false });
                      
               </script>
             </c:when>
