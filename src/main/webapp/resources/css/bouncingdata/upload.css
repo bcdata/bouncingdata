@@ -149,7 +149,7 @@
   margin-top: 10px;
 }
 
-#schema-table span.column-description, #schema-table span.column-name {
+#schema-table span.column-description, #schema-table span.column-name, #schema-table span.column-type  {
   border: 1px solid #FFF;
   padding: 2px;
   width: 95%;
@@ -158,7 +158,7 @@
   line-height: 1.3em;
 }
 
-#schema-table span.column-description:hover, #schema-table span.column-name:hover {
+#schema-table span.column-description:hover, #schema-table span.column-name:hover, #schema-table span.column-type:hover {
   border: 1px solid #CCC;
   cursor: text;
 }

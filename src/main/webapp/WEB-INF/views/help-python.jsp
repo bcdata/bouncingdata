@@ -5,7 +5,8 @@
       <h3>Datastore</h3>
       <p>
         BouncingData provides a full, scalable SQL-supported datastore which users can store, load and query data from their analysis.
-        <br />
+      </p>
+      <p>
         This section describes the Python APIs to work with BouncingData datastore. 
       </p>
       <p>Import Datastore module in Python</p>

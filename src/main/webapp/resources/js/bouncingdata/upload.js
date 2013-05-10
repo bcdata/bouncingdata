@@ -51,17 +51,16 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     var tableHtml = [];
     for (index in detectedSchema) {
       var column = detectedSchema[index];
-      /*tableHtml[index] = '<tr colname="' + column['name'] + '" detected="' + column['typeName'] + '"><td><input type="text" class="column-name" value="' 
-          + column['name'] + '"/></td><td><select class="column-type-select"><option value="Boolean">Boolean</option>'
-          + '<option value="Integer">Integer</option><option value="Long">Long</option>'
-          + '<option value="Double">Double</option><option value="String">String</option>'
-          + '</select></td><td><input type="text" class="column-description" /></td></tr>'*/
       
-      tableHtml[index] = '<tr colname="' + column['name'] + '" detected="' + column['typeName'] + '"><td><span class="column-name">' 
+      /*tableHtml[index] = '<tr colname="' + column['name'] + '" detected="' + column['typeName'] + '"><td><span class="column-name">' 
         + column['name'] + '</span></td><td><select class="column-type-select"><option value="Boolean">Boolean</option>'
         + '<option value="Integer">Integer</option><option value="Long">Long</option>'
         + '<option value="Double">Double</option><option value="String">String</option>'
-        + '</select></td><td><span class="column-description"></span></td></tr>'
+        + '</select></td><td><span class="column-description"></span></td></tr>'*/
+      
+      tableHtml[index] = '<tr colname="' + column['name'] + '" detected="' + column['typeName'] + '"><td><span class="column-name">' 
+        + column['name'] + '</span></td><td><span class="column-type">' + column['typeName']
+        + '</span></td><td><span class="column-description"></span></td></tr>';
     }
     
     $schemaTableBody.append(tableHtml.join());
@@ -74,21 +73,36 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     $('#reset-schema').click(function() {
       $('#schema-table tr').each(function() {
         $('.column-name', $(this)).text($(this).attr('colname'));
-        $('select.column-type-select', $(this)).val($(this).attr('detected'));
+        $('.column-type', $(this)).text($(this).attr('detected'));
       });
     });
     
-    $('#schema-table span.column-name, #schema-table span.column-description').mouseover(function() {
+    $('#schema-table span.column-name, #schema-table span.column-description, #schema-table span.column-type').mouseover(function() {
       $(this).css('border-color', '#DDD');
     }).mouseout(function() {
       $(this).css('border-color', '#FFF');
     }).click(function() {
-      var $inlineInput = $('<input type="text" class="inline-input" style="border: 1px solid #DDD; width: 95%; height: 1.3em; line-height: 1.3em;"'
-          + 'value="' + $(this).text() + '" />');
-      $inlineInput.insertAfter($(this)).focus().blur(function() {
-        $(this).prev().text($(this).val()).show();
-        $(this).remove();
-      });
+      if ($(this).hasClass('column-type')) {
+        // to be updated..
+        var $inlineSelect = $('<select>class="column-type-select"><option value="Boolean">Boolean</option>'
+            + '<option value="Integer">Integer</option><option value="Long">Long</option>'
+            + '<option value="Double">Double</option><option value="String">String</option></select>');
+        
+        $inlineSelect.val($(this).parents('tr').attr('detected'));
+        $('option:selected', $inlineSelect).css('color', 'green');
+        
+        $inlineSelect.insertAfter($(this)).focus().blur(function() {
+          $(this).prev().text($(this).val()).show();
+          $(this).remove();
+        });
+      } else {
+        var $inlineInput = $('<input type="text" class="inline-input" style="border: 1px solid #DDD; width: 95%; height: 1.3em; line-height: 1.3em;"'
+            + 'value="' + $(this).text() + '" />');
+        $inlineInput.insertAfter($(this)).focus().blur(function() {
+          $(this).prev().text($(this).val()).show();
+          $(this).remove();
+        });
+      }
       $(this).hide();
     });
     
