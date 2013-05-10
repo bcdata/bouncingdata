@@ -5,6 +5,7 @@
   //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
   com.bouncingdata.ActivityStream.init();
 </script>
+
 <div id="main-content" class="homepage-container">
   <div class="right-content">
     <div class="right-content-section most-popular-section">
@@ -13,7 +14,7 @@
         <div id="most-popular-content-tabs" class="most-popular-content-tabs ui-tabs">
           <ul>
             <li><a href="#most-popular-analysis">Analysis</a></li>
-            <li><a href="#most-popular-dataset">Dataset</a></li>
+            <li><a href="#most-popular-dataset">Dataset</a></li>	
           </ul>
           <div class="side-list-panel ui-tabs-hide" id="most-popular-analysis">
             <c:forEach items="${topAnalyses }" var="anls">
@@ -169,7 +170,8 @@
                     </a>
                   </div>
                   <p class="title">
-                    <a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}" />"><strong>${anls.name}</strong></a>
+                  	<!-- vinhpq : preview webpage on mouse over event (acitive fun : adding in link class="popover") -->
+                    <a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}"/>" ><strong>${anls.name}</strong></a>
                   </p>
                   <p class="info">
                     <span class="author">Author: <a href="#">${anls.user.username }</a></span><br/>

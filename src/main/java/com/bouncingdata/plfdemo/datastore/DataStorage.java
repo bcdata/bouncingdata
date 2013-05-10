@@ -481,6 +481,10 @@ public interface DataStorage {
   
   public void resetPassword(int userId, String newpass);
   
+  public void changeActiveRegisterStatus(int userId);
+  
+  public void addSttResetPassword(int userId, String activecode, String expiredDate);
+  
   //-----
   
   public List<Dataset> getMostPopularDatasets();

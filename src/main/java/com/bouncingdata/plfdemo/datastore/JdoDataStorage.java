@@ -309,6 +309,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 
 	@Override
 	public void createUser(User user) {
+		// vinhpq : add fail status active for register active mail
+		user.setEnabled(false);
+		
 		List<User> users = new ArrayList<User>();
 		users.add(user);
 		persistData(users);
@@ -1663,6 +1666,45 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 			tx.begin();
 			User user = pm.getObjectById(User.class, userId);
 			user.setPassword(newpass);
+			user.setActiveCode(null);
+			user.setExpiryDate(null);
+			tx.commit();
+		} finally {
+			if (tx.isActive()) {
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void changeActiveRegisterStatus(int userId){
+		PersistenceManager pm = getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		
+		try {
+			tx.begin();
+			User user = pm.getObjectById(User.class, userId);
+			user.setEnabled(true);
+			tx.commit();
+		} finally {
+			if (tx.isActive()) {
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void addSttResetPassword(int userId, String activecode, String expiredDate){
+		PersistenceManager pm = getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		
+		try {
+			tx.begin();
+			User user = pm.getObjectById(User.class, userId);
+			user.setActiveCode(activecode);
+			user.setExpiryDate(expiredDate);
 			tx.commit();
 		} finally {
 			if (tx.isActive()) {

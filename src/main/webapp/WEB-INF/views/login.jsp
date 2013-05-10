@@ -167,19 +167,19 @@
                 <input class="input-field" type='password' name='j_password' id='password' maxlength="100"></input>
                 <div class="login-actions">
                   <input type="submit" name="submit" value="Login" onclick="if ($('#username').val().length <= 0 || $('#password').val().length <= 0) return false; else return true;" />
-                  <!-- vinhpq : send new password to email function (active: adding id property -> id="forgot-user-password" ) -->
-                  <a href="#" >Forgot your password?</a>
+                  <a href="#" id="forgot-user-password">Forgot your password?</a>
                 </div>            
               <div class="clear"></div>
             </form>
           </div>
         </div>
         <div id="signup">
-          <h4>Register new account</h4>
+          <h4>Register new account</h4>       
+          <input type="hidden" value="${mode}" id="mode"/>
           <div class="message">
             <c:if test="${not empty regResult}">
               <div class="message-block" id="register-msg">
-                <span>${regResult.message }</span>
+                <span>${regResult.message}</span>
                 <c:if test="${regResult.statusCode < 0}">
                   <script type="text/javascript">
                   $(function() {
@@ -269,7 +269,7 @@
 	<div id="dialog-message" title="Reset your password">
 	  <p>
 	    <span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>
-	    Your password have sent successfully to your email. 
+	    A confirm mail is sent successfully to your email. 
 	  </p>
 	  <p>
 	    Check email <u><b id="email-text">...</b></u> to get new password.

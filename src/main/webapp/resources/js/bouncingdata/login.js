@@ -5,7 +5,7 @@ function initLogin() {
     $('input:submit').button();
     $('input:reset').button();
     
-    var mode = '${mode}';
+    var mode = $("#mode").val();
     if (mode == "register") {
       $('#login-tabs').tabs('select', 1);
     } else {
@@ -13,17 +13,19 @@ function initLogin() {
     }
     
     $('#login-tabs').bind('tabsselect', function(event, ui) {
-      if (ui.index == 1) {
-        if ($('#register-msg')) {
-          $('#register-msg').hide();
-        } else if ($('#error-msg')) {
-          $('#error-msg').hide();
-        }
-      }
+//      debugger;
+//    	if (ui.index == 1) {
+//        if ($('#register-msg')) {
+//          $('#register-msg').hide();
+//        } else if ($('#error-msg')) {
+//          $('#error-msg').hide();
+//        }
+//      }
+      
     });
     
-    $('#login-tabs').bind('tabsshow', function(event, ui) {
-      if (ui.index == 1) {
+    $('#login-tabs').bind('tabsshow', function(event, ui) {    	
+      if (ui.index == 1) {    	  
         $('#reg-username').focus();
       } else {
         $('#username').focus();

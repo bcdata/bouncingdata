@@ -557,6 +557,16 @@ public class DatastoreServiceImpl implements DatastoreService {
     dataStorage.resetPassword(userId, newpass);
   }
   
+  @Override
+  public void changeActiveRegisterStatus(int userId) {
+    dataStorage.changeActiveRegisterStatus(userId);
+  }
+  
+  @Override
+  public void addSttResetPassword(int userId, String activecode, String expiredDate) {
+    dataStorage.addSttResetPassword(userId, activecode, expiredDate);
+  }
+  
   //-----
   
   @Override

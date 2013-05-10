@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +53,19 @@ public class LoginController implements AuthenticationFailureHandler{
 	    
 	  	HttpSession session = request.getSession();   
 	  	UsernamePasswordAuthenticationToken user =(UsernamePasswordAuthenticationToken)ae.getAuthentication();
-        
+
+	  	session.removeAttribute("_tempUsr");
+	  	// check active account 
+	  	User is_active_user = datastoreService.findUserByUsername(user.getName());
+	  	if(is_active_user!=null && !is_active_user.isEnabled()){
+	  		session.setAttribute("_tempUsr", is_active_user);
+	  		
+	  		String url = request.getContextPath() + "/actregister";
+	  		// return fail login page
+	        response.sendRedirect(url);
+	        return;
+	  	}
+	  	
 	  	// init list username login fail
 	  	if(session.getAttribute("count_login_ss") == null){
 	  		List<String> lst = new ArrayList<String>();
@@ -107,10 +119,20 @@ public class LoginController implements AuthenticationFailureHandler{
   
   
 
+  @RequestMapping(value="/actregister", method = RequestMethod.GET)
+  public String openActiveRegisterPage(HttpSession session) {
+	  
+	  if(session.getAttribute("_tempUsr")==null)
+		  return "redirect:/auth/login";
+		  
+	  return "actregister";
+  }
+  
   @RequestMapping(value="/create", method = RequestMethod.GET)
   public String openCreate() {
     return "create";
   }
+  
   
   @RequestMapping(value="/learn", method = RequestMethod.GET)
   public String openLearn() {
@@ -141,7 +163,7 @@ public class LoginController implements AuthenticationFailureHandler{
   }
   
   @RequestMapping(value="/auth/failed", method=RequestMethod.GET)
-  public String failed(ModelMap model, HttpServletRequest request) {
+  public String failed(ModelMap model, HttpServletRequest request,HttpSession session) {
 	model.addAttribute("mode", "login");
     model.addAttribute("error", "true");
     return "login";
@@ -165,7 +187,9 @@ public class LoginController implements AuthenticationFailureHandler{
       @RequestParam(value="password", required=true) String password, 
       @RequestParam(value="email", required=true) String email, 
       @RequestParam(value="firstName", required=false) String firstName, 
-      @RequestParam(value="lastName", required=false) String lastName, ModelMap model) {
+      @RequestParam(value="lastName", required=false) String lastName, 
+      ModelMap model,
+      HttpServletRequest request) {
     
     RegisterResult result = new RegisterResult();
     result.setUsername(username);
@@ -181,25 +205,25 @@ public class LoginController implements AuthenticationFailureHandler{
     }
     
     if (password == null || password.length() < 4) {
-      if (errMsg.length() > 0) errMsg.append("\n");
+      if (errMsg.length() > 0) errMsg.append("<br/>");
       errMsg.append("Password must be at least 4 characters.");
       isValid = false;
     }
     
     if (email == null || !Utils.validate(email)) {
-      if (errMsg.length() > 0) errMsg.append("\n");
+      if (errMsg.length() > 0) errMsg.append("<br/>");
       errMsg.append("Your email address is invalid.");
       isValid = false;
     }
     
     if (datastoreService.findUserByUsername(username) != null) {
-      if (errMsg.length() > 0) errMsg.append("\n");
+      if (errMsg.length() > 0) errMsg.append("<br/>");
       errMsg.append("Username already exists.");
       isValid = false;
     }
     
     if (datastoreService.findUserByEmail(email) != null) {
-      if (errMsg.length() > 0) errMsg.append("\n");
+      if (errMsg.length() > 0) errMsg.append("<br/>");
       errMsg.append("Email address already exists.");
       isValid = false;
     }
@@ -226,7 +250,14 @@ public class LoginController implements AuthenticationFailureHandler{
        
       datastoreService.createUser(user);
       result.setStatusCode(0);
-      result.setMessage("Successfully create user " + user.getUsername());
+      result.setMessage("- Successfully create user " + username + ".<br/>- Information activate your account will be sent on e-mail address: " + email);
+      
+      //Set active link 
+      String url = request.getRequestURL().toString() + "/activelink/" + username;
+
+      // Send register mail 
+      Utils.sendMailActiveUser(username, email, url);
+      
       model.addAttribute("regResult", result);
     } catch (Exception e) {
       if (logger.isDebugEnabled()) logger.debug("Failed to create new user " + username, e);
@@ -238,12 +269,84 @@ public class LoginController implements AuthenticationFailureHandler{
     return "login";
   }
   
-  @RequestMapping(value="/auth/resetpasswd", method = RequestMethod.POST)
-  public @ResponseBody ActionResult resetPassword(@RequestParam(value="user-email", required=true) String email,
-		  					   @RequestParam(value="user-name", required=true) String name,
-		  					   ModelMap model) {
+  @RequestMapping(value="/auth/resendactmail", method = RequestMethod.POST)
+  public @ResponseBody ActionResult resendActiveMail(@RequestParam(value="user-email", required=true) String email,
+												      @RequestParam(value="user-name", required=true) String name,												      ModelMap model,
+												      HttpServletRequest request){
+	  String url = request.getRequestURL().toString();
+	  url = url.replace("/resendactmail", "/register/activelink/" + name);
+	  boolean isSent = Utils.sendMailActiveUser(name, email, url);
+	  
+	  if(isSent)	  
+		  return new ActionResult(0, email);
+	  
+	  return new ActionResult(-1, "Sent mail failure!");
+  }
+  
+  @RequestMapping(value="/auth/register/activelink/{name}", method=RequestMethod.GET)
+  public String activeAccount(@PathVariable String name,
+			   ModelMap model, 
+			   HttpServletRequest request,
+			   HttpSession session) {
+	  
+	User user = datastoreService.findUserByUsername(name);
+		
+    // validate username 
+    if (user == null) 
+    	return "login";
+	    
+    if(user.isEnabled())
+    	return "login";
+	
+    session.removeAttribute("_tempUsr");
+	datastoreService.changeActiveRegisterStatus(user.getId());
+	model.addAttribute("success", "OK");
+	model.addAttribute("_username", name);
+	
+	return "actregister";
+  }
+  
+  @RequestMapping(value="/auth/resetpasswd/{name}/{activecode}", method=RequestMethod.GET)
+  public String resetPassword(@PathVariable String name,
+		  					   @PathVariable String activecode, 
+		  					   ModelMap model, 
+		  					   HttpServletRequest request) {
+	model.addAttribute("mode", "resetPassword");
+	
+	User user = datastoreService.findUserByUsername(name);
+	
+    // validate username 
+    if (user == null) 
+    	return "cfpassword";
     
-	model.addAttribute("mode", "resetpasswd");
+    if(user.getActiveCode()==null || !user.getActiveCode().equals(activecode))
+    	return "cfpassword";
+    
+    if(user.getExpiryDate()==null || !Utils.compareExpiredDate(user.getExpiryDate()))
+    	return "cfpassword";
+    
+    // find email to determine user
+    String receiver = user.getEmail(); 
+    
+    // Set active code info
+    String newpass = Utils.RandomString();
+    
+    datastoreService.resetPassword(user.getId(), newpass);
+    
+    boolean result = Utils.sendMailPassword(name, receiver, newpass);
+    
+    model.addAttribute("success", "OK");
+    model.addAttribute("_username", name);
+    return "cfpassword";
+  }
+  
+  @RequestMapping(value="/auth/resetpasswd", method = RequestMethod.POST)
+  public @ResponseBody ActionResult cfResetPassword(@RequestParam(value="user-email", required=true) String email,
+		  										     @RequestParam(value="user-name", required=true) String name,
+		  										     ModelMap model,
+		  										     HttpServletRequest request) {
+    
+	model.addAttribute("mode", "cfresetpasswd");
     
 	User user = datastoreService.findUserByUsername(name);
 	
@@ -255,15 +358,22 @@ public class LoginController implements AuthenticationFailureHandler{
     	return new ActionResult(-1, "User isn't found !");
     
     // find email to determine user
-    String receiver = user.getEmail(); 
+    String receiver = user.getEmail();
     
-    // update password info
-    String newpass = Utils.RandomString();
+    // Set active code info
+    String activeCode = Utils.RandomString();
     
-    datastoreService.resetPassword(user.getId(), newpass);
+    // Set expired Date
+    String expiredDate = Utils.getTomorowDateTime();
+    
+    //Set link reset password
+    String url = request.getRequestURL().toString();
+    String lnkReset = url + "/" + name + "/" + activeCode;
+    
+    datastoreService.addSttResetPassword(user.getId(), activeCode, expiredDate);
     
     // send new password to email address
-    boolean result = Utils.sendMailPassword(name, receiver, newpass);
+    boolean result = Utils.sendMailConfirmResetPassword(name, receiver, lnkReset, expiredDate);
     
     // check mail is sent successfully 
     if(!result)

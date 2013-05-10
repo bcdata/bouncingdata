@@ -9,6 +9,26 @@
 </style-->
  <script>
  $(function() {
+	 //vinhpq : preview webpage onmouseover event 
+	 $('.popover').on({
+		    mousemove: function(e) {
+		        $(this).next('a').css({
+		            top: e.pageY - 100,
+		            left: e.pageX + 10
+		        });
+		    },
+		    mouseenter: function() {
+		        var lnk = $(this).attr('href');
+
+		        var big = $('<iframe />', {'class': 'big_img', src: lnk,scrolling: 'no'});
+		        $(this).after(big);
+		    },
+		    mouseleave: function() {
+		        $('.big_img').remove();
+		    }
+		});
+	 //End
+	 
 	    var npass = $( "#change-p-input" ),
 	      cpass = $( "#confirm-p-input" ),
 	      allFields = $( [] ).add(npass).add(cpass),
@@ -54,8 +74,8 @@
 	          var bValid = true;
 	          allFields.removeClass( "ui-state-error" );
 	 
-	          bValid = bValid && checkLength( npass, "new password", 6, 80 );
-	          bValid = bValid && checkLength( cpass, "confirm password", 6, 80 );
+	          bValid = bValid && checkLength( npass, "new password", 4, 80 );
+	          bValid = bValid && checkLength( cpass, "confirm password", 4, 80 );
 	          bValid = bValid && checkValue( npass, cpass );
 	          
 	          if ( bValid ) {
@@ -139,9 +159,7 @@
       <div class="guide-button-submenu">
         <div class="header-hidden-menu me-menu">
           <ul>
-           	<!-- vinhpq : change password function
             <li><a id="change-password" name="change-password" class="header-submenu-item" href="#">Change password</a></li>
-            -->
             <li><a class="header-submenu-item" href="<c:url value="/auth/security_logout" />">Logout</a></li>
           </ul>
         </div>

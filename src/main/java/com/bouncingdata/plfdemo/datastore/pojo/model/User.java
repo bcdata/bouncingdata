@@ -42,6 +42,10 @@ public class User implements UserDetails {
   private Date joinedDate;
   private Date lastLogin;
   
+  // Recover password feature
+  private String activeCode;
+  private String expiryDate;
+  
   @Persistent(mappedBy="user")
   UserActionLog actionLog;
   public void logAction(int actionCode,String data){
@@ -61,6 +65,23 @@ public class User implements UserDetails {
   public void setId(int id) {
     this.id = id;
   }
+  
+  public String getActiveCode() {
+	return activeCode;
+}
+
+public void setActiveCode(String activeCode) {
+	this.activeCode = activeCode;
+}
+
+public String getExpiryDate() {
+	return expiryDate;
+}
+
+public void setExpiryDate(String expiryDate) {
+	this.expiryDate = expiryDate;
+}
+
   public String getUsername() {
     return username;
   }
@@ -116,7 +137,7 @@ public class User implements UserDetails {
     this.enabled = enabled;
   }
   
-  @Override 
+  
   public boolean isEnabled() {
     return enabled;
   }

@@ -295,12 +295,14 @@ public class DatasetController {
 	        data.add((!scol_w_quote.equals("*"))?scol_wno_quote.split(","):columns);
 	        data.addAll(userDataService.getDatasetSearchQuery(ds.getName(), scol_w_quote, sCondition));
 	        model.addAttribute("data", mapper.writeValueAsString(data));
-//	      } else {
-//	        model.addAttribute("columns", mapper.writeValueAsString(columns));
-//	        model.addAttribute("data", null);
-//	        model.addAttribute("guid", oid);
-//	      }
-
+/*	      } else {
+	        model.addAttribute("columns", mapper.writeValueAsString((!scol_w_quote.equals("*"))?scol_wno_quote.split(","):columns));
+	        model.addAttribute("srStt", "true");
+	        model.addAttribute("srCondition", mapper.writeValueAsString(sCondition));
+	        model.addAttribute("data", null);
+	        model.addAttribute("guid", oid);
+	      }
+*/
 	      List<AnalysisDataset> relations = datastoreService.getRelatedAnalysis(ds.getId());
 	      if (relations != null) {
 	        List<Analysis> relatedAnls = new ArrayList<Analysis>();
