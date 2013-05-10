@@ -30,7 +30,7 @@
       <a class="editor-nav" id="describe-back" href="<c:url value="/editor/anls/${anls.guid }/size" />">Back</a>
       <a class="editor-nav" id="describe-publish" href="javascript:void(0);">Publish</a>
       <div style="text-align: right;">
-        <input type="checkbox" id="describe-ispublic" /> &nbsp;<label for="describe-ispublic">Public</label>
+        <input type="checkbox" id="describe-ispublic" checked="checked" /> &nbsp;<label for="describe-ispublic">Public</label>
       </div>
     </div>
     <div class="editor-progress progress">

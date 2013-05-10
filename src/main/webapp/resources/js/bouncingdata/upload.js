@@ -64,12 +64,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     }
     
     $schemaTableBody.append(tableHtml.join());
-    
-    $('#schema-table tr').each(function() {
-      $('select.column-type-select', $(this)).val($(this).attr('detected'));
-      $('select.column-type-select option:selected', $(this)).css('color', 'green');
-    });
-    
+        
     $('#reset-schema').click(function() {
       $('#schema-table tr').each(function() {
         $('.column-name', $(this)).text($(this).attr('colname'));
@@ -88,8 +83,8 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
             + '<option value="Integer">Integer</option><option value="Long">Long</option>'
             + '<option value="Double">Double</option><option value="String">String</option></select>');
         
-        $inlineSelect.val($(this).parents('tr').attr('detected'));
-        $('option:selected', $inlineSelect).css('color', 'green');
+        $inlineSelect.val($(this).text());
+        $('option[value="' + $(this).parents('tr').attr('detected') +'"]', $inlineSelect).css('color', 'green');
         
         $inlineSelect.insertAfter($(this)).focus().blur(function() {
           $(this).prev().text($(this).val()).show();
@@ -142,7 +137,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
       var schema = [];
       $('tr', $schemaTableBody).each(function() {
         var $tds = $('td', $(this));
-        schema.push([$.trim($('.column-name', $tds[0]).text()), $('select.column-type-select', $tds[1]).val()])
+        schema.push([$.trim($('.column-name', $tds[0]).text()), $('.column-type', $tds[1]).text()]);
       });
 
       var schemaStr = JSON.stringify(schema);
