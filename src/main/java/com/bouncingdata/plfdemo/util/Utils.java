@@ -7,6 +7,9 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,6 +92,90 @@ public class Utils {
 	return (str);
   }
   
+  
+  /**
+	 * send confirm reset password to user's mail address
+	 * @param derivaName
+	 * @param sEmail
+	 * @param lnkReset
+	 * @return : true if send mail success
+	 */
+  public static boolean sendMailActiveUser(String username, String sEmail, String lnkReset) {
+		
+	String title = "Bouncing Data: Registration mail to activate your account!";
+
+	String content = "<table cellpadding='0' cellspacing='0' border='0' width='620'>"+ 
+						"<tbody>"+  
+							"<tr>  "+
+								"<td style='background: #3b5998; font-weight: bold; vertical-align: middle; padding: 10px 8px;'>  "+
+									"<a style='color: #ffffff; text-decoration: none;font-size: 15px;' href='http://www.bouncingdata.com/' target='_blank'>Bouncing Data</a>"+  
+								"</td>"+ 
+							"</tr> "+
+							"<tr> "+
+								"<td style='border-right: 1px solid #cccccc;  "+
+										   "border-bottom: 1px solid #3b5998; "+ 
+										   "border-left: 1px solid #cccccc; "+
+										   "padding: 15px;font-size: 12px;font-weight: lighter;'>"+ 
+									"<div style='margin-bottom: 15px;'>Hi " + username + ",</div> "+
+									"<div style='margin-bottom: 15px'>To finish register account please click on the link below or copy and paste into your browser:</div>"+ 
+									"<div style='margin-bottom: 15px; width: 95%; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'> "+
+										"<a href='" + lnkReset + "' style='color: #3b5998; text-decoration: none; font-weight: bold; font-size: 13px' target='_blank'>" + lnkReset + "</a>"+ 
+									"</div> "+
+									"<div style='margin-bottom: 15px; margin: 0'>Thanks &amp; Best Regards!<br>Bouncing Data System</div>"+ 
+								"</td>"+ 
+							"</tr>"+ 
+						"</tbody>"+ 
+					"</table>"; 
+	
+	DTMailSender sender = new DTMailSender(title, content);
+	boolean process = sender.sendEmail(sEmail);
+	
+	return (process);
+  }
+  
+  
+  /**
+	 * send confirm reset password to user's mail address
+	 * @param derivaName
+	 * @param sEmail
+	 * @param lnkReset
+	 * @return : true if send mail success
+	 */
+  public static boolean sendMailConfirmResetPassword(String username, String sEmail, String lnkReset, String expiredDate) {
+		
+	String title = "Bouncing Data: Request to retrieve your password!";
+
+	String content = "<table cellpadding='0' cellspacing='0' border='0' width='620'>"+ 
+						"<tbody>"+  
+							"<tr>  "+
+								"<td style='background: #3b5998; font-weight: bold; vertical-align: middle; padding: 10px 8px;'>  "+
+									"<a style='color: #ffffff; text-decoration: none;font-size: 15px;' href='http://www.bouncingdata.com/' target='_blank'>Bouncing Data</a>"+  
+								"</td>"+ 
+							"</tr> "+
+							"<tr> "+
+								"<td style='border-right: 1px solid #cccccc;  "+
+										   "border-bottom: 1px solid #3b5998; "+ 
+										   "border-left: 1px solid #cccccc; "+
+										   "padding: 15px;font-size: 12px;font-weight: lighter;'>"+ 
+									"<div style='margin-bottom: 15px;'>Hi " + username + ",</div> "+
+									"<div style='margin-bottom: 15px'>You made the request to retrieve your password on <a href='#'>BouncingData</a>. To finish retrieve your password, please click on the link below or copy and paste into your browser:</div>"+ 
+									"<div style='margin-bottom: 15px; width: 95%; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'> "+
+										"<a href='" + lnkReset + "' style='color: #3b5998; text-decoration: none; font-weight: bold; font-size: 13px' target='_blank'>" + lnkReset + "</a>"+ 
+									"</div> "+
+									"<div style='margin-bottom: 15px;'>If you do not, please do NOT click on the link above.</div>"+
+									"<div style='margin-bottom: 15px;color: red;font-weight: bold;'>This email is value to end on " + expiredDate + " (year / month / day hour:minute).</div>"+
+									"<div style='margin-bottom: 15px; margin: 0'>Thanks &amp; Best Regards!<br>Bouncing Data System</div>"+ 
+								"</td>"+ 
+							"</tr>"+ 
+						"</tbody>"+ 
+					"</table>"; 
+	
+	DTMailSender sender = new DTMailSender(title, content);
+	boolean process = sender.sendEmail(sEmail);
+	
+	return (process);
+  }
+  
   /**
 	 * send new password to user's mail address
 	 * @param derivaName
@@ -111,10 +198,10 @@ public class Utils {
 					"<td style='border-right: 1px solid #cccccc;" + 
 							   "border-bottom: 1px solid #3b5998; " +
 							   "border-left: 1px solid #cccccc;" +
-							   "padding: 15px;font-size: 12px;'>" +
+							   "padding: 15px;font-size: 12px;font-weight: lighter;'>" +
 						"<div style='margin-bottom: 15px;'>Hi " + username + ",</div>" +
 						"<div style='margin-bottom: 15px'>This is your new password:</div>" +
-						"<div style='margin-bottom: 15px; width: 180px; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'>" +
+						"<div style='margin-bottom: 15px; width: 190px; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'>" +
 							"<b style='color: #3b5998; text-decoration: none; font-weight: bold; font-size: 13px'>" + password + "</b>" +
 						"</div>" +
 						"<div style='margin-bottom: 15px; margin: 0'>Thanks &amp; Best Regards!<br>Bouncing Data System</div>" +
@@ -143,7 +230,7 @@ public class Utils {
 								"<td style='border-right: 1px solid #cccccc;" + 
 										   "border-bottom: 1px solid #3b5998; " +
 										   "border-left: 1px solid #cccccc;" +
-										   "padding: 15px;font-size: 12px;'>" +
+										   "padding: 15px;font-size: 12px;font-weight: lighter;'>" +
 									"<div style='margin-bottom: 15px;'>Hi " + username + ",</div>" +
 									"<div style='margin-bottom: 15px'>Sorry, are you having trouble logging in to your Bouncing Data account?</div>" +
 									"<div style='margin-bottom: 15px; width: 170px; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'>" +
@@ -160,25 +247,48 @@ public class Utils {
 	  return (process);
   }
   
-  public static String getClientIpAddr(HttpServletRequest request) {  
-      String ip = request.getHeader("X-Forwarded-For");  
-      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-          ip = request.getHeader("Proxy-Client-IP");  
-      }  
-      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-          ip = request.getHeader("WL-Proxy-Client-IP");  
-      }  
-      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-          ip = request.getHeader("HTTP_CLIENT_IP");  
-      }  
-      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-          ip = request.getHeader("HTTP_X_FORWARDED_FOR");  
-      }  
-      if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
-          ip = request.getRemoteAddr();  
-      }  
-      return ip;  
-  }  
+  public static String getTomorowDateTime(){
+		
+		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date date = new Date();
+		
+		String today = sdf.format(date);
+		String tomorow = "";
+		Calendar c = Calendar.getInstance();
+		try {
+			c.setTime(sdf.parse(today));
+			c.add(Calendar.DATE, 1);  // number of days to add
+			tomorow = sdf.format(c.getTime());  // dt is now the new date
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(tomorow);		
+		return tomorow;
+	}
+	
+  public static boolean compareExpiredDate(String dateTarget){
+		
+		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date dtCurrent = new Date();
+		Date dtTarget = null;		
+		boolean result = false;
+		
+		try {
+			dtTarget = (Date) sdf.parse(dateTarget);
+			// Compare date return true if Current date before or equal with Target date
+			if(dtTarget.compareTo(dtCurrent) < 0)
+				result = false;
+			else 
+				result = true;
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
   // --- End
   
   public static String resultSetToJson(ResultSet rs) throws Exception {

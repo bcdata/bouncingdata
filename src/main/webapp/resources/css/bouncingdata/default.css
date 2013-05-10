@@ -15,6 +15,22 @@ body .ui-widget {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
+/** vinhpq : preview webpage onmouseover event */
+.big_img {
+    position: absolute;
+    width: 900px;
+    height: 640px;
+    -moz-transform: scale(0.2);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.2);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.4);
+    -webkit-transform-origin: 0 0;
+    z-index:1000;
+    border:1px solid #E2E2E2;
+}
+/** vinhpq : end */
+
 a, a:link, a:visited, a:active {
   outline: none;
   text-decoration: none;

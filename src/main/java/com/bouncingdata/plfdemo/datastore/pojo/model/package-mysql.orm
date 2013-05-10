@@ -80,6 +80,14 @@
       <field name="enabled">
         <column name="enabled" jdbc-type="BIT" />
       </field>
+      
+      <field name="activeCode">
+        <column name="active_code" jdbc-type="VARCHAR" length="40" />
+      </field>
+      <field name="expiryDate">
+        <column name="expiry_date" jdbc-type="VARCHAR" length="100" />
+      </field>
+
     </class>
     
     <class name="Visualization" identity-type="datastore" table="visualizations">

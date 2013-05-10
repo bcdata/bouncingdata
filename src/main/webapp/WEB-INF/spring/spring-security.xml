@@ -18,7 +18,10 @@
   </sec:http>
   
   <sec:http use-expressions="true" auto-config="true">
-    <sec:intercept-url pattern="/auth/*" access="permitAll" />
+    <sec:intercept-url pattern="/auth/resetpasswd/**" access="permitAll" />
+    <sec:intercept-url pattern="/auth/register/activelink/**" access="permitAll" />
+    <sec:intercept-url pattern="/actregister/**" access="permitAll" />
+    <sec:intercept-url pattern="/auth/*" access="permitAll" />    
     <sec:intercept-url pattern="/plfdemo/*" access="permitAll" />
     <sec:intercept-url pattern="/resources/**" access="permitAll" />
     <sec:intercept-url pattern="/cdn/**" access="permitAll" />

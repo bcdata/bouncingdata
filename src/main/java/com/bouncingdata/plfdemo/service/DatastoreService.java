@@ -315,6 +315,9 @@ public interface DatastoreService {
   
   void resetPassword(int userId, String newpass);
   
+  void changeActiveRegisterStatus(int userId);
+  
+  void addSttResetPassword(int userId, String activecode, String expiredDate);
   //------------------
   
   List<Dataset> getMostPopularDatasets();
