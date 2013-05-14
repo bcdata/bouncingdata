@@ -16,6 +16,11 @@ body .ui-widget {
 }
 
 /** vinhpq : preview webpage onmouseover event */
+.readMoreLnk{
+	color: blue !important;
+	text-decoration: underline !important;
+}
+
 .big_img {
     position: absolute;
     width: 900px;

@@ -4,6 +4,20 @@ function Main() {
   this.jsLoader = {};
 }
 
+Utils.prototype.cutArticleContent = function(objtag,content,lnk) {
+	debugger;
+	content = content.replace(/<(?:.|\n)*?>/gm, '');
+	
+	if(content.length>=380){
+		content = content.substring(0,content.substring(0,380).lastIndexOf(" "));
+		content += "... <a href='"+lnk+"' class='readMoreLnk'>Read more</a>";
+	}
+	
+	content = "<p>" + content + "</p>"; 
+	document.getElementById(objtag).innerHTML = content;
+	  
+}
+
 Main.prototype.setContext = function(ctx) {
   this.ctx = ctx;
 }

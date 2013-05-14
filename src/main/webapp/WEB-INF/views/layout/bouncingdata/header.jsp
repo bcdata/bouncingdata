@@ -1,12 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<!-- style>
-    label, input { display:block; }
-    input.text { margin-bottom:12px; width:95%; padding: .4em; }
-    fieldset { padding:0; border:0; margin-top:25px; }
+<style>
+    #change-pw-form label, input { display:block; }
+    #change-pw-form input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    #change-pw-form fieldset { padding:0; border:0; margin-top:25px; }
     .validateTips-password { border: 1px solid transparent; padding: 0.3em; }
     .ui-dialog .ui-state-error { padding: .3em; }
-</style-->
+</style>
  <script>
  $(function() {
 	 //vinhpq : preview webpage onmouseover event 
@@ -188,7 +188,7 @@
 <!-- vinhpq : popup change password -->
 <div id="dialog-form-change-password" title="Change password" style="display: none;">
   <p class="validateTips-password">All form fields are required.</p>
-  <form>
+  <form id="change-pw-form">
   <fieldset>
     <label for="name">New password:</label>
     <input type="password" name="change-p-input" id="change-p-input" class="text ui-widget-content ui-corner-all" />

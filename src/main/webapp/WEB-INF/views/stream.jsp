@@ -186,7 +186,11 @@
                     </span>
                   </p>
                   <p class="description">
-                    <span>${anls.description }</span>
+                    <span id= "sp_${anls.guid}">
+	                    <script>
+	                    	com.bouncingdata.Utils.cutArticleContent('sp_${anls.guid}','${anls.description}','<c:url value="/anls/${anls.guid}"/>');
+		                </script> 
+	                </span>
                   </p>
                   
                   <div class="clear"></div>

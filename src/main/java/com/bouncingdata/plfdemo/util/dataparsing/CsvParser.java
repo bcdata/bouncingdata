@@ -42,7 +42,7 @@ public class CsvParser implements DataParser {
   public List<Object[]> parse(InputStream is) throws Exception {
     CSVParser parser = new CSVParser(new InputStreamReader(is), CSVFormat.DEFAULT);
     List<CSVRecord> records = parser.getRecords();
-    long lineNumber = parser.getLineNumber();
+    long lineNumber = parser.getRecordNumber();
     logger.info("Reading CSV file: {} rows found.", lineNumber);
     List<Object[]> results = new ArrayList<Object[]>();
     boolean isFirst = true;
