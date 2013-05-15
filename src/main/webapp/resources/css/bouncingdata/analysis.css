@@ -21,7 +21,7 @@
 */
 
 #main-content.analysis-container .right-content, #main-content.datapage-container .right-content  {
-  width: 240px;  
+  width: 230px;  
 }
 
 .analysis-container#main-content .center-content .center-content-wrapper .top-rule, .datapage-container#main-content .center-content .center-content-wrapper .top-rule {
@@ -31,7 +31,7 @@
 #main-content .right-content .summary {
   background-color: #FFFFFF;
   border: 1px solid #E2E2E2; 
-  padding: 10px;
+  padding: 8px;
   border-radius: 4px;
   margin: 15px 0;
 }
@@ -67,7 +67,7 @@
 #main-content .right-content .related-info  {
   background-color: #FFFFFF;
   border: 1px solid #E2E2E2;
-  padding: 10px;
+  padding: 8px;
   border-radius: 4px;
   margin-top: 12px;
   min-height: 40px;
@@ -75,8 +75,8 @@
 
 .analysis-container#main-content .analysis-main .anls-dashboard {
   position: relative;
-  width: 800px;
-  height: 600px;
+  width: 600px;
+  height: 500px;
   border: 1px solid #E2E2E2;
 }
 
@@ -115,7 +115,7 @@
 }
 
 .analysis-main .anls-header {
-  padding: 15px;
+  padding: 15px 0 15px 10px;
 }
 
 .analysis-main .anls-header-rule {
@@ -239,9 +239,9 @@
 }
 
 #comment-form fieldset input#comment-title, #comment-form fieldset textarea#message {
-  width: 600px;
-  border: 1px solid #BBBBBB;
-  padding: .2em;
+  width: 596px;
+  border: 1px solid #E2E2E2;
+  padding: 2px;
 }
 
 #comment-form fieldset textarea#message {

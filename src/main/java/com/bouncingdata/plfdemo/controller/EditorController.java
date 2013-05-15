@@ -95,6 +95,7 @@ public class EditorController {
           String execId = req.getParameter("execid");
           if (execId != null && !execId.isEmpty()) {
             // do something
+            model.addAttribute("lastOutput", StringEscapeUtils.escapeJavaScript(anls.getLastOutput()));
           }
         }
         return "editor";
@@ -107,14 +108,12 @@ public class EditorController {
           visualsMap = new HashMap<String, VisualizationDetail>();
           for (Visualization v : visuals) {
             if ("html".equals(v.getType())) {
-              visualsMap.put(v.getName(),
-                  new VisualizationDetail(v.getGuid(), "visualize/app/" + guid + "/" + v.getGuid() + "/html",
+              visualsMap.put(v.getName(), new VisualizationDetail(v.getGuid(), "visualize/app/" + guid + "/" + v.getGuid() + "/html",
                       VisualizationType.getVisualType(v.getType())));
             } else if ("png".equals(v.getType())) {
               try {
                 String source = appStoreService.getVisualization(guid, v.getGuid(), v.getType());
-                visualsMap.put(v.getName(),
-                    new VisualizationDetail(v.getGuid(), source, VisualizationType.getVisualType(v.getType())));
+                visualsMap.put(v.getName(), new VisualizationDetail(v.getGuid(), source, VisualizationType.getVisualType(v.getType())));
               } catch (Exception e) {
                 if (logger.isDebugEnabled()) {
                   logger.debug("Error occurs when retrieving visualizations {} from analysis {}", v.getGuid(), guid);

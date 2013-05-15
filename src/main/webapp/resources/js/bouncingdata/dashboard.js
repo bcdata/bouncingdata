@@ -27,7 +27,9 @@ Dashboard.prototype.load = function(vizList, dashboardPos, $container, editMode)
     this.zCounter[$container.attr('tabid')] = 0;
     dbCache = this.dashboardCache[$container.attr('guid')];
   }
-  $container.empty();
+  if (editMode) {
+    $('#dashboard-wrapper', $container).empty()
+  } else $container.empty();
   var count = 0, defaultSize = 380; //Math.floor($container.width()/2);
   
   if (!dashboardPos) {
@@ -40,7 +42,8 @@ Dashboard.prototype.load = function(vizList, dashboardPos, $container, editMode)
       if (pos) {
         this.addViz(pos.x, pos.y, pos.w, pos.h, viz, $container, editMode);
       } else {
-        this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, editMode);
+        //this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, editMode);
+        this.addViz(0, 0, 600, 600, viz, $container, editMode);
       }
       count++;
     }
@@ -59,7 +62,10 @@ Dashboard.prototype.load = function(vizList, dashboardPos, $container, editMode)
           dbCache[v] = {x: pos.x, y: pos.y, w: pos.w, h: pos.h}
         }
       }
-      else this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, editMode);
+      else {
+        //this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, editMode);
+        this.addViz(0, 0, 600, 600, viz, $container, editMode);
+      }
       count++;
     }
   }
@@ -71,6 +77,11 @@ Dashboard.prototype.viewDashboard = function() {
   
 }
 
+
+
+/**
+ * 
+ */
 Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
   if (!viz || !viz.source) return;
 
@@ -82,8 +93,8 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
   $vizContainer.attr('guid', viz.guid).attr('n', viz.name);
   $vizContainer.css('width', w + 'px').css('height', h + 'px');  
   //var $vizHandle = $('<div class="viz-handle"><span class="permalink viz-permalink"><a href="" target="_blank">permalink</a></span></div>');
-  var $vizHandle = $('<div class="viz-handle"></div>');
-  $vizContainer.append($vizHandle);
+  //var $vizHandle = $('<div class="viz-handle"></div>');
+  //$vizContainer.append($vizHandle);
   
   var $inner;
   switch(type) {
@@ -95,21 +106,20 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
     $inner.attr('src', ctx + '/' + src);
       
     if ($container.height() < (y + h)) {
-      $container.css('height', (y + h + 10) + "px");
+      $container.css('height', (y + h + 20) + "px");
       if (editMode) me.updateRuler($container);
     }
     break;
   case "png":
     $inner = $('<img src="data:image/png;base64,' + src + '" />');
-    $('a', $vizHandle).attr('href', 'data:image/png;base64,' + src);
+    //$('a', $vizHandle).attr('href', 'data:image/png;base64,' + src);
     $inner.bind('load', function() {
-      w = w || ($(this).width() + 10);
-      h = h || ($(this).height() + 15);
+      /*w = w || ($(this).width() + 10);
+      h = h || ($(this).height() + 15);*/
       // adjust viz. container size
-      $(this).css('width', (w - 10) + 'px').css('height', (h - 15) + 'px');
-      $vizContainer.css('width', w + 'px').css('height', h + 'px');
+      $(this).css('width', w + 'px').css('height', h + 'px');
       if ($container.height() < (y + h)) {
-        $container.css('height', (y + h + 10) + "px");
+        $container.css('height', (y + h + 20) + "px");
         if (editMode) me.updateRuler($container);
       }
     }).appendTo($vizContainer);
@@ -122,12 +132,11 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
   $vizContainer.css('position', 'absolute')
     .css('top', y + 'px')
     .css('left', x + 'px')
-   
-  if (editMode) $vizContainer.css('z-index', this.zCounter[$container.attr('tabid')]++);
-  
-  $container.append($vizContainer);
   
   if (editMode) {
+    $vizContainer.css('z-index', this.zCounter[$container.attr('tabid')]++);
+    
+    $('#dashboard-wrapper', $container).append($vizContainer);
     
     // add info tooltip
     var $info = $('<div class="viz-dimension-info"></div>');
@@ -143,19 +152,20 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
     var _w = $container.width(); // should be fixed
     var _h = $container.height();
     
-    $vizContainer.draggable({ 
+    /*$vizContainer.draggable({ 
       //containment: [_x, _y, _x + _w - w, 140000],
       containment: '#dashboard-wrapper', 
       handle: '.viz-handle', 
       iframeFix: true, 
       grid: [10, 10] 
-    });
+    });*/
     
     $vizContainer.resizable({
-      containment: '#' + $container.attr('id'),
+      containment: 'parent',
       //containment: '#dashboard-wrapper-' + $container.attr('tabid'),
       //containment: [_x, _y, _x + w, 140000],
       grid: 10,
+      handles: "s",
       //aspectRatio: type=="png"
       aspectRatio: false
     });
@@ -189,7 +199,7 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
       
     });
     
-    $vizContainer.bind('drag', function(event, ui) {
+    /*$vizContainer.bind('drag', function(event, ui) {
       me.showSnapLines($(this), $container, false);
       
       if (ui.position.top + $(this).height() + 15 >= $container.height()) {
@@ -210,9 +220,9 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
       }
       // post back
       me.postback($container, "rearrange");
-    })
+    })*/
     
-    .bind('resize', function(event, ui) {
+    $vizContainer.bind('resize', function(event, ui) {
       me.showSnapLines($(this), $container, true);
       
       if (ui.position.top + $(this).height() + 15 >= $container.height()) {
@@ -221,7 +231,7 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
       }
       
       var cw = $(this).width(), ch = $(this).height(); 
-      $inner.css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+      $inner.css('height', ch + "px").css('width', cw + "px");
       //$vizContainer.draggable("option", "containment", [_x, _y, _x + _w - cw, 140000]);
       
       // update inner iframe-fix position
@@ -241,10 +251,13 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
       $info.hide();
       var cw = $(this).width(), ch = $(this).height(); 
       
-      if (ui.position.top + ch >= $container.height()) {
+      //if (ui.position.top + ch >= $container.height()) {
+        $container.css('height', (ui.position.top + ch + 20) + "px");
+        me.updateRuler($container);
+      /*} else {
         $container.css('heigth', (ui.position.top + ch + 10) + "px");
         me.updateRuler($container);
-      }
+      }*/
       
       //remove resizable-iframe-fix
       $('.resizable-iframe-fix').remove();
@@ -262,15 +275,15 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
           url: ctx + "/visualize/replot/" + anlsGuid + "/" + vizGuid + "/png",
           type: "get",
           data: {
-            "w": cw - 10,
-            "h": ch - 15
+            "w": cw,
+            "h": ch
           },
           success: function(res) {
             // reload plot
             if (res) {       
               $inner.attr('src', 'data:image/png;base64,' + res);
               $inner.bind('load', function() {
-                $(this).css('height', (ch - 15) + "px").css('width', (cw - 10) + "px");
+                $(this).css('height', ch + "px").css('width', cw + "px");
                 $vizContainer.css('width', cw + 'px').css('height', ch + 'px');
               });
               console.debug("Successfully replay plot.");
@@ -287,15 +300,15 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
       }
     });
     
-    $vizContainer.hover(function() {
-      $vizHandle.addClass('viz-handle-hover');
+    /*$vizContainer.hover(function() {
+      //$vizHandle.addClass('viz-handle-hover');
       $(this).addClass('viz-container-hover');
     },
     function() {
-      $vizHandle.removeClass('viz-handle-hover');
+      //$vizHandle.removeClass('viz-handle-hover');
       $(this).removeClass('viz-container-hover');
-    });
-  }
+    });*/
+  } else $container.append($vizContainer);
 
 }
 
@@ -345,7 +358,6 @@ Dashboard.prototype.postback = function($container, cause) {
     }
   });
 }
-
 
 
 /**

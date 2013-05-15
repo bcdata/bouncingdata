@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <style>
-    #change-pw-form label, input { display:block; }
+    #change-pw-form label, #change-pw-form input { display:block; }
     #change-pw-form input.text { margin-bottom:12px; width:95%; padding: .4em; }
     #change-pw-form fieldset { padding:0; border:0; margin-top:25px; }
     .validateTips-password { border: 1px solid transparent; padding: 0.3em; }

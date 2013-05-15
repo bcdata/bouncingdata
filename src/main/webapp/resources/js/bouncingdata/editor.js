@@ -13,9 +13,16 @@ Editor.prototype.init = function(anls, feature) {
     com.bouncingdata.Main.toggleLeftNav();
     var $executeButton = $('#editor-execute');
     $executeButton.button();
+    
+    me.jqConsole = $('.editor-container .execution-logs .console').jqconsole('Welcome to our console\n', Utils.getConsoleCaret('python'));
+    me.startPrompt(me.jqConsole, 'python');
+    
     if (feature == 'edit') {
       $('span',$executeButton).text('Next');
       executeAction = 'next';
+      
+      me.jqConsole.Write(lastOutput, 'jqconsole-output');
+      me.startPrompt(me.jqConsole, 'python');
     }
     
     //initialize ace editor
@@ -32,10 +39,6 @@ Editor.prototype.init = function(anls, feature) {
       }
     }); 
     
-    // logs
-    me.jqConsole = $('.editor-container .execution-logs .console').jqconsole('Welcome to our console\n', Utils.getConsoleCaret('python'));
-    me.startPrompt(me.jqConsole, 'python');
-    
     me.$message = $(".editor-status .status-message");
     me.$loading = $(".editor-status .ajax-loading");
     
@@ -51,7 +54,7 @@ Editor.prototype.init = function(anls, feature) {
       }     
     });
     
-    $('#execution-logs button.clear-console').click(function() {
+    $('#execution-logs .clear-console').click(function() {
       me.jqconsole.Reset();
       me.startPrompt(jqconsole, 'python');
     });

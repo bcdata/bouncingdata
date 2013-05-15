@@ -19,7 +19,7 @@
 }
 
 .homepage-container .stream-filter {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .homepage-container .stream-filter a:hover {
@@ -46,7 +46,7 @@
   border: 1px solid #E2E2E2;
   border-radius: 2px;
   padding: 10px;
-  width: 655px;
+  width: 510px;
   position: relative;
 }
 
@@ -193,8 +193,8 @@
 }
 
 .right-content .right-content-section {
-  background-color: #FbFbFb;
-  margin-top: 10px;
+  background-color: #F5F5F5;
+  margin-top: 15px;
   padding: 10px 0;
   border-radius: 2px;
 }

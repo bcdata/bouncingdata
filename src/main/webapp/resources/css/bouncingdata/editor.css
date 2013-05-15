@@ -220,8 +220,8 @@
 .editor-size-area #dashboard-wrapper {
   width: 100%; 
   position: absolute; 
-  visibility: hidden; 
   height: 14000px;
+  width: 600px;
 }
 
 .editor-size-area .size-viz .dashboard-ruler {
@@ -289,9 +289,8 @@
 }
 
 .editor-size-area .size-viz #viz-dashboard {
-  min-height: 450px;
   border: 0 none;
-  width: 100%;
+  width: 600px;
   background: url('../../images/grid.gif') repeat scroll left top transparent;
   position: relative;
   padding: 0;
@@ -304,6 +303,10 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   overflow: hidden;
+}
+
+#viz-dashboard .viz-container .ui-resizable-s {
+  height: 10px;
 }
 
 .editor-size-area .size-viz .app-output-actions {

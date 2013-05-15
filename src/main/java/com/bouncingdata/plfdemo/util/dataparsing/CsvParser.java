@@ -65,29 +65,6 @@ public class CsvParser implements DataParser {
     return results;
   }
   
-  public static void main(String[] args) throws Exception {
-    File file = new File("/home/khiem/Downloads/Fuel.csv");
-    CSVParser parser = new CSVParser(new FileReader(file));
-    //Map<String, Integer> headerMap = parser.getHeaderMap();
-    //List<CSVRecord> records = parser.getRecords();
-    //long lineNumber = parser.getLineNumber();
-    //System.out.println("Number of line " + lineNumber);
-    //Map<String, Integer> headerMap = parser.
-    Iterator<CSVRecord> iter = parser.iterator();
-    CSVRecord header = iter.next();
-    int fieldNumber = (int) header.size();
-    for (int i = 0; i < fieldNumber; i++) {
-      System.out.println("Field " + i + ": " + header.get(i));
-    }
-    
-    for (int i = 1; i <= 10; i++) {
-      if (iter.hasNext()) {
-        CSVRecord record = iter.next();
-      }
-      
-    }
-  }
-
   @Override
   public List<DatasetColumn> parseSchema(InputStream is) throws Exception {
     CSVParser parser = new CSVParser(new InputStreamReader(is), CSVFormat.DEFAULT);

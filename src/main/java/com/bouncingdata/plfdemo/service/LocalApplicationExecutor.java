@@ -22,8 +22,10 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.record.SCLRecord;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,9 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
   
   @Autowired
   private DatastoreService datastoreService;
+  
+  @Autowired
+  private ApplicationStoreService appStoreService;
   
   private ServletContext servletContext;
   
@@ -398,6 +403,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
    */
   private int processVisualizations(String executionId, Analysis anls) throws Exception {
     datastoreService.invalidateViz(anls);
+    
     String execLogPath = logDir + Utils.FILE_SEPARATOR + executionId;
     File execLogDir = new File(execLogPath);
     File[] vsFiles = execLogDir.listFiles(new FileFilter() {
@@ -409,6 +415,20 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
         } else return false;
       }
     });
+
+    // for the new "canvas", we get only the lastest visualization file
+    
+    long lastModified = Long.MIN_VALUE;
+    File last = null;
+    for (File f : vsFiles) {
+      if (f.lastModified() > lastModified) {
+        lastModified = f.lastModified();
+        last = f;
+      }
+    }
+    
+    if (last != null) vsFiles = new File[] { last };
+    
     File vDir = new File(storePath + Utils.FILE_SEPARATOR + anls.getGuid() + Utils.FILE_SEPARATOR + "v");
     if (vDir.isDirectory()) {
       vDir.delete(); 
@@ -445,12 +465,14 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
         if (!makeThumb && type == VisualizationType.PNG) {
           // create thumbnail
           BufferedImage img = ImageIO.read(f);
-          int imgType = img.getType() == 0? BufferedImage.TYPE_INT_ARGB : img.getType();
+          /*int imgType = img.getType() == 0? BufferedImage.TYPE_INT_ARGB : img.getType();
           BufferedImage thumbnail = new BufferedImage(100, 100, imgType);
           Graphics2D g = thumbnail.createGraphics();
           g.drawImage(img, 0, 0, 100, 100, null);
-          g.dispose();
+          g.dispose();*/
           //ImageIO.write(thumbnail, "jpg", new File(storePath + Utils.FILE_SEPARATOR + anls.getGuid() + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
+          
+          BufferedImage thumbnail = Scalr.resize(img, Scalr.Method.QUALITY, Scalr.Mode.FIT_EXACT, 100, 100, Scalr.OP_ANTIALIAS);
           ImageIO.write(thumbnail, "jpg", new File(servletContext.getRealPath("/thumbnails") + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
           makeThumb = true;
           anls.setThumbnail(anls.getGuid());
@@ -460,6 +482,12 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
           FileUtils.copyFile(f, new File(vDir.getAbsoluteFile() + Utils.FILE_SEPARATOR + guid + "." + type.getType()));
           if (type == VisualizationType.PNG && snapshot.isFile()) {
             FileUtils.copyFile(snapshot, new File(vDir.getAbsoluteFile() + Utils.FILE_SEPARATOR + guid + ".snapshot"));
+            
+            BufferedImage img = ImageIO.read(f);
+            double ratio = img.getWidth() / img.getHeight();
+            
+            // replay snapshot
+            appStoreService.resizeRPlot(anls.getGuid(), guid, 600, (int)(600/ratio));
           }
           count++;
         } catch (IOException e) {

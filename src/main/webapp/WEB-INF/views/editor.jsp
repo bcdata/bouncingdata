@@ -10,6 +10,7 @@
   }
   
   var feature = '${feature}';
+  var lastOutput = '${lastOutput}';
   // supports async. load js but we really should pre-load workbench.js from the layout.jsp
   if (!com.bouncingdata.Editor) {
     $.getScript(ctx + "/resources/js/bouncingdata/editor.js", function() {

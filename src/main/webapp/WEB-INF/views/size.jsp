@@ -77,8 +77,9 @@
               <div class="snap-line-right snap-line"></div>
               <div class="snap-line-bottom snap-line"></div>
             </div>
-            <div id="dashboard-wrapper" class="dashboard-wrapper"></div>
-            <div class="viz-dashboard" id="viz-dashboard"></div>
+            <div class="viz-dashboard" id="viz-dashboard">
+              <div id="dashboard-wrapper" class="dashboard-wrapper"></div>
+            </div>
           </div>
         </div>
         <div class="size-code ui-tabs-hide" id="size-code">

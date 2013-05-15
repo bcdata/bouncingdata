@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -196,8 +197,7 @@ public class DatasetController {
 
   @SuppressWarnings("rawtypes")
   @RequestMapping(value = "/{guid}", method = RequestMethod.GET)
-  public @ResponseBody
-  List<Map> getData(@PathVariable String guid) {
+  public @ResponseBody List<Map> getData(@PathVariable String guid) {
     try {
       Dataset ds = datastoreService.getDatasetByGuid(guid);
       if (ds == null) {
@@ -214,8 +214,7 @@ public class DatasetController {
 
   @SuppressWarnings("rawtypes")
   @RequestMapping(value = "/{guid}?start={start}&count={count}", method = RequestMethod.GET)
-  public @ResponseBody
-  List<Map> getData(@PathVariable String guid, @PathVariable int start, @PathVariable int count) {
+  public @ResponseBody List<Map> getData(@PathVariable String guid, @PathVariable int start, @PathVariable int count) {
     try {
       Dataset ds = datastoreService.getDatasetByGuid(guid);
       if (ds == null) {
@@ -324,6 +323,7 @@ public class DatasetController {
 	    
 		return "datapage";
 	}
+  
   @RequestMapping(value = "/m/{guids}", method = RequestMethod.GET)
   public @ResponseBody Map<String, DatasetDetail> getDataMap(@PathVariable String guids) {
     Map<String, DatasetDetail> results = new HashMap<String, DatasetDetail>();
