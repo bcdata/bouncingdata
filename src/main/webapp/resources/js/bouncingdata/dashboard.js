@@ -371,7 +371,7 @@ Dashboard.prototype.view = function(vizList, dashboardPos, $container) {
     for (v in vizList) {
       var viz = vizList[v];
       viz.name = v;    
-      this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, false);
+      this.addViz(0, 0, 600, 600, viz, $container, editMode);
       count++;
     }
   }  else {
@@ -382,7 +382,7 @@ Dashboard.prototype.view = function(vizList, dashboardPos, $container) {
       if (pos) {
         this.addViz(pos.x, pos.y, pos.w, pos.h, viz, $container, false);
       }
-      else this.addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container, false);
+      else this.addViz(0, 0, 600, 600, viz, $container, editMode);
       count++;
     }
   }
