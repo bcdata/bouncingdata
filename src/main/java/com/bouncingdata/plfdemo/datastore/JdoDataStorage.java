@@ -1601,7 +1601,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		}
 	}
 
-	@Override
+  @Override
   public List<Analysis> getMostRecentAnalyses(int maxNumber) {
     PersistenceManager pm = getPersistenceManager();
     Query q = pm.newQuery(Analysis.class);
@@ -1678,6 +1678,30 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	}
 	
 	@Override
+	public List<Analysis> getTop20AuthorItemPublic(int maxNumber){
+	    PersistenceManager pm = null;
+	    Query q = null;
+	    
+	    try {
+	      pm = getPersistenceManager();
+	      q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM analyses WHERE user IN (SELECT * FROM (SELECT id FROM spring_users ORDER BY id DESC LIMIT 1 , 20) AS t) AND `published` =1 ORDER BY `last_update` DESC");
+	      q.setClass(Analysis.class);
+	      q.setRange(0, maxNumber);
+	      
+	      List<Analysis> analyses = (List<Analysis>) q.execute();
+	      if (analyses != null) {
+	        return (List<Analysis>) pm.detachCopyAll(analyses);
+	      } else return null;
+	    }catch(Exception ex){
+	    	System.out.println(ex.getStackTrace());
+	    } finally {
+	      q.closeAll();
+	      pm.close();
+	    }
+	    return null;
+	  }
+	
+	@Override
 	public void changeActiveRegisterStatus(int userId){
 		PersistenceManager pm = getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
@@ -1719,7 +1743,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Analysis.class);
 		q.setFilter("user.id == " + userId);
-		q.setOrdering("score DESC");
+		q.setOrdering("createAt DESC");
 		try {
 			List<Analysis> analyses = (List<Analysis>) q.execute();
 			if (analyses != null) 

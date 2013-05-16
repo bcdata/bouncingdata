@@ -567,6 +567,11 @@ public class DatastoreServiceImpl implements DatastoreService {
     dataStorage.addSttResetPassword(userId, activecode, expiredDate);
   }
   
+  @Override
+  public List<Analysis> getTop20AuthorItemPublic(int maxNumber){
+	  return dataStorage.getTop20AuthorItemPublic(maxNumber);  
+  }
+  
   //-----
   
   @Override

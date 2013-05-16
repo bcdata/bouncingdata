@@ -136,7 +136,8 @@
           <span class="" style="float: left;">
             <a href="#">All</a>&nbsp;|&nbsp;
             <a href="#">Analysis</a>&nbsp;|&nbsp;
-            <a href="#">Dataset</a>
+            <a href="#">Dataset</a>&nbsp;|&nbsp;
+            <a href="#">Scraper</a>
           </span>
           <span style="float: right;">
             <a href="#">Recent</a>&nbsp;|&nbsp;

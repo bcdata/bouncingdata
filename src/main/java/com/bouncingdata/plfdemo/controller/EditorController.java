@@ -98,7 +98,9 @@ public class EditorController {
             model.addAttribute("lastOutput", StringEscapeUtils.escapeJavaScript(anls.getLastOutput()));
           }
         }
-        return "editor";
+//        return "editor";
+        // Vinhpq : change mode for clone feature
+        mode = "size";
       }
 
       if ("size".equals(mode)) {

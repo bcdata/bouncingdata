@@ -57,7 +57,7 @@ public class AnalysisController {
 	private ApplicationStoreService appStoreService;
 
 	@RequestMapping(value="/{guid}", method=RequestMethod.GET)
-  public String viewAnalysis(@PathVariable String guid, ModelMap model, Principal principal) {
+	public String viewAnalysis(@PathVariable String guid, ModelMap model, Principal principal) {
     logger.debug("Received request for analysis {}", guid);
     try {
       Analysis anls = datastoreService.getAnalysisByGuid(guid);

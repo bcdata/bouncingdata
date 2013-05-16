@@ -485,6 +485,7 @@ public interface DataStorage {
   
   public void addSttResetPassword(int userId, String activecode, String expiredDate);
   
+  public List<Analysis> getTop20AuthorItemPublic(int maxNumber);
   //-----
   
   public List<Dataset> getMostPopularDatasets();

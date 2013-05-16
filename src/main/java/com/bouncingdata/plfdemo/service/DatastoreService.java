@@ -318,6 +318,8 @@ public interface DatastoreService {
   void changeActiveRegisterStatus(int userId);
   
   void addSttResetPassword(int userId, String activecode, String expiredDate);
+  
+  List<Analysis> getTop20AuthorItemPublic(int maxNumber);
   //------------------
   
   List<Dataset> getMostPopularDatasets();

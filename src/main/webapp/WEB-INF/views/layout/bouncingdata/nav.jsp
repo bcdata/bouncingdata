@@ -2,9 +2,9 @@
 <div class="main-nav-container">
   <div class="main-nav-content">
     <ul class="main-nav-links">
-      <li><a class="main-nav-item" href="<c:url value="/stream" />">Timeline</a></li>
-      <li><a class="main-nav-item" href="<c:url value="/streambyself" />">Created By Me</a></li>
+      <%-- <li><a class="main-nav-item" href="<c:url value="/stream" />">Timeline</a></li> --%>
       <li><a class="main-nav-item" href="<c:url value="/streamall" />">All</a></li>
+      <li><a class="main-nav-item" href="<c:url value="/streambyself" />">Created By Me</a></li>
       <li><a class="main-nav-item" href="<c:url value="/staffpicks" />">Staff's Picks</a></li>
       <li><a class="main-nav-item" href="<c:url value="/popularAuthors" />">Popular Authors</a></li>
       <li>

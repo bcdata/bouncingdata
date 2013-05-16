@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.util.Utils;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
 import com.bouncingdata.plfdemo.util.dataparsing.InvalidColumnTypeException;
@@ -112,6 +113,7 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       if (conn != null) try { conn.close(); } catch (Exception e) {}
     }  
   }
+  
   //--- end of search function
   
   public List<Map> getDatasetToList(String dataset, int begin, int maxNumber) throws DataAccessException {

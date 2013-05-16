@@ -57,8 +57,11 @@ public class ActivityController {
       List<Activity> activities = datastoreService.getRecentFeed(user.getId());
       model.addAttribute("activities", activities);
       
-      List<Analysis> mostRecentAnalyses = datastoreService.getMostRecentAnalyses();
-      model.addAttribute("recentAnalyses", mostRecentAnalyses);
+//      List<Analysis> mostRecentAnalyses = datastoreService.getMostRecentAnalyses();
+//      model.addAttribute("recentAnalyses", mostRecentAnalyses);
+      
+      List<Analysis> allAnalyses = datastoreService.getAllAnalysesPublished();
+      model.addAttribute("recentAnalyses", allAnalyses);
       
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
       model.addAttribute("topAnalyses", mostPopularAnalyses);
@@ -266,19 +269,24 @@ public class ActivityController {
 	      } catch (Exception e) {
 	        logger.debug("Failed to log action", e);
 	      }
-	     
+	      
+	      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
+	      model.addAttribute("activities", activities);
+	      
+	      List<Analysis> mostRecentAnalyses = datastoreService.getTop20AuthorItemPublic(20);
+	      model.addAttribute("recentAnalyses", mostRecentAnalyses);
+	      
 	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
 	      model.addAttribute("topAnalyses", mostPopularAnalyses);
 	      
 	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
 	      model.addAttribute("topDatasets", mostPopularDatasets);
-	      
 	    } catch (Exception e) {
 	      logger.debug("Failed to load activity stream", e);
 	      model.addAttribute("errorMsg", "Failed to load the activity stream");
 	    }
 	  
-    return "author";
+	    return "stream";
   }
   
 }
