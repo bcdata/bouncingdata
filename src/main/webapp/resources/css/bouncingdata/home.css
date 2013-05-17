@@ -24,6 +24,12 @@
 
 .homepage-container .stream-filter a:hover {
   color: #0077CC;
+  text-decoration: none;
+}
+
+.homepage-container .stream-filter a.nav-selected{
+	color: black;
+	text-decoration: underline;
 }
 
 #stream .event .event-avatar-link {

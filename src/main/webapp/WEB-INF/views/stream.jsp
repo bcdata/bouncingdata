@@ -132,15 +132,15 @@
   <div class="center-content">
     <div class="center-content-wrapper">
       <div class="stream-container center-content-main">
-        <div class="stream-filter">
+        <div class="stream-filter" id="filter-nav-top">
           <span class="" style="float: left;">
-            <a href="#">All</a>&nbsp;|&nbsp;
+            <a href="#" class="nav-selected">All</a>&nbsp;|&nbsp;
             <a href="#">Analysis</a>&nbsp;|&nbsp;
             <a href="#">Dataset</a>&nbsp;|&nbsp;
             <a href="#">Scraper</a>
           </span>
           <span style="float: right;">
-            <a href="#">Recent</a>&nbsp;|&nbsp;
+            <a href="#" class="nav-selected">Recent</a>&nbsp;|&nbsp;
             <a href="#">Popular</a>
           </span>
         </div>

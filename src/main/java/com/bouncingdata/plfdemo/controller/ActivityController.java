@@ -68,6 +68,8 @@ public class ActivityController {
       
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
+      
+      model.addAttribute("menuId", "streamall");
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -121,6 +123,7 @@ public class ActivityController {
 	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
 	      model.addAttribute("topDatasets", mostPopularDatasets);
 	      
+	      model.addAttribute("menuId", "tags");
 	  } catch (Exception e) {
 	      logger.debug("Failed to load activity stream", e);
 	      model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -162,6 +165,7 @@ public class ActivityController {
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
       
+      model.addAttribute("menuId", "streambyself");
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -191,10 +195,7 @@ public class ActivityController {
       
       List<Analysis> allAnalyses = datastoreService.getAllAnalysesPublished();
       model.addAttribute("recentAnalyses", allAnalyses);
-
-//      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
-//      model.addAttribute("topDatasets", allDatasets);
-      
+     
       //---
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
       model.addAttribute("topAnalyses", mostPopularAnalyses);
@@ -202,6 +203,7 @@ public class ActivityController {
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
       
+      model.addAttribute("menuId", "streamall");
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -242,6 +244,7 @@ public class ActivityController {
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
       
+      model.addAttribute("menuId", "staffpicks");
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -281,6 +284,8 @@ public class ActivityController {
 	      
 	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
 	      model.addAttribute("topDatasets", mostPopularDatasets);
+	      
+	      model.addAttribute("menuId", "popularAuthors");
 	    } catch (Exception e) {
 	      logger.debug("Failed to load activity stream", e);
 	      model.addAttribute("errorMsg", "Failed to load the activity stream");

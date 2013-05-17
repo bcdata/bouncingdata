@@ -35,6 +35,7 @@ public class TagController {
     List<Analysis> analyses = datastoreService.getAnalysesByTag(tag);
     model.addAttribute("anlsList", analyses);
     model.addAttribute("tag", tag);
+    model.addAttribute("menuId", tag);
     return "tag";
   }
 

@@ -374,6 +374,13 @@ body > .popup-container {
   line-height: 24px;
 }
 
+#page .main-navigation a.nav-selected {
+  background: white !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  font-style:oblique;
+}
+
 #page .main-navigation ul.main-nav-links a.main-nav-item {
   line-height: 24px;
   padding-left: 4px;
@@ -390,10 +397,10 @@ body > .popup-container {
   background: none repeat scroll 0 0 transparent;
 }
 
-#page .main-navigation ul.main-nav-links a.main-nav-item:hover, #page .main-navigation ul.main-nav-links a.sub-nav-item:hover, #page .main-navigation a.nav-selected {
-  background-color: #555555;
-  color: #fff;
-  text-decoration: none;
+#page .main-navigation ul.main-nav-links a.main-nav-item:hover, #page .main-navigation ul.main-nav-links a.sub-nav-item:hover {
+  background-color: #555555 !important;
+  color: #fff !important;
+  text-decoration: none !important;
 }
 
 #page .main-navigation .nav-item a:hover, #page .main-navigation .nav-item-selected a {

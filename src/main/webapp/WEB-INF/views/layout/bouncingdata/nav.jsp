@@ -3,26 +3,26 @@
   <div class="main-nav-content">
     <ul class="main-nav-links">
       <%-- <li><a class="main-nav-item" href="<c:url value="/stream" />">Timeline</a></li> --%>
-      <li><a class="main-nav-item" href="<c:url value="/streamall" />">All</a></li>
-      <li><a class="main-nav-item" href="<c:url value="/streambyself" />">Created By Me</a></li>
-      <li><a class="main-nav-item" href="<c:url value="/staffpicks" />">Staff's Picks</a></li>
-      <li><a class="main-nav-item" href="<c:url value="/popularAuthors" />">Popular Authors</a></li>
+      <li><a class="main-nav-item ${(menuId=='' || menuId=='streamall')?'nav-selected':''}" href="<c:url value="/streamall" />">All</a></li>
+      <li><a class="main-nav-item ${menuId=='streambyself'?'nav-selected':''}" href="<c:url value="/streambyself" />">Created By Me</a></li>
+      <li><a class="main-nav-item ${menuId=='staffpicks'?'nav-selected':''}" href="<c:url value="/staffpicks" />">Staff's Picks</a></li>
+      <li><a class="main-nav-item ${menuId=='popularAuthors'?'nav-selected':''}" href="<c:url value="/popularAuthors" />">Popular Authors</a></li>
       <li>
-        <a class="main-nav-item" href="<c:url value="/tags" />">Tags</a>
+        <a class="main-nav-item ${menuId=='tags'?'nav-selected':''}" href="<c:url value="/tags" />">Tags</a>
         <div class="tags-container">
           <ul class="tag-links">
-            <li><a class="sub-nav-item" href="<c:url value="/tag/economics" />">Economics</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/finance" />">Finance</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/health" />">Health</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/education" />">Education</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/us" />">US</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/football" />">Football</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/sports" />">Sports</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/amz" />">AMZ</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/worldbank" />">World Bank</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/oced" />">OCED</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/payroll" />">Payroll</a></li>
-            <li><a class="sub-nav-item" href="<c:url value="/tag/more" />">More..</a></li>
+            <li><a class="sub-nav-item ${menuId=='economics'?'nav-selected':''}" href="<c:url value="/tag/economics" />">Economics</a></li>
+            <li><a class="sub-nav-item ${menuId=='finance'?'nav-selected':''}" href="<c:url value="/tag/finance" />">Finance</a></li>
+            <li><a class="sub-nav-item ${menuId=='health'?'nav-selected':''}" href="<c:url value="/tag/health" />">Health</a></li>
+            <li><a class="sub-nav-item ${menuId=='education'?'nav-selected':''}" href="<c:url value="/tag/education" />">Education</a></li>
+            <li><a class="sub-nav-item ${menuId=='us'?'nav-selected':''}" href="<c:url value="/tag/us" />">US</a></li>
+            <li><a class="sub-nav-item ${menuId=='football'?'nav-selected':''}" href="<c:url value="/tag/football" />">Football</a></li>
+            <li><a class="sub-nav-item ${menuId=='sports'?'nav-selected':''}" href="<c:url value="/tag/sports" />">Sports</a></li>
+            <li><a class="sub-nav-item ${menuId=='amz'?'nav-selected':''}" href="<c:url value="/tag/amz" />">AMZ</a></li>
+            <li><a class="sub-nav-item ${menuId=='worldbank'?'nav-selected':''}" href="<c:url value="/tag/worldbank" />">World Bank</a></li>
+            <li><a class="sub-nav-item ${menuId=='oced'?'nav-selected':''}" href="<c:url value="/tag/oced" />">OCED</a></li>
+            <li><a class="sub-nav-item ${menuId=='payroll'?'nav-selected':''}" href="<c:url value="/tag/payroll" />">Payroll</a></li>
+            <li><a class="sub-nav-item ${menuId=='more'?'nav-selected':''}" href="<c:url value="/tag/more" />">More..</a></li>
           </ul>
         </div>
       </li>

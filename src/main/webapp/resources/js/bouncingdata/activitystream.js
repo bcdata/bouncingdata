@@ -10,7 +10,7 @@ ActivityStream.prototype.init = function() {
   var main = com.bouncingdata.Main;
 
   //com.bouncingdata.Nav.setSelected('page', 'stream');
-  $('#page>.main-container>.main-navigation ul.main-nav-links li:first-child a').addClass('nav-selected');
+  /*$('#page>.main-container>.main-navigation ul.main-nav-links li:first-child a').addClass('nav-selected');*/
 
   $(function() {
 

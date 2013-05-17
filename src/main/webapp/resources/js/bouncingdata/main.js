@@ -5,7 +5,6 @@ function Main() {
 }
 
 Utils.prototype.cutArticleContent = function(objtag,content,lnk) {
-	debugger;
 	content = content.replace(/<(?:.|\n)*?>/gm, '');
 	
 	if(content.length>=380){
