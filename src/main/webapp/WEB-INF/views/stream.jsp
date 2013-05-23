@@ -131,24 +131,52 @@
   </div>
   <div class="center-content">
     <div class="center-content-wrapper">
+    <script type="text/javascript">
+	$(document).ready(function() {
+		$('#filter-nav-top #filter-top-left a').click(function() {
+			// fetch the class of the clicked item
+			var ourClass = $(this).attr('fid');
+			
+			// reset the active class on all the buttons
+			$('#filter-nav-top #filter-top-left a').removeClass('nav-selected');
+			// update the active state on our clicked button
+			$(this).addClass('nav-selected');
+			
+			if(ourClass == 'All') {
+				// show all our items
+				$('#stream').children('div.stream-item').show();	
+			}
+			else {
+				// hide all elements that don't share ourClass
+				$('#stream').children('div:not(.' + ourClass + ')').hide();
+				// show all elements that do share ourClass
+				$('#stream').children('div.' + ourClass).show();
+			}
+			return false;
+		});
+		
+	});
+	</script>
+    
       <div class="stream-container center-content-main">
         <div class="stream-filter" id="filter-nav-top">
-          <span class="" style="float: left;">
-            <a href="#" class="nav-selected">All</a>&nbsp;|&nbsp;
-            <a href="#">Analysis</a>&nbsp;|&nbsp;
-            <a href="#">Dataset</a>&nbsp;|&nbsp;
-            <a href="#">Scraper</a>
+          <span id="filter-top-left" style="float: left;">
+            <a href="#" class="nav-selected" fid="All" >All</a>&nbsp;|&nbsp;
+            <a href="#" fid="Analysis"	>Analysis</a>&nbsp;|&nbsp;
+            <a href="#" fid="Dataset">Dataset</a>&nbsp;|&nbsp;
+            <a href="#" fid="Scraper">Scraper</a>
           </span>
-          <span style="float: right;">
-            <a href="#" class="nav-selected">Recent</a>&nbsp;|&nbsp;
-            <a href="#">Popular</a>
+          <span id="filter-top-right" style="float: right;">
+            <a href="<c:url value="/${filLnk}" />" ${empty fLinkActive?'class="nav-selected"':''} >Recent</a>&nbsp;|&nbsp;
+            <a href="<c:url value="/fstream?fn=${filLnk}" />" ${not empty fLinkActive?'class="nav-selected"':''}>Popular</a>
           </span>
         </div>
         <div class="clear"></div>
         <div class="stream main-activity-stream" id="stream">
           <c:if test="${not empty recentAnalyses }">
             <c:forEach items="${recentAnalyses }" var="anls">         
-              <div class="event stream-item" aid=${anls.id }>
+              
+              <div class="event stream-item ${anls.classType}" aid=${anls.id }>
                 <div class="event-content">
                   <!-- div class="info" aid="${activity.id }">
                     <a href="#" class="user"><strong>${activity.user.username }</strong></a>&nbsp;
@@ -171,11 +199,17 @@
                     </a>
                   </div>
                   <p class="title">
-                  	<!-- vinhpq : preview webpage on mouse over event (acitive fun : adding in link class="popover") -->
-                    <a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}"/>" ><strong>${anls.name}</strong></a>
+                  	<!-- vinhpq : preview webpage on mouse over event (acitive func : adding in link class="popover") -->
+                    <a id="evt-title-${anls.id }" href="
+                    									<c:choose>
+                											<c:when test="${anls.classType eq 'Analysis' }"> 
+                												<c:url value="/anls/${anls.guid}"/>
+                											</c:when>
+                											<c:otherwise><c:url value="/dataset/view/${anls.guid}" /></c:otherwise>
+                										</c:choose>" ><strong>${anls.name}</strong></a>
                   </p>
                   <p class="info">
-                    <span class="author">Author: <a href="#">${anls.user.username }</a></span><br/>
+                    <span class="author">Author: <a href="#">${anls.username }</a></span><br/>
                     <span class="tag-list">Tags:&nbsp; 
                       <c:if test="${not empty anls.tags }">
                         <c:forEach var="tag" items="${anls.tags }">
@@ -205,7 +239,13 @@
                     <c:if test="${anls.score < 0}">
                       <strong class="event-score event-score-negative">${anls.score }</strong>    
                     </c:if>
-                    &nbsp;<a id="evt-comment-${anls.id }" class="comments-link" href="<c:url value="/anls/${anls.guid}#comments" />"><strong>${anls.commentCount }</strong>&nbsp;comments</a>
+                    &nbsp;<a id="evt-comment-${anls.id }" class="comments-link" href="<c:choose>
+                    																	<c:when test="${anls.classType eq 'Analysis' }"> 
+                    																		<c:url value="/anls/${anls.guid}#comments" />
+                    																  	</c:when>
+                    																  	 <c:otherwise>#</c:otherwise>
+                    																  </c:choose>">
+                    																  		<strong>${anls.commentCount }</strong>&nbsp;comments</a>
                   </div>
                 </div>
                 <div class="clear"></div>

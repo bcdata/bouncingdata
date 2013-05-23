@@ -568,10 +568,26 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   @Override
-  public List<Analysis> getTop20AuthorItemPublic(int maxNumber){
-	  return dataStorage.getTop20AuthorItemPublic(maxNumber);  
+  public List<Analysis> getTop20AuthorAnalysesItemPublic(int maxNumber){
+	  return dataStorage.getTop20AuthorAnalysesItemPublic(maxNumber);  
   }
   
+  @Override
+  public List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber) {
+	  return dataStorage.getTop20AuthorDataSetItemPublic(maxNumber);  
+  }
+  
+  public List<Analysis> getMostPopularAnalysesBySelf(int userId){
+	  return dataStorage.getMostPopularAnalysesBySelf(userId);  
+  }
+  
+  public List<Analysis> getMostPopularAnalysesStaffPick(){
+	  return dataStorage.getMostPopularAnalysesStaffPick();
+  }
+  
+  public List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber){
+	  return dataStorage.getTop20AuthorMostPopularAnalysesItemPublic(maxNumber);
+  }
   //-----
   
   @Override

@@ -264,7 +264,7 @@ public class DatasetController {
 	        model.addAttribute("errorMsg", "Dataset not found!");
 	        return "error";
 	      }
-
+	      
 	      try {
 	        String data = mapper.writeValueAsString(new String[] { "1", oid });
 	        datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.VIEW_DATAPAGE, data);

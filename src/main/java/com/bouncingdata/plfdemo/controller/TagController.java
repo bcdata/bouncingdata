@@ -19,7 +19,7 @@ import com.bouncingdata.plfdemo.service.DatastoreService;
 @RequestMapping(value = "/tag")
 public class TagController {
 
-  private Logger           logger = LoggerFactory.getLogger(AnalysisController.class);
+  private Logger logger = LoggerFactory.getLogger(AnalysisController.class);
 
   @Autowired
   private DatastoreService datastoreService;

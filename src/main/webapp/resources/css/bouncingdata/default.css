@@ -206,8 +206,13 @@ div.clear {
 }
 
 #page .top-page-panel .header-buttons .guide-button-container .guide-button:hover {
-  background-color: #555;
-  color: #FFF;
+	/* border: 3px solid transparent;
+	border-bottom-color: #EED5B7;
+	opacity: 1;
+	filter: none; */
+	
+	color : #fff;
+	background-color:#555555;
 }
 
 #page .top-page-panel .header-buttons .create-button-container {

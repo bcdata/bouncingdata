@@ -1678,7 +1678,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	}
 	
 	@Override
-	public List<Analysis> getTop20AuthorItemPublic(int maxNumber){
+	public List<Analysis> getTop20AuthorAnalysesItemPublic(int maxNumber){
 	    PersistenceManager pm = null;
 	    Query q = null;
 	    
@@ -1691,6 +1691,54 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	      List<Analysis> analyses = (List<Analysis>) q.execute();
 	      if (analyses != null) {
 	        return (List<Analysis>) pm.detachCopyAll(analyses);
+	      } else return null;
+	    }catch(Exception ex){
+	    	System.out.println(ex.getStackTrace());
+	    } finally {
+	      q.closeAll();
+	      pm.close();
+	    }
+	    return null;
+	}
+	
+	@Override
+	public List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber){
+	    PersistenceManager pm = null;
+	    Query q = null;
+	    
+	    try {
+	      pm = getPersistenceManager();
+	      q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM analyses WHERE user IN (SELECT * FROM (SELECT id FROM spring_users ORDER BY id DESC LIMIT 1 , 20) AS t) AND `published` =1 ORDER BY `score` DESC");
+	      q.setClass(Analysis.class);
+	      q.setRange(0, maxNumber);
+	      
+	      List<Analysis> analyses = (List<Analysis>) q.execute();
+	      if (analyses != null) {
+	        return (List<Analysis>) pm.detachCopyAll(analyses);
+	      } else return null;
+	    }catch(Exception ex){
+	    	System.out.println(ex.getStackTrace());
+	    } finally {
+	      q.closeAll();
+	      pm.close();
+	    }
+	    return null;
+	  }
+	
+	@Override
+	public List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber){
+	    PersistenceManager pm = null;
+	    Query q = null;
+	    
+	    try {
+	      pm = getPersistenceManager();
+	      q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM datasets WHERE user IN (SELECT * FROM (SELECT id FROM spring_users ORDER BY id DESC LIMIT 1 , 20) AS t) AND `is_public` =1 ORDER BY `last_update` DESC");
+	      q.setClass(Dataset.class);
+	      q.setRange(0, maxNumber);
+	      
+	      List<Dataset> dataset = (List<Dataset>) q.execute();
+	      if (dataset != null) {
+	        return (List<Dataset>) pm.detachCopyAll(dataset);
 	      } else return null;
 	    }catch(Exception ex){
 	    	System.out.println(ex.getStackTrace());
@@ -1757,6 +1805,24 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	}
 	
 	@Override
+	public List<Analysis> getMostPopularAnalysesBySelf(int userId) {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Analysis.class);
+		q.setFilter("user.id == " + userId);
+		q.setOrdering("score DESC");
+		try {
+			List<Analysis> analyses = (List<Analysis>) q.execute();
+			if (analyses != null) {
+			  analyses = analyses.subList(0,  Math.min(analyses.size(), 10));
+	      return (List<Analysis>) pm.detachCopyAll(analyses);
+			} else return null;			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	@Override
 	public List<Analysis> getAllAnalysesPublished() {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Analysis.class);
@@ -1776,6 +1842,24 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	
 	@Override
 	public List<Analysis> getAnalysesStaffPick() {
+		PersistenceManager pm = getPersistenceManager();
+		Query q = pm.newQuery(Analysis.class);
+		q.setFilter("published == true");
+		q.setOrdering("createAt DESC");
+		try {
+			List<Analysis> analyses = (List<Analysis>) q.execute();
+			if (analyses != null) {
+			  analyses = analyses.subList(0,  Math.min(analyses.size(), 10));
+	      return (List<Analysis>) pm.detachCopyAll(analyses);
+			} else return null;			
+		} finally {
+			q.closeAll();
+			pm.close();
+		}
+	}
+	
+	@Override
+	public List<Analysis> getMostPopularAnalysesStaffPick() {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Analysis.class);
 		q.setFilter("published == true");
@@ -1816,7 +1900,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		PersistenceManager pm = getPersistenceManager();
 		Query q = pm.newQuery(Dataset.class);
 		q.setFilter("isPublic == true");
-		q.setOrdering("rowCount DESC");
+		q.setOrdering("createAt DESC");
 		try {
 			List<Dataset> datasets = (List<Dataset>) q.execute();
 			if (datasets != null)

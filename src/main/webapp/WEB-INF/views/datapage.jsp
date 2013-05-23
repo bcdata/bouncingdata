@@ -13,10 +13,10 @@
 
 <style>
 	#q{
-		width: 99%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
+		width: 98%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
 	}
 	#divQuery{
-		border-color: rgb(77, 144, 254);float: left;width: 66%; border: 1px solid #DDD; height: 28px; padding: 0; display: inline-block; background-color: #FFFFFF;
+		border-color: rgb(77, 144, 254);float: left;width: 58%; border: 1px solid #DDD; height: 28px; padding: 0; display: inline-block; background-color: #FFFFFF;
 	}
 </style>
 <div id="main-content" class="datapage-container">

@@ -13,8 +13,8 @@ ActivityStream.prototype.init = function() {
   /*$('#page>.main-container>.main-navigation ul.main-nav-links li:first-child a').addClass('nav-selected');*/
 
   $(function() {
-
-    $('.right-content #most-popular-content-tabs').tabs();
+	
+	$('.right-content #most-popular-content-tabs').tabs();
     
     $('.right-content #staff-pick-content-tabs').tabs();
     

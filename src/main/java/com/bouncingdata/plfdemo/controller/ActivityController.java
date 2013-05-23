@@ -1,7 +1,9 @@
 package com.bouncingdata.plfdemo.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,16 +17,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.DatastoreService;
+import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
 public class ActivityController {
@@ -56,12 +61,14 @@ public class ActivityController {
       
       List<Activity> activities = datastoreService.getRecentFeed(user.getId());
       model.addAttribute("activities", activities);
-      
-//      List<Analysis> mostRecentAnalyses = datastoreService.getMostRecentAnalyses();
-//      model.addAttribute("recentAnalyses", mostRecentAnalyses);
-      
+ 
+      // vinhpq : merge data 2 class Analysis and Dataset 
       List<Analysis> allAnalyses = datastoreService.getAllAnalysesPublished();
-      model.addAttribute("recentAnalyses", allAnalyses);
+      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
+      
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets,true);
+      
+      model.addAttribute("recentAnalyses", lstRepresentClass);
       
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
       model.addAttribute("topAnalyses", mostPopularAnalyses);
@@ -70,6 +77,80 @@ public class ActivityController {
       model.addAttribute("topDatasets", mostPopularDatasets);
       
       model.addAttribute("menuId", "streamall");
+      model.addAttribute("filLnk", "stream");
+    } catch (Exception e) {
+      logger.debug("Failed to load activity stream", e);
+      model.addAttribute("errorMsg", "Failed to load the activity stream");
+    }
+    return "stream";
+  }
+  
+  // vinhpq : top menu filter
+  @RequestMapping(value={"/fstream"}, method=RequestMethod.GET)
+  public String getfilterPopularStream(@RequestParam(value = "fn", required = true) String filter, WebRequest request, ModelMap model, Principal principal) {
+    try {    
+      
+      if(filter==null || filter.length() == 0)
+    	  return "error";
+      
+      if(!filter.equals("stream") && !filter.equals("streambyself") && !filter.equals("staffpicks") && !filter.equals("popularAuthors"))
+    	  return "error";
+      
+      User user = (User) ((Authentication)principal).getPrincipal();
+      
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
+        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
+      
+      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
+      model.addAttribute("activities", activities);
+ 
+      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", mostPopularAnalyses);
+      
+      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", mostPopularDatasets);
+      
+      List<Analysis> allAnalyses = new ArrayList<Analysis>();
+      List<Dataset> allDatasets = new ArrayList<Dataset>();
+      
+      if(filter.equals("stream")){
+    	  allAnalyses = datastoreService.getMostPopularAnalyses();
+    	  allDatasets = datastoreService.getMostPopularDatasets();
+    	  model.addAttribute("menuId", "streamall");
+    	  model.addAttribute("filLnk", "stream");
+      }
+      else if(filter.equals("streambyself")){
+    	  allAnalyses = datastoreService.getMostPopularAnalysesBySelf(user.getId());
+    	  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId());
+    	  
+    	  model.addAttribute("menuId", "streambyself");
+    	  model.addAttribute("filLnk", "streambyself");
+      }
+      else if(filter.equals("staffpicks")){
+    	  allAnalyses = datastoreService.getMostPopularAnalysesStaffPick();
+    	  allDatasets = datastoreService.getAllDatasetsPublished();
+    	  
+    	  model.addAttribute("menuId", "staffpicks");
+          model.addAttribute("filLnk", "staffpicks");
+      }
+      else if(filter.equals("popularAuthors")){
+    	  allAnalyses = datastoreService.getTop20AuthorMostPopularAnalysesItemPublic(20);
+    	  allDatasets = datastoreService.getTop20AuthorDataSetItemPublic(20);
+    	  
+	      model.addAttribute("menuId", "popularAuthors");
+	      model.addAttribute("filLnk", "popularAuthors");
+      }
+      
+
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, false);
+      model.addAttribute("recentAnalyses", lstRepresentClass);
+      model.addAttribute("fLinkActive", "true");
+      
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -153,11 +234,11 @@ public class ActivityController {
       }
       
       List<Analysis> allAnalysesBySelf = datastoreService.getAllAnalysesBySelf(user.getId());
-      model.addAttribute("recentAnalyses", allAnalysesBySelf);
-
-//      List<Dataset> allDatasetsBySelf = datastoreService.getAllDatasetsBySelf(user.getId());
-//      model.addAttribute("topDatasets", allDatasetsBySelf);
+      List<Dataset> allDatasetsBySelf = datastoreService.getAllDatasetsBySelf(user.getId());
       
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalysesBySelf, allDatasetsBySelf, true);
+      
+      model.addAttribute("recentAnalyses", lstRepresentClass);
       //---
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
       model.addAttribute("topAnalyses", mostPopularAnalyses);
@@ -166,6 +247,7 @@ public class ActivityController {
       model.addAttribute("topDatasets", mostPopularDatasets);
       
       model.addAttribute("menuId", "streambyself");
+      model.addAttribute("filLnk", "streambyself");
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -173,7 +255,7 @@ public class ActivityController {
     return "stream";
   }
   
-  @RequestMapping(value={"/streamall"}, method=RequestMethod.GET)
+  /*@RequestMapping(value={"/streamall"}, method=RequestMethod.GET)
   public String getActivitystreamall(WebRequest request, ModelMap model, Principal principal) {
     try {    
       String filter = request.getParameter("filter");
@@ -209,7 +291,7 @@ public class ActivityController {
       model.addAttribute("errorMsg", "Failed to load the activity stream");
     }
     return "stream";
-  }
+  }*/
   
   @RequestMapping(value={"/staffpicks"}, method=RequestMethod.GET)
   public String getstaffpicks(WebRequest request, ModelMap model, Principal principal) {
@@ -232,11 +314,11 @@ public class ActivityController {
       }
       
       List<Analysis> allAnalyses = datastoreService.getAnalysesStaffPick();
-      model.addAttribute("recentAnalyses", allAnalyses);
+      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
 
-//      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
-//      model.addAttribute("topDatasets", allDatasets);
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets , true);
       
+      model.addAttribute("recentAnalyses", lstRepresentClass);
       //---
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
       model.addAttribute("topAnalyses", mostPopularAnalyses);
@@ -245,6 +327,7 @@ public class ActivityController {
       model.addAttribute("topDatasets", mostPopularDatasets);
       
       model.addAttribute("menuId", "staffpicks");
+      model.addAttribute("filLnk", "staffpicks");
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
       model.addAttribute("errorMsg", "Failed to load the activity stream");
@@ -276,8 +359,11 @@ public class ActivityController {
 	      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
 	      model.addAttribute("activities", activities);
 	      
-	      List<Analysis> mostRecentAnalyses = datastoreService.getTop20AuthorItemPublic(20);
-	      model.addAttribute("recentAnalyses", mostRecentAnalyses);
+	      List<Analysis> top20Analyses = datastoreService.getTop20AuthorAnalysesItemPublic(20);
+	      List<Dataset> top20Dataset = datastoreService.getTop20AuthorDataSetItemPublic(20);
+	      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(top20Analyses, top20Dataset , true);
+	      
+	      model.addAttribute("recentAnalyses", lstRepresentClass);
 	      
 	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
 	      model.addAttribute("topAnalyses", mostPopularAnalyses);
@@ -286,6 +372,7 @@ public class ActivityController {
 	      model.addAttribute("topDatasets", mostPopularDatasets);
 	      
 	      model.addAttribute("menuId", "popularAuthors");
+	      model.addAttribute("filLnk", "popularAuthors");
 	    } catch (Exception e) {
 	      logger.debug("Failed to load activity stream", e);
 	      model.addAttribute("errorMsg", "Failed to load the activity stream");

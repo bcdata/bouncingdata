@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +33,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardPosition;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
 import com.bouncingdata.plfdemo.service.DTMailSender;
 
 
@@ -84,8 +87,73 @@ public class Utils {
     return result;
   }
   
-  // --- Vinhpq : add new functions 
-   
+  // --- Vinhpq : add new functions
+  
+  /**
+   * vinhpq : merge data for 2 class Analysis and Dataset and return list data have order by CreateAt field
+   * @param allAnalyses
+   * @param allDatasets
+   * @return
+   */
+  public static List<RepresentClass> mergeData2Class(List<Analysis> allAnalyses, List<Dataset> allDatasets, boolean isOrder){
+	  
+	  List<RepresentClass> lstRepresentClass =  new ArrayList<RepresentClass>();
+
+      RepresentClass representClass_object = null;
+	  Analysis analysis_object = null;
+	  Dataset dataset_object = null;
+	  
+      if(allAnalyses!=null && allAnalyses.size()>0){
+    	  
+    	  for(int i=0;i < allAnalyses.size();i++){
+
+    		  analysis_object = allAnalyses.get(i);
+    		  representClass_object = new RepresentClass();
+    		  
+    		  representClass_object.setId(analysis_object.getId());
+    		  representClass_object.setScore(analysis_object.getScore());
+    		  representClass_object.setTags(analysis_object.getTags());
+    		  representClass_object.setThumbnail(analysis_object.getThumbnail());
+    		  representClass_object.setCreateAt(analysis_object.getCreateAt());
+    		  representClass_object.setCommentCount(analysis_object.getCommentCount());
+    		  representClass_object.setDescription(analysis_object.getDescription());
+    		  representClass_object.setGuid(analysis_object.getGuid());
+    		  representClass_object.setUsername(analysis_object.getUser().getUsername());
+    		  representClass_object.setName(analysis_object.getName());
+    		  representClass_object.setClassType("Analysis");
+    		  
+    		  lstRepresentClass.add(representClass_object);
+    	  }
+      }
+      
+      if(allDatasets!=null && allDatasets.size()>0){
+    	  
+    	  for (int i = 0; i < allDatasets.size(); i++) {
+    		  
+    		  dataset_object = allDatasets.get(i);
+    		  representClass_object = new RepresentClass();
+    		  
+    		  representClass_object.setId(dataset_object.getId());
+    		  representClass_object.setTags(dataset_object.getTags());
+    		  representClass_object.setCreateAt(dataset_object.getCreateAt());
+    		  representClass_object.setDescription(dataset_object.getDescription());
+    		  representClass_object.setGuid(dataset_object.getGuid());
+    		  representClass_object.setUsername(dataset_object.getUser().getUsername());
+    		  representClass_object.setName(dataset_object.getName());
+    		  representClass_object.setClassType("Dataset");
+    		  
+    		  lstRepresentClass.add(representClass_object);
+		}
+      }
+      
+      if(lstRepresentClass != null && lstRepresentClass.size() > 0 && isOrder){
+    	  Collections.sort(lstRepresentClass, new RepresentClass());
+      }
+	  
+	  return lstRepresentClass;
+  }
+  
+  
   public static String RandomString(){
 	SecureRandom random = new SecureRandom();  
 	String str = new BigInteger(130, random).toString(32);  

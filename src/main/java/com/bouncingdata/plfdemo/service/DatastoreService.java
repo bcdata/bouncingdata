@@ -303,7 +303,10 @@ public interface DatastoreService {
   
   List<Analysis> getAllAnalysesBySelf(int userId);
   
+  List<Analysis> getMostPopularAnalysesBySelf(int userId);
+  
   List<Analysis> getAllAnalysesPublished();
+  
   
   List<Analysis> getAnalysesStaffPick();
 
@@ -319,7 +322,13 @@ public interface DatastoreService {
   
   void addSttResetPassword(int userId, String activecode, String expiredDate);
   
-  List<Analysis> getTop20AuthorItemPublic(int maxNumber);
+  List<Analysis> getTop20AuthorAnalysesItemPublic(int maxNumber);
+  
+  List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber);
+  
+  List<Analysis> getMostPopularAnalysesStaffPick();
+  
+  List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber);
   //------------------
   
   List<Dataset> getMostPopularDatasets();
