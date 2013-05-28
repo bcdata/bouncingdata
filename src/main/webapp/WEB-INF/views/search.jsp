@@ -88,9 +88,9 @@ $(function() {
                       <br style="line-height: 18px;" />
                       by <a class="user-link" href="">${anls.user.username }</a>
                     </p>
-                    <p class="description">
-                      <span>${anls.description }</span>
-                    </p>
+                    <div class="description">
+                      ${anls.description }
+                    </div>
                     <div class="clear"></div>
                   </div>
                 </li>

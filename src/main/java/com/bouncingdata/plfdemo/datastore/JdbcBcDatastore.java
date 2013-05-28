@@ -90,8 +90,8 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
   }
   
 //--- vinhpq : custom for search query 
-  public List<Object[]> getDatasetSearchQuery(String dataset, String cols, String condition) throws DataAccessException {
-    String sql = "SELECT " + cols + " FROM `" + dataset + "` " + condition;
+  public List<Object[]> getDatasetSearchQuery(String query) throws DataAccessException {
+    String sql = query;
     Connection conn = null;
     Statement st = null;
     ResultSet rs = null;
@@ -103,7 +103,7 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       
     } catch (SQLException e) {
       if (logger.isDebugEnabled()) {
-        logger.debug("Error when retrieved dataset {}", dataset);
+        logger.debug("Error when retrieved dataset");
         logger.debug("Exception detail: ", e);
       }
       return null;
@@ -491,6 +491,33 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       if (conn != null) try { conn.close(); } catch (Exception e) {}
     }
   }
+  
+  public String[] getColumnNamesByQuery(String query) {
+	    Connection conn = null;
+	    Statement st = null;
+	    ResultSet rs = null;
+	    try {
+	      conn = getDataSource().getConnection();
+	      st = conn.createStatement();
+	      rs = st.executeQuery(query);
+	      ResultSetMetaData rsmd = rs.getMetaData();
+	      String[] columns = new String[rsmd.getColumnCount()];
+	      for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+	        columns[i-1] = rsmd.getColumnName(i);
+	      }
+	      return columns;
+	    } catch (SQLException e) {
+	      if (logger.isDebugEnabled()) {
+	        logger.debug("Error occurs when read dataset columns");
+	        logger.debug("Exception detail: ", e);
+	      }
+	      return null;
+	    } finally {
+	      if (rs != null) try { rs.close(); } catch (Exception e) {}
+	      if (st != null) try { st.close(); } catch (Exception e) {}
+	      if (conn != null) try { conn.close(); } catch (Exception e) {}
+	    }
+	  }
   
   public void getCsvStream(String dsFullname, OutputStream os) throws Exception {
     Connection conn = null;

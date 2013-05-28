@@ -281,19 +281,21 @@ public class DatasetController {
 	        model.addAttribute("isOwner", false);
 	      
 	      //get column query
-	      String[] columns = userDataService.getColumnNames(ds.getName());
+	      String[] columns = userDataService.getColumnNamesByQuery(query);
 	      
-	      String scol_w_quote = query.substring(query.indexOf("[") +1, query.indexOf("]"))	,
-	      		 scol_wno_quote = scol_w_quote.replace("`", "");
-	      
-	      String sCondition = query.substring(query.indexOf("]") + 2,query.length());
-	      		 sCondition = (sCondition.trim().length() > 0) ? (" Where " + sCondition):("");
+//	      String scol_w_quote = query.substring(query.indexOf("[") +1, query.indexOf("]"))	,
+//	      		 scol_wno_quote = scol_w_quote.replace("`", "");
+//	      
+//	      String sCondition = query.substring(query.indexOf("]") + 2,query.length());
+//	      		 sCondition = (sCondition.trim().length() > 0) ? (" Where " + sCondition):("");
 	      		 
 //	      if (ds.getRowCount() < 1000) {
 	        List<Object[]> data = new ArrayList<Object[]>();
-	        data.add((!scol_w_quote.equals("*"))?scol_wno_quote.split(","):columns);
-	        data.addAll(userDataService.getDatasetSearchQuery(ds.getName(), scol_w_quote, sCondition));
+	        data.add(columns);
+	        data.addAll(userDataService.getDatasetSearchQuery(query));
 	        model.addAttribute("data", mapper.writeValueAsString(data));
+	        model.addAttribute("squery_datapage", query);
+	        
 /*	      } else {
 	        model.addAttribute("columns", mapper.writeValueAsString((!scol_w_quote.equals("*"))?scol_wno_quote.split(","):columns));
 	        model.addAttribute("srStt", "true");

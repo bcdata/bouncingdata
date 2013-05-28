@@ -4,7 +4,8 @@ function Main() {
   this.jsLoader = {};
 }
 
-Utils.prototype.cutArticleContent = function(objtag,content,lnk) {
+/*Utils.prototype.cutArticleContent = function(objtag,content,lnk) {
+//	debugger;
 	content = content.replace(/<(?:.|\n)*?>/gm, '');
 	
 	if(content.length>=380){
@@ -15,7 +16,7 @@ Utils.prototype.cutArticleContent = function(objtag,content,lnk) {
 	content = "<p>" + content + "</p>"; 
 	document.getElementById(objtag).innerHTML = content;
 	  
-}
+}*/
 
 Main.prototype.setContext = function(ctx) {
   this.ctx = ctx;

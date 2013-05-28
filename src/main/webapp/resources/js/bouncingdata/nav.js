@@ -6,7 +6,7 @@ Nav.prototype.init = function() {
   var $mainNav = $('#page>.main-container>.main-navigation');
   
   // binds Ajax actions, history
-  this.bindAjaxActions();
+//  this.bindAjaxActions();
   
   // manage 'Create' sub-menu
   var $createPopup = $('.nav-hidden .nav-create-popup', $mainNav);

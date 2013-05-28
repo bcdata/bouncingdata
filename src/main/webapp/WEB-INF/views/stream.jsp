@@ -6,6 +6,7 @@
   com.bouncingdata.ActivityStream.init();
 </script>
 
+
 <div id="main-content" class="homepage-container">
   <div class="right-content">
     <div class="right-content-section most-popular-section">
@@ -187,7 +188,12 @@
                     <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
                   </a>
                   <div class="thumbnail">
-                    <a href="<c:url value="/anls/${anls.guid}" />">
+                    <a href="<c:choose>
+								<c:when test="${anls.classType eq 'Analysis' }"> 
+									<c:url value="/anls/${anls.guid}"/>
+								</c:when>
+								<c:otherwise><c:url value="/dataset/view/${anls.guid}" /></c:otherwise>
+							</c:choose>">
                       <c:choose>
                         <c:when test="${not empty anls.thumbnail }">
                           <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
@@ -220,13 +226,9 @@
                       </c:if>
                     </span>
                   </p>
-                  <p class="description">
-                    <span id= "sp_${anls.guid}">
-	                    <script>
-	                    	com.bouncingdata.Utils.cutArticleContent('sp_${anls.guid}','${anls.description}','<c:url value="/anls/${anls.guid}"/>');
-		                </script> 
-	                </span>
-                  </p>
+                  <div class="description">
+                    	${anls.description}
+                  </div>
                   
                   <div class="clear"></div>
                   <div class="event-footer">

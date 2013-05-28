@@ -45,8 +45,8 @@ public class BcDatastoreService {
   }
   
   //--- vinhpq : custom for search query
-  public List<Object[]> getDatasetSearchQuery(String dataset, String cols, String condition) throws Exception {
-    return jdbcBcDatastore.getDatasetSearchQuery( dataset,  cols,  condition);
+  public List<Object[]> getDatasetSearchQuery(String query) throws Exception {
+    return jdbcBcDatastore.getDatasetSearchQuery(query);
   }
   //--- end of search function
   
@@ -75,6 +75,10 @@ public class BcDatastoreService {
   
   public String[] getColumnNames(String dsFullname) throws Exception {
     return jdbcBcDatastore.getColumnNames(dsFullname);
+  }
+  
+  public String[] getColumnNamesByQuery(String query) throws Exception {
+    return jdbcBcDatastore.getColumnNamesByQuery(query);
   }
   
   public void getCsvStream(String dsFullname, OutputStream os) throws Exception {

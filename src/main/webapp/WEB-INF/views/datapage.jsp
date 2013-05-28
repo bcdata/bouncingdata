@@ -18,6 +18,15 @@
 	#divQuery{
 		border-color: rgb(77, 144, 254);float: left;width: 58%; border: 1px solid #DDD; height: 28px; padding: 0; display: inline-block; background-color: #FFFFFF;
 	}
+	#psearchleft {
+		float: left;width: 93%;
+	}
+	#psearchright {
+		float: left;width: 7%;height: 100%;
+	}
+	#imgsearchquery {
+		margin-left: 7px;margin-top: 6px;cursor: pointer;width: 14px;height: 16px;
+	}
 </style>
 <div id="main-content" class="datapage-container">
   <div class="data-info right-content">
@@ -156,7 +165,21 @@
       <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">
         <form id="search-query" method="post" action="<c:url value="/dataset/squery"/>">
 	        <div id="divQuery">
-	          <input type="text" id="q" name="q" value="Search query ..." onblur="if(value=='') value = 'Search query ...'" onfocus="if(value=='Search query ...') value = ''" title="Syntax: [* || `colname1`,`colname2`,...], condition clause (Column name must be quote in ``)"/>
+	          <c:choose>
+	          	<c:when test="${not empty squery_datapage}">
+		          <div id="psearchleft">
+					<input type="text" id="q" name="q" value="${squery_datapage}" onblur="if(value=='') value = 'Search query ...'" onfocus="if(value=='Search query ...') value = ''" title="Using MySql syntax">
+				  </div>
+				  <div id="psearchright">
+					<a href="<c:url value="/dataset/view/${dataset.guid}"/>">
+						<img id="imgsearchquery" src="<c:url value="/resources/images/delete-icon.gif"/>" title="Delete query">
+					</a>
+				  </div>
+				</c:when>
+				<c:otherwise>
+					<input type="text" id="q" name="q" value="Search query ..." onblur="if(value=='') value = 'Search query ...'" onfocus="if(value=='Search query ...') value = ''" title="Using MySql syntax">
+				</c:otherwise>
+			  </c:choose>
 	          <input type="hidden" id="oq" name="oq" value="${dataset.guid}"/>
 			</div>
         </form>	
@@ -199,7 +222,8 @@
         <div id="ref-doc" class="ui-tabs-hide">
           <c:choose>
             <c:when test="${not empty dataset.refDocuments }">
-              <c:set var="baseURL" value="${fn:replace(pageContext.request.requestURL, pageContext.request.requestURI, pageContext.request.contextPath)}" />
+              <c:set var="ctUrl">${pageContext.request.requestURL}</c:set>
+              <c:set var="baseURL" value="${fn:replace(ctUrl, pageContext.request.requestURI, pageContext.request.contextPath)}" />
               <c:forEach items="${dataset.refDocuments }" var="ref">
                 <c:if test="${ref.type == 'url' }">
                   <p>
