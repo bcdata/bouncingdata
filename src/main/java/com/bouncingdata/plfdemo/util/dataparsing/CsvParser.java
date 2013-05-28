@@ -74,7 +74,7 @@ public class CsvParser implements DataParser {
     
     List<CSVRecord> recordList = new ArrayList<CSVRecord>();
     
-    int patternSize = (int) Math.max(100, parser.getRecordNumber());
+    int patternSize = (int) Math.min(100, parser.getRecordNumber());
     // guess column type from the first 100 records
     for (int i = 1; i <= patternSize; i++) {
       if (iter.hasNext()) {
