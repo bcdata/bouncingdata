@@ -502,7 +502,7 @@
       <div class="clear"></div>
     </div>
   </script>
-  <script id="feed-item-template_old" type="text/x-jquery-tmpl">  
+  <script id="feed-item-template" type="text/x-jquery-tmpl">  
     <div class="event stream-item" aid=\${id }>
       <div class="event-content">
         <a class="event-avatar-link"> <img class="avatar no-avatar"

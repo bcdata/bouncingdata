@@ -16,9 +16,15 @@ import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
 class ExcelParser implements DataParser {
   
+  private boolean firstRowAsHeader;
+  
   private Logger logger = LoggerFactory.getLogger(ExcelParser.class);
   
   protected ExcelParser() {}
+  
+  public void setFirstRowAsHeader(boolean header) {
+    this.firstRowAsHeader = header;
+  }
 
   @Override
   public List<Object[]> parse(InputStream is) throws Exception {
@@ -106,7 +112,7 @@ class ExcelParser implements DataParser {
     int lastCellNum = firstRow.getLastCellNum() - 1;
 
     List<Row> rows = new ArrayList<Row>();
-    int patternSize = (int) Math.max(100, lastRowNum - firstRowNum);
+    int patternSize = (int) Math.min(100, lastRowNum - firstRowNum);
     
     for (int i = 1 ; i <= patternSize; i++) {
       rows.add(sheet.getRow(firstRowNum + i));
