@@ -1172,7 +1172,7 @@ Workbench.prototype.renderDatasets = function(datasetDetailMap, $dsContainer) {
   }
   
   //$dsContainer.empty();
-  $dsContainer.append(htmlToAppend.join());
+  $dsContainer.append(htmlToAppend.join(''));
   
   $('.dataset-item', $dsContainer).each(function() {
     var $dsItem = $(this);
@@ -1201,7 +1201,7 @@ Workbench.prototype.renderAttachments = function(attachmentList, $dsContainer) {
       + '<strong><a href="javascript:void(0)">' + name + '</a></strong></span><table class="attachment-item-table"></table></div>';
   }
   
-  $dsContainer.append(htmlToAppend.join());
+  $dsContainer.append(htmlToAppend.join(''));
   
   $('.attachment-item', $dsContainer).each(function() {
     var $attItem = $(this);

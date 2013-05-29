@@ -1,6 +1,5 @@
 package com.bouncingdata.plfdemo.service;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -22,7 +21,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import org.apache.poi.hssf.record.SCLRecord;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.imgscalr.Scalr;

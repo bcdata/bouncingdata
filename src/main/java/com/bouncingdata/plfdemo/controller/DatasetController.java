@@ -184,7 +184,7 @@ public class DatasetController {
     try {
       // parse schema
       List<DatasetColumn> schema = parser.parseSchema(file.getInputStream());
-      model.addAttribute("schema", mapper.writeValueAsString(schema));
+      model.addAttribute("schema", schema);
     } catch (Exception e) {
       logger.debug("Exception occured when parsing data schema", e);
       model.addAttribute("errorMsg", "Failed to parse schema.");

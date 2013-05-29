@@ -63,7 +63,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
         + '</span></td><td><span class="column-description"></span></td></tr>';
     }
     
-    $schemaTableBody.append(tableHtml.join());
+    $schemaTableBody.append(tableHtml.join(''));
         
     $('#reset-schema').click(function() {
       $('#schema-table tr').each(function() {

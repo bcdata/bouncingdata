@@ -132,13 +132,13 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
   }
   
   $('.feed-loading', $stream).hide();
-  $('.stream-footer',$stream).before(htmlToAdd.join());
+  $('.stream-footer',$stream).before(htmlToAdd.join(''));
   
-  for (index in idsToAdd) {
+  /*for (index in idsToAdd) {
     var aid = idsToAdd[index];
     var $event = $('#stream .event[aid="' + aid + '"]');
     this.loadAnalysisByAjax($event);
-  }
+  }*/
 }
 
 ActivityStream.prototype.loadAnalysisByAjax = function($feed) {
