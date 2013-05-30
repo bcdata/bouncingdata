@@ -2109,7 +2109,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public void addDataSetTag(int dsId, int tagId) {
+  public void addDatasetTag(int dsId, int tagId) {
 
     PersistenceManager pm = getPersistenceManager();
     Transaction tx = pm.currentTransaction();
@@ -2128,7 +2128,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public void deleteDataSetTag(int dsId, int tagId) {
+  public void deleteDatasetTag(int dsId, int tagId) {
 
     PersistenceManager pm = getPersistenceManager();
     Transaction tx = pm.currentTransaction();
@@ -2149,7 +2149,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public Set<Tag> getTagByDataSet(int dsId) {
+  public Set<Tag> getTagByDataset(int dsId) {
     Set<Tag> results = null;
     PersistenceManager pm = getPersistenceManager();
     Transaction tx = pm.currentTransaction();
@@ -2170,7 +2170,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public List<Dataset> getDataSetByTag(int tagId) {
+  public List<Dataset> getDatasetByTag(int tagId) {
     PersistenceManager pm = getPersistenceManager();
     Query query = pm.newQuery("javax.jdo.query.SQL",
         "SELECT t1 . * FROM datasets t1 INNER JOIN Dataset_tags t2 ON t1.id = t2.id_OID WHERE t2.id_EID = :param");

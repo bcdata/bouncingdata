@@ -183,14 +183,19 @@ Analysis.prototype.init = function(anls, dbDetail) {
       var tag = $('#add-tag-input').val();
       if (!tag) return false;
       $.ajax({
-        url: ctx + '/anls/' + guid + '/addtag',
+        url: ctx + '/tag/addtag,
         type: 'post',
         data: {
-          tag: tag
+          'guid': guid,
+          'tag': tag,
+          'type': 'analysis'
         },
         success: function(res) {
           console.debug(res);
-          if (res['code'] < 0) return;
+          if (res['code'] < 0) {
+            console.debug(res);
+            return;
+          }
           var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
           $('.tag-set .tag-list').append($newTag);
           $('.tag-remove', $newTag).click(function() {

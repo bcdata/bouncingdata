@@ -681,4 +681,20 @@ public class DatastoreServiceImpl implements DatastoreService {
     dataStorage.removeDatasetTags(dts.getId(), tags);
     
   }
+
+  @Override
+  public void createTag(String tag) {
+    Tag t = new Tag(tag.toLowerCase());
+    dataStorage.createTag(t);
+  }
+
+  @Override
+  public void addAnalysisTag(int anlsId, int tagId) {
+    dataStorage.addAnalysisTag(anlsId, tagId);
+  }
+
+  @Override
+  public void addDatasetTag(int datasetId, int tagId) {
+    dataStorage.addDatasetTag(datasetId, tagId);
+  }
 }

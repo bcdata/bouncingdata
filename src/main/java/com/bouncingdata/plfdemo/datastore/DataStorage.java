@@ -519,11 +519,11 @@ public interface DataStorage {
   public List<Scraper> getScraperByTag(int tagId);
   
   
-  public void addDataSetTag(int dsId, int tagId);
-  public void deleteDataSetTag(int dsId, int tagId);
+  public void addDatasetTag(int dsId, int tagId);
+  public void deleteDatasetTag(int dsId, int tagId);
   /*How many tag for a DataSet*/
-  public Set<Tag> getTagByDataSet(int dsId);
-  public List<Dataset> getDataSetByTag(int tagId);
+  public Set<Tag> getTagByDataset(int dsId);
+  public List<Dataset> getDatasetByTag(int tagId);
 
   Tag getTag(String tagStr);
 
