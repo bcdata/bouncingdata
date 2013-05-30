@@ -63,8 +63,8 @@ public class ActivityController {
       model.addAttribute("activities", activities);
  
       // vinhpq : merge data 2 class Analysis and Dataset 
-      List<Analysis> allAnalyses = datastoreService.getAllAnalysesPublished();
-      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
+      List<Analysis> allAnalyses = datastoreService.getAnalysesIn1Month();
+      List<Dataset> allDatasets = datastoreService.getDatasetsIn1Month();
       
       List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets,true);
       
@@ -119,21 +119,21 @@ public class ActivityController {
       List<Dataset> allDatasets = new ArrayList<Dataset>();
       
       if(filter.equals("stream")){
-    	  allAnalyses = datastoreService.getMostPopularAnalyses();
-    	  allDatasets = datastoreService.getMostPopularDatasets();
+    	  allAnalyses = datastoreService.getMostPopularAnalyses(20);
+    	  allDatasets = datastoreService.getMostPopularDatasets(20);
     	  model.addAttribute("menuId", "streamall");
     	  model.addAttribute("filLnk", "stream");
       }
       else if(filter.equals("streambyself")){
-    	  allAnalyses = datastoreService.getMostPopularAnalysesBySelf(user.getId());
+    	  allAnalyses = datastoreService.getMostPopularAnalysesBySelf(user.getId(), 20);
     	  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId());
     	  
     	  model.addAttribute("menuId", "streambyself");
     	  model.addAttribute("filLnk", "streambyself");
       }
       else if(filter.equals("staffpicks")){
-    	  allAnalyses = datastoreService.getMostPopularAnalysesStaffPick();
-    	  allDatasets = datastoreService.getAllDatasetsPublished();
+    	  allAnalyses = datastoreService.getMostPopularAnalysesStaffPick(20);
+    	  allDatasets = datastoreService.getAllDatasetsPublished(20);
     	  
     	  model.addAttribute("menuId", "staffpicks");
           model.addAttribute("filLnk", "staffpicks");
@@ -314,7 +314,7 @@ public class ActivityController {
       }
       
       List<Analysis> allAnalyses = datastoreService.getAnalysesStaffPick();
-      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished();
+      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished(20);
 
       List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets , true);
       

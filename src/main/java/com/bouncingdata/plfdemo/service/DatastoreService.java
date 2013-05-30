@@ -301,18 +301,23 @@ public interface DatastoreService {
   
   //----- Vinhpq : adding temporary functions for left menu ----
   
+  List<Dataset> getMostPopularDatasets(int maxNumber);
+  
+  List<Analysis> getMostPopularAnalyses(int maxNumber);
+  
   List<Analysis> getAllAnalysesBySelf(int userId);
   
-  List<Analysis> getMostPopularAnalysesBySelf(int userId);
+  List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber);
   
-  List<Analysis> getAllAnalysesPublished();
+  List<Analysis> getAnalysesIn1Month();
   
+  List<Dataset> getDatasetsIn1Month();
   
   List<Analysis> getAnalysesStaffPick();
 
   List<Dataset> getAllDatasetsBySelf(int userId);
   
-  List<Dataset> getAllDatasetsPublished();
+  List<Dataset> getAllDatasetsPublished(int maxNumber);
   
   List<Tag> get10Tags();
   
@@ -326,7 +331,7 @@ public interface DatastoreService {
   
   List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber);
   
-  List<Analysis> getMostPopularAnalysesStaffPick();
+  List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber);
   
   List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber);
   //------------------

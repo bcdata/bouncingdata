@@ -168,8 +168,21 @@ public class DatasetController {
        */
 
       ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
+      
+      //vinhpq : remove empty rows
+      int lengthRow = (data.size() > 0 ? data.get(0).length : 0),
+    	   empty_cell = 0;
+      
       for (Object[] row : data) {
-        os.writeObject(row);
+    	empty_cell = 0;
+    	for (int i = 0; i < lengthRow; i++) {
+			if(row[i].equals("")){
+				empty_cell++;
+			}
+		}
+    	if(empty_cell < lengthRow){
+    		os.writeObject(row);
+    	}
       }
       os.close();
 

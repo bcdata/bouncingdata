@@ -521,6 +521,13 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   //----- Vinhpq : adding temporary functions for left menu ----  
+  public List<Dataset> getMostPopularDatasets(int maxnumber){
+    return dataStorage.getMostPopularDatasets(maxnumber);
+  }
+  
+  public List<Analysis> getMostPopularAnalyses(int maxnumber){
+    return dataStorage.getMostPopularAnalyses(maxnumber);
+  }
   
   @Override
   public List<Analysis> getAllAnalysesBySelf(int userId) {
@@ -528,8 +535,13 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   @Override
-  public List<Analysis> getAllAnalysesPublished() {
-    return dataStorage.getAllAnalysesPublished();
+  public List<Analysis> getAnalysesIn1Month() {
+    return dataStorage.getAnalysesIn1Month();
+  }
+  
+  @Override
+  public List<Dataset> getDatasetsIn1Month(){
+	  return dataStorage.getDatasetsIn1Month();
   }
   
   @Override
@@ -543,8 +555,8 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   @Override
-  public List<Dataset> getAllDatasetsPublished() {
-    return dataStorage.getAllDatasetsPublished();
+  public List<Dataset> getAllDatasetsPublished(int maxNumber) {
+    return dataStorage.getAllDatasetsPublished(maxNumber);
   }
   
   @Override
@@ -577,12 +589,12 @@ public class DatastoreServiceImpl implements DatastoreService {
 	  return dataStorage.getTop20AuthorDataSetItemPublic(maxNumber);  
   }
   
-  public List<Analysis> getMostPopularAnalysesBySelf(int userId){
-	  return dataStorage.getMostPopularAnalysesBySelf(userId);  
+  public List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber){
+	  return dataStorage.getMostPopularAnalysesBySelf(userId, maxNumber);  
   }
   
-  public List<Analysis> getMostPopularAnalysesStaffPick(){
-	  return dataStorage.getMostPopularAnalysesStaffPick();
+  public List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber){
+	  return dataStorage.getMostPopularAnalysesStaffPick(maxNumber);
   }
   
   public List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber){

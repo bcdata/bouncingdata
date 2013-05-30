@@ -466,16 +466,21 @@ public interface DataStorage {
   public List<Analysis> getMostPopularAnalyses();
   
   //----- Vinhpq : adding temporary functions for left menu ----
+  public List<Dataset> getMostPopularDatasets(int maxnumber);
+  
+  public List<Analysis> getMostPopularAnalyses(int maxnumber);
   
   public List<Analysis> getAllAnalysesBySelf(int userId);
   
-  public List<Analysis> getAllAnalysesPublished();
+  public List<Analysis> getAnalysesIn1Month();
+  
+  public List<Dataset> getDatasetsIn1Month();
   
   public List<Analysis> getAnalysesStaffPick();
 
   public List<Dataset> getAllDatasetsBySelf(int userId);
   
-  public List<Dataset> getAllDatasetsPublished();
+  public List<Dataset> getAllDatasetsPublished(int maxNumber);
   
   public List<Tag> get10Tags();
   
@@ -489,9 +494,9 @@ public interface DataStorage {
 
   public List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber);
   
-  public List<Analysis> getMostPopularAnalysesBySelf(int userId);
+  public List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber);
   
-  public List<Analysis> getMostPopularAnalysesStaffPick();
+  public List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber);
   
   public List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber);
   //-----

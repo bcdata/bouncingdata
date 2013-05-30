@@ -1506,6 +1506,25 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
+  
+  @Override
+  public List<Analysis> getMostPopularAnalyses(int maxNumber) {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Analysis.class);
+    q.setFilter("published == true");
+    q.setOrdering("score DESC");
+    q.setRange(0, maxNumber);
+    try {
+      List<Analysis> analyses = (List<Analysis>) q.execute();
+      if (analyses != null) {
+        return (List<Analysis>) pm.detachCopyAll(analyses);
+      } else
+        return null;
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
 
   @Override
   public List<Analysis> getMostRecentAnalyses(int maxNumber) {
@@ -1539,6 +1558,27 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
         return (List<Analysis>) pm.detachCopyAll(analyses);
       } else
         return null;
+    } finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
+  
+  @Override
+  public List<Dataset> getMostPopularDatasets(int maxNumber) {
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery(Dataset.class);
+    q.setFilter("isPublic == true");
+    q.setOrdering("rowCount DESC");
+    q.setRange(0, maxNumber);
+    
+    try {
+      List<Dataset> datasets = (List<Dataset>) q.execute();
+      if (datasets != null) {
+        return (List<Dataset>) pm.detachCopyAll(datasets);
+      } else
+        return null;
+
     } finally {
       q.closeAll();
       pm.close();
@@ -1726,15 +1766,15 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public List<Analysis> getMostPopularAnalysesBySelf(int userId) {
+  public List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber) {
     PersistenceManager pm = getPersistenceManager();
     Query q = pm.newQuery(Analysis.class);
     q.setFilter("user.id == " + userId);
     q.setOrdering("score DESC");
+    q.setRange(0, maxNumber);
     try {
       List<Analysis> analyses = (List<Analysis>) q.execute();
       if (analyses != null) {
-        analyses = analyses.subList(0, Math.min(analyses.size(), 10));
         return (List<Analysis>) pm.detachCopyAll(analyses);
       } else
         return null;
@@ -1745,15 +1785,33 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public List<Analysis> getAllAnalysesPublished() {
+  public List<Analysis> getAnalysesIn1Month() {
     PersistenceManager pm = getPersistenceManager();
-    Query q = pm.newQuery(Analysis.class);
-    q.setFilter("published == true");
-    q.setOrdering("score DESC");
+    Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `published` = 1 ORDER BY `create_at` DESC");
+    q.setClass(Analysis.class);
     try {
       List<Analysis> analyses = (List<Analysis>) q.execute();
       if (analyses != null)
         return (List<Analysis>) pm.detachCopyAll(analyses);
+      else
+        return null;
+    } catch(Exception e){
+    	return null;
+    }finally {
+      q.closeAll();
+      pm.close();
+    }
+  }
+  
+  @Override
+  public List<Dataset> getDatasetsIn1Month(){
+    PersistenceManager pm = getPersistenceManager();
+    Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `is_public` = 1 ORDER BY `create_at` DESC");
+    q.setClass(Dataset.class);
+    try {
+      List<Dataset> datasets = (List<Dataset>) q.execute();
+      if (datasets != null)
+        return (List<Dataset>) pm.detachCopyAll(datasets);
       else
         return null;
     } finally {
@@ -1782,11 +1840,12 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public List<Analysis> getMostPopularAnalysesStaffPick() {
+  public List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber) {
     PersistenceManager pm = getPersistenceManager();
     Query q = pm.newQuery(Analysis.class);
     q.setFilter("published == true");
     q.setOrdering("score DESC");
+    q.setRange(0, maxNumber);
     try {
       List<Analysis> analyses = (List<Analysis>) q.execute();
       if (analyses != null) {
@@ -1818,13 +1877,14 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
-
+  
   @Override
-  public List<Dataset> getAllDatasetsPublished() {
+  public List<Dataset> getAllDatasetsPublished(int maxNumber) {
     PersistenceManager pm = getPersistenceManager();
     Query q = pm.newQuery(Dataset.class);
     q.setFilter("isPublic == true");
     q.setOrdering("createAt DESC");
+    q.setRange(0, maxNumber);
     try {
       List<Dataset> datasets = (List<Dataset>) q.execute();
       if (datasets != null)
@@ -1991,7 +2051,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       tx.begin();
       Analysis anls = pm.getObjectById(Analysis.class, anlsId);
       results = anls.getTags();
-      System.out.println("Size : " + results.size());
+//      System.out.println("Size : " + results.size());
       tx.commit();
     } finally {
       if (tx.isActive()) tx.rollback();
@@ -2027,7 +2087,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       tx.begin();
       Scraper scp = pm.getObjectById(Scraper.class, scId);
       results = scp.getTags();
-      System.out.println("Size : " + results.size());
+//      System.out.println("Size : " + results.size());
       tx.commit();
     } finally {
       if (tx.isActive()) tx.rollback();
@@ -2044,7 +2104,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Map params = new HashMap();
     params.put("param", tagId);
     List<Scraper> results = (List<Scraper>) query.executeWithMap(params);
-    System.out.println("Size : " + results.size());
+//    System.out.println("Size : " + results.size());
     return results;
   }
 
@@ -2097,7 +2157,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       tx.begin();
       Dataset dts = pm.getObjectById(Dataset.class, dsId);
       results = dts.getTags();
-      System.out.println("Size : " + results.size());
+//      System.out.println("Size : " + results.size());
 
       User user = dts.getUser();
 
@@ -2117,7 +2177,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Map params = new HashMap();
     params.put("param", tagId);
     List<Dataset> results = (List<Dataset>) query.executeWithMap(params);
-    System.out.println("Size : " + results.size());
+//    System.out.println("Size : " + results.size());
 
     return results;
   }
