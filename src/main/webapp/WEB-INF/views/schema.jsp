@@ -2,7 +2,10 @@
 
 <script type="text/javascript">
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/upload.css", "upload");
-  var schema = $.parseJSON('${schema}');
+  var schema = [];
+  <c:forEach items='${schema}' var='column'>
+    schema.push({ 'name': '${column.name}', 'typeName': '${column.typeName}' });
+  </c:forEach>
   var ticket = '${ticket}';
   if (!com.bouncingdata.Upload) {
     $.getScript(ctx + "/resources/js/bouncingdata/upload.js", function() {

@@ -113,7 +113,8 @@ Main.prototype.init = function() {
       var query = $('#query', $(this)).val();
       var criteria = $('#criteria', $(this)).val();
       if (!query || !criteria) return false;
-      com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);
+      //com.bouncingdata.Nav.fireAjaxLoad(ctx + '/main/search/?query=' + query + '&criteria=' + criteria, false);
+      window.location.href = ctx + '/main/search/?query=' + query + '&criteria=' + criteria;
     });
     
     // search query textbox

@@ -96,7 +96,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
     });
     
     $('.header a.anls-clone').click(function() {
-      var name = $('.anls-header .anls-title h2').text();
+      /*var name = $('.anls-header .anls-title h2').text();
       var data = {
         name : name + '_clone',
         language : 'r',
@@ -106,7 +106,23 @@ Analysis.prototype.init = function(anls, dbDetail) {
         tags : '',
         type : 'analysis'
       };
-      com.bouncingdata.Main.newAnalysis(data, true);
+      com.bouncingdata.Main.newAnalysis(data, true);*/
+      
+      $.ajax({
+        url: ctx + '/anls/clone/' + anls.guid,
+        success: function(res) {
+          if (res == "error") {
+            window.location.href = ctx + '/error';
+            return;
+          }
+          
+          window.location.href = ctx + '/editor/anls/' + res + '/size';
+        },
+        error: function(res) {
+          console.debug(res);
+        }
+      });
+      
       return false;
     });
 

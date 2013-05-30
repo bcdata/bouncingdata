@@ -1,5 +1,6 @@
 package com.bouncingdata.plfdemo.controller;
 
+import java.io.File;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,15 +34,18 @@ import com.bouncingdata.plfdemo.datastore.pojo.dto.VisualizationType;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisVote;
+import com.bouncingdata.plfdemo.datastore.pojo.model.BcDataScript;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
+import com.bouncingdata.plfdemo.util.ScriptType;
 import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
@@ -390,4 +394,68 @@ public class AnalysisController {
 			return new ActionResult(-1, "Failed");
 		}
 	}
+	
+  @RequestMapping(value = "/clone/{guid}", method = RequestMethod.GET)
+  public @ResponseBody String clone(@PathVariable String guid, ModelMap model, Principal principal) throws Exception {
+    User user = (User) ((Authentication) principal).getPrincipal();
+    Analysis anls = datastoreService.getAnalysisByGuid(guid);
+    if (anls == null) {
+      return "error";
+    }
+    
+    Analysis script = new Analysis();
+    script.setName(anls.getName() + "_clone");
+    script.setDescription(anls.getDescription());
+    script.setLanguage(anls.getLanguage());
+    script.setLineCount(anls.getLineCount());
+    script.setPublished(false);
+    Date date = Utils.getCurrentDate();
+    script.setCreateAt(date);
+    script.setLastUpdate(date);
+    script.setUser(user);
+    script.setExecuted(false);
+    script.setCreateSource("web");
+
+    String newGuid = null;
+    try {
+      newGuid = datastoreService.createBcDataScript(script, "analysis");
+    } catch (Exception e) {
+      logger.error("Failed to create application " + script.getName() + " for user " + user.getUsername(), e);
+      return "error";
+    }
+
+    if (newGuid == null) {
+      logger.error("Can't get the guid of application {} so the code cannot saved", script.getName());
+      return "error";
+    }
+    
+    // copy script code & visualizations
+    try {
+      String code = appStoreService.getScriptCode(guid, anls.getLanguage());
+      appStoreService.createApplicationFile(newGuid, script.getLanguage(), code);
+    } catch (Exception e) {
+      logger.error("Error occurs when save application code, guid {}", newGuid);
+    }
+    
+    List<Visualization> vizs = datastoreService.getAnalysisVisualizations(anls.getId());
+    for (Visualization viz : vizs) {
+      String vGuid = Utils.generateGuid();
+      
+      Visualization v = new Visualization();      
+      v.setAnalysis(script);
+      v.setUser(user);
+      v.setName(viz.getName());
+      v.setType(viz.getType());
+      v.setGuid(vGuid);
+      v.setActive(true);
+      datastoreService.createVisualization(v);
+      
+      File vFile = new File(appStoreService.getStorePath() + Utils.FILE_SEPARATOR + newGuid + Utils.FILE_SEPARATOR + "v" 
+          + Utils.FILE_SEPARATOR + vGuid + "." + viz.getType());
+      
+      appStoreService.copyVisualization(guid, viz.getGuid(), viz.getType(), vFile);
+    }
+    
+    return newGuid;
+  }
 }

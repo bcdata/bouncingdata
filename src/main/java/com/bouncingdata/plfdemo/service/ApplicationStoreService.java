@@ -8,7 +8,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,6 +39,10 @@ public class ApplicationStoreService {
 
   public void setLogDir(String logDir) {
     this.logDir = logDir;
+  }
+  
+  public String getStorePath() {
+    return storePath;
   }
   
   public void createApplicationFile(String guid, String language, String code) throws IOException {
@@ -82,6 +88,11 @@ public class ApplicationStoreService {
       String content = FileUtils.readFileToString(f);
       return content;
     }
+  }
+  
+  public void copyVisualization(String guid, String vGuid, String type, File target) throws IOException {
+    File f = new File(storePath + Utils.FILE_SEPARATOR + guid + Utils.FILE_SEPARATOR + "/v/" + vGuid + "." + type.toLowerCase());
+    FileUtils.copyFile(f, target);
   }
   
   public String getTemporaryVisualization(String executionId, String name, String type) throws IOException {
@@ -138,8 +149,32 @@ public class ApplicationStoreService {
           if (root.has("description")) {
             description = root.get("description").getTextValue();
           }
-          String data = root.get("data").toString();
-          Attachment attachment = new Attachment(-1, name, description, data);
+          //String data = root.get("data").toString();
+          JsonNode dataNode = root.get("data");
+          Iterator<JsonNode> dataIter =  dataNode.getElements();
+          List<Object[]> data = new ArrayList<Object[]>();
+          boolean firstEle = true;
+          if (dataIter.hasNext()) {
+            JsonNode ele = dataIter.next();
+            if (firstEle) { 
+              Iterator<String> iter = ele.getFieldNames();
+              List<String> firstRow = new ArrayList<String>();
+              while(iter.hasNext()) {
+                firstRow.add(iter.next());
+              }
+              data.add(firstRow.toArray());
+              firstEle = false;
+            } else {
+              Iterator<Entry<String, JsonNode>> fieldIter =  ele.getFields();
+              List<String> row = new ArrayList<String>();
+              while (fieldIter.hasNext()) {
+                row.add(fieldIter.next().getValue().getTextValue());
+              }
+              data.add(row.toArray());
+            }
+            
+          }
+          Attachment attachment = new Attachment(-1, name, description, mapper.writeValueAsString(data));
           results.add(attachment);
         } catch (IOException e) {
           logger.debug("Cannot parse attachment file {}", f.getAbsoluteFile());

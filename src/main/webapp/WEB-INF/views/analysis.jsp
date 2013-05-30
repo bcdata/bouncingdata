@@ -183,8 +183,8 @@
                 	  + '<table class="attachment-table"></table></div>');
                 	  $attachment.appendTo($('#anls-data'));
                 	  var $table = $('table', $attachment);
-                	  var data = '${attachment.data}';
-                	  com.bouncingdata.Workbench.renderDatatable($.parseJSON(data), $table);
+                	  var data = ${attachment.data};
+                	  com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false });
                 	});
               	</script>
               </c:forEach>  
