@@ -154,7 +154,7 @@ public class ApplicationStoreService {
           Iterator<JsonNode> dataIter =  dataNode.getElements();
           List<Object[]> data = new ArrayList<Object[]>();
           boolean firstEle = true;
-          if (dataIter.hasNext()) {
+          while (dataIter.hasNext()) {
             JsonNode ele = dataIter.next();
             if (firstEle) { 
               Iterator<String> iter = ele.getFieldNames();
@@ -178,6 +178,7 @@ public class ApplicationStoreService {
           results.add(attachment);
         } catch (IOException e) {
           logger.debug("Cannot parse attachment file {}", f.getAbsoluteFile());
+          logger.debug("", e);
           continue;
         }
         
