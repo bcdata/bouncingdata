@@ -168,7 +168,7 @@ public class ApplicationStoreService {
               Iterator<Entry<String, JsonNode>> fieldIter =  ele.getFields();
               List<String> row = new ArrayList<String>();
               while (fieldIter.hasNext()) {
-                row.add(fieldIter.next().getValue().getTextValue());
+                row.add(fieldIter.next().getValue().toString());
               }
               data.add(row.toArray());
             }
