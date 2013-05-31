@@ -123,7 +123,7 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
     if (feed.tags) {
       for (idx in feed.tags) {
         var tag = feed.tags[idx];
-        $('.info .tag-list', $feed).append('<a class="tag-element" href="' + ctx + '/tag/' + tag + '">' + tag + '</a>'); 
+        $('.info .tag-list', $feed).append('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + '/tag/' + tag.tag + '">' + tag.tag + '</a></div>'); 
       }
     }
         

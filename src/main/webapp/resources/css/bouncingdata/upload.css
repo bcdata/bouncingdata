@@ -178,6 +178,7 @@
 
 .upload-container #schema-tab-view table#data-preview {
   margin-top: 10px;
+  width: 100% !important;
 }
 
 .upload-container .description-panel table.mceLayout {

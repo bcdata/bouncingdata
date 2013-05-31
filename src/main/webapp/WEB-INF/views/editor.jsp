@@ -26,7 +26,7 @@
   <div class="top-bar">
     <div class="left-buttons">
       <button id="editor-clone">Clone</button>
-      <button id="editor-cancel">Cancel</button>
+      <a href="<c:url value="/anls/${anls.guid}" />" class="editor-nav" id="editor-cancel">Cancel</a>
     </div>
     <div class="editor-nav-panel">
       <button class="editor-nav" id="editor-execute">Execute</button>

@@ -214,9 +214,9 @@
                 											<c:otherwise><c:url value="/dataset/view/${anls.guid}" /></c:otherwise>
                 										</c:choose>" ><strong>${anls.name}</strong></a>
                   </p>
-                  <p class="info">
+                  <div class="info">
                     <span class="author">Author: <a href="#">${anls.username }</a></span><br/>
-                    <span class="tag-list">Tags:&nbsp; 
+                    <div class="tag-list">Tags:&nbsp; 
                       <c:if test="${not empty anls.tags }">
                         <c:forEach var="tag" items="${anls.tags }">
                           <div class="tag-element-outer">
@@ -224,10 +224,10 @@
                           </div>
                         </c:forEach>
                       </c:if>
-                    </span>
-                  </p>
+                    </div>
+                  </div>
                   <div class="description">
-                    	${anls.description}
+                    	<span>${anls.description}</span>
                   </div>
                   
                   <div class="clear"></div>

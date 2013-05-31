@@ -471,37 +471,6 @@
   	</div>
   </script>
   
-  <script id="feed-item-template_old" type="text/x-jquery-tmpl">
-    <div class="event stream-item" aid="\${id }">
-      <div class="event-avatar">
-        <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.jpg" />">
-      </div>
-      <div class="event-content">
-        <div class="info" aid="\${id }">
-          <a href="#" class="user"><strong>\${username }</strong></a>&nbsp;
-          <span class="action">\${action }</span>
-          <div class="time">\${time}</div> 
-        </div>
-        <div class="thumbnail">
-          <a id="evt-thumb-\${id }" href="<c:url value="/anls/\${guid}" />">
-          	<img class="thumb-img" src="<c:url value="/thumbnails/\${thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
-          </a>
-        </div>
-        <p class="title">
-          <a id="evt-title-\${id }" href="<c:url value="/anls/\${guid}" />"><strong>\${name}</strong></a>
-        </p>
-        <p class="description">
-          <span>\${description }</span>
-        </p>
-        <div class="clear"></div>
-        <div class="event-footer">
-            <strong class="event-score">\${score }</strong>    
-          &nbsp;<a id="evt-comment-\${id }" class="comments-link" href="<c:url value="/anls/\${guid}#comments" />"><strong>\${commentCount }</strong>&nbsp;comments</a>
-        </div>
-      </div>
-      <div class="clear"></div>
-    </div>
-  </script>
   <script id="feed-item-template" type="text/x-jquery-tmpl">  
     <div class="event stream-item" aid=\${id }>
       <div class="event-content">
@@ -517,14 +486,13 @@
         <p class="title">
           <a id="evt-title-\${id }" href="<c:url value="/anls/\${guid}" />"><strong>\${name}</strong></a>
         </p>
-        <p class="info">
+        <div class="info">
           <span class="author">Author: <a href="#">\${username}</a></span><br /> 
-          <span class="tag-list">Tags:&nbsp;          
-          </span>
-        </p>
-        <p class="description">
+          <div class="tag-list">Tags:&nbsp; </div>
+        </div>
+        <div class="description">
           <span>\${description }</span>
-        </p>   
+        </div>   
         <div class="clear"></div>
         <div class="event-footer">
           <strong class="event-score">\${score}</strong>&nbsp;

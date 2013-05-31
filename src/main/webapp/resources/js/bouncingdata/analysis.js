@@ -112,11 +112,12 @@ Analysis.prototype.init = function(anls, dbDetail) {
         url: ctx + '/anls/clone/' + anls.guid,
         success: function(res) {
           if (res == "error") {
-            window.location.href = ctx + '/error';
+            alert("Error occured when trying clone this analysis. Please try again.")
             return;
           }
           
-          window.location.href = ctx + '/editor/anls/' + res + '/size';
+          window.open(ctx + '/editor/anls/' + res + '/size', '_blank');
+
         },
         error: function(res) {
           console.debug(res);
@@ -178,12 +179,12 @@ Analysis.prototype.init = function(anls, dbDetail) {
         $addTagPopup.hide();
       }
     });
-    
+        
     $('.add-tag-popup #add-tag-button').click(function() {
       var tag = $('#add-tag-input').val();
       if (!tag) return false;
       $.ajax({
-        url: ctx + '/tag/addtag,
+        url: ctx + '/tag/addtag',
         type: 'post',
         data: {
           'guid': guid,
@@ -203,10 +204,12 @@ Analysis.prototype.init = function(anls, dbDetail) {
             if (anls.user != com.bouncingdata.Main.username) return;
             var tag = $(this).prev().text();
             $.ajax({
-              url: ctx + '/anls/' + guid + '/removetag',
+              url: ctx + '/tag/removetag',
               type: 'post',
               data: {
-                tag: tag
+                'guid': guid,
+                'tag': tag,
+                'type': 'analysis'
               },
               success: function(res) {
                 if (res['code'] < 0) {
@@ -232,10 +235,12 @@ Analysis.prototype.init = function(anls, dbDetail) {
       if (anls.user != com.bouncingdata.Main.username) return;
       var tag = $(this).prev().text();
       $.ajax({
-        url: ctx + '/anls/' + guid + '/removetag',
+        url: ctx + '/tag/removetag',
         type: 'post',
         data: {
-          tag: tag
+          'guid': guid,
+          'tag': tag,
+          'type': type
         },
         success: function(res) {
           if (res['code'] < 0) {

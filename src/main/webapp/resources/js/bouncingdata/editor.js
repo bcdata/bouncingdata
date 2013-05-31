@@ -59,26 +59,9 @@ Editor.prototype.init = function(anls, feature) {
       me.startPrompt(jqconsole, 'python');
     });
     
-    $('button#editor-cancel').click(function() {
-      var code = me.editor.getSession().getDocument().getValue();
-      if (!code) {
-        // remove anls
-        
-      }
-      window.location.href = ctx + '/stream';
-    });
-    
     $('button#editor-clone').click(function() {
-      var data = {
-        name : anls.name + '_clone',
-        language : 'r',
-        description : 'Cloned from ' + anls.name,
-        code : anls.code,
-        isPublic : false,
-        tags : '',
-        type : 'analysis'
-      };
-      com.bouncingdata.Main.newAnalysis(data, true);
+      me.clone(anls);
+      return false;
     });
     
   });
@@ -171,21 +154,10 @@ Editor.prototype.initSize = function(anls, dbDetail) {
       }
     });
     
-    $('button#editor-cancel').click(function() {
-      window.location.href = ctx + '/stream';
-    });
     
     $('button#editor-clone').click(function() {
-      var data = {
-        name : anls.name + '_clone',
-        language : 'r',
-        description : 'Cloned from ' + anls.name,
-        code : anls.code,
-        isPublic : false,
-        tags : '',
-        type : 'analysis'
-      };
-      com.bouncingdata.Main.newAnalysis(data, true);
+      me.clone(anls);
+      return false;
     });
     
   });
@@ -195,6 +167,7 @@ Editor.prototype.initSize = function(anls, dbDetail) {
  * Last step in analysis creation process. In this step, user can add information and publish analysis
  */
 Editor.prototype.initDescribe = function(anls) {
+  var me = this;
   $(function() {
     com.bouncingdata.Main.toggleLeftNav();
     $('.editor-nav').button();
@@ -239,10 +212,12 @@ Editor.prototype.initDescribe = function(anls) {
       var tag = $('#add-tag-input').val();
       if (!tag) return false;
       $.ajax({
-        url: ctx + '/anls/' + anls.guid + '/addtag',
+        url: ctx + '/tag/addtag',
         type: 'post',
         data: {
-          tag: tag
+          'guid': anls.guid,
+          'tag': tag,
+          'type': 'analysis'
         },
         success: function(res) {
           console.debug(res);
@@ -284,21 +259,9 @@ Editor.prototype.initDescribe = function(anls) {
       return false;
     });
     
-    $('button#editor-cancel').click(function() {
-      window.location.href = ctx + '/stream';
-    });
-    
     $('button#editor-clone').click(function() {
-      var data = {
-        name : anls.name + '_clone',
-        language : 'r',
-        description : 'Cloned from ' + anls.name,
-        code : anls.code,
-        isPublic : false,
-        tags : '',
-        type : 'analysis'
-      };
-      com.bouncingdata.Main.newAnalysis(data, true);
+      me.clone(anls);
+      return false;
     });
   }); 
 }
@@ -369,6 +332,28 @@ Editor.prototype.execute = function(callback) {
     }
   });
   
+}
+
+/**
+ * Clone current analysis, the new analysis will be opened in a new tab
+ */
+Editor.prototype.clone = function(anls) {
+  $.ajax({
+    url: ctx + '/anls/clone/' + anls.guid,
+    success: function(res) {
+      if (res == "error") {
+        alert("Error occured when trying clone this analysis. Please try again.")
+        return;
+      }
+      
+      window.open(ctx + '/editor/anls/' + res + '/size', '_blank');
+
+    },
+    error: function(res) {
+      alert("Error occured when trying clone this analysis. Please try again.");
+      console.debug(res);
+    }
+  });
 }
 
 Editor.prototype.setStatus = function(status) {

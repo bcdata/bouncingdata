@@ -34,18 +34,15 @@ import com.bouncingdata.plfdemo.datastore.pojo.dto.VisualizationType;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisVote;
-import com.bouncingdata.plfdemo.datastore.pojo.model.BcDataScript;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
-import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
-import com.bouncingdata.plfdemo.util.ScriptType;
 import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
@@ -317,82 +314,6 @@ public class AnalysisController {
 			return sortedResult;
 		} else
 			return null;
-	}
-
-	@RequestMapping(value = "/{guid}/addtag", method = RequestMethod.POST)
-	public @ResponseBody ActionResult addAnalysisTag(@PathVariable String guid,
-			@RequestParam(value = "tag", required = true) String tag,
-			ModelMap model, Principal principal) throws Exception {
-		User user = (User) ((Authentication) principal).getPrincipal();
-		if (user == null) {
-			return new ActionResult(-1, "Error: User does not exist");
-		}
-		Analysis anls = datastoreService.getAnalysisByGuid(guid);
-		if (anls == null) {
-			return new ActionResult(-1, "Error: Analysis does not exist");
-		}
-
-		if (!user.getUsername().equals(anls.getUser().getUsername())) {
-			return new ActionResult(-1,
-					"Error: User does not have permission to add tag");
-		}
-
-		Tag tagObj = datastoreService.getTag(tag);
-		if (tagObj == null) {
-			return new ActionResult(-1, "Tag does not exist");
-		}
-
-		Set<Tag> tagset = anls.getTags();
-		if (tagset != null) {
-			for (Tag t : tagset) {
-				if (t.getTag().equals(tag))
-					return new ActionResult(-1,
-							"This analysis has been tagged already.");
-			}
-		}
-
-		List<Tag> tagList = new ArrayList<Tag>();
-		tagList.add(tagObj);
-		try {
-			datastoreService.addAnalysisTags(anls.getId(), tagList);
-			return new ActionResult(0, "OK");
-		} catch (Exception e) {
-			logger.debug("Failed to add tag", e);
-			return new ActionResult(-1, "Failed");
-		}
-	}
-
-	@RequestMapping(value = "/{guid}/removetag", method = RequestMethod.POST)
-	public @ResponseBody ActionResult removeAnalysisTag(@PathVariable String guid,
-			@RequestParam(value = "tag", required = true) String tag,
-			ModelMap model, Principal principal) throws Exception {
-		User user = (User) ((Authentication) principal).getPrincipal();
-		if (user == null) {
-			return new ActionResult(-1, "Error: User does not exist");
-		}
-
-		Analysis anls = datastoreService.getAnalysisByGuid(guid);
-		if (anls == null) {
-			return new ActionResult(-1, "Error: Analysis does not exist");
-		}
-
-		if (!user.getUsername().equals(anls.getUser().getUsername())) {
-			return new ActionResult(-1,
-					"Error: User does not have permission to remove tag");
-		}
-
-		Tag tagObj = datastoreService.getTag(tag);
-		if (tagObj == null) {
-			return new ActionResult(-1, "Tag does not exist");
-		}
-
-		try {
-			datastoreService.removeAnalysisTag(anls, tagObj);
-			return new ActionResult(0, "OK");
-		} catch (Exception e) {
-			logger.debug("Failed to remove tag", e);
-			return new ActionResult(-1, "Failed");
-		}
 	}
 	
   @RequestMapping(value = "/clone/{guid}", method = RequestMethod.GET)
