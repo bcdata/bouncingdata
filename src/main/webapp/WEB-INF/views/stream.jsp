@@ -5,8 +5,14 @@
   //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
   com.bouncingdata.ActivityStream.init();
 </script>
-
-
+<style>
+	.description{
+		overflow: hidden;
+		height: 40px;
+		width: 370px;
+	}
+</style>
+	
 <div id="main-content" class="homepage-container">
   <div class="right-content">
     <div class="right-content-section most-popular-section">

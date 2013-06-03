@@ -548,12 +548,6 @@ body > #ajaxLoadingMessage {
   z-index: 10000;
 }
 
-.description{
-	overflow: hidden;
-	height: 40px;
-	width: 370px;
-}
-
 .error-page#main-content .error-message {
   padding: 10px;
 }
