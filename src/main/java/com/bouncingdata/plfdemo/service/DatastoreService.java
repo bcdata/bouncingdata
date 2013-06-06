@@ -16,6 +16,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
@@ -223,7 +224,7 @@ public interface DatastoreService {
    */
   public void doPublishAction(User user, BcDataScript script) throws Exception;
   
-  public void addAnalysisVote(int usreId, int analysisId, AnalysisVote analysisVote) throws Exception;
+  public boolean addAnalysisVote(int usreId, int analysisId, AnalysisVote analysisVote) throws Exception;
   
   /**
    * @param userId
@@ -280,7 +281,6 @@ public interface DatastoreService {
 
   SearchResult search(String query, int ownerId) throws Exception;
   
-  
   public void createDataCollection(DataCollection collection);
   
   public void deleteDataCollection(int collectionId);
@@ -301,23 +301,33 @@ public interface DatastoreService {
   
   //----- Vinhpq : adding temporary functions for left menu ----
   
+  public boolean addDatasetVote(int userId, Dataset ds, DatasetVote dsVote) throws Exception;
+  
   List<Dataset> getMostPopularDatasets(int maxNumber);
   
-  List<Analysis> getMostPopularAnalyses(int maxNumber);
+  List<Analysis> getAllAnalysesBySelf(int userId ,int startPoint ,int maxNumber);
   
-  List<Analysis> getAllAnalysesBySelf(int userId);
+  List<Dataset> getAllDatasetsBySelf(int userId ,int startPoint ,int maxNumber);
   
-  List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber);
-  
-  List<Analysis> getAnalysesIn1Month();
-  
-  List<Dataset> getDatasetsIn1Month();
-  
-  List<Analysis> getAnalysesStaffPick();
+  List<Analysis> getPopularAnalysesBySelf(int userId, int startPoint, int maxNumber);
 
-  List<Dataset> getAllDatasetsBySelf(int userId);
+  List<Dataset> getPopularDatasetsBySelf(int userId, int startPoint, int maxNumber);
   
-  List<Dataset> getAllDatasetsPublished(int maxNumber);
+  List<Analysis> getAnalysesIn1Month(int startPoint, int numrows);
+  
+  List<Dataset> getDatasetsIn1Month(int startPoint, int numrows);
+  
+  List<Analysis> getPopularAnalysesIn1Month(int startPoint, int numrows);
+  
+  List<Dataset> getPopularDatasetsIn1Month(int startPoint, int numrows);
+  
+  List<Analysis> getRecentAnalysisStaffPick(int startPoint, int maxNumber);
+  
+  List<Dataset> getRecentDatasetsStaffPick(int startPoint, int maxNumber);
+
+  List<Analysis> getPopularAnalysesStaffPick(int startPoint, int maxNumber);
+  
+  List<Dataset> getPopularDatasetsStaffPick(int startPoint, int maxNumber);
   
   List<Tag> get10Tags();
   
@@ -327,13 +337,13 @@ public interface DatastoreService {
   
   void addSttResetPassword(int userId, String activecode, String expiredDate);
   
-  List<Analysis> getTop20AuthorAnalysesItemPublic(int maxNumber);
+  List<Analysis> get20AuthorAnalysesRecent(int startPoint, int maxNumber);
   
-  List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber);
+  List<Dataset> get20AuthorDataSetRecent(int startPoint, int maxNumber);
   
-  List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber);
+  List<Analysis> get20AuthorAnalysesItemPopular(int startPoint, int maxNumber);
   
-  List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber);
+  List<Dataset> get20AuthorDataSetItemPopular(int startPoint, int maxNumber);
   //------------------
   
   List<Dataset> getMostPopularDatasets();

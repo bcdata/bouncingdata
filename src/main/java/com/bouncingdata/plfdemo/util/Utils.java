@@ -134,6 +134,7 @@ public class Utils {
     		  representClass_object = new RepresentClass();
     		  
     		  representClass_object.setId(dataset_object.getId());
+    		  representClass_object.setScore(dataset_object.getScore());
     		  representClass_object.setTags(dataset_object.getTags());
     		  representClass_object.setCreateAt(dataset_object.getCreateAt());
     		  representClass_object.setDescription(dataset_object.getDescription());

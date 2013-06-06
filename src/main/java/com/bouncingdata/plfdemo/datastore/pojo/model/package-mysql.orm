@@ -46,6 +46,10 @@
       <field name="isPublic">
         <column name="is_public" jdbc-type="BIT" />
       </field>
+      
+      <field name="score">
+        <column name="score" jdbc-type="INTEGER" />
+      </field>
     </class>
         
     <class name="User" identity-type="datastore" table="spring_users">
@@ -314,6 +318,29 @@
         <column name="is_active" jdbc-type="BIT" />
       </field>
     </class>
+    
+    <class name="DatasetVote" identity-type="datastore" table="dataset_votes">
+      <inheritance strategy="new-table" />
+      <field name="id" primary-key="true">
+        <column name="id" jdbc-type="INTEGER" />
+      </field>
+      <field name="user">
+        <column name="user" jdbc-type="INTEGER" />
+      </field>
+      <field name="dataset">
+        <column name="dataset" jdbc-type="INTEGER" />
+      </field>
+      <field name="vote">
+        <column name="vote" jdbc-type="INTEGER" />
+      </field>
+      <field name="voteAt">
+        <column name="vote_at" jdbc-type="TIMESTAMP" />
+      </field>
+      <field name="isActive">
+        <column name="is_active" jdbc-type="BIT" />
+      </field>
+    </class>
+    
     <class name="CommentVote" identity-type="datastore" table="comment_votes">
       <inheritance strategy="new-table" />
       <field name="id" primary-key="true">

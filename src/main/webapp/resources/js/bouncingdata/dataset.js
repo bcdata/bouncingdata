@@ -137,8 +137,49 @@ Dataset.prototype.loadCommentList = function(guid) {
   console.debug("Comment list loaded");
 }
 
-Dataset.prototype.voteDataset = function(guid, score) {
-  console.debug("Vote dataset: guid=" + guid + ", score=" + score);
+Dataset.prototype.voteDataset = function(guid, vote) {
+//  console.debug("Vote dataset: guid=" + guid + ", score=" + score);
+	var me = this;
+	  if (this.votingCache[guid] && this.votingCache[guid] * vote > 0) {
+	    console.debug("You have voted this dataset " + guid + "already");
+	    return;
+	  }
+	  
+	  if (!this.votingCache[guid]) this.votingCache[guid] = 0;
+
+	  $.ajax({
+		  url: ctx + "/dataset/vote/" + guid,
+		  data: {
+			  vote: vote
+		  },
+		  type: 'post',
+		  success: function(result) {
+			  if(result=='1'){
+				  var $score = $('.header .score');
+				  if (vote >= 0) {
+					  me.votingCache[guid]++;
+					  $score.text($score.text() - (-1));
+				  } 
+				  else {
+					  me.votingCache[guid]--;
+					  $score.text($score.text() - 1);
+				  }
+				  var score = $score.text();
+				  if (score > 0) {
+					  $score.attr('class', 'score score-positive');
+				  } else {
+					  if (score == 0) 
+						  $score.attr('class', 'score');
+					  else 
+						  $score.attr('class', 'score score-negative');
+				  }
+			  }
+		  },
+		  error: function(result) {
+			  console.debug("Failed to vote dataset " + guid);
+			  console.debug(result);
+		  }
+	  }); 
 }
 
 com.bouncingdata.Dataset = new Dataset();

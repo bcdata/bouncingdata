@@ -138,6 +138,7 @@
   </div>
   <div class="center-content">
     <div class="center-content-wrapper">
+    <!-- vinhpq : for ajax filter. Don't need reload page. 
     <script type="text/javascript">
 	$(document).ready(function() {
 		$('#filter-nav-top #filter-top-left a').click(function() {
@@ -163,19 +164,19 @@
 		});
 		
 	});
-	</script>
+	</script> -->
     
       <div class="stream-container center-content-main">
         <div class="stream-filter" id="filter-nav-top">
           <span id="filter-top-left" style="float: left;">
-            <a href="#" class="nav-selected" fid="All" >All</a>&nbsp;|&nbsp;
-            <a href="#" fid="Analysis"	>Analysis</a>&nbsp;|&nbsp;
-            <a href="#" fid="Dataset">Dataset</a>&nbsp;|&nbsp;
-            <a href="#" fid="Scraper">Scraper</a>
+            <a href="<c:url value="/stream/${pageId}/all/${tp}" />" ${fm eq 'all'?'class="nav-selected"':''}>All</a>&nbsp;|&nbsp;
+            <a href="<c:url value="/stream/${pageId}/analysis/${tp}" />" ${fm eq 'analysis'?'class="nav-selected"':''}>Analysis</a>&nbsp;|&nbsp;
+            <a href="<c:url value="/stream/${pageId}/dataset/${tp}" />" ${fm eq 'dataset'?'class="nav-selected"':''}>Dataset</a>&nbsp;|&nbsp;
+            <a href="<c:url value="/stream/${pageId}/scraper/${tp}" />" ${fm eq 'scraper'?'class="nav-selected"':''}>Scraper</a>
           </span>
           <span id="filter-top-right" style="float: right;">
-            <a href="<c:url value="/${filLnk}" />" ${empty fLinkActive?'class="nav-selected"':''} >Recent</a>&nbsp;|&nbsp;
-            <a href="<c:url value="/fstream?fn=${filLnk}" />" ${not empty fLinkActive?'class="nav-selected"':''}>Popular</a>
+            <a href="<c:url value="/stream/${pageId}/${fm}/recent" />" ${tp eq 'recent'?'class="nav-selected"':''} >Recent</a>&nbsp;|&nbsp;
+            <a href="<c:url value="/stream/${pageId}/${fm}/popular" />" ${tp eq 'popular'?'class="nav-selected"':''}>Popular</a>
           </span>
         </div>
         <div class="clear"></div>
@@ -263,7 +264,7 @@
           </c:if>      
           
           <div class="stream-footer">
-            <a href="javascript:void(0);" class="more-feed">More</a> &nbsp;&nbsp;
+            <a href="javascript:void(0);" class="more-feed" pageid="${pageId}" fm="${fm}" tp="${tp}">More</a> &nbsp;&nbsp;
             <img style="display: none;" class="feed-loading" src="<c:url value="/resources/images/loader32.gif" />" />
           </div>    
         </div>

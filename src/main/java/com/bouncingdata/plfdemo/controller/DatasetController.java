@@ -43,7 +43,9 @@ import com.bouncingdata.plfdemo.datastore.pojo.dto.DatasetDetail;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.QueryResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
@@ -802,4 +804,48 @@ public class DatasetController {
     return;
   }
 
+  /**
+	 * Votes the analysis
+	 * 
+	 * @param guid
+	 * @param vote
+	 * @param model
+	 * @param principal
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/vote/{guid}", method = RequestMethod.POST)
+	public @ResponseBody String vote(@PathVariable String guid, @RequestParam(value="vote", required=true) int vote, ModelMap model, Principal principal) throws Exception {
+	  User user = (User) ((Authentication)principal).getPrincipal();
+	  if (user == null) {
+	    return "0";
+	  }
+	  try{
+		    ObjectMapper logmapper = new ObjectMapper();
+		    String data = logmapper.writeValueAsString(new String[] {"2", guid, Integer.toBinaryString(vote)});		   	 
+		    datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.VOTE,data);
+	  }catch (Exception e) {
+	      logger.debug("Failed to log action", e);
+	    }
+	
+	  Dataset ds = datastoreService.getDatasetByGuid(guid);
+	  if (ds == null) {
+	    return "0";
+	  }
+	  
+	  vote = vote>0?1:-1;
+	  
+	  try {
+	    
+	    DatasetVote dsVote = new DatasetVote();
+	    dsVote.setVote(vote);
+	    dsVote.setVoteAt(new Date());
+	    dsVote.setActive(true);
+	    boolean result = datastoreService.addDatasetVote(user.getId(), ds, dsVote);
+	  
+	    return (result?"1":"0");
+	  } catch (Exception e) {
+	    logger.debug("Failed to add new vote to analysis id {}, user id {}", ds.getId(), user.getId());
+	  }
+	  return "0";
+	}
 }

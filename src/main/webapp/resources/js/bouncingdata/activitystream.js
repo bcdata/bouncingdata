@@ -26,7 +26,7 @@ ActivityStream.prototype.init = function() {
     $('.more-feed').click(function() {
       var $lastEvent = $('#stream .event:last');
       if ($lastEvent.length > 0 && !me.streamEnded && !me.streamLoading) {
-        me.loadMore($lastEvent.attr('aid'));
+        me.loadMore();
       }
     });
 
@@ -41,7 +41,8 @@ ActivityStream.prototype.init = function() {
           if (!me.streamEnded && !me.streamLoading) {
             var $lastEvent = $('#stream .event:last');
             if ($lastEvent.length > 0) {
-              me.loadMore($lastEvent.attr('aid'));
+//              me.loadMore($lastEvent.attr('aid'));
+            	me.loadMore();
             }
           }
         }
@@ -57,12 +58,16 @@ ActivityStream.prototype.init = function() {
  * Loads more recent activity stream.
  * @param lastId the last (oldest) activity id currently in activity stream.
  */
-ActivityStream.prototype.loadMore = function(lastId) {
+ActivityStream.prototype.loadMore = function() {
   var me = this;
+  var pageId = $('.more-feed').attr('pageid');
+  var fm = $('.more-feed').attr('fm');
+  var tp = $('.more-feed').attr('tp');
+  
   $('#stream .feed-loading').show();
   this.streamLoading = true;
   $.ajax({
-    url: ctx + '/a/more/' + lastId,
+    url: ctx + '/a/more/' + pageId + '/' + fm + '/' + tp,
     success: function(result) {
       me.streamLoading = false;
       console.debug("More " + result.length + " feeds loaded!");
@@ -105,7 +110,7 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
       
       id: feed.id,
       guid: feed.guid,
-      username: feed.user.username,
+      username: feed.username,
       description: feed.description,
       name: feed.name,
       score: feed.score,

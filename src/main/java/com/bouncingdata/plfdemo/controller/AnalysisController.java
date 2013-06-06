@@ -202,10 +202,11 @@ public class AnalysisController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/vote/{guid}", method = RequestMethod.POST)
-  public @ResponseBody void vote(@PathVariable String guid, @RequestParam(value="vote", required=true) int vote, ModelMap model, Principal principal) throws Exception {
+  public @ResponseBody String vote(@PathVariable String guid, @RequestParam(value="vote", required=true) int vote, ModelMap model, Principal principal) throws Exception {
     User user = (User) ((Authentication)principal).getPrincipal();
+    
     if (user == null) {
-      return;
+      return "0";
     }
     try{
 	    ObjectMapper logmapper = new ObjectMapper();
@@ -217,7 +218,7 @@ public class AnalysisController {
 
     Analysis anls = datastoreService.getAnalysisByGuid(guid);
     if (anls == null) {
-      return;
+      return "0";
     }
     
     vote = vote>0?1:-1;
@@ -228,10 +229,14 @@ public class AnalysisController {
       anlsVote.setVote(vote);
       anlsVote.setVoteAt(new Date());
       anlsVote.setActive(true);
-      datastoreService.addAnalysisVote(user.getId(), anls.getId(), anlsVote);
+      boolean result = datastoreService.addAnalysisVote(user.getId(), anls.getId(), anlsVote);
+      
+      return (result?"1":"0");
     } catch (Exception e) {
       logger.debug("Failed to add new vote to analysis id {}, user id {}", anls.getId(), user.getId());
     }
+    
+    return "0";
   }
 
 	/**

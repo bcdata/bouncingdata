@@ -23,6 +23,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
@@ -309,12 +310,12 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
 
   @Override
-  public void addAnalysisVote(int userId, int analysisId, AnalysisVote analysisVote) throws Exception {
+  public boolean addAnalysisVote(int userId, int analysisId, AnalysisVote analysisVote) throws Exception {
     Analysis anls = dataStorage.getAnalysis(analysisId);
     if (anls == null) {
       if (logger.isDebugEnabled()) {
         logger.debug("Analysis id {} does not exist.", analysisId);
-        return;
+        return false;
       }
     }
     
@@ -323,12 +324,12 @@ public class DatastoreServiceImpl implements DatastoreService {
     if (oldVote == null) {
       dataStorage.addAnalysisVote(userId, analysisId, analysisVote);
     } else {
-      if (oldVote.getVote() == analysisVote.getVote()) {
-        return;
-      } else {
+      if (oldVote.getVote() == analysisVote.getVote()) 
+        return false;
+      else 
         dataStorage.removeAnalysisVote(userId, analysisId);
-      }
     }
+    return true;
   }
 
   @Override
@@ -521,6 +522,49 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   //----- Vinhpq : adding temporary functions for left menu ----  
+  @Override
+  public List<Analysis> getPopularAnalysesIn1Month(int startPoint, int numrows) {
+    return dataStorage.getPopularAnalysesIn1Month(startPoint, numrows);
+  }
+  
+  public List<Dataset> getPopularDatasetsIn1Month(int startPoint, int numrows){
+    return dataStorage.getPopularDatasetsIn1Month(startPoint, numrows);
+  }
+  
+  @Override
+  public List<Analysis> getAnalysesIn1Month(int startPoint, int numrows) {
+    return dataStorage.getAnalysesIn1Month(startPoint, numrows);
+  }
+  
+  @Override
+  public List<Dataset> getDatasetsIn1Month(int startPoint, int numrows){
+	  return dataStorage.getDatasetsIn1Month(startPoint, numrows);
+  }
+  
+  @Override
+  public boolean addDatasetVote(int userId, Dataset ds, DatasetVote dsVote) throws Exception {
+    if (ds == null) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Analysis id {} does not exist.", ds.getId());
+        return false;
+      }
+    }
+    // check if this user has voted before
+    DatasetVote oldVote = dataStorage.getDatasetVote(userId, ds.getId());
+    if (oldVote == null) {
+      dataStorage.addDatasetVote(userId, ds.getId(), dsVote);
+    } else {
+      if (oldVote.getVote() == dsVote.getVote()) {
+        return false;
+      } else {
+        dataStorage.removeDatasetVote(userId, ds.getId());
+      }
+    }
+    
+    return true;
+  }
+  
+  @Override
   public List<Dataset> getMostPopularDatasets(int maxnumber){
     return dataStorage.getMostPopularDatasets(maxnumber);
   }
@@ -530,33 +574,43 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   @Override
-  public List<Analysis> getAllAnalysesBySelf(int userId) {
-    return dataStorage.getAllAnalysesBySelf(userId);
+  public List<Analysis> getAllAnalysesBySelf(int userId ,int startPoint ,int maxNumber) {
+    return dataStorage.getAllAnalysesBySelf(userId, startPoint, maxNumber);
   }
   
   @Override
-  public List<Analysis> getAnalysesIn1Month() {
-    return dataStorage.getAnalysesIn1Month();
+  public List<Dataset> getAllDatasetsBySelf(int userId ,int startPoint ,int maxNumber) {
+    return dataStorage.getAllDatasetsBySelf(userId, startPoint, maxNumber);
   }
   
   @Override
-  public List<Dataset> getDatasetsIn1Month(){
-	  return dataStorage.getDatasetsIn1Month();
+  public List<Dataset> getPopularDatasetsBySelf(int userId ,int startPoint ,int maxNumber) {
+    return dataStorage.getPopularDatasetsBySelf(userId, startPoint, maxNumber);
   }
   
   @Override
-  public List<Analysis> getAnalysesStaffPick() {
-    return dataStorage.getAnalysesStaffPick();
+  public List<Analysis> getPopularAnalysesBySelf(int userId, int startPoint , int maxNumber){
+	  return dataStorage.getPopularAnalysesBySelf(userId, startPoint, maxNumber);  
   }
   
   @Override
-  public List<Dataset> getAllDatasetsBySelf(int userId) {
-    return dataStorage.getAllDatasetsBySelf(userId);
+  public List<Dataset> getRecentDatasetsStaffPick(int startPoint ,int maxNumber) {
+    return dataStorage.getRecentDatasetsStaffPick(startPoint ,maxNumber);
   }
   
   @Override
-  public List<Dataset> getAllDatasetsPublished(int maxNumber) {
-    return dataStorage.getAllDatasetsPublished(maxNumber);
+  public List<Analysis> getRecentAnalysisStaffPick(int startPoint ,int maxNumber) {
+    return dataStorage.getRecentAnalysisStaffPick(startPoint ,maxNumber);
+  }
+ 
+  @Override
+  public List<Dataset> getPopularDatasetsStaffPick(int startPoint ,int maxNumber) {
+    return dataStorage.getPopularDatasetsStaffPick(startPoint ,maxNumber);
+  }
+  
+  @Override
+  public List<Analysis> getPopularAnalysesStaffPick(int startPoint ,int maxNumber){
+	  return dataStorage.getPopularAnalysesStaffPick(startPoint ,maxNumber);
   }
   
   @Override
@@ -580,25 +634,23 @@ public class DatastoreServiceImpl implements DatastoreService {
   }
   
   @Override
-  public List<Analysis> getTop20AuthorAnalysesItemPublic(int maxNumber){
-	  return dataStorage.getTop20AuthorAnalysesItemPublic(maxNumber);  
+  public List<Analysis> get20AuthorAnalysesRecent(int startPoint, int maxNumber){
+	  return dataStorage.get20AuthorAnalysesRecent(startPoint,maxNumber);  
   }
   
   @Override
-  public List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber) {
-	  return dataStorage.getTop20AuthorDataSetItemPublic(maxNumber);  
+  public List<Dataset> get20AuthorDataSetRecent(int startPoint, int maxNumber) {
+	  return dataStorage.get20AuthorDataSetRecent(startPoint,maxNumber);  
   }
   
-  public List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber){
-	  return dataStorage.getMostPopularAnalysesBySelf(userId, maxNumber);  
+  @Override
+  public List<Dataset> get20AuthorDataSetItemPopular(int startPoint, int maxNumber){
+	  return dataStorage.get20AuthorDataSetItemPopular(startPoint,maxNumber);
   }
   
-  public List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber){
-	  return dataStorage.getMostPopularAnalysesStaffPick(maxNumber);
-  }
-  
-  public List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber){
-	  return dataStorage.getTop20AuthorMostPopularAnalysesItemPublic(maxNumber);
+  @Override
+  public List<Analysis> get20AuthorAnalysesItemPopular(int startPoint, int maxNumber){
+	  return dataStorage.get20AuthorAnalysesItemPopular(startPoint,maxNumber);
   }
   //-----
   

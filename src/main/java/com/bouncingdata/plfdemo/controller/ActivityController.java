@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Size;
+
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -40,16 +43,32 @@ public class ActivityController {
   private DatastoreService datastoreService;
   
   @RequestMapping(value={"/stream"}, method=RequestMethod.GET)
-  public String getActivityStream(WebRequest request, ModelMap model, Principal principal) {
+  public String getDefaultStream(WebRequest request, 
+			   ModelMap model, 
+			   Principal principal) {
+	  
+	  return "redirect:stream/a/all/recent";
+  }
+  
+  @RequestMapping(value={"/stream/{page}/{filter}/{type}"}, method=RequestMethod.GET)
+  public String getActivityStream(@PathVariable String page ,
+		  						   @PathVariable String filter ,
+		  						   @PathVariable String type ,
+		  						   WebRequest request, 
+		  						   ModelMap model, 
+		  						   Principal principal,
+		  						   HttpSession session) {
     try {    
-      String filter = request.getParameter("filter");
+      /*String filter = request.getParameter("filter");
       if (StringUtils.isEmpty(filter)) filter = "all";
       
       if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
         return "error";
-      }
+      }*/
       
       User user = (User) ((Authentication)principal).getPrincipal();
+      boolean isOrder = true;
+      int startPoint = 0;
       
       try {
         ObjectMapper logmapper = new ObjectMapper();
@@ -59,97 +78,212 @@ public class ActivityController {
         logger.debug("Failed to log action", e);
       }
       
-      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
-      model.addAttribute("activities", activities);
- 
-      // vinhpq : merge data 2 class Analysis and Dataset 
-      List<Analysis> allAnalyses = datastoreService.getAnalysesIn1Month();
-      List<Dataset> allDatasets = datastoreService.getDatasetsIn1Month();
-      
-      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets,true);
-      
-      model.addAttribute("recentAnalyses", lstRepresentClass);
-      
-      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
-      model.addAttribute("topAnalyses", mostPopularAnalyses);
-      
-      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
-      model.addAttribute("topDatasets", mostPopularDatasets);
-      
-      model.addAttribute("menuId", "streamall");
-      model.addAttribute("filLnk", "stream");
-    } catch (Exception e) {
-      logger.debug("Failed to load activity stream", e);
-      model.addAttribute("errorMsg", "Failed to load the activity stream");
-    }
-    return "stream";
-  }
-  
-  // vinhpq : top menu filter
-  @RequestMapping(value={"/fstream"}, method=RequestMethod.GET)
-  public String getfilterPopularStream(@RequestParam(value = "fn", required = true) String filter, WebRequest request, ModelMap model, Principal principal) {
-    try {    
-      
-      if(filter==null || filter.length() == 0)
-    	  return "error";
-      
-      if(!filter.equals("stream") && !filter.equals("streambyself") && !filter.equals("staffpicks") && !filter.equals("popularAuthors"))
-    	  return "error";
-      
-      User user = (User) ((Authentication)principal).getPrincipal();
-      
-      try {
-        ObjectMapper logmapper = new ObjectMapper();
-        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
-      } catch (Exception e) {
-        logger.debug("Failed to log action", e);
-      }
-      
-      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
-      model.addAttribute("activities", activities);
- 
-      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
-      model.addAttribute("topAnalyses", mostPopularAnalyses);
-      
-      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
-      model.addAttribute("topDatasets", mostPopularDatasets);
-      
+     /* List<Activity> activities = datastoreService.getRecentFeed(user.getId());
+      model.addAttribute("activities", activities);*/
       List<Analysis> allAnalyses = new ArrayList<Analysis>();
       List<Dataset> allDatasets = new ArrayList<Dataset>();
       
-      if(filter.equals("stream")){
-    	  allAnalyses = datastoreService.getMostPopularAnalyses(20);
-    	  allDatasets = datastoreService.getMostPopularDatasets(20);
-    	  model.addAttribute("menuId", "streamall");
-    	  model.addAttribute("filLnk", "stream");
-      }
-      else if(filter.equals("streambyself")){
-    	  allAnalyses = datastoreService.getMostPopularAnalysesBySelf(user.getId(), 20);
-    	  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId());
-    	  
-    	  model.addAttribute("menuId", "streambyself");
-    	  model.addAttribute("filLnk", "streambyself");
-      }
-      else if(filter.equals("staffpicks")){
-    	  allAnalyses = datastoreService.getMostPopularAnalysesStaffPick(20);
-    	  allDatasets = datastoreService.getAllDatasetsPublished(20);
-    	  
-    	  model.addAttribute("menuId", "staffpicks");
-          model.addAttribute("filLnk", "staffpicks");
-      }
-      else if(filter.equals("popularAuthors")){
-    	  allAnalyses = datastoreService.getTop20AuthorMostPopularAnalysesItemPublic(20);
-    	  allDatasets = datastoreService.getTop20AuthorDataSetItemPublic(20);
-    	  
-	      model.addAttribute("menuId", "popularAuthors");
-	      model.addAttribute("filLnk", "popularAuthors");
+      page = ((page==null||page.trim().equals(""))? "a" : page );
+      type = ((type==null||type.trim().equals(""))? "recent" : type );
+      filter = ((filter==null||filter.trim().equals(""))? "all" : filter );
+      
+      //page All
+      if(page.equals("a")){
+      
+	      // type order (recent/popular)
+	      if(type.equals("recent")){
+	    	  
+	    	  // type filter (all/analysis/dataset/scraper)
+	    	  if(filter.equals("all")){
+	    	      allAnalyses = datastoreService.getAnalysesIn1Month(0,10);
+	    	      allDatasets = datastoreService.getDatasetsIn1Month(0,10);    		  
+	    	  }
+	    	  
+	    	  else if(filter.equals("analysis")){
+	    		  allAnalyses = datastoreService.getAnalysesIn1Month(0,20);
+	    	  }
+	    	  
+	    	  else if(filter.equals("dataset")){
+	    		  allDatasets = datastoreService.getDatasetsIn1Month(0,20);
+	    	  }
+
+	    	  else if(filter.equals("scraper")){
+	    		  
+	    	  }
+	      } else if(type.equals("popular")){
+	    	  isOrder = false;
+	    	  // type filter (all/analysis/dataset/scraper)
+	    	  if(filter.equals("all")){
+	    		  allAnalyses = datastoreService.getPopularAnalysesIn1Month(0,10);
+	        	  allDatasets = datastoreService.getPopularDatasetsIn1Month(0,10);	  
+	    	  }
+	    	  
+	    	  else if(filter.equals("analysis")){
+	    		  allAnalyses = datastoreService.getPopularAnalysesIn1Month(0,20);
+	    	  }
+	    	  
+	    	  else if(filter.equals("dataset")){
+	    		  allDatasets = datastoreService.getPopularDatasetsIn1Month(0,20);	
+	    	  }
+	    	  
+	    	  else if(filter.equals("scraper")){
+	    	  }
+	      }
       }
       
-
-      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, false);
+      //page streambyself
+      if(page.equals("streambyself")){
+      
+	      // type order (recent/popular)
+    	  if(type.equals("recent")){
+        	  
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getAllAnalysesBySelf(user.getId(), 0, 10);
+        		  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId(), 0, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getAllAnalysesBySelf(user.getId(), 0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId(), 0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        		  
+        	  }
+          } else if(type.equals("popular")){
+        	  isOrder = false;
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getPopularAnalysesBySelf(user.getId(),0 , 10);
+        		  allDatasets = datastoreService.getPopularDatasetsBySelf(user.getId(),0 , 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getPopularAnalysesBySelf(user.getId(), 0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getPopularDatasetsBySelf(user.getId(), 0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        	  }
+          }
+      }
+      
+      //page staffpicks
+      if(page.equals("staffpicks")){
+      
+	      // type order (recent/popular)
+    	  if(type.equals("recent")){
+        	  
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getRecentAnalysisStaffPick(0, 10);
+        		  allDatasets = datastoreService.getRecentDatasetsStaffPick(0, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getRecentAnalysisStaffPick(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getRecentDatasetsStaffPick(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        		  
+        	  }
+          } else if(type.equals("popular")){
+        	  isOrder = false;
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getPopularAnalysesStaffPick(0, 10);
+            	  allDatasets = datastoreService.getPopularDatasetsStaffPick(0, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getPopularAnalysesStaffPick(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getPopularDatasetsStaffPick(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        	  }
+          }
+      }
+      
+      //page popularAuthors
+      if(page.equals("popularAuthors")){
+      
+	      // type order (recent/popular)
+    	  if(type.equals("recent")){
+        	  
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.get20AuthorAnalysesRecent(0, 10);
+        		  allDatasets = datastoreService.get20AuthorDataSetRecent(0, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.get20AuthorAnalysesRecent(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.get20AuthorDataSetRecent(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        		  
+        	  }
+          } else if(type.equals("popular")){
+        	  isOrder = false;
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+            	  allAnalyses = datastoreService.get20AuthorAnalysesItemPopular(0, 10);
+            	  allDatasets = datastoreService.get20AuthorDataSetItemPopular(0, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.get20AuthorAnalysesItemPopular(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.get20AuthorDataSetItemPopular(0, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        	  }
+          }
+      }
+      
+      // set number items for paging
+      if(filter.equals("all"))
+    	  startPoint = 10;
+      else if(filter.equals("analysis") || filter.equals("dataset") || filter.equals("scraper"))
+    	  startPoint = 20;
+      
+      session.setAttribute("startpoint", startPoint);
+      
+      // merge data 2 class Analysis and Dataset 
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder);
       model.addAttribute("recentAnalyses", lstRepresentClass);
-      model.addAttribute("fLinkActive", "true");
+      
+      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      model.addAttribute("topAnalyses", mostPopularAnalyses);
+      
+      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
+      model.addAttribute("topDatasets", mostPopularDatasets);
+      
+      model.addAttribute("pageId", page);
+      model.addAttribute("fm", filter);
+      model.addAttribute("tp", type);
       
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);
@@ -158,28 +292,229 @@ public class ActivityController {
     return "stream";
   }
   
-  @RequestMapping(value="/a/more/{lastId}", method=RequestMethod.GET)
-  public @ResponseBody List<Analysis> getMoreActivities(@PathVariable int lastId, ModelMap model, Principal principal) {
+  @RequestMapping(value="/a/more/{page}/{filter}/{type}", method=RequestMethod.GET)
+  public @ResponseBody List<RepresentClass> getMoreActivities(@PathVariable String page ,
+													     @PathVariable String filter ,
+													     @PathVariable String type ,
+													     ModelMap model, 
+													     Principal principal,
+													     HttpSession session) {
     try {
       User user = (User) ((Authentication)principal).getPrincipal();
       try{
 	      ObjectMapper logmapper = new ObjectMapper();
-	      String data = logmapper.writeValueAsString(new String[] {"1",Integer.toString(lastId)});		   	 
+	      String data = logmapper.writeValueAsString(new String[] {"0"});				   	 
 	      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
       }catch (Exception e) {
           logger.debug("Failed to log action", e);
-        }
-      List<Analysis> analyses = datastoreService.getMoreRecentAnalyses(lastId);
-      return analyses;
+      }
+      
+      int startPoint = 0;
+      boolean isOrder = true;
+      
+      if(session.getAttribute("startpoint")!=null)
+    	  startPoint = Integer.parseInt((session.getAttribute("startpoint").toString()));
+      
+      List<Analysis> allAnalyses = new ArrayList<Analysis>();
+      List<Dataset> allDatasets = new ArrayList<Dataset>();
+      
+      page = ((page==null||page.trim().equals(""))? "a" : page );
+      type = ((type==null||type.trim().equals(""))? "recent" : type );
+      filter = ((filter==null||filter.trim().equals(""))? "all" : filter );
+      
+      //page All
+      if(page.equals("a")){
+      
+	      // type order (recent/popular)
+	      if(type.equals("recent")){
+	    	  
+	    	  // type filter (all/analysis/dataset/scraper)
+	    	  if(filter.equals("all")){
+	    	      allAnalyses = datastoreService.getAnalysesIn1Month(startPoint,10);
+	    	      allDatasets = datastoreService.getDatasetsIn1Month(startPoint,10);    		  
+	    	  }
+	    	  
+	    	  else if(filter.equals("analysis")){
+	    		  allAnalyses = datastoreService.getAnalysesIn1Month(startPoint,20);
+	    	  }
+	    	  
+	    	  else if(filter.equals("dataset")){
+	    		  allDatasets = datastoreService.getDatasetsIn1Month(startPoint,20);
+	    	  }
+
+	    	  else if(filter.equals("scraper")){
+	    		  
+	    	  }
+	      } else if(type.equals("popular")){
+	    	  isOrder = false;
+	    	  // type filter (all/analysis/dataset/scraper)
+	    	  if(filter.equals("all")){
+	    		  allAnalyses = datastoreService.getPopularAnalysesIn1Month(startPoint,10);
+	        	  allDatasets = datastoreService.getPopularDatasetsIn1Month(startPoint,10);	  
+	    	  }
+	    	  
+	    	  else if(filter.equals("analysis")){
+	    		  allAnalyses = datastoreService.getPopularAnalysesIn1Month(startPoint,20);
+	    	  }
+	    	  
+	    	  else if(filter.equals("dataset")){
+	    		  allDatasets = datastoreService.getPopularDatasetsIn1Month(startPoint,20);	
+	    	  }
+	    	  
+	    	  else if(filter.equals("scraper")){
+	    	  }
+	      }
+      }
+      //page streambyself
+      if(page.equals("streambyself")){
+      
+	      // type order (recent/popular)
+    	  if(type.equals("recent")){
+        	  
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getAllAnalysesBySelf(user.getId(), startPoint, 10);
+        		  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId(), startPoint, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getAllAnalysesBySelf(user.getId(), startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId(), startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        		  
+        	  }
+          } else if(type.equals("popular")){
+        	  isOrder = false;
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getPopularAnalysesBySelf(user.getId(),startPoint , 10);
+        		  allDatasets = datastoreService.getPopularDatasetsBySelf(user.getId(),startPoint , 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getPopularAnalysesBySelf(user.getId(), startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getPopularDatasetsBySelf(user.getId(), startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        	  }
+          }
+      }
+      
+      //page staffpicks
+      if(page.equals("staffpicks")){
+      
+	      // type order (recent/popular)
+    	  if(type.equals("recent")){
+        	  
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getRecentAnalysisStaffPick(startPoint, 10);
+        		  allDatasets = datastoreService.getRecentDatasetsStaffPick(startPoint, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getRecentAnalysisStaffPick(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getRecentDatasetsStaffPick(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        		  
+        	  }
+          } else if(type.equals("popular")){
+        	  isOrder = false;
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.getPopularAnalysesStaffPick(startPoint, 10);
+            	  allDatasets = datastoreService.getPopularDatasetsStaffPick(startPoint, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.getPopularAnalysesStaffPick(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.getPopularDatasetsStaffPick(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        	  }
+          }
+      }
+      
+      //page popularAuthors
+      if(page.equals("popularAuthors")){
+      
+	      // type order (recent/popular)
+    	  if(type.equals("recent")){
+        	  
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+        		  allAnalyses = datastoreService.get20AuthorAnalysesRecent(startPoint, 10);
+        		  allDatasets = datastoreService.get20AuthorDataSetRecent(startPoint, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.get20AuthorAnalysesRecent(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.get20AuthorDataSetRecent(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        		  
+        	  }
+          } else if(type.equals("popular")){
+        	  isOrder = false;
+        	  // type filter (all/analysis/dataset/scraper)
+        	  if(filter.equals("all")){
+            	  allAnalyses = datastoreService.get20AuthorAnalysesItemPopular(startPoint, 10);
+            	  allDatasets = datastoreService.get20AuthorDataSetItemPopular(startPoint, 10);
+        	  }
+        	  
+        	  else if(filter.equals("analysis")){
+        		  allAnalyses = datastoreService.get20AuthorAnalysesItemPopular(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("dataset")){
+        		  allDatasets = datastoreService.get20AuthorDataSetItemPopular(startPoint, 20);
+        	  }
+        	  
+        	  else if(filter.equals("scraper")){
+        	  }
+          }
+      }
+      
+      // set number items for paging
+      if(filter.equals("all"))
+    	  startPoint = startPoint + 10;
+      else if(filter.equals("analysis") || filter.equals("dataset") || filter.equals("scraper"))
+    	  startPoint = startPoint + 20;
+      
+      session.setAttribute("startpoint", startPoint);
+      
+      // merge data 2 class Analysis and Dataset 
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder);
+      return (lstRepresentClass);
+      
     } catch (Exception e) {
       logger.debug("Failed to load more activity", e);
       return null;
     }
   }
 
-  /*
-   * Vinhpq: Adding function for top and left menu
-   */
   @RequestMapping(value={"/tags"}, method=RequestMethod.GET)
   public String get10TopTags(WebRequest request, ModelMap model, Principal principal) {
 	  
@@ -212,173 +547,4 @@ public class ActivityController {
 	  }
 	  return "tags";
   }
-  
-  @RequestMapping(value={"/streambyself"}, method=RequestMethod.GET)
-  public String getActivityStreamBySelf(WebRequest request, ModelMap model, Principal principal) {
-    try {    
-      String filter = request.getParameter("filter");
-      if (StringUtils.isEmpty(filter)) filter = "all";
-      
-      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
-        return "error";
-      }
-      
-      User user = (User) ((Authentication)principal).getPrincipal();
-      
-      try {
-        ObjectMapper logmapper = new ObjectMapper();
-        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
-      } catch (Exception e) {
-        logger.debug("Failed to log action", e);
-      }
-      
-      List<Analysis> allAnalysesBySelf = datastoreService.getAllAnalysesBySelf(user.getId());
-      List<Dataset> allDatasetsBySelf = datastoreService.getAllDatasetsBySelf(user.getId());
-      
-      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalysesBySelf, allDatasetsBySelf, true);
-      
-      model.addAttribute("recentAnalyses", lstRepresentClass);
-      //---
-      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
-      model.addAttribute("topAnalyses", mostPopularAnalyses);
-      
-      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
-      model.addAttribute("topDatasets", mostPopularDatasets);
-      
-      model.addAttribute("menuId", "streambyself");
-      model.addAttribute("filLnk", "streambyself");
-    } catch (Exception e) {
-      logger.debug("Failed to load activity stream", e);
-      model.addAttribute("errorMsg", "Failed to load the activity stream");
-    }
-    return "stream";
-  }
-  
-  /*@RequestMapping(value={"/streamall"}, method=RequestMethod.GET)
-  public String getActivitystreamall(WebRequest request, ModelMap model, Principal principal) {
-    try {    
-      String filter = request.getParameter("filter");
-      if (StringUtils.isEmpty(filter)) filter = "all";
-      
-      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
-        return "error";
-      }
-      
-      User user = (User) ((Authentication)principal).getPrincipal();
-      
-      try {
-        ObjectMapper logmapper = new ObjectMapper();
-        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
-      } catch (Exception e) {
-        logger.debug("Failed to log action", e);
-      }
-      
-      List<Analysis> allAnalyses = datastoreService.getAllAnalysesPublished();
-      model.addAttribute("recentAnalyses", allAnalyses);
-     
-      //---
-      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
-      model.addAttribute("topAnalyses", mostPopularAnalyses);
-      
-      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
-      model.addAttribute("topDatasets", mostPopularDatasets);
-      
-      model.addAttribute("menuId", "streamall");
-    } catch (Exception e) {
-      logger.debug("Failed to load activity stream", e);
-      model.addAttribute("errorMsg", "Failed to load the activity stream");
-    }
-    return "stream";
-  }*/
-  
-  @RequestMapping(value={"/staffpicks"}, method=RequestMethod.GET)
-  public String getstaffpicks(WebRequest request, ModelMap model, Principal principal) {
-    try {    
-      String filter = request.getParameter("filter");
-      if (StringUtils.isEmpty(filter)) filter = "all";
-      
-      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
-        return "error";
-      }
-      
-      User user = (User) ((Authentication)principal).getPrincipal();
-      
-      try {
-        ObjectMapper logmapper = new ObjectMapper();
-        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
-      } catch (Exception e) {
-        logger.debug("Failed to log action", e);
-      }
-      
-      List<Analysis> allAnalyses = datastoreService.getAnalysesStaffPick();
-      List<Dataset> allDatasets = datastoreService.getAllDatasetsPublished(20);
-
-      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets , true);
-      
-      model.addAttribute("recentAnalyses", lstRepresentClass);
-      //---
-      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
-      model.addAttribute("topAnalyses", mostPopularAnalyses);
-      
-      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
-      model.addAttribute("topDatasets", mostPopularDatasets);
-      
-      model.addAttribute("menuId", "staffpicks");
-      model.addAttribute("filLnk", "staffpicks");
-    } catch (Exception e) {
-      logger.debug("Failed to load activity stream", e);
-      model.addAttribute("errorMsg", "Failed to load the activity stream");
-    }
-    return "stream";
-  }
-  
-  @RequestMapping(value={"/popularAuthors"}, method=RequestMethod.GET)
-  public String getPopularAuthors(WebRequest request, ModelMap model, Principal principal) {
-    
-	  try {    
-	      String filter = request.getParameter("filter");
-	      if (StringUtils.isEmpty(filter)) filter = "all";
-	      
-	      if (!Arrays.asList(new String[] {"all", "analysis", "dataset", "recent", "popular"}).contains(filter)) {
-	        return "error";
-	      }
-	      
-	      User user = (User) ((Authentication)principal).getPrincipal();
-	      
-	      try {
-	        ObjectMapper logmapper = new ObjectMapper();
-	        String data = logmapper.writeValueAsString(new String[] {"0"});		   	 
-	        datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_ACTIVITY_STREAM,data);
-	      } catch (Exception e) {
-	        logger.debug("Failed to log action", e);
-	      }
-	      
-	      List<Activity> activities = datastoreService.getRecentFeed(user.getId());
-	      model.addAttribute("activities", activities);
-	      
-	      List<Analysis> top20Analyses = datastoreService.getTop20AuthorAnalysesItemPublic(20);
-	      List<Dataset> top20Dataset = datastoreService.getTop20AuthorDataSetItemPublic(20);
-	      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(top20Analyses, top20Dataset , true);
-	      
-	      model.addAttribute("recentAnalyses", lstRepresentClass);
-	      
-	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
-	      model.addAttribute("topAnalyses", mostPopularAnalyses);
-	      
-	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
-	      model.addAttribute("topDatasets", mostPopularDatasets);
-	      
-	      model.addAttribute("menuId", "popularAuthors");
-	      model.addAttribute("filLnk", "popularAuthors");
-	    } catch (Exception e) {
-	      logger.debug("Failed to load activity stream", e);
-	      model.addAttribute("errorMsg", "Failed to load the activity stream");
-	    }
-	  
-	    return "stream";
-  }
-  
 }

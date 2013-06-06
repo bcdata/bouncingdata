@@ -153,7 +153,7 @@
           <!-- AddThis Button END -->
         </div>
         <div class="action-links dataset-action-links" style="margin-top: 4px;">
-          <h3 class="dataset-score score">0</h3>&nbsp;
+          <h3 class="dataset-score score">${dataset.score}</h3>&nbsp;
           <a href="javascript:void(0);" class="action vote-up dataset-vote-up">Vote up</a>&nbsp;&nbsp;
           <a href="javascript:void(0);" class="action vote-down dataset-vote-down">Vote down</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="action dataset-action dataset-embed-button" id="dataset-embed-button">Embed</a>&nbsp;&nbsp;

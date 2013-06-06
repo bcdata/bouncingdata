@@ -17,6 +17,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Comment;
 import com.bouncingdata.plfdemo.datastore.pojo.model.CommentVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ExecutionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Group;
@@ -300,6 +301,8 @@ public interface DataStorage {
    */
   public void removeAnalysisVote(int userId, int analysisId);
   
+  
+  
   /**
    * @param activityId
    * @return
@@ -466,21 +469,40 @@ public interface DataStorage {
   public List<Analysis> getMostPopularAnalyses();
   
   //----- Vinhpq : adding temporary functions for left menu ----
+  
+  public DatasetVote getDatasetVote(int userId, int dsId);
+  
+  public void addDatasetVote(int userId, int dsId, DatasetVote dsVote);
+  
+  public void removeDatasetVote(int userId, int dsId);
+  
   public List<Dataset> getMostPopularDatasets(int maxnumber);
   
   public List<Analysis> getMostPopularAnalyses(int maxnumber);
   
-  public List<Analysis> getAllAnalysesBySelf(int userId);
-  
-  public List<Analysis> getAnalysesIn1Month();
-  
-  public List<Dataset> getDatasetsIn1Month();
-  
-  public List<Analysis> getAnalysesStaffPick();
+  public List<Analysis> getAllAnalysesBySelf(int userId ,int startPoint ,int maxNumber);
 
-  public List<Dataset> getAllDatasetsBySelf(int userId);
+  public List<Dataset> getAllDatasetsBySelf(int userId ,int startPoint ,int maxNumber);
+
+  public List<Dataset> getPopularDatasetsBySelf(int userId ,int startPoint ,int maxNumber);
+
+  public List<Analysis> getPopularAnalysesBySelf(int userId ,int startPoint ,int maxNumber);
   
-  public List<Dataset> getAllDatasetsPublished(int maxNumber);
+  public List<Analysis> getAnalysesIn1Month(int startPoint, int numrows);
+  
+  public List<Dataset> getDatasetsIn1Month(int startPoint, int numrows);
+  
+  public List<Analysis> getPopularAnalysesIn1Month(int startPoint, int numrows);
+  
+  public List<Dataset> getPopularDatasetsIn1Month(int startPoint, int numrows);
+  
+  public List<Analysis> getRecentAnalysisStaffPick(int startPoint, int maxNumber);
+  
+  public List<Dataset> getRecentDatasetsStaffPick(int startPoint, int maxNumber);
+  
+  public List<Dataset> getPopularDatasetsStaffPick(int startPoint, int maxNumber);
+
+  public List<Analysis> getPopularAnalysesStaffPick(int startPoint, int maxNumber);
   
   public List<Tag> get10Tags();
   
@@ -490,19 +512,18 @@ public interface DataStorage {
   
   public void addSttResetPassword(int userId, String activecode, String expiredDate);
   
-  public List<Analysis> getTop20AuthorAnalysesItemPublic(int maxNumber);
+  public List<Analysis> get20AuthorAnalysesRecent(int startPoint, int maxNumber);
 
-  public List<Dataset> getTop20AuthorDataSetItemPublic(int maxNumber);
+  public List<Dataset> get20AuthorDataSetRecent(int startPoint, int maxNumber);
   
-  public List<Analysis> getMostPopularAnalysesBySelf(int userId, int maxNumber);
+  public List<Dataset> get20AuthorDataSetItemPopular(int startPoint, int maxNumber);
   
-  public List<Analysis> getMostPopularAnalysesStaffPick(int maxNumber);
+  public List<Analysis> get20AuthorAnalysesItemPopular(int startPoint, int maxNumber);
   
-  public List<Analysis> getTop20AuthorMostPopularAnalysesItemPublic(int maxNumber);
   //-----
   
   public List<Dataset> getMostPopularDatasets();
-
+  
   /*Add for tag features*/
   public void createTag(Tag tag);  
 

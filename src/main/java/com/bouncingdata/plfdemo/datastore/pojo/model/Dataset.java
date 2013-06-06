@@ -22,7 +22,7 @@ public class Dataset {
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   private int id;
-  
+  private int score;
   @Persistent(table = "Dataset_tags")
   @Join(column = "id_OID")
   @Element(column = "id_EID")
@@ -58,6 +58,12 @@ public class Dataset {
   }
   public void setId(int id) {
     this.id = id;
+  }
+  public int getScore() {
+    return score;
+  }
+  public void setScore(int score) {
+    this.score = score;
   }
   public String getName() {
     return name;
