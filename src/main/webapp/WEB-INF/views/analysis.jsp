@@ -101,7 +101,7 @@
           <h3 class="score anls-score">${anls.score}</h3>&nbsp;
           <a href="javascript:void(0)" class="action anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="action anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="action anls-action anls-clone">Clone</a>&nbsp;&nbsp;
+          <a href="<c:url value="/anls/clone/processing/${anls.guid }" />" target="_blank" class="action anls-action anls-clone">Clone</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="action anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
             <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="action anls-action" title="Edit this analysis">Edit</a>&nbsp;&nbsp;

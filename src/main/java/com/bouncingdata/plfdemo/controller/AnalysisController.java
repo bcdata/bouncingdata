@@ -1,6 +1,7 @@
 package com.bouncingdata.plfdemo.controller;
 
 import java.io.File;
+import java.io.Writer;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -318,6 +321,17 @@ public class AnalysisController {
 			return sortedResult;
 		} else
 			return null;
+	}
+	
+	@RequestMapping(value="/clone/processing/{guid}", method = RequestMethod.GET)
+	public String cloneProcess(@PathVariable String guid, ModelMap model) throws Exception {
+	  Analysis anls = datastoreService.getAnalysisByGuid(guid);
+    if (anls == null) {
+      model.addAttribute("errorMsg", "Analysis not found!");
+      return "error";
+    }
+	  model.addAttribute("guid", guid);
+	  return "clone-process";
 	}
 	
   @RequestMapping(value = "/clone/{guid}", method = RequestMethod.GET)
