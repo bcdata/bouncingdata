@@ -43,7 +43,6 @@
           <form action="<c:url value='/help/r'/>" method="GET" id="help-page-r" style="padding: 0px;margin: 0px;"></form>
           <a href="<c:url value='/help/r'/>" id="help-page-r-link" class="help-page-link">R</a>
         </div>
-        &nbsp;&nbsp;<strong style="color: red;">(to be updated...)</strong>
       </div>
       <div class="help-right-menu">
 

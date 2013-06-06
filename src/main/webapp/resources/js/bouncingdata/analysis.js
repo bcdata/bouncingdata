@@ -192,12 +192,11 @@ Analysis.prototype.init = function(anls, dbDetail) {
           'type': 'analysis'
         },
         success: function(res) {
-          console.debug(res);
           if (res['code'] < 0) {
             console.debug(res);
             return;
           }
-          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
+          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tag + '">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
           $('.tag-set .tag-list').append($newTag);
           $('.tag-remove', $newTag).click(function() {
             var self = this;

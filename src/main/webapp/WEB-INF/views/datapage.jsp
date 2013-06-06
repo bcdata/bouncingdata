@@ -29,54 +29,7 @@
 	}
 </style>
 <div id="main-content" class="datapage-container">
-  <div class="data-info right-content">
-    <!-- div class="dataset-summary summary">
-      <div class="data-info-header info-header">
-        <div class="data-info-title info-title">Dataset Info</div>
-        <div class="data-info-title-line info-title-line"></div>
-      </div>
-      <p class="line-item">
-        <strong>Dataset: </strong><span>${dataset.name }</span>
-      </p>
-      <p class="line-item">
-        <strong>Author: </strong><span>${dataset.user.username }</span>
-      </p>
-      <p class="line-item">
-        <strong>Description: </strong><span>${dataset.description }</span>
-      </p>
-      <p class="line-item">
-        <strong>Create at: </strong><span>${dataset.createAt }</span>
-      </p>
-      <p class="line-item">
-        <strong>Tags: </strong><span>${dataset.tags }</span>
-      </p>
-    </div>
-    <div class="related-info dataset-related-info">
-      <div class="data-info-header info-header">
-        <div class="data-info-title info-title">Related Info</div>
-        <div class="data-info-title-line info-title-line"></div>
-      </div>
-      <c:if test="${not empty relatedAnls }">
-        <p class="related-analyses">
-          <strong>Related analyses: </strong>
-          <c:forEach items="${relatedAnls }" var="anls">
-            <a class="related-anls-link" href="<c:url value="/anls" />/${anls.guid}">${anls.name }</a>&nbsp;
-          </c:forEach>
-        </p>
-        <script>
-          $(function() {
-            $('.related-analyses a.related-anls-link').each(function() {
-              $(this).click(function() {
-                com.bouncingdata.Nav.fireAjaxLoad($(this).prop('href'), false);
-                return false;
-              });
-            });
-          });
-      	</script>
-      </c:if>
-    </div-->  
-    
-    
+  <div class="data-info right-content"> 
     <div class="dataset-summary summary">
       <div class="author-summary">       
         <a class="author-avatar" href="javascript:void(0);"><img src="<c:url value="/resources/images/no-avatar.png" />" /></a>       
@@ -95,7 +48,7 @@
       <c:if test="${not empty dataset.tags }">
         <c:forEach items="${dataset.tags }" var="tag">
           <div class="tag-element-outer">
-            <a class="tag-element" href="<c:url value="/tag/${dataset.tag }" />">${dataset.tag }</a>
+            <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
             <c:if test="${isOwner }">
               <span class="tag-remove" title="Remove tag from this dataset">x</span>
             </c:if>
@@ -196,10 +149,12 @@
           <c:choose>
             <c:when test="${not empty data }">
               <script>
-                var data = ${data};
-                var $table = $('#data-table');
-                com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false });
-                     
+                $(function() {
+                  var data = ${data};
+                  var $table = $('#data-table');
+                  com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false});  
+                });
+                                   
               </script>
             </c:when>
             <c:otherwise>
@@ -216,8 +171,28 @@
           </c:choose>
         </div>
         <div id="schema" class="ui-tabs-hide">
-          <!-- pre style="white-space: normal; word-wrap: break-word;">${dataset.schema }</pre-->
-          <pre class="brush: sql" style="white-space: pre-wrap; word-wrap: break-word;">${dataset.schema }</pre>
+          <!-- pre class="brush: sql" style="white-space: pre-wrap; word-wrap: break-word;">${dataset.schema }</pre-->
+          <div class="schema-table-wrapper">
+            <table id="schema-table" ticket="${ticket }">  
+              <thead>
+                <tr>
+                  <th width="30%"><strong>Column Name</strong></th>
+                  <th><strong>Data Type</strong></th>
+                  <th width="55%"><strong>Description</strong></th>
+                </tr>
+              </thead>
+              <tbody>
+              <c:forEach items='${schema}' var='column'>
+                <tr>
+                  <td><span class="column-name">${column.name}</span></td>
+                  <td><span class="column-type">${column.typeName }</span></td>
+                  <td><span class="column-description"></span></td>
+                </tr>
+              </c:forEach>
+              
+              </tbody>           
+            </table>
+          </div>
         </div>
         <div id="ref-doc" class="ui-tabs-hide">
           <c:choose>

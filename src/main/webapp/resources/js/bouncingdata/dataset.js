@@ -13,7 +13,8 @@ Dataset.prototype.init = function(dataset) {
   $(function() {
     $('#dataset-content').tabs();
     $('#related-tabs').tabs();
-    SyntaxHighlighter.highlight();
+    
+    //SyntaxHighlighter.highlight();
     
     /*$('#comment-form #comment-submit').click(function() {
       // validate
@@ -68,25 +69,29 @@ Dataset.prototype.init = function(dataset) {
       var tag = $('#add-tag-input').val();
       if (!tag) return false;
       $.ajax({
-        url: ctx + '/dataset/' + guid + '/addtag',
+        url: ctx + '/tag/addtag',
         type: 'post',
         data: {
-          tag: tag
+          'guid': guid,
+          'tag': tag,
+          'type': 'dataset'
         },
         success: function(res) {
           console.debug(res);
           if (res['code'] < 0) return;
-          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a><span class="tag-remove" title="Remove tag from this datasetd">x</span></div>');
+          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tag + '">' + tag + '</a><span class="tag-remove" title="Remove tag from this datasetd">x</span></div>');
           $('.tag-set .tag-list').append($newTag);
           $('.tag-remove', $newTag).click(function() {
             var self = this;
             if (dataset.user != com.bouncingdata.Main.username) return;
             var tag = $(this).prev().text();
             $.ajax({
-              url: ctx + '/dataset/' + guid + '/removetag',
+              url: ctx + '/tag/removetag',
               type: 'post',
               data: {
-                tag: tag
+                guid: guid,
+                tag: tag,
+                type: 'dataset'
               },
               success: function(res) {
                 if (res['code'] < 0) {
@@ -129,7 +134,7 @@ Dataset.prototype.init = function(dataset) {
         }
       });
     });
-    
+       
   });
 }
 

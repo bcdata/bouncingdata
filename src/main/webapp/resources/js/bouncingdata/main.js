@@ -515,21 +515,10 @@ Utils.prototype.renderDatatable = function(data, $table, options) {
   
   var aaData = data.slice(1);
 
-  /*var aaData = [];
-  for (index in data) {
-    if (index == 0) continue;
-    var item = data[index];
-    var arr = [];
-    for (colIndex in item) {
-      arr.push(item[colIndex]);
-    }
-    aaData.push(arr);
-  }*/
   var dataTableOptions = {
     "aaData": aaData,
     "aoColumns": aoColumns,
-    "bFilter": false,
-//    "bJQueryUI": true
+    "bFilter": false
   }
   
   if (options) {
@@ -539,16 +528,16 @@ Utils.prototype.renderDatatable = function(data, $table, options) {
   }
   
   var datatable = $table.dataTable(dataTableOptions);
-  /*var datatable = $table.dataTable({
-    "aaData": aaData,
-    "aoColumns": aoColumns,
-    "bJQueryUI": true,
-    "sPaginationType": "full_numbers"
-  });*/
-  var keys = new KeyTable( {
+  /*var keys = new KeyTable( {
     "table": $table[0],
     "datatable": datatable
-  });
+  });*/
+  
+  // adjust height
+  if ($table.height() < 500) {
+    $table.parent().css('height', '');
+  }
+  
 }
 
 /**

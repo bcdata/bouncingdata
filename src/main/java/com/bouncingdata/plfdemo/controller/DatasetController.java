@@ -14,13 +14,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -43,11 +41,9 @@ import com.bouncingdata.plfdemo.datastore.pojo.dto.DatasetDetail;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.QueryResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
-import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
-import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
@@ -159,15 +155,6 @@ public class DatasetController {
       }
 
       List<Object[]> data = parser.parse(file.getInputStream());
-      /*
-       * List<Map> dataMapList = new ArrayList<Map>(); String[] header =
-       * data.get(0); int maxRow = Math.min(100, data.size() - 1); for (int i =
-       * 1; i <= maxRow; i++) { HashMap<String, Object> row = new
-       * HashMap<String, Object>(); for (int j = 0; j < header.length; j++) {
-       * String col = header[j]; Object val = data.get(i)[j]; row.put(col, val);
-       * } dataMapList.add(row); } model.addAttribute("data",
-       * mapper.writeValueAsString(dataMapList));
-       */
 
       ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(tempDataFile));
       
@@ -482,7 +469,7 @@ public class DatasetController {
           break;
         }
       }
-
+      is.close();
     } catch (Exception e) {
       logger.debug("Failed to read temporary datafile {}", tempDataFile.getAbsolutePath());
       return new ActionResult(-1, "Can't read your subbmitted data. Data persist failed.");
@@ -563,6 +550,8 @@ public class DatasetController {
       }
 
       model.addAttribute("dataset", ds);
+     
+      model.addAttribute("schema", Utils.parseDatasetSchemaFromSqlCreate(ds.getSchema()));
 
       if (ds.getUser().getUsername().equals(user.getUsername())) {
         model.addAttribute("isOwner", true);

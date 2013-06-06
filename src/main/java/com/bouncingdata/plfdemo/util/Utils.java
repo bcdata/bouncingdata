@@ -36,6 +36,8 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
 import com.bouncingdata.plfdemo.service.DTMailSender;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
+import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
 
 
@@ -618,6 +620,23 @@ public class Utils {
   
   public static boolean isBoolean(String str) {
     return ("true".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str));
+  }
+  
+  public static List<DatasetColumn> parseDatasetSchemaFromSqlCreate(String schema) {
+    String columnsStr = schema.substring(schema.indexOf("(") + 1, schema.lastIndexOf(")"));
+    String[] columns = columnsStr.split(",");
+    if (columns.length > 0) {
+      List<DatasetColumn> columnList = new ArrayList<DatasetColumn>();
+      for (String col : columns) {
+        String colName = col.substring(col.indexOf("`") + 1, col.lastIndexOf("`")).trim();
+        String colType = col.substring(col.lastIndexOf("`") + 1).trim();
+        DatasetColumn column = new DatasetColumn(colName);
+        column.setType(ColumnType.getTypeFromName(colType));
+        column.setTypeName(column.getType().getTypeName());
+        columnList.add(column);
+      }
+      return columnList;
+    } else return null;
   }
   
 }

@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bouncingdata.plfdemo.util.Utils;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
 class ExcelParser implements DataParser {
@@ -129,7 +130,7 @@ class ExcelParser implements DataParser {
       boolean isLong = true;
       boolean isDouble = true;
       
-      // read first 100 value of this column to guess the datatype
+      /*// read first 100 value of this column to guess the datatype
       for (int j = 0; j < rows.size(); j++) {
         Cell cell = rows.get(j).getCell(i);
         if (cell != null) {
@@ -146,6 +147,14 @@ class ExcelParser implements DataParser {
             isInt = false;
             isLong = false;
             break;
+          case Cell.CELL_TYPE_STRING:
+            isBoolean = false;
+            isInt = false;
+            isLong = false;
+            isDouble = false;
+            break;
+          default:
+            isBoolean = isInt = isLong = isDouble = false;
           }
         }
       }
@@ -178,6 +187,48 @@ class ExcelParser implements DataParser {
         continue;
       }
       
+      column.setTypeName("String");
+      column.setType(ColumnType.STRING);
+      columns.add(column);
+      continue;*/
+      
+      for (int j = 0; j < rows.size(); j++) {
+        String value = getCellStringValue(rows.get(j).getCell(i));
+        if (isBoolean && !Utils.isBoolean(value)) isBoolean = false;
+        if (isInt && !Utils.isInt(value)) isInt = false;
+        if (isLong && !Utils.isLong(value)) isLong = false;
+        if (isDouble && !Utils.isDouble(value)) isDouble = false;
+      }
+      
+      if (isBoolean) {
+        column.setTypeName("Boolean");
+        column.setType(ColumnType.BOOLEAN);
+        columns.add(column);
+        continue;
+      }
+      
+      if (isInt) {
+        column.setTypeName("Integer");
+        column.setType(ColumnType.INTEGER);
+        columns.add(column);
+        continue;
+      }
+      
+      if (isLong) {
+        column.setTypeName("Long");
+        column.setType(ColumnType.LONG);
+        columns.add(column);
+        continue;
+      }
+      
+      if (isDouble) {
+        column.setTypeName("Double");
+        column.setType(ColumnType.DOUBLE);
+        columns.add(column);
+        continue;
+      }
+      
+      // default
       column.setTypeName("String");
       column.setType(ColumnType.STRING);
       columns.add(column);

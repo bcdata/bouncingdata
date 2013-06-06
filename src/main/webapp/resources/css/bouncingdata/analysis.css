@@ -390,3 +390,30 @@ li.comment-item .comment-score {
 .anls-data .anls-dataset, .anls-data .anls-attachment {
   overflow-x: auto;
 }
+
+/* Data page schema table styles */
+table#schema-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table#schema-table, table#schema-table thead th, table#schema-table td {
+  border: 1px solid #DDD;
+}
+
+table#schema-table thead th, table#schema-table td {
+  padding: 4px;
+}
+
+table#schema-table thead th {
+  background-color: #EEE;
+}
+
+table#schema-table span.column-description, table#schema-table span.column-name, table#schema-table span.column-type  {
+  border: 1px solid #FFF;
+  padding: 2px;
+  width: 95%;
+  display: inline-block;
+  height: 1.3em;
+  line-height: 1.3em;
+}

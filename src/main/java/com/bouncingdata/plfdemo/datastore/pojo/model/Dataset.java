@@ -23,7 +23,7 @@ public class Dataset {
   @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
   private int id;
   private int score;
-  @Persistent(table = "Dataset_tags")
+  @Persistent(table = "Dataset_tags", defaultFetchGroup="true")
   @Join(column = "id_OID")
   @Element(column = "id_EID")
   private Set<Tag> tags;

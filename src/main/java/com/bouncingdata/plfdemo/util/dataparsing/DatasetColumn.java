@@ -57,8 +57,8 @@ public class DatasetColumn {
       if ("Integer".equalsIgnoreCase(typeName)) return INTEGER;
       else if ("Long".equalsIgnoreCase(typeName)) return LONG;
       else if ("Double".equalsIgnoreCase(typeName)) return DOUBLE;
-      else if ("Boolean".equalsIgnoreCase(typeName)) return BOOLEAN;
-      else if ("String".equalsIgnoreCase(typeName)) return STRING;
+      else if ("Boolean".equalsIgnoreCase(typeName) || "Bit".equalsIgnoreCase(typeName)) return BOOLEAN;
+      else if ("String".equalsIgnoreCase(typeName) || "Text".equalsIgnoreCase(typeName)) return STRING;
       else return null;
     }
   }

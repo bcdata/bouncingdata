@@ -1247,7 +1247,7 @@ Workbench.prototype.loadDatatableByAjax = function(dsGuid, columns, $table) {
     }*/
     "bScrollInfinite" :true,
     "bScrollCollapse": true,
-    "bFilter": false,
+    "bFilter": false
 //    "bJQueryUI": false
   });
   
