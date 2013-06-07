@@ -204,22 +204,22 @@ public class DTMailSender {
 	}
 	
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 //		String target[] = {"vinhpq@techburgcorp.com","vinhpq177@gmail.com", "pham_quang_vinh1412@yahoo.com"};
-		/*String target[] = {"vinhpq177@gmail.com"};
+		String target[] = {"vinhpq177@gmail.com"};
 		String title = "Hello Chau. Your account is registered!";
 		String content = "Click here to activate your account: www.vnexpress.net";
-		*/
 		
 		
-		/** Build Register Email */
-		/*DTMailSender sender = buildActivateMail();
-		sender.sendEmail("vinhpq177@gmail.com");*/
 		
-		/*MailSender sender = new MailSender(title, content);
-		sender.sendGroupMail(target);*/
-		/*DTMailSender userReport = new DTMailSender("test from derivatrust", "test content");
-		userReport.sendEmail("vinhpq@techburgcorp.com");*/
+		*//** Build Register Email *//*
+		DTMailSender sender = buildActivateMail();
+		sender.sendEmail("vinhpq177@gmail.com");
+		
+		MailSender sender = new MailSender(title, content);
+		sender.sendGroupMail(target);
+		DTMailSender userReport = new DTMailSender("test from derivatrust", "test content");
+		userReport.sendEmail("vinhpq@techburgcorp.com");
 		
 		String content = "<p>Dear ";
 //		content += a.getDerivaName() + ",\n";
@@ -230,7 +230,7 @@ public class DTMailSender {
 		userReport.sendEmail("vinhpq@techburgcorp.com");
 //		userReport.sendEmail(emailList.get(0).getEmailAddress());
 		
-	}
+	}*/
 	
 	private static DTMailSender buildActivateMail(){
 		String title = "Please verify your bouncingdata account";

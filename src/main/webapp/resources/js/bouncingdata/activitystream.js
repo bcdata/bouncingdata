@@ -114,6 +114,7 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
       description: feed.description,
       name: feed.name,
       score: feed.score,
+      classType : feed.classType,
       thumbnail: feed.thumbnail,
       commentCount: feed.commentCount
     });
@@ -131,7 +132,11 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
         $('.info .tag-list', $feed).append('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + '/tag/' + tag.tag + '">' + tag.tag + '</a></div>'); 
       }
     }
-        
+    
+    if(feed.description){
+    	$('.description', $feed).append(feed.description);
+    }
+    
     htmlToAdd[index] = $feed.outerHtml();
     idsToAdd[index] = feed.id;
   }

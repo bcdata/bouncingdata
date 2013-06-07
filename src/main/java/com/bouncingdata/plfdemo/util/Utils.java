@@ -198,9 +198,10 @@ public class Utils {
 						"</tbody>"+ 
 					"</table>"; 
 	
+	boolean process = false;
+		
 	DTMailSender sender = new DTMailSender(title, content);
-	boolean process = sender.sendEmail(sEmail);
-	
+	process = sender.sendEmail(sEmail);
 	return (process);
   }
   
