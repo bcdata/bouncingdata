@@ -114,7 +114,8 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
       description: feed.description,
       name: feed.name,
       score: feed.score,
-      classType : feed.classType,
+      cmturl : (feed.classType=='Analysis' ? ctx + '/anls/' +feed.guid : '#'),
+      url : (feed.classType=='Analysis' ? ctx + '/anls/' +feed.guid : ctx + '/dataset/view/' +feed.guid),
       thumbnail: feed.thumbnail,
       commentCount: feed.commentCount
     });

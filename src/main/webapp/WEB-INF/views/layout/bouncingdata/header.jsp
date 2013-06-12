@@ -478,12 +478,7 @@
                     <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
                   </a>
                   <div class="thumbnail">
-                    <a href="<c:choose>
-								<c:when test="\${classType eq 'Analysis' }"> 
-									<c:url value="/anls/\${guid}"/>
-								</c:when>
-								<c:otherwise><c:url value="/dataset/view/\${guid}" /></c:otherwise>
-							</c:choose>">
+                    <a href="\${url}">
                       <c:choose>
                         <c:when test="\${not empty thumbnail }">
                           <img class="thumb-img" src="<c:url value="/thumbnails/\${thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
@@ -496,34 +491,20 @@
                   </div>
                   <p class="title">
                   	<!-- vinhpq : preview webpage on mouse over event (acitive func : adding in link class="popover") -->
-                    <a id="evt-title-${id }" href="
-                    									<c:choose>
-                											<c:when test="\${classType eq 'Analysis' }"> 
-                												<c:url value="/anls/\${guid}"/>
-                											</c:when>
-                											<c:otherwise><c:url value="/dataset/view/\${guid}" /></c:otherwise>
-                										</c:choose>" ><strong>\${name}</strong></a>
+                    <a id="evt-title-${id }" href="\${url}" ><strong>\${name}</strong></a>
                   </p>
                   <div class="info">
                     <span class="author">Author: <a href="#">\${username }</a></span><br/>
                     <div class="tag-list">Tags:&nbsp;</div>
                   </div>
                   <div class="description"></div>
-                  
                   <div class="clear"></div>
                   <div class="event-footer">
                     <strong class="event-score">\${score}</strong>&nbsp;
-					<a id="evt-comment-\${id }" class="comments-link" href="<c:choose>
-                    																	<c:when test="\${classType eq 'Analysis' }"> 
-                    																		<c:url value="/anls/\${guid}#comments" />
-                    																  	</c:when>
-                    																  	 <c:otherwise>#</c:otherwise>
-                    																  </c:choose>">
-                    																  		<strong>\${commentCount }</strong>&nbsp;comments</a>
+					<a id="evt-comment-\${id }" class="comments-link" href="\${cmturl}"><strong>\${commentCount }</strong>&nbsp;comments</a>
                   </div>
                 </div>
                 <div class="clear"></div>
               </div>
-
   </script>
 </jqtemplate>

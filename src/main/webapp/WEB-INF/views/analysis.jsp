@@ -57,7 +57,6 @@
           <input type="button" value="Add" id="add-tag-button" />
         </div>
       </c:if>
-      
     </div>
     <div class="anls-related-info related-info">
       <p><strong>Related:</strong></p>

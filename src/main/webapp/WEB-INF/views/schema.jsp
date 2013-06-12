@@ -3,10 +3,10 @@
 <script type="text/javascript">
   com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/upload.css", "upload");
   var schema = [];
-  <c:forEach items='${schema}' var='column'>
+  <c:forEach items='${varUp.schema}' var='column'>
     schema.push({ 'name': '${column.name}', 'typeName': '${column.typeName}' });
   </c:forEach>
-  var ticket = '${ticket}';
+  var ticket = '${varUp.ticket}';
   if (!com.bouncingdata.Upload) {
     $.getScript(ctx + "/resources/js/bouncingdata/upload.js", function() {
       console.debug("upload.js async. loaded!");
@@ -23,7 +23,7 @@
       <button class="close-button" id="upload-close">Discard</button>
     </div>
     <div class="schema-nav-panel">
-      <a class="schema-nav" id="schema-back" href="<c:url value="/dataset/upload" />">Back</a>
+      <a class="schema-nav" id="schema-back" href="<c:url value="/dataset/bupload" />">Back</a>
       <a class="schema-nav" id="schema-submit" href="javascript:void(0)">Submit</a>
       <div style="text-align: right;">
         <input type="checkbox" id="dataset-ispublic" checked="checked" /> &nbsp;<label for="dataset-ispublic">Public</label>
@@ -54,9 +54,9 @@
             <span><strong>Note: </strong>This preview just show maximum first 100 rows from dataset.</span>
             <table id="data-preview"></table>
             <c:choose>
-              <c:when test="${not empty data }">
+              <c:when test="${not empty varUp.data }">
                 <script>
-                  var data = ${data};
+                  var data = ${varUp.data};
                   var $table = $('#data-preview');
                   com.bouncingdata.Utils.renderDatatable(data, $table,  { "sScrollX": "840px", "sScrollY": "400px", "bPaginate": false, "bFilter": false } );
                 </script>
@@ -78,7 +78,7 @@
         </div>
         <div id="schema-tab-schema" class="ui-tabs-hide">
           <div class="schema-table-wrapper">
-            <table id="schema-table" ticket="${ticket }">  
+            <table id="schema-table" ticket="${varUp.ticket }">  
               <thead>
                 <tr>
                   <th width="30%"><strong>Column Name</strong></th>

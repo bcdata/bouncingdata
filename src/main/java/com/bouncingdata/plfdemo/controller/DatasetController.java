@@ -17,6 +17,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.JsonNode;
@@ -46,6 +47,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
+import com.bouncingdata.plfdemo.datastore.pojo.model.VariablesUploadDataset;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.BcDatastoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
@@ -79,7 +81,7 @@ public class DatasetController {
   }
 
   @RequestMapping(value = { "/upload" }, method = RequestMethod.GET)
-  public String getUploadPage(ModelMap model, Principal principal) {
+  public String getUploadPage(ModelMap model, Principal principal, HttpSession session) {
     try {
       User user = (User) ((Authentication) principal).getPrincipal();
       ObjectMapper logmapper = new ObjectMapper();
@@ -91,19 +93,53 @@ public class DatasetController {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    
+    // vinhpq : remove temp object upload 
+    if(session.getAttribute("varUp") != null)  
+    	session.removeAttribute("varUp");
+    
     return "upload";
   }
+  
+  @RequestMapping(value = { "/bupload" }, method = RequestMethod.GET)
+  public String backUploadPage(ModelMap model, Principal principal, HttpSession session) {
+    try {
+      User user = (User) ((Authentication) principal).getPrincipal();
+      ObjectMapper logmapper = new ObjectMapper();
+      String data;
+      data = logmapper.writeValueAsString(new String[] { "0" });
 
+      datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.GET_UPLOAD_PAGE, data);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+    return "upload";
+  }
+  
   @RequestMapping(value = "/upload/schema", method = RequestMethod.GET)
   public String getUploadPage2() {
     return "redirect:/dataset/upload";
   }
+  
+  @RequestMapping(value = "/fschema", method = RequestMethod.GET)
+  public String forwardSchemaPage(HttpSession session) {
+	  
+	if(session.getAttribute("varUp")==null)
+		return "redirect:/dataset/bupload";
+	
+    return "schema";
+  }
 
   @RequestMapping(value = "/upload/schema", method = RequestMethod.POST)
   public String getSchemaPage(@RequestParam(value = "file", required = false) MultipartFile file,
-      @RequestParam(value = "fileUrl", required = false) String fileUrl,
-      @RequestParam(value = "firstRowAsHeader", required = false) String firstRowAsHeader,
-      @RequestParam(value = "delimiter", required = false) String delimiter, ModelMap model, Principal principal) {
+						       @RequestParam(value = "fileUrl", required = false) String fileUrl,
+						       @RequestParam(value = "firstRowAsHeader", required = false) String firstRowAsHeader,
+						       @RequestParam(value = "delimiter", required = false) String delimiter, 
+						       ModelMap model, 
+						       Principal principal, 
+						       HttpSession session) {
 
     User user = (User) ((Authentication) principal).getPrincipal();
     ObjectMapper mapper = new ObjectMapper();
@@ -120,6 +156,8 @@ public class DatasetController {
       return "upload";
     }
 
+    String dataSchema = "";
+    List<DatasetColumn> schema;
     String filename = file.getOriginalFilename();
     int index = filename.lastIndexOf(".");
     String type = filename.substring(index + 1);
@@ -174,8 +212,9 @@ public class DatasetController {
     	}
       }
       os.close();
-
-      model.addAttribute("data", mapper.writeValueAsString(data.subList(0, Math.min(100, data.size()))));
+      
+      dataSchema = mapper.writeValueAsString(data.subList(0, Math.min(100, data.size())));
+      model.addAttribute("data", dataSchema);
 
     } catch (Exception e) {
       logger.debug("Failed to write to temporary datafile {}", tempDataFilePath);
@@ -185,8 +224,9 @@ public class DatasetController {
 
     try {
       // parse schema
-      List<DatasetColumn> schema = parser.parseSchema(file.getInputStream());
+      schema = parser.parseSchema(file.getInputStream());
       model.addAttribute("schema", schema);
+      
     } catch (Exception e) {
       logger.debug("Exception occured when parsing data schema", e);
       model.addAttribute("errorMsg", "Failed to parse schema.");
@@ -194,6 +234,18 @@ public class DatasetController {
     }
 
     model.addAttribute("ticket", ticket);
+    
+    // temp schema variables for back page upload    
+    VariablesUploadDataset var = new VariablesUploadDataset(file, 
+    														file.getOriginalFilename(),
+    														fileUrl,
+    														firstRowAsHeader,
+    														delimiter, 
+    														dataSchema, 
+    														schema,
+    														ticket);
+    session.setAttribute("varUp", var);
+    
     return "schema";
   }
 

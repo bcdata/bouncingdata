@@ -39,9 +39,13 @@ public class ActivityController {
   @RequestMapping(value={"/stream"}, method=RequestMethod.GET)
   public String getDefaultStream(WebRequest request, 
 			   ModelMap model, 
-			   Principal principal) {
+			   Principal principal, HttpSession session) {
 	  
-	  return "redirect:stream/a/all/recent";
+	// vinhpq : remove temp object upload 
+    if(session.getAttribute("varUp") != null)  
+    	session.removeAttribute("varUp");
+    
+	return "redirect:stream/a/all/recent";
   }
   
   @RequestMapping(value={"/stream/{page}/{filter}/{type}"}, method=RequestMethod.GET)
