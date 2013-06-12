@@ -479,14 +479,7 @@
                   </a>
                   <div class="thumbnail">
                     <a href="\${url}">
-                      <c:choose>
-                        <c:when test="\${not empty thumbnail }">
-                          <img class="thumb-img" src="<c:url value="/thumbnails/\${thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
-                        </c:when>
-                        <c:otherwise>
-                          <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
-                        </c:otherwise>
-                      </c:choose>
+                      <img class="thumb-img" src="\${thumbnail}" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
                     </a>
                   </div>
                   <p class="title">

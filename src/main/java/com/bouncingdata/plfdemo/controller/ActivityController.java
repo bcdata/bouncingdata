@@ -279,7 +279,7 @@ public class ActivityController {
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
       
-      model.addAttribute("pageId", page);
+      session.setAttribute("pageId", page);
       model.addAttribute("fm", filter);
       model.addAttribute("tp", type);
       
