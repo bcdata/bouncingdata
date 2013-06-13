@@ -51,6 +51,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.VariablesUploadDataset;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.BcDatastoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
+import com.bouncingdata.plfdemo.util.PageType;
 import com.bouncingdata.plfdemo.util.Utils;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParser;
 import com.bouncingdata.plfdemo.util.dataparsing.DataParserFactory;
@@ -635,6 +636,10 @@ public class DatasetController {
         }
         model.addAttribute("relatedAnls", relatedAnls);
       }
+      
+      // page view increment
+      int pageView = datastoreService.increasePageView(ds.getId(), PageType.DATASET.getType());
+      model.addAttribute("pageView", pageView);
 
     } catch (Exception e) {
       logger.debug("", e);

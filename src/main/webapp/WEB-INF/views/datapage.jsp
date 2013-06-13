@@ -42,6 +42,7 @@
       <p><strong>Source: </strong><a href="#">http://www.footballdata.com/gamedata</a></p>
       <p><strong>License: </strong><a href="#">X</a></p>
       <p><strong>Last updated: </strong>${dataset.shortLastUpdate }</p>
+      <p><strong>View count: </strong>${pageView }</p>
     </div>
     <div class="tag-set">
       <div class="tag-list">
@@ -222,7 +223,7 @@
         </div>
       </div>
       <div class="clear"></div>
-      <div class="description">
+      <div class="description dataset-description">
         <h3 style="margin: 0 0 10px; cursor: pointer">Description</h3>
         <c:choose>
           <c:when test="${not empty dataset.description }">

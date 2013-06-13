@@ -381,4 +381,14 @@ public interface DatastoreService {
   void addAnalysisTag(int anlsId, int tagId);
   
   void addDatasetTag(int datasetId, int tagId);
+  
+  /**
+   * 
+   * @param objectId
+   * @param type
+   * @return the total page view before increment
+   */
+  int increasePageView(int objectId, String type);
+  
+  int getPageView(int objectId, String type);
 }

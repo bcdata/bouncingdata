@@ -177,8 +177,7 @@ Editor.prototype.initDescribe = function(anls) {
     }
     
     tinyMCE.init({
-
-  mode : "textareas",
+      mode : "textareas",
       theme : "advanced",
       plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,visualblocks",
 
@@ -238,7 +237,33 @@ Editor.prototype.initDescribe = function(anls) {
         success: function(res) {
           console.debug(res);
           if (res['code'] < 0) return;
-          $('.tag-set .tag-list').append('<div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">' + tag + '</a></div>');
+          $('.tag-set .tag-list').append('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + '/tag/'
+              + tag + '">' + tag + '</a></div>');
+        },
+        error: function(res) {
+          console.debug(res);
+        }
+      });
+    });
+    
+    
+    $('.tag-element-outer .tag-remove').click(function() {
+      var self = this;
+      var tag = $(this).prev().text();
+      $.ajax({
+        url: ctx + '/tag/removetag',
+        type: 'post',
+        data: {
+          'guid': anls.guid,
+          'tag': tag,
+          'type': 'analysis'
+        },
+        success: function(res) {
+          if (res['code'] < 0) {
+            console.debug(res);
+            return;
+          }
+          $(self).parent().remove();
         },
         error: function(res) {
           console.debug(res);

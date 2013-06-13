@@ -229,7 +229,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
         data: {
           'guid': guid,
           'tag': tag,
-          'type': type
+          'type': 'analysis'
         },
         success: function(res) {
           if (res['code'] < 0) {

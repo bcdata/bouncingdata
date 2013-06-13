@@ -71,7 +71,8 @@
               <c:if test="${not empty anls.tags }">
                 <c:forEach items="${anls.tags }" var="tag">
                   <div class="tag-element-outer">
-                    <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />">${tag.tag }</a>
+                    <a class="tag-element" href="<c:url value="/tag/${tag.tag }" />" target="_blank">${tag.tag }</a>
+                    <span class="tag-remove" title="Remove tag from this analysis">x</span>
                   </div>
                 </c:forEach>  
               </c:if>

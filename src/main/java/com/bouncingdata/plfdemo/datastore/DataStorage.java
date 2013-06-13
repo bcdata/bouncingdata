@@ -21,6 +21,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ExecutionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Group;
+import com.bouncingdata.plfdemo.datastore.pojo.model.PageView;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
@@ -565,6 +566,10 @@ public interface DataStorage {
   void removeDatasetTag(int dtsId, int tagId);
 
   void removeDatasetTags(int dtsId, List<Tag> tags);
+  
+  int increasePageView(int objectId, String type);
+  
+  PageView getPageView(int objectId, String type);
   
 }
 

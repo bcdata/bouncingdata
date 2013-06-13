@@ -117,10 +117,12 @@ Dataset.prototype.init = function(dataset) {
       if (dataset.user != com.bouncingdata.Main.username) return;
       var tag = $(this).prev().text();
       $.ajax({
-        url: ctx + '/dataset/' + guid + '/removetag',
+        url: ctx + '/tag/removetag',
         type: 'post',
         data: {
-          tag: tag
+          guid: guid,
+          tag: tag,
+          type: 'dataset'
         },
         success: function(res) {
           if (res['code'] < 0) {
