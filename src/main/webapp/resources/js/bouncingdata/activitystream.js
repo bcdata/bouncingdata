@@ -73,7 +73,7 @@ ActivityStream.prototype.loadMore = function() {
       console.debug("More " + result.length + " feeds loaded!");
       // appending
       if (result.length > 0) {
-        me.appendFeeds(result);
+        me.appendFeeds(result, pageId);
       } else {
         $('#stream .feed-loading').hide();
         $('#stream .more-feed').hide();
@@ -90,10 +90,14 @@ ActivityStream.prototype.loadMore = function() {
   });
 }
 
-ActivityStream.prototype.appendFeeds = function(feedList) {
+ActivityStream.prototype.appendFeeds = function(feedList, pageId) {
   var $stream = $('#stream');
   var htmlToAdd = [];
   var idsToAdd = [];
+  
+  var pv = '<img src=\"'+ ctx + '/resources/images/icon-private.png\" style=\"width: 26px;height: 28px;margin-left: 5px;\" title=\"Private\">';
+  var pb = '<img src=\"'+ ctx + '/resources/images/icon-public.png\" style=\"width: 26px;height: 20px;margin-left: 5px;\" title=\"Public\">';
+  
   for (index in feedList) {
     var feed = feedList[index];
     var $feed = $.tmpl(this.$feedTemplate, {
@@ -114,6 +118,8 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
       description: feed.description,
       name: feed.name,
       score: feed.score,
+//      pbicon: (pageId=='streambyself' ? (feed.flag==true ? pb:'') : ''),
+//      pvicon: (pageId=='streambyself' ? (feed.flag==false? pv:'') : ''),
       cmturl : (feed.classType=='Analysis' ? ctx + '/anls/' +feed.guid : '#'),
       url : (feed.classType=='Analysis' ? ctx + '/anls/' +feed.guid : ctx + '/dataset/view/' +feed.guid),
       thumbnail: ((feed.thumbnail !=null || feed.thumbnail != '') ? ctx + '/thumbnails/' + feed.thumbnail + '.jpg' : ctx + '/thumbnails/no-image.jpg'),
@@ -125,6 +131,11 @@ ActivityStream.prototype.appendFeeds = function(feedList) {
       $('.event-score', $feed).text('+' + $('.event-score', $feed).text());
     } else if (feed.score < 0) {
       $('.event-score', $feed).addClass('event-score-negative');
+    }
+    
+    if(pageId == 'streambyself'){
+    	feed.flag==true? $('#pbicon', $feed).append(pb) : '';
+    	feed.flag==false? $('#pvicon', $feed).append(pv) : '';
     }
     
     if (feed.tags) {

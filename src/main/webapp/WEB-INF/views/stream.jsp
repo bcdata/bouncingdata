@@ -239,6 +239,18 @@
                   
                   <div class="clear"></div>
                   <div class="event-footer">
+                  	<c:if test="${pageId eq 'streambyself'}">
+                  		<c:if test="${anls.flag eq 'true'}">	
+							<img src="<c:url value="/resources/images/icon-public.png" />" style="width: 26px;height: 20px;margin-left: 5px;" title="Public">
+						</c:if>
+					</c:if>
+                  
+                    <c:if test="${pageId eq 'streambyself'}">
+						<c:if test="${anls.flag eq 'false'}">
+							<img src="<c:url value="/resources/images/icon-private.png" />" style="width: 26px;height: 28px;margin-left: 5px;" title="Private">
+						</c:if>
+					</c:if> 
+					
                     <c:if test="${anls.score > 0}">
                       <strong class="event-score event-score-positive">+${anls.score }</strong>    
                     </c:if>
@@ -255,6 +267,7 @@
                     																  	 <c:otherwise>#</c:otherwise>
                     																  </c:choose>">
                     																  		<strong>${anls.commentCount }</strong>&nbsp;comments</a>
+					                   																  		
                   </div>
                 </div>
                 <div class="clear"></div>

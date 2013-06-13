@@ -122,7 +122,9 @@ public class Utils {
     		  representClass_object.setGuid(analysis_object.getGuid());
     		  representClass_object.setUsername(analysis_object.getUser().getUsername());
     		  representClass_object.setName(analysis_object.getName());
+    		  representClass_object.setFlag(analysis_object.isPublished());
     		  representClass_object.setClassType("Analysis");
+    		  
     		  
     		  lstRepresentClass.add(representClass_object);
     	  }
@@ -143,6 +145,7 @@ public class Utils {
     		  representClass_object.setGuid(dataset_object.getGuid());
     		  representClass_object.setUsername(dataset_object.getUser().getUsername());
     		  representClass_object.setName(dataset_object.getName());
+    		  representClass_object.setFlag(dataset_object.isPublic());
     		  representClass_object.setClassType("Dataset");
     		  
     		  lstRepresentClass.add(representClass_object);
