@@ -493,7 +493,9 @@
                   <div class="description"></div>
                   <div class="clear"></div>
                   <div class="event-footer">
-                    <strong class="event-score">\${score}</strong>&nbsp;
+					<font id="pbicon"></font>
+					<font id="pvicon"></font>                    
+					<strong class="event-score">\${score}</strong>&nbsp;
 					<a id="evt-comment-\${id }" class="comments-link" href="\${cmturl}"><strong>\${commentCount }</strong>&nbsp;comments</a>
                   </div>
                 </div>
