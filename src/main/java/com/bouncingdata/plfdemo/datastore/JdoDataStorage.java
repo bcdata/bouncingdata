@@ -288,7 +288,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   @Override
   public void createUser(User user) {
     // vinhpq : add fail status active for register active mail
-    user.setEnabled(false);
+//    user.setEnabled(false);
 
     List<User> users = new ArrayList<User>();
     users.add(user);
