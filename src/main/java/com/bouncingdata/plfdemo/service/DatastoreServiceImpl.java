@@ -25,12 +25,14 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.DataCollection;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
+import com.bouncingdata.plfdemo.datastore.pojo.model.PageView;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.util.Action;
+import com.bouncingdata.plfdemo.util.PageType;
 import com.bouncingdata.plfdemo.util.Utils;
 
 @Transactional
@@ -748,5 +750,32 @@ public class DatastoreServiceImpl implements DatastoreService {
   @Override
   public void addDatasetTag(int datasetId, int tagId) {
     dataStorage.addDatasetTag(datasetId, tagId);
+  }
+  
+  @Override
+  public int increasePageView(int objectId, String type) {
+    if (PageType.ANALYSIS.getType().equalsIgnoreCase(type) || PageType.SCRAPER.getType().equalsIgnoreCase(type) 
+        || PageType.DATASET.getType().equalsIgnoreCase(type)) {
+      return dataStorage.increasePageView(objectId, type);
+    } else { 
+      logger.debug("Page type {} does not exist.", type);
+      return 0;
+    }
+  }
+  
+  @Override
+  public int getPageView(int objectId, String type) {
+    if (PageType.ANALYSIS.getType().equalsIgnoreCase(type) || PageType.SCRAPER.getType().equalsIgnoreCase(type) 
+        || PageType.DATASET.getType().equalsIgnoreCase(type)) {
+      PageView pv = dataStorage.getPageView(objectId, type);
+      if (pv != null) return pv.getCount();
+      else {
+        logger.debug("No pageview record for objectId: {}, type: {}", objectId, type);
+        return -1;
+      }
+    } else {
+      logger.debug("Page type {} does not exist.", type);
+      return -1;
+    }
   }
 }

@@ -45,6 +45,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
+import com.bouncingdata.plfdemo.util.PageType;
 import com.bouncingdata.plfdemo.util.Utils;
 
 @Controller
@@ -131,6 +132,10 @@ public class AnalysisController {
       
       List<Attachment> attachments = appStoreService.getAttachmentData(guid);
       model.addAttribute("attachments", attachments);
+      
+      // page view increment
+      int pageView = datastoreService.increasePageView(anls.getId(), PageType.ANALYSIS.getType());
+      model.addAttribute("pageView", pageView);
       
       return "analysis";
     } catch (Exception e) {

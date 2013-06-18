@@ -26,7 +26,7 @@ public class Analysis extends BcDataScript {
   @Persistent
   private String thumbnail;
   
-  @NotPersistent
+  @Persistent
   private int commentCount;
     
   public String getStatus() {

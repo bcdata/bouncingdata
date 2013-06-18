@@ -33,6 +33,7 @@
       <p><strong>Referenced by: </strong><a href="#">Football vs. NFL Revenues</a></p>
       <p><strong>Dataset used: </strong><a href="#">2011 Football Revenues</a></p>
       <p><strong>Last updated: </strong>${anls.shortLastUpdate }</p>
+      <p><strong>View count: </strong>${pageView }</p>
     </div>
     <div class="tag-set">
       <div class="tag-list">
@@ -194,7 +195,10 @@
       <div class="clear"></div>
       <div class="description anls-description">
         <h3 style="margin: 0 0 10px; cursor: pointer">Description</h3>
-        <span>${anls.description }</span>
+        <c:choose>
+          <c:when test="${empty anls.description }">No description</c:when>
+          <c:otherwise><span>${anls.description }</span></c:otherwise>
+        </c:choose>
       </div>
         
       <div class="comments-container">

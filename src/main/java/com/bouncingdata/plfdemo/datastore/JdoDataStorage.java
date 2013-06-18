@@ -32,6 +32,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.ExecutionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Following;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Group;
 import com.bouncingdata.plfdemo.datastore.pojo.model.GroupAuthority;
+import com.bouncingdata.plfdemo.datastore.pojo.model.PageView;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
@@ -414,7 +415,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       List<Analysis> anlses = (List<Analysis>) q.execute();
       anls = anlses.size() > 0 ? anlses.get(0) : null;
       if (anls != null) {
-        anls.setCommentCount(anls.getComments() != null ? anls.getComments().size() : 0);
         anls = pm.detachCopy(anls);
       }
       return anls;
@@ -559,6 +559,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       comment.setUser(user);
       comment.setAnalysis(analysis);
       analysis.getComments().add(comment);
+      analysis.setCommentCount(analysis.getCommentCount() + 1);
       pm.makePersistent(comment);
       pm.makePersistent(analysis);
       tx.commit();
@@ -577,9 +578,11 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Comment comment = pm.getObjectById(Comment.class, commentId);
     try {
       tx.begin();
-      // Analysis analysis = pm.getObjectById(Analysis.class,
-      // comment.getAnalysis().getId());
+      Analysis analysis = pm.getObjectById(Analysis.class, comment.getAnalysis().getId());
+      analysis.getComments().remove(comment); //?!
+      analysis.setCommentCount(analysis.getCommentCount() - 1);
       pm.deletePersistent(comment);
+      pm.makePersistent(analysis);
       tx.commit();
     } finally {
       if (tx.isActive()) tx.rollback();
@@ -607,7 +610,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     PersistenceManager pm = getPersistenceManager();
     try {
       Analysis anls = pm.getObjectById(Analysis.class, analysisId);
-      anls.setCommentCount(anls.getComments() != null ? anls.getComments().size() : 0);
       return pm.detachCopy(anls);
     } finally {
       pm.close();
@@ -947,9 +949,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       for (Activity ac : activities) {
         try {
           Analysis anls = pm.getObjectById(Analysis.class, ac.getObjectId());
-          // List<Comment> comments = getComments(ac.getObjectId());
-          List<Comment> comments = anls.getComments();
-          anls.setCommentCount(comments != null ? comments.size() : 0);
           ac.setObject(anls);
         } catch (Exception e) {
           logger.debug("", e);
@@ -988,7 +987,6 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
         try {
           Analysis anls = pm.getObjectById(Analysis.class, ac.getObjectId());
           List<Comment> comments = getComments(ac.getObjectId());
-          anls.setCommentCount(comments != null ? comments.size() : 0);
           ac.setObject(anls);
         } catch (Exception e) {
           iter.remove();
@@ -2463,6 +2461,47 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   public void removeDatasetTags(int dtsId, List<Tag> tags) {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public int increasePageView(int objectId, String type) {
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    try {
+      tx.begin();
+      Query q = pm.newQuery(PageView.class);
+      q.setFilter("objectId == " + objectId + " && type == \"" + type.toLowerCase() + "\"" );
+      List<PageView> pvs = (List<PageView>) q.execute();
+      PageView pv = pvs.size() > 0 ? pvs.get(0) : null;
+      if (pv != null) {
+        pv.setCount(pv.getCount() + 1);
+      } else {
+        // insert new row
+        pv = new PageView(objectId, 1, type);
+        pm.makePersistent(pv);
+      }
+      tx.commit();
+      return pv.getCount() - 1;
+    } finally {
+      if (tx.isActive()) tx.rollback();
+      pm.close();
+    }
+  }
+
+  @Override
+  public PageView getPageView(int objectId, String type) {
+    PersistenceManager pm = getPersistenceManager();
+    try {
+      Query q = pm.newQuery(PageView.class);
+      q.setFilter("objectId == " + objectId + " && type == \"" + type.toLowerCase() + "\"" );
+      List<PageView> pvs = (List<PageView>) q.execute();
+      PageView pv = pvs.size() > 0 ? pvs.get(0) : null;
+      if (pv != null) {
+        return pm.detachCopy(pv);
+      } else return null;
+    } finally {
+      pm.close();
+    }
   }
 
 }
