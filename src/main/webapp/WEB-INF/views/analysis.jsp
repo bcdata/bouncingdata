@@ -29,9 +29,9 @@
         <p class="published-date">Published on ${anls.shortCreateAt }</p>
         <div class="clear"></div>
       </div>
-      <p><strong>Reference: </strong><a href="#">http://www.economist.com/football</a></p>
-      <p><strong>Referenced by: </strong><a href="#">Football vs. NFL Revenues</a></p>
-      <p><strong>Dataset used: </strong><a href="#">2011 Football Revenues</a></p>
+      <p><strong>Reference: </strong></p>
+      <p><strong>Referenced by: </strong></p>
+      <p><strong>Dataset used: </strong></p>
       <p><strong>Last updated: </strong>${anls.shortLastUpdate }</p>
       <p><strong>View count: </strong>${pageView }</p>
     </div>
