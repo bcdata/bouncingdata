@@ -50,7 +50,21 @@ table {
 	border-spacing: 0;
 }
 
-
+.description{
+	overflow: hidden;
+	height: 37px;
+	width: 370px;
+}
+.privImage{
+	width: 26px;
+	height: 26.5px;
+	margin-left: 5px;
+}
+.publImage{
+	width: 24px;
+	height: 18px;
+	margin-left: 5px;
+}
 /*************     PAGE STYLES     *************/
 
 html {

@@ -300,6 +300,9 @@ public interface DatastoreService {
   List<Analysis> getMostPopularAnalyses();
   
   //----- Vinhpq : adding temporary functions for left menu ----
+  public boolean removeAnalysis(int anlsId);
+  
+  public boolean removeDataset(int dsId);
   
   public boolean addDatasetVote(int userId, Dataset ds, DatasetVote dsVote) throws Exception;
   

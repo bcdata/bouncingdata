@@ -525,6 +525,16 @@ public class DatastoreServiceImpl implements DatastoreService {
   
   //----- Vinhpq : adding temporary functions for left menu ----  
   @Override
+  public boolean removeAnalysis(int anlsId) {
+	  return dataStorage.removeAnalysis(anlsId);
+  }
+  
+  @Override
+  public boolean removeDataset(int dsId){
+	  return dataStorage.removeDataset(dsId);
+  }
+  
+  @Override
   public List<Analysis> getPopularAnalysesIn1Month(int startPoint, int numrows) {
     return dataStorage.getPopularAnalysesIn1Month(startPoint, numrows);
   }

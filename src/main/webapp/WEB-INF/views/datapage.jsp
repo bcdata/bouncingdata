@@ -10,7 +10,58 @@
 	};
 	com.bouncingdata.Dataset.init(dataset);
 </script>
-
+<script>
+$(function() {
+	
+	$( "#dels-ds" ).click(function() {
+		$("#item-del-name").html("'<b style=\"color: royalblue;\">${dataset.name}</b>'");
+        $( "#dialog-confirm-delete" ).dialog( "open" );
+    });
+	
+	$( "#dialog-confirm-delete" ).dialog({
+	  autoOpen: false,
+	  resizable: false,
+	  height:'auto',
+	  minHeight: 140,
+      modal: true,
+      buttons: {
+        "Delete": function() {
+      	  $("#progress-del-img").show();
+      	  var iguid = "${dataset.guid}";
+      	  var iname = "${dataset.name}";
+      	  
+      	  //pvdels : page view delete stream 
+      	  var url = '<c:url value="/dataset/delds"/>';
+      	  debugger;
+      	  
+      	  //process delete here 
+      	  $.ajax({
+				type : "post",
+				url :   url,
+				data : {
+					"iguid" : iguid,
+					"iname" : iname
+				},
+				success : function(res) {
+					$( "#dialog-confirm-delete" ).dialog( "close" );
+					$("#progress-del-img").hide();
+					
+					if (res['code'] < 0) {
+						window.alert("Failed to delete!");
+				        return;
+					}else{
+						window.location='<c:url value="/stream/${pageId}/${fm}/${tp}"/>';
+					}
+				}
+			});
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+});
+</script>
 <style>
 	#q{
 		width: 98%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
@@ -59,9 +110,7 @@
       
       </div>&nbsp;
       <c:if test="${isOwner }">
-        <a class="add-tag-link" href="javascript:void(0);">
-          Add tag
-        </a>
+        <a class="add-tag-link" href="javascript:void(0);">Add tag</a>
         <div class="add-tag-popup" style="display: none;">
           <input type="text" id="add-tag-input" />
           <input type="button" value="Add" id="add-tag-button" />
@@ -110,6 +159,9 @@
           <h3 class="dataset-score score">${dataset.score}</h3>&nbsp;
           <a href="javascript:void(0);" class="action vote-up dataset-vote-up">Vote up</a>&nbsp;&nbsp;
           <a href="javascript:void(0);" class="action vote-down dataset-vote-down">Vote down</a>&nbsp;&nbsp;
+          <c:if test="${isOwner}">
+          	<a id="dels-ds" href="javascript:void(0);" >Delete</a>&nbsp;&nbsp;
+          </c:if>
           <a href="javascript:void(0)" class="action dataset-action dataset-embed-button" id="dataset-embed-button">Embed</a>&nbsp;&nbsp;
           <a href="<c:url value="/dataset/dl/csv/${dataset.guid}"/>" class="action dataset-action">Download CSV</a>&nbsp;&nbsp;
           <a href="<c:url value="/dataset/dl/json/${dataset.guid}"/>" class="action dataset-action">Download JSON</a>
@@ -234,6 +286,13 @@
           </c:otherwise>
         </c:choose>
       </div>
+      <!-- vinhpq : popup delete item -->
+		<div id="dialog-confirm-delete" title="Delete item?" >
+		  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>The <font id="item-del-name"></font> item will be deleted and cannot be recovered. Are you sure?</p>
+		  <div id="progress-del-img" style="display:none">
+			<img src="<c:url value="/resources/images/wait.gif" />" style="vertical-align: middle;height: 18px;width: 18px; margin-right: 3px;"> waiting...
+		  </div>
+		</div>
       <!-- <div class="comments-container">
         <h3 class="comments-title">
           <a href="javascript:void(0);" onclick="$('#comment-form').toggle('slow');">Comment</a>

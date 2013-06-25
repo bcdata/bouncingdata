@@ -507,6 +507,10 @@ public interface DataStorage {
   
   public List<Tag> get10Tags();
   
+  public boolean removeDataset(int dsId);
+  
+  public boolean removeAnalysis(int anlsId);
+  
   public void resetPassword(int userId, String newpass);
   
   public void changeActiveRegisterStatus(int userId);

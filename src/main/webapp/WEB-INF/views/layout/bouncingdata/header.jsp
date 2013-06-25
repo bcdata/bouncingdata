@@ -497,6 +497,7 @@
 					<font id="pvicon"></font>                    
 					<strong class="event-score">\${score}</strong>&nbsp;
 					<a id="evt-comment-\${id }" class="comments-link" href="\${cmturl}"><strong>\${commentCount }</strong>&nbsp;comments</a>
+					<font id="delicon"></font> 
                   </div>
                 </div>
                 <div class="clear"></div>

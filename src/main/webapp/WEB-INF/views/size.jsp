@@ -60,7 +60,7 @@
     <div class="editor-size-area">
       <div class="size-tabs ui-tabs" id="size-tabs">
         <ul>
-          <li><a href="#size-viz">Visualization</a></li>
+          <li><a href="#size-viz">Viz</a></li>
           <li><a href="#size-data">Data</a></li>
           <li><a href="#size-code">Code</a></li>
         </ul>

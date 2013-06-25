@@ -36,7 +36,7 @@ public interface BcDatastore {
   /**
    * @param datasetName
    */
-  void dropDataset(String datasetName);
+  boolean dropDataset(String datasetName);
   
   void getCsvStream(String dsFullname, OutputStream os) throws Exception;
 

@@ -421,7 +421,7 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
   }
 
   @Override
-  public void dropDataset(String dsFullname) {
+  public boolean dropDataset(String dsFullname) {
     Connection conn = null;
     Statement st = null;
     try {
@@ -430,11 +430,13 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
       String sql = "DROP TABLE `" + dsFullname + "`";
       st.executeUpdate(sql);
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+//      throw new RuntimeException(e);
+      return false;
     } finally {
       if (st != null) try { st.close(); } catch(Exception e) {}
       if (conn != null) try { conn.close(); } catch (Exception e) {}
     }
+    return true;
   }
   
   public int getDatasetSize(String dsFullname) {

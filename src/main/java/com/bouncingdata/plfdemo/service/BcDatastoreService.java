@@ -48,6 +48,10 @@ public class BcDatastoreService {
   public List<Object[]> getDatasetSearchQuery(String query) throws Exception {
     return jdbcBcDatastore.getDatasetSearchQuery(query);
   }
+  
+  public boolean dropDataset(String dsFullname) throws Exception {
+    return jdbcBcDatastore.dropDataset(dsFullname);
+  }
   //--- end of search function
   
   public String getDatasetToString(String dataset, int begin, int maxNumber) throws Exception {

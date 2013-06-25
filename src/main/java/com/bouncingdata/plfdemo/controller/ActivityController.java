@@ -16,9 +16,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
@@ -280,8 +282,8 @@ public class ActivityController {
       model.addAttribute("topDatasets", mostPopularDatasets);
       
       session.setAttribute("pageId", page);
-      model.addAttribute("fm", filter);
-      model.addAttribute("tp", type);
+      session.setAttribute("fm", filter);
+      session.setAttribute("tp", type);
       
     } catch (Exception e) {
       logger.debug("Failed to load activity stream", e);

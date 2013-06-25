@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -27,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
+import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.Attachment;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardDetail;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.DashboardPosition;
@@ -44,6 +47,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
 import com.bouncingdata.plfdemo.service.ApplicationStoreService;
+import com.bouncingdata.plfdemo.service.BcDatastoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 import com.bouncingdata.plfdemo.util.PageType;
 import com.bouncingdata.plfdemo.util.Utils;
@@ -58,8 +62,95 @@ public class AnalysisController {
 	private DatastoreService datastoreService;
 
 	@Autowired
+	private BcDatastoreService userDataService;
+	  
+	@Autowired
 	private ApplicationStoreService appStoreService;
 
+	  
+    @RequestMapping(value={"/delanls"}, method=RequestMethod.POST)
+    public @ResponseBody ActionResult deletePageViewStream(@RequestParam(value="iguid", required=true) String iguid,
+														  @RequestParam(value="iname", required=true) String iname,
+														   WebRequest request, 
+														   ModelMap model, 
+														   Principal principal,
+														   HttpSession session) {
+	  
+    	User user = (User) ((Authentication)principal).getPrincipal();
+    	try{
+		  
+    		ObjectMapper logmapper = new ObjectMapper();
+    		String data = logmapper.writeValueAsString(new String[] {"0"});				   	 
+    		datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
+    		
+    		Analysis anl = datastoreService.getAnalysisByGuid(iguid);
+			  
+    		if(anl==null || !anl.getName().equals(iname))
+			  return new ActionResult(-1, "Type of the item isn't found !");
+    			
+    		// delete Analysis  
+    		boolean isRemoveAnls =  datastoreService.removeAnalysis(anl.getId());
+		  
+    		// delete Analysis file in server
+    		boolean isDeletefolder = false;
+		  
+    		if (isRemoveAnls)
+			  isDeletefolder = appStoreService.deleteAnalysisDirectory(iguid);
+		  
+    		if(isRemoveAnls && isDeletefolder)
+			  return new ActionResult(0, "Delete Analysis successfully !");  
+    		
+    	}catch(Exception e) {
+    		logger.debug("Failed to log action", e);
+    	}
+	  
+    	return new ActionResult(-1, "Can't delete analysis !");
+    }
+	
+	@RequestMapping(value={"/dels"}, method=RequestMethod.POST)
+	public @ResponseBody ActionResult deleteAnalysisStream(@RequestParam(value="iguid", required=true) String iguid,
+			  												@RequestParam(value="itype", required=true) String itype,
+			  												@RequestParam(value="iname", required=true) String iname,
+															 WebRequest request, 
+															 ModelMap model, 
+															 Principal principal,
+															 HttpSession session) {
+		  
+	  User user = (User) ((Authentication)principal).getPrincipal();
+      try{
+		  
+	      ObjectMapper logmapper = new ObjectMapper();
+	      String data = logmapper.writeValueAsString(new String[] {"0"});				   	 
+	      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
+		  
+		  if(itype.toLowerCase().equals("analysis")){
+			  Analysis anl = datastoreService.getAnalysisByGuid(iguid);
+			  
+			  if(anl==null || !anl.getName().equals(iname))
+				  return new ActionResult(-1, "Type of the item isn't found !");
+			  
+			  // delete Analysis  
+			  boolean isRemoveAnls =  datastoreService.removeAnalysis(anl.getId());
+			  
+			  // delete Analysis file in server
+			  boolean isDeletefolder = false;
+			  
+			  if (isRemoveAnls)
+				  isDeletefolder = appStoreService.deleteAnalysisDirectory(iguid);
+			  
+			  if(isRemoveAnls && isDeletefolder)
+				  return new ActionResult(0, "Delete Analysis successfully !");  
+			  
+		  }else
+			  return new ActionResult(-1, "Type of the item isn't found !");
+		  
+      }catch(Exception e) {
+          logger.debug("Failed to log action", e);
+      }
+	  
+	  return new ActionResult(-1, "User isn't found !");
+	}
+	
 	@RequestMapping(value="/{guid}", method=RequestMethod.GET)
 	public String viewAnalysis(@PathVariable String guid, ModelMap model, Principal principal) {
     logger.debug("Received request for analysis {}", guid);

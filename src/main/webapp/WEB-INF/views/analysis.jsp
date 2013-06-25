@@ -20,6 +20,58 @@
     com.bouncingdata.Analysis.init(anls, dbDetail);
   }
 </script>
+<script>
+$(function() {
+	
+	$( "#del-anls" ).click(function() {
+		$("#item-del-name").html("'<b style=\"color: royalblue;\">${anls.name}</b>'");
+        $( "#dialog-confirm-delete" ).dialog( "open" );
+    });
+	
+	$( "#dialog-confirm-delete" ).dialog({
+	  autoOpen: false,
+	  resizable: false,
+	  height:'auto',
+	  minHeight: 140,
+      modal: true,
+      buttons: {
+        "Delete": function() {
+      	  $("#progress-del-img").show();
+      	  var iguid = "${anls.guid}";
+      	  var iname = "${anls.name}";
+      	  
+      	  //pvdels : page view delete stream 
+      	  var url = '<c:url value="/anls/delanls"/>';
+      	  debugger;
+      	  
+      	  //process delete here 
+      	  $.ajax({
+				type : "post",
+				url :   url,
+				data : {
+					"iguid" : iguid,
+					"iname" : iname
+				},
+				success : function(res) {
+					$( "#dialog-confirm-delete" ).dialog( "close" );
+					$("#progress-del-img").hide();
+					
+					if (res['code'] < 0) {
+						window.alert("Failed to delete!");
+				        return;
+					}else{
+						window.location='<c:url value="/stream/${pageId}/${fm}/${tp}"/>';
+					}
+				}
+			});
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+});
+</script>
 <div id="main-content" class="analysis-container">
   <div class="analysis-info right-content">
     <div class="anls-summary summary">
@@ -105,6 +157,7 @@
           <a href="javascript:void(0)" class="action anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
           <c:if test="${isOwner }">
             <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="action anls-action" title="Edit this analysis">Edit</a>&nbsp;&nbsp;
+            <a id="del-anls" href="javascript:void(0)" title="Delete this analysis">Delete</a>&nbsp;&nbsp;
           </c:if>
           <a href="javascript:void(0);" class="action anls-action anls-download">Download</a>
           <div class="action-hidden-menu anls-action-hidden-menu" style="display: none;">
@@ -120,7 +173,7 @@
           <div class="embedded-options" style="float: left; margin-left: 15px;">     
             <div>  
               <strong>Include tab</strong><br />
-              <input id="include-viz" type="checkbox" checked />Dashboard<br />
+              <input id="include-viz" type="checkbox" checked />Viz<br />
               <input id="include-code" type="checkbox"/>Code<br />
               <input id="include-data" type="checkbox"/>Data<br />
             </div><br />
@@ -138,7 +191,7 @@
       <div class="anls-header-rule"></div>
       <div class="anls-content anls-tab-container ui-tabs" id="anls-content">
         <ul class="anls-tabs">
-          <li class="anls-tab"><a href="#anls-dashboard">Dashboard</a></li>
+          <li class="anls-tab"><a href="#anls-dashboard">Viz</a></li>
           <li class="anls-tab"><a href="#anls-code">Code</a></li>
           <li class="anls-tab"><a href="#anls-data">Data</a></li>
         </ul>
@@ -226,5 +279,11 @@
     </div>
     
   </div>
-  
+  <!-- vinhpq : popup delete item -->
+  <div id="dialog-confirm-delete" title="Delete item?" >
+	  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>The <font id="item-del-name"></font> item will be deleted and cannot be recovered. Are you sure?</p>
+	  <div id="progress-del-img" style="display:none">
+		<img src="<c:url value="/resources/images/wait.gif" />" style="vertical-align: middle;height: 18px;width: 18px; margin-right: 3px;"> waiting...
+	  </div>
+  </div>
 </div>

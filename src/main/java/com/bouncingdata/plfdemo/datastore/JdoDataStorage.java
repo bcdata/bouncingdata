@@ -822,7 +822,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     }
 
   }
-
+  
   @Override
   public void updateActivity(Activity activity) {
     PersistenceManager pm = getPersistenceManager();
@@ -1810,7 +1810,106 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     }
     return null;
   }
-
+  
+  @Override
+  public boolean removeDataset(int dsId) {
+	  
+	  PersistenceManager pm = getPersistenceManager();
+	  Transaction tx = pm.currentTransaction();
+	  Query q = null;
+	  long deleted = 0;
+	  try {
+	     tx.begin();
+	     
+	     // delete 2 tables (comment vote & comment) 
+	     q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM `comments` WHERE `dataset` = " + dsId);
+	     q.setClass(Comment.class);
+	     List<Comment> cmt = (List<Comment>) q.execute();
+	     
+	     if(cmt!=null && cmt.size() > 0){
+	    	 for (int i = 0; i < cmt.size(); i++) {
+	    		 q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `comment_votes` WHERE `comment` = " + cmt.get(i).getId());
+	    		 q.execute();
+	    	 }
+	     }
+	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `comments` WHERE `dataset` = " + dsId);
+	     q.execute();
+	     
+	     // delete dataset tag 
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `Dataset_tags` WHERE `id_EID` = " + dsId);
+	     q.execute();
+	     
+	     // delete 2 tables (dataset vote & dataset) 
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `dataset_votes` WHERE `dataset` = " + dsId);
+	     q.execute();
+	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `datasets` WHERE `id` = " + dsId);
+	     q.execute();
+//	     deleted = q.deletePersistentAll();
+//	     System.out.println("4.-----Result = " + deleted);
+	     tx.commit();
+	  } catch(Exception e){ 
+		  tx.rollback();
+		  pm.close();
+		  return false;
+	  } finally {
+	     if (tx.isActive()) tx.rollback();
+	     pm.close();
+	  }
+	  
+	  return true;
+  }
+  
+  @Override
+  public boolean removeAnalysis(int anlsId) {
+	  
+	  PersistenceManager pm = getPersistenceManager();
+	  Transaction tx = pm.currentTransaction();
+	  Query q = null;
+		    
+	  try {
+	     tx.begin();
+	     
+	     // delete 2 tables (comment vote & comment) 
+	     q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM `comments` WHERE `analysis` = " + anlsId);
+	     q.setClass(Comment.class);
+	     List<Comment> cmt = (List<Comment>) q.execute();
+	     
+	     if(cmt!=null && cmt.size() > 0){
+	    	 for (int i = 0; i < cmt.size(); i++) {
+	    		 q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `comment_votes` WHERE `comment` = " + cmt.get(i).getId());
+	    		 q.execute();
+	    	 }
+	     }
+	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `comments` WHERE `analysis` = " + anlsId);
+	     q.execute();
+	     
+	     // delete analyses tag 
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `Analysis_tags` WHERE `id_EID` = " + anlsId);
+	     q.execute();
+	     
+	     // delete 2 tables (analyses vote & analyses) 
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `analysis_votes` WHERE `analysis` = " + anlsId);
+	     q.execute();
+	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `analyses` WHERE `id` = " + anlsId);
+	     q.execute();
+	     
+	     tx.commit();
+	  } catch(Exception e){ 
+		  tx.rollback();
+		  pm.close();
+		  return false;
+	  } finally {
+	     if (tx.isActive()) tx.rollback();
+	     pm.close();
+	  }
+	  
+	  return true;
+  }
+  
   @Override
   public void changeActiveRegisterStatus(int userId) {
     PersistenceManager pm = getPersistenceManager();

@@ -81,6 +81,89 @@ public class DatasetController {
     this.logDir = ld;
   }
 
+  @RequestMapping(value={"/delds"}, method=RequestMethod.POST)
+  public @ResponseBody ActionResult deletePageViewStream(@RequestParam(value="iguid", required=true) String iguid,
+														  @RequestParam(value="iname", required=true) String iname,
+														   WebRequest request, 
+														   ModelMap model, 
+														   Principal principal,
+														   HttpSession session) {
+	  
+	  User user = (User) ((Authentication)principal).getPrincipal();
+      try{
+		  
+	      ObjectMapper logmapper = new ObjectMapper();
+	      String data = logmapper.writeValueAsString(new String[] {"0"});				   	 
+	      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
+      
+	      Dataset ds = datastoreService.getDatasetByGuid(iguid);
+		  
+		  if(ds==null || !ds.getName().equals(iname))
+			  return new ActionResult(-1, "Type of the item isn't found !");
+		  
+		  // delete dataset  
+		  boolean isRemoveDs = datastoreService.removeDataset(ds.getId());
+		  
+		  // delete table dataset in bcdatastore db
+		  boolean isDropDs = false;
+		  
+		  if (isRemoveDs)
+			  isDropDs = userDataService.dropDataset(ds.getName());
+		  
+		  if(isRemoveDs && isDropDs)
+			  return new ActionResult(0, "Delete Dataset successfully !");
+		  
+      }catch(Exception e) {
+          logger.debug("Failed to log action", e);
+      }
+	  
+	  return new ActionResult(-1, "Can't delete Dataset !");
+  }
+  
+  @RequestMapping(value={"/dels"}, method=RequestMethod.POST)
+  public @ResponseBody ActionResult deleteDatasetStream(@RequestParam(value="iguid", required=true) String iguid,
+		  												  @RequestParam(value="itype", required=true) String itype,
+		  												  @RequestParam(value="iname", required=true) String iname,
+														   WebRequest request, 
+														   ModelMap model, 
+														   Principal principal,
+														   HttpSession session) {
+	  
+	  User user = (User) ((Authentication)principal).getPrincipal();
+      try{
+		  
+	      ObjectMapper logmapper = new ObjectMapper();
+	      String data = logmapper.writeValueAsString(new String[] {"0"});				   	 
+	      datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.GET_MORE_ACTIVITY,data);
+	      
+		  if(itype.toLowerCase().equals("dataset")){
+			  Dataset ds = datastoreService.getDatasetByGuid(iguid);
+			  
+			  if(ds==null || !ds.getName().equals(iname))
+				  return new ActionResult(-1, "Type of the item isn't found !");
+			  
+			  // delete dataset  
+			  boolean isRemoveDs =  datastoreService.removeDataset(ds.getId());
+			  
+			  // delete table dataset in bcdatastore db
+			  boolean isDropDs = false;
+			  
+			  if (isRemoveDs)
+				  isDropDs = userDataService.dropDataset(ds.getName());
+			  
+			  if(isRemoveDs && isDropDs)
+				  return new ActionResult(0, "Delete Dataset successfully !");  
+			  
+		  }else
+			  return new ActionResult(-1, "Type of the item isn't found !");
+		  
+      }catch(Exception e) {
+          logger.debug("Failed to log action", e);
+      }
+	  
+	  return new ActionResult(-1, "User isn't found !");
+  }
+  
   @RequestMapping(value = { "/upload" }, method = RequestMethod.GET)
   public String getUploadPage(ModelMap model, Principal principal, HttpSession session) {
     try {

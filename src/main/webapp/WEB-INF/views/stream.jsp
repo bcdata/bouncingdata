@@ -5,14 +5,73 @@
   //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/home.css", "home");
   com.bouncingdata.ActivityStream.init();
 </script>
-<style>
-	.description{
-		overflow: hidden;
-		height: 40px;
-		width: 370px;
-	}
-</style>
+
+<script>
+$(function() {
 	
+	$( ".link-del-item" ).click(function() {
+		$("#item-del-infor").attr("dvid",$(this).attr("dvid"));
+		$("#item-del-infor").attr("iguid",$(this).attr("iguid"));
+		$("#item-del-infor").attr("itype",$(this).attr("itype"));
+		$("#item-del-infor").attr("iname",$(this).attr("iname"));
+		
+		$("#item-del-name").html("'<b style=\"color: royalblue;\">" + $(this).attr("iname") + "</b>'");
+        $( "#dialog-confirm-delete" ).dialog( "open" );
+    });
+	
+	$( "#dialog-confirm-delete" ).dialog({
+	  autoOpen: false,
+	  resizable: false,
+	  height:'auto',
+	  minHeight: 140,
+      modal: true,
+      buttons: {
+        "Delete": function() {
+      	  $("#progress-del-img").show();
+      	  var dvid = $("#item-del-infor").attr("dvid");
+      	  var iguid = $("#item-del-infor").attr("iguid");
+      	  var itype = $("#item-del-infor").attr("itype");
+      	  var iname = $("#item-del-infor").attr("iname");
+      	  
+      	  var url = '';
+      	  debugger;
+      	  if(itype=='Dataset')
+      		  url = '<c:url value="/dataset/dels"/>';
+          else if(itype=='Analysis')
+        	  url = '<c:url value="/anls/dels"/>';
+       	  else{
+       		  window.alert("Cant find type of the item!");
+	          return;
+       	  }
+      	  //process delete here 
+      	  $.ajax({
+				type : "post",
+				url :   url,
+				data : {
+					"iguid" : iguid,
+					"itype" : itype,
+					"iname" : iname
+				},
+				success : function(res) {
+					$( "#dialog-confirm-delete" ).dialog( "close" );
+					$("#progress-del-img").hide();
+					
+					if (res['code'] < 0) {
+						window.alert("Failed to delete!");
+				        return;
+					}else{
+						$("div[aid='"+dvid+"']").remove();
+					}
+				}
+			});
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+});
+</script>
 <div id="main-content" class="homepage-container">
   <div class="right-content">
     <div class="right-content-section most-popular-section">
@@ -241,13 +300,13 @@
                   <div class="event-footer">
                   	<c:if test="${pageId eq 'streambyself'}">
                   		<c:if test="${anls.flag eq 'true'}">	
-							<img src="<c:url value="/resources/images/icon-public.png" />" style="width: 26px;height: 20px;margin-left: 5px;" title="Public">
+							<img src="<c:url value="/resources/images/icon-public.png" />" title="Public" class="publImage">
 						</c:if>
 					</c:if>
                   
                     <c:if test="${pageId eq 'streambyself'}">
 						<c:if test="${anls.flag eq 'false'}">
-							<img src="<c:url value="/resources/images/icon-private.png" />" style="width: 26px;height: 28px;margin-left: 5px;" title="Private">
+							<img src="<c:url value="/resources/images/icon-private.png" />" title="Private" class="privImage">
 						</c:if>
 					</c:if> 
 					
@@ -267,7 +326,11 @@
                     																  	 <c:otherwise>#</c:otherwise>
                     																  </c:choose>">
                     																  		<strong>${anls.commentCount }</strong>&nbsp;comments</a>
-					                   																  		
+					<c:if test="${pageId eq 'streambyself'}">
+						<a href="javascript:void(0)" class="link-del-item" dvid="${anls.id }" iguid="${anls.guid}" itype="${anls.classType}" iname="${anls.name}">
+							<img src="<c:url value="/resources/images/trash.png" />" style="width: 13px;" title="delete">
+						</a>
+					</c:if>                   																  		
                   </div>
                 </div>
                 <div class="clear"></div>
@@ -284,4 +347,13 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- vinhpq : popup delete item -->
+<div id="dialog-confirm-delete" title="Delete item?" >
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>The <font id="item-del-name"></font> item will be deleted and cannot be recovered. Are you sure?</p>
+  <div id="progress-del-img" style="display:none">
+	<img src="<c:url value="/resources/images/wait.gif" />" style="vertical-align: middle;height: 18px;width: 18px; margin-right: 3px;"> waiting...
+  </div>
+  <label id="item-del-infor"></label>
 </div>

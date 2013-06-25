@@ -95,8 +95,9 @@ ActivityStream.prototype.appendFeeds = function(feedList, pageId) {
   var htmlToAdd = [];
   var idsToAdd = [];
   
-  var pv = '<img src=\"'+ ctx + '/resources/images/icon-private.png\" style=\"width: 26px;height: 28px;margin-left: 5px;\" title=\"Private\">';
-  var pb = '<img src=\"'+ ctx + '/resources/images/icon-public.png\" style=\"width: 26px;height: 20px;margin-left: 5px;\" title=\"Public\">';
+  var pv = '<img src=\"'+ ctx + '/resources/images/icon-private.png\" class=\"privImage\" title=\"Private\">';
+  var pb = '<img src=\"'+ ctx + '/resources/images/icon-public.png\" class=\"publImage\" title=\"Public\">';
+  var delImg = '<img src=\"'+ ctx + '/resources/images/trash.png\" style=\"width: 13px;\" title=\"delete\">';
   
   for (index in feedList) {
     var feed = feedList[index];
@@ -136,6 +137,7 @@ ActivityStream.prototype.appendFeeds = function(feedList, pageId) {
     if(pageId == 'streambyself'){
     	feed.flag==true? $('#pbicon', $feed).append(pb) : '';
     	feed.flag==false? $('#pvicon', $feed).append(pv) : '';
+    	$('#delicon', $feed).append(delImg);
     }
     
     if (feed.tags) {

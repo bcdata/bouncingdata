@@ -45,6 +45,19 @@ public class ApplicationStoreService {
     return storePath;
   }
   
+  public boolean deleteAnalysisDirectory(String guid) throws IOException {
+	  
+	  File anlsDir = new File(storePath + Utils.FILE_SEPARATOR + guid);
+	  try{
+		  if (anlsDir.exists()&&anlsDir.isDirectory()){
+			  FileUtils.deleteDirectory(anlsDir);
+		  }
+	  }catch(Exception e){
+		  return false;
+	  }
+	  return true;
+  }
+  
   public void createApplicationFile(String guid, String language, String code) throws IOException {
     String storeAbsPath = storePath; //servletContext.getRealPath(Utils.FILE_SEPARATOR + storePath);
     logger.debug("Application store absolute path: {}", storeAbsPath);
