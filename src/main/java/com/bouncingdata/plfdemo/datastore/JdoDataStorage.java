@@ -1844,6 +1844,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `dataset_votes` WHERE `dataset` = " + dsId);
 	     q.execute();
 	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `analysis_dataset` WHERE `dataset` = " + dsId);
+	     q.execute();
+	     
 	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `datasets` WHERE `id` = " + dsId);
 	     q.execute();
 //	     deleted = q.deletePersistentAll();
@@ -1892,6 +1895,12 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	     
 	     // delete 2 tables (analyses vote & analyses) 
 	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `analysis_votes` WHERE `analysis` = " + anlsId);
+	     q.execute();
+	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `analysis_dataset` WHERE `analysis` = " + anlsId);
+	     q.execute();
+	     
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `visualizations` WHERE `analysis` = " + anlsId);
 	     q.execute();
 	     
 	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `analyses` WHERE `id` = " + anlsId);
