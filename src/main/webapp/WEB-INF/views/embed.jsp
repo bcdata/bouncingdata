@@ -19,6 +19,7 @@
   var ctx = '${pageContext.request.contextPath}';
 	var $wrapper = $('#bcdata-embedded-wrapper');
 </script>
+
 <c:choose>
   <c:when test="${not empty errorMsg }">
     <script>
@@ -28,10 +29,10 @@
   <c:when test='${mode eq "default"}'>
     <script>
       var dbDetail = JSON.parse('${dashboardDetail}');
-      var $dashboard = $('<div class="bcdata-dashboard"></div>');
-      $dashboard.height('600px').width('800px').css('position', 'relative');
+      var $dashboard = $('<div class="bcdata-dashboard" style="height: 100%; width: 100%; position: relative;margin-top: 13px;"></div>');
+      /* $dashboard.height('600px').width('800px').css('position', 'relative'); */
       $wrapper.append($dashboard);
-      view(dbDetail.visualizations, dbDetail.dashboard, $dashboard);
+      view(dbDetail.visualizations, dbDetail.dashboard, $dashboard,'${anls.description}');
     </script>
   </c:when>
   <c:when test='${mode eq "single"}'>
@@ -39,10 +40,10 @@
       <c:when test="${tabs[0] eq 'v'}">
         <script>
         	var dbDetail = JSON.parse('${dashboardDetail}');
-        	var $dashboard = $('<div class="bcdata-dashboard"></div>');
-        	$dashboard.height('600px').width('800px').css('position', 'relative');
+        	var $dashboard = $('<div class="bcdata-dashboard" style="height: 100%; width: 100%; position: relative;margin-top: 13px;"></div>');
+/*         	$dashboard.height('600px').width('800px').css('position', 'relative'); */
         	$wrapper.append($dashboard);
-        	view(dbDetail.visualizations, dbDetail.dashboard, $dashboard);
+        	view(dbDetail.visualizations, dbDetail.dashboard, $dashboard,'${anls.description}');
         </script>
       </c:when>
       <c:when test="${tabs[0] eq 'c'}">
@@ -109,13 +110,13 @@
     <c:forEach items="${tabs }" var="tab">
       <c:if test="${tab eq 'v'}">
         <script>
-          $('.tabs', $wrapper).tabs('add', '#v', 'Dashboard');
+          $('.tabs', $wrapper).tabs('add', '#v', '  Viz  ');
           var $panel = $('.tabs #v', $wrapper);
-          var $dashboard = $('<div class="bcdata-dashboard"></div>');
-          $dashboard.height('600px').width('800px').css('position', 'relative');
+          var $dashboard = $('<div class="bcdata-dashboard" style="height: 100%; width: 100%; position: relative;margin-top: 13px;"></div>');
+/*           $dashboard.height('600px').width('800px').css('position', 'relative'); */
           $panel.append($dashboard);
           var dbDetail = JSON.parse('${dashboardDetail}');
-          view(dbDetail.visualizations, dbDetail.dashboard, $dashboard);
+          view(dbDetail.visualizations, dbDetail.dashboard, $dashboard, '${anls.description}');
         </script>
       </c:if>
       <c:if test="${tab eq 'c'}">
@@ -172,7 +173,8 @@
                 $attachment.appendTo($dataTab);
                 var $table = $('table', $attachment);
                 var data = '${attachment.data}';
-                renderDatatable($.parseJSON(data), $table);
+                renderDatatable($.parseJSON(data), $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false});
+                
               });
             </script>
           </c:forEach>

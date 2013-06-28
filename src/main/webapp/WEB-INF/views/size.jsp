@@ -20,6 +20,14 @@
     com.bouncingdata.Editor.initSize(anls, dbDetail);
   }
 </script>
+<style>
+
+.space-item {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+</style>
 
 <div id="main-content" class="editor-container">
   <div class="top-bar">
@@ -60,9 +68,9 @@
     <div class="editor-size-area">
       <div class="size-tabs ui-tabs" id="size-tabs">
         <ul>
-          <li><a href="#size-viz">Viz</a></li>
-          <li><a href="#size-data">Data</a></li>
-          <li><a href="#size-code">Code</a></li>
+          <li><a href="#size-viz"  style="padding-left: 20px;padding-right: 20px;">Viz</a></li>
+          <li><a href="#size-data" style="padding-left: 20px;padding-right: 20px;">Data</a></li>
+          <li><a href="#size-code" style="padding-left: 20px;padding-right: 20px;">Code</a></li>
         </ul>
         <div class="clear"></div>
         <div class="size-viz ui-tabs-hide" id="size-viz">

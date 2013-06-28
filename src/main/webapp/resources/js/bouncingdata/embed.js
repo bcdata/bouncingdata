@@ -1,4 +1,4 @@
-function view(vizList, dashboardPos, $container) {
+function view(vizList, dashboardPos, $container, description) {
   var count = 0, defaultSize = 380;
   $container.empty();
   for (v in vizList) {
@@ -6,14 +6,14 @@ function view(vizList, dashboardPos, $container) {
     viz.name = v;
     var pos = dashboardPos[viz.guid];
     if (pos) {
-      addViz(pos.x, pos.y, pos.w, pos.h, viz, $container);
+      addViz(pos.x, pos.y, pos.w, pos.h, viz, $container,description);
     }
-    else addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container);
+    else addViz((count%2 + 1)*10 + ((count%2) * defaultSize), (Math.floor(count/2)+1)*10 + (Math.floor(count/2) * defaultSize), defaultSize, defaultSize, viz, $container,description);
     count++;
   }
 }
 
-function addViz(x, y, w, h, viz, $container) {
+function addViz(x, y, w, h, viz, $container,description) {
   if (!viz || !viz.source) return;
 
   var type = viz.type.toLowerCase();
@@ -57,6 +57,13 @@ function addViz(x, y, w, h, viz, $container) {
     console.debug("Unknown visualization type!");
     return;
   }
+  
+  //add description
+  $inner = $('<div class="clear"></div>');
+  $inner.load().appendTo($vizContainer);
+
+  $inner = $('<div class="description anls-description"><h3 style="margin: 0 0 10px; cursor: pointer">Description</h3><span>'+description+'</span></div>');
+  $inner.load().appendTo($vizContainer);
   
   $vizContainer.css('position', 'absolute')
     .css('top', y + 'px')

@@ -32,7 +32,6 @@ $(function() {
       	  
       	  //pvdels : page view delete stream 
       	  var url = '<c:url value="/dataset/delds"/>';
-      	  debugger;
       	  
       	  //process delete here 
       	  $.ajax({
@@ -78,6 +77,17 @@ $(function() {
 	#imgsearchquery {
 		margin-left: 7px;margin-top: 6px;cursor: pointer;width: 14px;height: 16px;
 	}
+	#embedded-link-text-ds{
+		float: left;
+		border: 1px solid #CCCCCC;
+		resize: vertical;
+		min-height: 80px;
+		width: 520px;
+		padding: 4px;
+		font-family: monospace;
+		color: #333;
+		border-radius: 2px;
+	}
 </style>
 <div id="main-content" class="datapage-container">
   <div class="data-info right-content"> 
@@ -88,9 +98,9 @@ $(function() {
         <p class="published-date">Published on ${dataset.shortCreateAt }</p>
         <div class="clear"></div>
       </div>
-      <p><strong>Reference: </strong><a href="#">http://www.economist.com/football</a></p>
-      <p><strong>Dataset Collection: </strong><a href="#">NFL 2000-2010</a></p>
-      <p><strong>Source: </strong><a href="#">http://www.footballdata.com/gamedata</a></p>
+      <p><strong>Reference: </strong><a href="#"></a></p>
+      <p><strong>Dataset Collection: </strong><a href="#"></a></p>
+      <p><strong>Source: </strong><a href="#"></a></p>
       <p><strong>License: </strong><a href="#">X</a></p>
       <p><strong>Last updated: </strong>${dataset.shortLastUpdate }</p>
       <p><strong>View count: </strong>${pageView }</p>
@@ -137,7 +147,7 @@ $(function() {
     <div class="center-content-wrapper">
       <div class="dataset-header header">
         <div class="dataset-title main-title"><h2>${dataset.name}</h2></div>
-        <div class="share-panel" style="float: right;">
+        <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">
           <a class="addthis_button_preferred_1"></a>
@@ -162,10 +172,17 @@ $(function() {
           <c:if test="${isOwner}">
           	<a id="dels-ds" href="javascript:void(0);" >Delete</a>&nbsp;&nbsp;
           </c:if>
-          <a href="javascript:void(0)" class="action dataset-action dataset-embed-button" id="dataset-embed-button">Embed</a>&nbsp;&nbsp;
+          <%-- <c:if test="${${dataset.public}"> --%>
+          	<a href="javascript:void(0)" class="action dataset-action dataset-embed-button" id="dataset-embed-button">Embed</a>&nbsp;&nbsp;
+          <%-- </c:if> --%>
           <a href="<c:url value="/dataset/dl/csv/${dataset.guid}"/>" class="action dataset-action">Download CSV</a>&nbsp;&nbsp;
-          <a href="<c:url value="/dataset/dl/json/${dataset.guid}"/>" class="action dataset-action">Download JSON</a>
+          <a href="<c:url value="/dataset/dl/json/${dataset.guid}"/>" class="action dataset-action">Download JSON</a>	
         </div>
+        
+        <div class="embedded-link" id="embedded-link-ds" style="display: none;">
+          <textarea id="embedded-link-text-ds" spellcheck='false'></textarea>
+        </div>
+        <div class="clear"></div>
       </div>
       <div class="header-rule"></div>
       <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">

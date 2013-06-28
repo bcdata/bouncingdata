@@ -131,7 +131,7 @@ $(function() {
     <div class="center-content-wrapper">
       <div class="anls-header header">
         <div class="anls-title main-title"><h2>${anls.name}</h2></div>
-        <div class="share-panel" style="float: right;">
+        <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">
           <a class="addthis_button_preferred_1"></a>
@@ -154,7 +154,9 @@ $(function() {
           <a href="javascript:void(0)" class="action anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
           <a href="javascript:void(0)" class="action anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
           <a href="<c:url value="/anls/clone/processing/${anls.guid }" />" target="_blank" class="action anls-action anls-clone">Clone</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="action anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
+          <c:if test="${anls.published}">
+          	<a href="javascript:void(0)" class="action anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
+          </c:if>
           <c:if test="${isOwner }">
             <a href="<c:url value="/editor/anls/${anls.guid }/size" />" class="action anls-action" title="Edit this analysis">Edit</a>&nbsp;&nbsp;
             <a id="del-anls" href="javascript:void(0)" title="Delete this analysis">Delete</a>&nbsp;&nbsp;
@@ -168,9 +170,9 @@ $(function() {
           
         </div>
         <div class="embedded-link" id="embedded-link" style="display: none;">
-          <textarea id="embedded-link-text" spellcheck='false' style="float: left;"></textarea>
+          <textarea id="embedded-link-text" spellcheck='false' style="float: left;height: 80px;"></textarea>
           <!-- a class="embedded-link-hidden" href="<c:url value="/anls/embed/" />${anls.guid}" style="display: none;">embedded</a-->
-          <div class="embedded-options" style="float: left; margin-left: 15px;">     
+          <!-- <div class="embedded-options" style="float: left; margin-left: 15px;">     
             <div>  
               <strong>Include tab</strong><br />
               <input id="include-viz" type="checkbox" checked />Viz<br />
@@ -184,16 +186,16 @@ $(function() {
               <input id="embedded-height" type="text" value="600" />&nbsp; pixels<br/>
               <input type="checkbox" id="embedded-border" />&nbsp; Border?
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="clear"></div>
       </div>
       <div class="anls-header-rule"></div>
       <div class="anls-content anls-tab-container ui-tabs" id="anls-content">
         <ul class="anls-tabs">
-          <li class="anls-tab"><a href="#anls-dashboard">Viz</a></li>
-          <li class="anls-tab"><a href="#anls-code">Code</a></li>
-          <li class="anls-tab"><a href="#anls-data">Data</a></li>
+          <li class="anls-tab"><a href="#anls-dashboard" style="padding-left: 20px;padding-right: 20px;">Viz</a></li>
+          <li class="anls-tab"><a href="#anls-code" style="padding-left: 18px;padding-right: 18px;">Code</a></li>
+          <li class="anls-tab"><a href="#anls-data" style="padding-left: 20px;padding-right: 20px;">Data</a></li>
         </ul>
         <div class="clear"></div>
         <div class="anls-tabs-content-wrapper">

@@ -123,19 +123,19 @@ Analysis.prototype.init = function(anls, dbDetail) {
       $embedded.toggle('slow');
       // still not reversed the remote ip to hostname, temporarily hard code the host
       var host = "www.bouncingdata.com";
-      var embedded = '<iframe src="http://' + host + ctx + '/public/embed/' + guid + '" style="border: 0" width="800" height="600" frameborder="0"></iframe>';
+      var embedded = '<iframe src="http://' + host + ctx + '/public/embed/' + guid + '/?tab=v&tab=c&tab=d" style="border:solid 1px #777" width="800" height="600" frameborder="0"></iframe>';
       $('#embedded-link-text', $embedded).val(embedded).click(function() {
         $(this).select();
         $(this).attr('title', 'Press CTRL-C to copy embedded code');
       });
 
       // reset options
-      $('#include-viz', $embedded).prop('checked', true);
-      $('#include-code', $embedded).prop('checked', false);
-      $('#include-data', $embedded).prop('checked', false);
-      $('#embedded-width', $embedded).val('800');
-      $('#embedded-height', $embedded).val('600');
-      $('#embedded-border', $embedded).prop('checked', false);
+//      $('#include-viz', $embedded).prop('checked', true);
+//      $('#include-code', $embedded).prop('checked', false);
+//      $('#include-data', $embedded).prop('checked', false);
+//      $('#embedded-width', $embedded).val('800');
+//      $('#embedded-height', $embedded).val('600');
+//      $('#embedded-border', $embedded).prop('checked', false);
     });
 
     $('.embedded-options input', $embedded).change(function() {
