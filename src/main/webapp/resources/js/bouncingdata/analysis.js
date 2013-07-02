@@ -2,6 +2,7 @@ function Analysis() {
   
 }
 
+
 Analysis.prototype.init = function(anls, dbDetail) {
   var guid = anls.guid;
   //$('#anls-content').easytabs();
@@ -172,22 +173,28 @@ Analysis.prototype.init = function(anls, dbDetail) {
         
     $('.add-tag-popup #add-tag-button').click(function() {
       var tag = $('#add-tag-input').val();
-      if (!tag) return false;
-      $.ajax({
-        url: ctx + '/tag/addtag',
-        type: 'post',
-        data: {
-          'guid': guid,
-          'tag': tag,
-          'type': 'analysis'
-        },
-        success: function(res) {
-          if (res['code'] < 0) {
-            console.debug(res);
-            return;
-          }
-          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tag + '">' + tag + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
-          $('.tag-set .tag-list').append($newTag);
+       		 if (!tag) return false;
+       		 $.ajax({
+      			  url: ctx + '/tag/addtag',
+       			 type: 'post',
+        		data: {
+         		 'guid': guid,
+         		 'tag': tag,
+         		 'type': 'analysis'
+      			  },
+              
+        success: function(res) { 
+        	$('.add-tag-popup #add-tag-input').val('');        	
+         	 var result = res['message'];
+			 if(result=='') return;
+        	 var tags= result.split(",");		
+
+          for (var i=0;i<tags.length;i++){
+				
+        	  	var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tags[i] + '">' + tags[i] + '</a><span class="tag-remove" title="Remove tag from this analysis">x</span></div>');
+ 			 $('.tag-set .tag-list').append($newTag);
+                   
+          
           $('.tag-remove', $newTag).click(function() {
             var self = this;
             if (anls.user != com.bouncingdata.Main.username) return;
@@ -212,6 +219,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
               }
             });
           });
+        }
         },
         error: function(res) {
           console.debug(res);
@@ -232,7 +240,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
           'type': 'analysis'
         },
         success: function(res) {
-          if (res['code'] < 0) {
+          if (res['code'] < 0) {          
             console.debug(res);
             return;
           }

@@ -32,19 +32,111 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
     $('#schema-panel').tabs().tabs('select', 1);
     
     tinyMCE.init({
-      mode : "textareas",
-      theme : "simple",
-      plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,visualblocks",
+        mode : "textareas",
+        theme : "advanced",
+        plugins : "codeElement,latex,autolink,lists,pagebreak,style,layer,save,advhr,advimage,advlink,iespell,inlinepopups,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist,visualblocks",
 
-      // Theme options
-      theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-      theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
-      theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
-      theme_advanced_toolbar_location : "top",
-      theme_advanced_toolbar_align : "left",
-      theme_advanced_statusbar_location : "bottom",
-      theme_advanced_resizing : true
-    });  
+        // Theme options
+        theme_advanced_buttons1 : "codeElement,latex,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,link,unlink,code,|,forecolor,backcolor,|,formatselect,fontselect,fontsizeselect,|,preview",     
+        theme_advanced_toolbar_location : "bottom",
+        theme_advanced_toolbar_align : "center",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : true
+
+      });
+    
+    $('.add-tag-popup #add-tag-button').click(function() {
+    	
+        var tag = $('#add-tag-input').val();
+        if (!tag) return false;
+        $.ajax({
+          url: ctx + '/tag/addtag',
+          type: 'post',
+          data: {
+            'guid': guid,
+            'tag': tag,
+            'type': 'dataset'
+          },
+          success: function(res) {
+            console.debug(res);
+            var result = res['message'];
+  		  if(result=='') return;
+       	  var tags= result.split(",");		
+
+       	  for (var i=0;i<tags.length;i++){   	   
+       	 
+            var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tags[i] + '">' + tags[i] + '</a><span class="tag-remove" title="Remove tag from this datasetd">x</span></div>');
+            $('.tag-set .tag-list').append($newTag);
+            $('.tag-remove', $newTag).click(function() {
+              var self = this;
+              if (dataset.user != com.bouncingdata.Main.username) return;
+              var tag = $(this).prev().text();
+              $.ajax({
+                url: ctx + '/tag/removetag',
+                type: 'post',
+                data: {
+                  guid: guid,
+                  tag: tag,
+                  type: 'dataset'
+                },
+                success: function(res) {
+                  if (res['code'] < 0) {
+                    console.debug(res);
+                    return;
+                  }
+                  $(self).parent().remove();
+                },
+                error: function(res) {
+                  console.debug(res);
+                }
+              });
+            });
+          }
+          },
+          error: function(res) {
+            console.debug(res);
+          }
+        });
+      });
+    
+    
+    $('.tag-element-outer .tag-remove').click(function() {
+      var self = this;
+      if (dataset.user != com.bouncingdata.Main.username) return;
+      var tag = $(this).prev().text();
+      $.ajax({
+        url: ctx + '/tag/removetag',
+        type: 'post',
+        data: {
+          guid: guid,
+          tag: tag,
+          type: 'dataset'
+        },
+        success: function(res) {
+          if (res['code'] < 0) {
+            console.debug(res);
+            return;
+          }
+          $(self).parent().remove();
+        },
+        error: function(res) {
+          console.debug(res);
+        }
+      });
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     var $schemaTableBody = $('#schema-table tbody');
     var index;
@@ -132,6 +224,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
         $('.description-panel #name').focus();
         return;
       }
+      var tag = $('.description-panel #tag').val();
       var description = tinymce.editors[0].getContent();
       var isPublic = $('#dataset-ispublic').prop('checked');
       var schema = [];
@@ -151,6 +244,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
           name: name,
           schema: schemaStr,
           description: description,
+          tag:tag,
           isPublic: isPublic
         },
         success: function(res) {
@@ -165,7 +259,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
           var refFile = $('#file-ref', $refForm).val();
           
           if (!refFile) {
-            window.alert("Your dataset \"" + name + "\" has been uploaded successfully.");
+           // window.alert("Your dataset \"" + name + "\" has been uploaded successfully.");
             window.location.href = ctx + '/dataset/view/' + guid;
           } else {
             console.debug("Uploading reference document..");
@@ -173,9 +267,7 @@ Upload.prototype.initSchema = function(ticket, detectedSchema) {
               url: ctx + '/dataset/upload/ref/' + guid,
               type: 'post',
               success: function(res) {
-                if (res['code'] >= 0) {
-                  window.alert("Your dataset \"" + name + "\" has been uploaded successfully.");
-                } else {
+                if (res['code'] < 0) {                  
                   window.alert("Successfully upload dataset but failed to upload reference document.");                 
                 }
                 window.location.href = ctx + '/dataset/view/' + guid; 

@@ -90,9 +90,15 @@ Dataset.prototype.init = function(dataset) {
           'type': 'dataset'
         },
         success: function(res) {
+          $('.add-tag-popup #add-tag-input').val('');
           console.debug(res);
-          if (res['code'] < 0) return;
-          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tag + '">' + tag + '</a><span class="tag-remove" title="Remove tag from this datasetd">x</span></div>');
+          var result = res['message'];
+		  if(result=='') return;
+     	  var tags= result.split(",");		
+
+     	  for (var i=0;i<tags.length;i++){   	   
+     	 
+          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + "/tag/" + tags[i] + '">' + tags[i] + '</a><span class="tag-remove" title="Remove tag from this datasetd">x</span></div>');
           $('.tag-set .tag-list').append($newTag);
           $('.tag-remove', $newTag).click(function() {
             var self = this;
@@ -118,6 +124,7 @@ Dataset.prototype.init = function(dataset) {
               }
             });
           });
+        }
         },
         error: function(res) {
           console.debug(res);

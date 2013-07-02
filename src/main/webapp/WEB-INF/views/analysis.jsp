@@ -87,7 +87,9 @@ $(function() {
       <p><strong>Last updated: </strong>${anls.shortLastUpdate }</p>
       <p><strong>View count: </strong>${pageView }</p>
     </div>
+    
     <div class="tag-set">
+     <p><strong>Tags:</strong></p>
       <div class="tag-list">
       <c:if test="${not empty anls.tags }">
         <c:forEach items="${anls.tags }" var="tag">
@@ -101,14 +103,12 @@ $(function() {
       </c:if>
       
       </div>&nbsp;
-      <c:if test="${isOwner }">
-        <a class="add-tag-link" href="javascript:void(0);">
-          Add tag
-        </a>
-        <div class="add-tag-popup" style="display: none;">
-          <input type="text" id="add-tag-input" />
+      <c:if test="${isOwner }">      
+          <div class="add-tag-popup">         
+          <input type="text" id="add-tag-input" style="width:69%"/>
           <input type="button" value="Add" id="add-tag-button" />
         </div>
+        
       </c:if>
     </div>
     <div class="anls-related-info related-info">
