@@ -57,6 +57,48 @@ Dataset.prototype.init = function(dataset) {
       return false;
     });
     
+    
+    $(document).on('click', '#detailsheader', function() {
+        $(this).replaceWith("<input type='text' id='edit' value='" + $(this).text() + "' />");
+    });
+
+    $(document).on('focusout', '#edit', function() {
+        var newTitle = this.value;
+        if (newTitle == '') {
+            alert("Cant be blank!");
+            return false;
+        }
+        else {
+        	       	
+        		$.ajax({
+        			  url: ctx + '/dataset/changetitle',
+         			 type: 'post',
+         			 data: {
+         				 'guid': guid,
+         				 'newTitle': newTitle
+        			  },
+                success: function(res) {
+                	 var result = res['code'];  
+                	 var updatedTitle = res['message'];
+                  if (result < 0) {
+                    alert(updatedTitle);                    
+                  }else{
+                	  $('#edit').replaceWith('<h2 class="tc_pageheader editableName" id="detailsheader">' + updatedTitle + '</h2>');
+                  }
+                  return;           
+                },
+                error: function(res) {
+                  console.debug(res);
+                }
+              });
+        		
+        	        
+        }
+    });
+
+    
+    
+    
     $(document).click(function() {
       var $addTagPopup = $('div.add-tag-popup');
       if ($addTagPopup.hasClass('active')) {

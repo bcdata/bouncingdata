@@ -146,7 +146,19 @@ $(function() {
   <div class="center-content">
     <div class="center-content-wrapper">
       <div class="dataset-header header">
-        <div class="dataset-title main-title"><h2>${dataset.name}</h2></div>
+
+
+		<c:choose>
+<c:when test="${isOwner }">
+	<h2 class="tc_pageheader editableName" id="detailsheader">${dataset.name}</h2>
+</c:when>
+<c:otherwise>
+    <div class="dataset-title main-title"><h2>${dataset.name}</h2></div>
+</c:otherwise>
+</c:choose>    
+
+
+   
         <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">

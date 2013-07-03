@@ -92,5 +92,9 @@ public class BcDatastoreService {
   public String buildSchema(String tableName, DatasetColumn[] columns) {
     return jdbcBcDatastore.buildSchema(tableName, columns);
   }
+  
+  public boolean renameDataset(String oldName, String newName) {
+	    return jdbcBcDatastore.renameDataset(oldName, newName);
+  }
       
 }

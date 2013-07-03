@@ -64,6 +64,46 @@ Analysis.prototype.init = function(anls, dbDetail) {
     });
 
 
+$(document).on('click', '#detailsheader', function() {
+    $(this).replaceWith("<input type='text' id='edit' value='" + $(this).text() + "' />");
+});
+
+$(document).on('focusout', '#edit', function() {
+    var newTitle = this.value;
+    if (newTitle == '') {
+        alert("Cant be blank!");
+        return false;
+    }
+    else {
+    	
+    	
+    		$.ajax({
+    			  url: ctx + '/anls/changetitle',
+     			 type: 'post',
+     			 data: {
+     				 'guid': guid,
+     				 'newTitle': newTitle
+    			  },
+            success: function(res) {
+              var result = res['code'];            
+              if (result < 0) {
+                alert("Error occured when trying change title of this analysis. Please try again.")
+              }else{
+            	  $('#edit').replaceWith('<h2 class="tc_pageheader editableName" id="detailsheader">' + newTitle + '</h2>');
+              }
+                       
+				return;     
+            },
+            error: function(res) {
+              console.debug(res);
+            }
+          });
+    		
+    	        
+    }
+});
+
+
     $('#comment-form #comment-submit').click(function() {
       // validate
       var message = $('#comment-form #message').val();

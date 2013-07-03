@@ -788,4 +788,10 @@ public class DatastoreServiceImpl implements DatastoreService {
       return -1;
     }
   }
+
+@Override
+public boolean updateDataset(Dataset dataset) throws Exception {
+	// TODO Auto-generated method stub
+	return dataStorage.updateDataset(dataset);
+}
 }

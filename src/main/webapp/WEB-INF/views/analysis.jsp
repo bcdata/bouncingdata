@@ -130,7 +130,20 @@ $(function() {
   <div class="analysis-main center-content">
     <div class="center-content-wrapper">
       <div class="anls-header header">
-        <div class="anls-title main-title"><h2>${anls.name}</h2></div>
+
+<c:choose>
+<c:when test="${isOwner }">
+	<h2 class="tc_pageheader editableName" id="detailsheader">${anls.name}</h2>
+</c:when>
+<c:otherwise>
+    <div class="anls-title main-title"><h2>${anls.name}</h2></div>
+</c:otherwise>
+</c:choose>
+
+
+
+
+
         <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">

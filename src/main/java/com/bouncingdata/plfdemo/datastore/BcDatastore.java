@@ -44,4 +44,5 @@ public interface BcDatastore {
   
   String buildSchema(String tableName, DatasetColumn[] columns);
 
+  boolean renameDataset(String oldName, String newName);
 }

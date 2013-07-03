@@ -116,6 +116,34 @@ public class JdbcBcDatastore extends JdbcDaoSupport implements BcDatastore {
   
   //--- end of search function
   
+//  RENAME TABLE old_table TO tmp_table,
+  public boolean renameDataset(String oldName, String newName){
+	  String sql = "RENAME TABLE  `" + oldName + "` TO `" + newName + "`";
+	    Connection conn = null;
+	    Statement st = null;
+	    ResultSet rs = null;
+	    try {
+	      conn = getDataSource().getConnection();
+	      st = conn.createStatement();
+	      rs = st.executeQuery(sql);
+	     
+	      
+	    } catch (SQLException e) {
+	      if (logger.isDebugEnabled()) {
+	        logger.debug("Error when rename dataset");
+	        logger.debug("Exception detail: ", e);
+	      }
+	      return false;
+	      
+	    } finally {
+	      if (rs != null) try { rs.close(); } catch (Exception e) {return false;}
+	      if (st != null) try { st.close(); } catch (Exception e) {return false;}
+	      if (conn != null) try { conn.close(); } catch (Exception e) {return false;}
+	    } 
+	    
+	    return true;
+  }
+  
   public List<Map> getDatasetToList(String dataset, int begin, int maxNumber) throws DataAccessException {
     String sql = "SELECT * FROM `" + dataset + "` LIMIT " + begin + "," + maxNumber;
     Connection conn = null;

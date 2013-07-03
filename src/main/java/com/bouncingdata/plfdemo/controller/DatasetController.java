@@ -1011,4 +1011,62 @@ public class DatasetController {
 	  }
 	  return "0";
 	}
+	
+	@RequestMapping(value = "/changetitle", method = RequestMethod.POST)
+	public @ResponseBody
+	ActionResult changeTitle(
+			@RequestParam(value = "guid", required = true) String guid,
+			@RequestParam(value = "newTitle", required = true) String newTitle,
+			WebRequest request, ModelMap model, Principal principal,
+			HttpSession session) {
+		User user = (User) ((Authentication) principal).getPrincipal();
+		Dataset dataset;
+		String message;
+		String oldTitle;
+		try {
+			dataset = datastoreService.getDatasetByGuid(guid);
+			if (dataset == null) {
+				message = "Error:Can not get dataset";
+				return new ActionResult(-1, message);
+			}
+			
+			if (!user.getUsername().equals(dataset.getUser().getUsername())) {
+				message = "Error: User does not have permission to change title";
+				return new ActionResult(-1,message);
+			}
+		
+			if (dataset.getName().equals(newTitle)) {
+				message = "They are the same name. No need to change";
+				return new ActionResult(-1,message);
+			} else {
+				
+				
+				oldTitle = dataset.getName();
+				newTitle=user.getUsername() + "." + newTitle;
+				dataset.setName(newTitle);				
+				if(datastoreService.updateDataset(dataset)){
+					//update bcDatastore
+					if(userDataService.renameDataset(oldTitle,newTitle)){
+						return new ActionResult(0, newTitle);
+					}else{
+						message = "An exception occurs when update bcDatastore";
+						dataset.setName(oldTitle);		
+						return new ActionResult(-1,	message);
+					}
+				}else{
+					message = "Can not update Dataset";
+					return new ActionResult(-1,	message);
+				}
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block	
+			
+			return new ActionResult(-1,
+					"An exception occurs when changing the title");
+		}
+
+		
+	}
+
 }
