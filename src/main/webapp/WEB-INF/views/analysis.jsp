@@ -248,7 +248,7 @@ $(function() {
         </div>
       </div>
       <div class="clear"></div>
-      <div class="description anls-description">
+      <div class="description anls-description" style="width: 100%;height: 100%;">
         <h3 style="margin: 0 0 10px; cursor: pointer">Description</h3>
         <c:choose>
           <c:when test="${empty anls.description }">No description</c:when>

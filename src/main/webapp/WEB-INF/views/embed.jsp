@@ -32,7 +32,7 @@
       var $dashboard = $('<div class="bcdata-dashboard" style="height: 100%; width: 100%; position: relative;margin-top: 13px;"></div>');
       /* $dashboard.height('600px').width('800px').css('position', 'relative'); */
       $wrapper.append($dashboard);
-      view(dbDetail.visualizations, dbDetail.dashboard, $dashboard,'${anls.description}');
+      view(dbDetail.visualizations, dbDetail.dashboard, $dashboard);
     </script>
   </c:when>
   <c:when test='${mode eq "single"}'>
@@ -43,7 +43,7 @@
         	var $dashboard = $('<div class="bcdata-dashboard" style="height: 100%; width: 100%; position: relative;margin-top: 13px;"></div>');
 /*         	$dashboard.height('600px').width('800px').css('position', 'relative'); */
         	$wrapper.append($dashboard);
-        	view(dbDetail.visualizations, dbDetail.dashboard, $dashboard,'${anls.description}');
+        	view(dbDetail.visualizations, dbDetail.dashboard, $dashboard);
         </script>
       </c:when>
       <c:when test="${tabs[0] eq 'c'}">
@@ -116,7 +116,8 @@
 /*           $dashboard.height('600px').width('800px').css('position', 'relative'); */
           $panel.append($dashboard);
           var dbDetail = JSON.parse('${dashboardDetail}');
-          view(dbDetail.visualizations, dbDetail.dashboard, $dashboard, '${anls.description}');
+          var vAnls = JSON.parse('${anls}');
+          view(dbDetail.visualizations, dbDetail.dashboard, $dashboard , vAnls);
         </script>
       </c:if>
       <c:if test="${tab eq 'c'}">
