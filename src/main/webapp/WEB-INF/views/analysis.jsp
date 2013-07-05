@@ -87,7 +87,9 @@ $(function() {
       <p><strong>Last updated: </strong>${anls.shortLastUpdate }</p>
       <p><strong>View count: </strong>${pageView }</p>
     </div>
+    
     <div class="tag-set">
+     <p><strong>Tags:</strong></p>
       <div class="tag-list">
       <c:if test="${not empty anls.tags }">
         <c:forEach items="${anls.tags }" var="tag">
@@ -101,14 +103,12 @@ $(function() {
       </c:if>
       
       </div>&nbsp;
-      <c:if test="${isOwner }">
-        <a class="add-tag-link" href="javascript:void(0);">
-          Add tag
-        </a>
-        <div class="add-tag-popup" style="display: none;">
-          <input type="text" id="add-tag-input" />
+      <c:if test="${isOwner }">      
+          <div class="add-tag-popup">         
+          <input type="text" id="add-tag-input" style="width:69%"/>
           <input type="button" value="Add" id="add-tag-button" />
         </div>
+        
       </c:if>
     </div>
     <div class="anls-related-info related-info">
@@ -130,7 +130,20 @@ $(function() {
   <div class="analysis-main center-content">
     <div class="center-content-wrapper">
       <div class="anls-header header">
-        <div class="anls-title main-title"><h2>${anls.name}</h2></div>
+
+<c:choose>
+<c:when test="${isOwner }">
+	<h2 class="tc_pageheader editableName" id="detailsheader">${anls.name}</h2>
+</c:when>
+<c:otherwise>
+    <div class="anls-title main-title"><h2>${anls.name}</h2></div>
+</c:otherwise>
+</c:choose>
+
+
+
+
+
         <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">

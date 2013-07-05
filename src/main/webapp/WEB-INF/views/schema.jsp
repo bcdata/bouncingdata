@@ -119,17 +119,12 @@
           <label for="description">Description</label>
           <textarea name="description" id="description" style="width: 100%;"></textarea>
         </div>
-        <div class="tag-set" id="tag-set">
-          <div class="tag-list">
-            <div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">Football</a></div>
-            <div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">Money</a></div>
-            <div class="tag-element-outer"><a class="tag-element" href="javascript:void(0);">Madrid</a></div>
-          </div>&nbsp;
-          <a class="add-tag-button>" href="javascript:void()">
-            Add tag
-          </a>
-        </div>
-      </div>
+         
+    <br>
+<label for="source">Tag</label>
+<div class="input-wrapper"><input type="text" name="tag" id="tag" style="width: 100%;"></div>
+
     </div>
   </div>
 </div>
+

@@ -89,6 +89,7 @@ public interface DatastoreService {
    * @throws Exception
    */
   public void updateAnalysis(Analysis Analysis) throws Exception;
+  public boolean updateDataset(Dataset dataset) throws Exception;
   
   public void deleteAnalysis(int analysisId) throws Exception;
   

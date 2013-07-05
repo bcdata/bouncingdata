@@ -141,7 +141,7 @@ public interface DataStorage {
    * @throws DataAccessException
    */
   public void updateAnalysis(Analysis analysis);
-  
+  public boolean updateDataset(Dataset dataset);
   /**
    * @param analysisId
    * @throws DataAccessException

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.DatasetVote;
 import com.bouncingdata.plfdemo.datastore.pojo.model.ReferenceDocument;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.VariablesUploadDataset;
@@ -571,6 +573,7 @@ public class DatasetController {
       @RequestParam(value = "schema", required = true) String schema,
       @RequestParam(value = "name", required = true) String name,
       @RequestParam(value = "description", required = false) String description,
+      @RequestParam(value = "tag", required = false) String tag,
       @RequestParam(value = "isPublic", required = true) boolean isPublic, Principal principal) {
 
     User user = (User) ((Authentication) principal).getPrincipal();
@@ -650,12 +653,43 @@ public class DatasetController {
       ds.setSchema(datasetSchema);
       ds.setPublic(isPublic);
       datastoreService.createDataset(ds);
+      //add tag
+      
+      
+      for (String tagItem : tag.split("[,]+")) {
+    	  if(tagItem.trim()== null || tagItem.trim()== "")
+    		  break;
+    	  
+    	  Tag tagObj = datastoreService.getTag(tagItem);
+    	  if (tagObj == null) {
+				logger.debug(
+						"Tag {} does not exist. Trying create new tag.",
+						tagItem);
+				try {
+					datastoreService.createTag(tagItem);
+					tagObj = datastoreService.getTag(tagItem);
+				} catch (Exception e) {
+					logger.debug("Failed to create new tag {}", tagItem);
+					logger.debug("", e);					
+				}
+
+			}
+    	  
+    	  datastoreService.addDatasetTag(ds.getId(),
+					tagObj.getId());
+  		
+      }
+      
+      
+     
     } catch (Exception e) {
       logger.debug("Failed to store datafile {} to datastore as {}", tempDataFile.getAbsolutePath(), dsFName);
       logger.debug("Requested schema: {}", datasetSchema);
       logger.debug("", e);
       return new ActionResult(-1, "Failed to store your dataset");
     }
+    
+   
 
     // delete temp. file
     tempDataFile.delete();
@@ -977,4 +1011,62 @@ public class DatasetController {
 	  }
 	  return "0";
 	}
+	
+	@RequestMapping(value = "/changetitle", method = RequestMethod.POST)
+	public @ResponseBody
+	ActionResult changeTitle(
+			@RequestParam(value = "guid", required = true) String guid,
+			@RequestParam(value = "newTitle", required = true) String newTitle,
+			WebRequest request, ModelMap model, Principal principal,
+			HttpSession session) {
+		User user = (User) ((Authentication) principal).getPrincipal();
+		Dataset dataset;
+		String message;
+		String oldTitle;
+		try {
+			dataset = datastoreService.getDatasetByGuid(guid);
+			if (dataset == null) {
+				message = "Error:Can not get dataset";
+				return new ActionResult(-1, message);
+			}
+			
+			if (!user.getUsername().equals(dataset.getUser().getUsername())) {
+				message = "Error: User does not have permission to change title";
+				return new ActionResult(-1,message);
+			}
+		
+			if (dataset.getName().equals(newTitle)) {
+				message = "They are the same name. No need to change";
+				return new ActionResult(-1,message);
+			} else {
+				
+				
+				oldTitle = dataset.getName();
+				newTitle=user.getUsername() + "." + newTitle;
+				dataset.setName(newTitle);				
+				if(datastoreService.updateDataset(dataset)){
+					//update bcDatastore
+					if(userDataService.renameDataset(oldTitle,newTitle)){
+						return new ActionResult(0, newTitle);
+					}else{
+						message = "An exception occurs when update bcDatastore";
+						dataset.setName(oldTitle);		
+						return new ActionResult(-1,	message);
+					}
+				}else{
+					message = "Can not update Dataset";
+					return new ActionResult(-1,	message);
+				}
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block	
+			
+			return new ActionResult(-1,
+					"An exception occurs when changing the title");
+		}
+
+		
+	}
+
 }

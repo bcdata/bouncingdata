@@ -219,10 +219,40 @@ Editor.prototype.initDescribe = function(anls) {
           'type': 'analysis'
         },
         success: function(res) {
-          console.debug(res);
-          if (res['code'] < 0) return;
+    	console.debug(res);
+    	var result = res['message'];
+		 if(result=='') return;
+		 var tags= result.split(",");	
+         for (var i=0;i<tags.length;i++){        	 
+          
           $('.tag-set .tag-list').append('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + '/tag/'
-              + tag + '">' + tag + '</a></div>');
+              + tags[i] + '">' + tags[i] + '</a></div>');
+          $('.tag-remove', $newTag).click(function() {
+              var self = this;
+              if (anls.user != com.bouncingdata.Main.username) return;
+              var tag = $(this).prev().text();
+              $.ajax({
+                url: ctx + '/tag/removetag',
+                type: 'post',
+                data: {
+                  'guid': guid,
+                  'tag': tag,
+                  'type': 'analysis'
+                },
+                success: function(res) {
+                  if (res['code'] < 0) {
+                    console.debug(res);
+                    return;
+                  }
+                  $(self).parent().remove();
+                },
+                error: function(res) {
+                  console.debug(res);
+                }
+              });
+            });
+          
+        }
         },
         error: function(res) {
           console.debug(res);

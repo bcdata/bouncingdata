@@ -424,6 +424,33 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     }
   }
 
+  
+  
+  @Override
+  public boolean updateDataset(Dataset dataset) {
+    if (dataset.getUser() == null) return false;
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    
+    try {
+      tx.begin();
+      Dataset storedObject = pm.getObjectById(Dataset.class, dataset.getId());      
+      storedObject.setName(dataset.getName());          
+      tx.commit();
+    }catch (Exception e){
+    	return false;
+    }finally {
+      if (tx.isActive()) {
+        tx.rollback();
+      }
+      pm.close();
+     
+    }
+    return true;
+    
+  }
+
+  
   @Override
   public void updateAnalysis(Analysis analysis) {
     if (analysis.getUser() == null) return;

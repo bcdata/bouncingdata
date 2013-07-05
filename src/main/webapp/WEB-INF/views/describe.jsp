@@ -65,7 +65,7 @@
           <input type="text" name="name" id="name" value="${anls.name }"><br>
           <label for="description"><strong>Description</strong></label>
           <textarea name="description" id="description">${anls.description }</textarea><br>
-          <label for="tag-set"><strong>Tag: </strong></label>
+          <label for="tag-set"><strong>Tags: </strong></label>
           <div class="tag-set" id="tag-set">
             <div class="tag-list">
               <c:if test="${not empty anls.tags }">
@@ -76,13 +76,12 @@
                   </div>
                 </c:forEach>  
               </c:if>
-            </div>&nbsp; 
-            <a class="add-tag-link" href="javascript:void(0);">
-              Add tag
-            </a>
-            <div class="add-tag-popup" style="display: none;">
-              <input type="text" id="add-tag-input" /> <input type="button" value="Add" id="add-tag-button" />
-            </div>
+            </div>&nbsp;             
+            <div class="add-tag-popup">            
+          <input type="text" id="add-tag-input" style="width:69%"/>
+          <input type="button" value="Add" id="add-tag-button" />
+        </div>
+           
           </div>
           <br/>
         </fieldset>
