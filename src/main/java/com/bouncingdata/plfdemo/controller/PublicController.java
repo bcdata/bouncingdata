@@ -62,6 +62,86 @@ public class PublicController {
   @Autowired
   private MailService mailService;
   
+  @RequestMapping(value = "/ajax/{guid}", method = RequestMethod.GET)
+  public @ResponseBody Map<String, Object> pbloadDatatable(@PathVariable String guid, WebRequest request) {
+    try {
+      Dataset ds = datastoreService.getDatasetByGuid(guid);
+      if (ds == null) {
+        logger.debug("Can't find the dataset {}", guid);
+        return null;
+      }
+
+      Map<String, String[]> params = request.getParameterMap();
+      int displayStart = Integer.valueOf(params.get("iDisplayStart")[0]);
+      int displayLength = Integer.valueOf(params.get("iDisplayLength")[0]);
+      int sEcho = Integer.valueOf(params.get("sEcho")[0]);
+
+      Map<String, Object> result = new HashMap<String, Object>();
+      result.put("sEcho", sEcho);
+
+      // List<Map> data = userDataService.getDatasetToList(ds.getName(),
+      // displayStart, displayLength);
+      List<Object[]> data = userDataService.getDatasetToListOfArray(ds.getName(), displayStart, displayLength);
+      // int totalDisplayRecords = data.size();
+      int totalRecords = ds.getRowCount();
+      result.put("iTotalRecords", totalRecords);
+      result.put("iTotalDisplayRecords", totalRecords);
+      result.put("aaData", data);
+      /*
+       * StringBuilder sColumns = new StringBuilder(); for (Object s :
+       * data.get(0)) { String col = (String) s; sColumns.append(col + ","); }
+       * sColumns.substring(0, sColumns.length() - 1); result.put("sColumns",
+       * sColumns.toString());
+       */
+      return result;
+    } catch (Exception e) {
+      logger.debug("", e);
+      return null;
+    }
+
+  }
+  
+  @RequestMapping(value="/embedds/{guid}")
+  public String embedDataset(@PathVariable String guid, ModelMap model, HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException {
+	  
+	  try {
+      ObjectMapper mapper = new ObjectMapper();
+      Dataset ds = datastoreService.getDatasetByGuid(guid);
+      
+      if (ds == null) {
+        model.addAttribute("errorMsg", "Dataset " + guid + " not found!"); 
+        return "embedds";
+      }
+      
+      if (!ds.isPublic()) {
+        model.addAttribute("errorMsg", "This dataset was set to private.");
+        return "embedds";
+      }
+
+      model.addAttribute("guid", guid);
+      model.addAttribute("dataset", ds);
+      model.addAttribute("schema", Utils.parseDatasetSchemaFromSqlCreate(ds.getSchema()));
+      
+      
+      if (ds.getRowCount() < 1000) {
+          List<Object[]> data = new ArrayList<Object[]>();
+          data.add(userDataService.getColumnNames(ds.getName()));
+          data.addAll(userDataService.getDatasetToListOfArray(ds.getName()));
+          model.addAttribute("data", mapper.writeValueAsString(data));
+        } else {
+          String[] columns = userDataService.getColumnNames(ds.getName());
+          model.addAttribute("columns", mapper.writeValueAsString(columns));
+          model.addAttribute("data", null);
+          model.addAttribute("guid", guid);
+        }
+    		  
+    } catch (Exception e) {
+        model.addAttribute("errorMsg", "Failed to load dataset: Unknown error.");
+    }
+    
+    return "embedds";
+  }
+  
   @RequestMapping(value="/embed/{guid}")
   public String embedAnalysis(@PathVariable String guid, ModelMap model, HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException {
     try {

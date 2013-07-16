@@ -384,7 +384,7 @@ li.comment-item .comment-score {
 }
 
 #dataset-content #data .dataTables_wrapper {
-  overflow: auto;
+  overflow: hidden;
 }
 
 .anls-data .anls-dataset, .anls-data .anls-attachment {

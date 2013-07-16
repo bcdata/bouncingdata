@@ -1259,6 +1259,31 @@ Workbench.prototype.loadDatatableByAjax = function(dsGuid, columns, $table) {
 }
 
 
+Workbench.prototype.pbloadDatatableByAjax = function(dsGuid, columns, $table) {
+	  var aoColumns = [];
+	  for (idx in columns) {
+	    aoColumns.push({ "sTitle": columns[idx] });
+	  }
+	  var datatable = $table.dataTable({
+		"bServerSide": true,
+	    "bProcessing": true,
+	    "sAjaxSource": ctx + "/public/ajax/" + dsGuid,
+	    "aoColumns": aoColumns,
+	    "iDisplayLength": 200,
+	    "sScrollY": "500px",
+	    "sScrollX": "100%",
+	    "bScrollInfinite" :true,
+	    "bScrollCollapse": true,
+	    "bFilter": false
+	  });
+	  
+	  // temporarily disable this due to the incompability of KeyTable with server-side processing
+	  /*var keys = new KeyTable( {
+	    "table": $table[0],
+	    "datatable": datatable
+	  });*/
+	}
+
 /**
  * 
  */

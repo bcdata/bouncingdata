@@ -113,7 +113,7 @@ Dataset.prototype.init = function(dataset) {
       $embedded.toggle('slow');
       // still not reversed the remote ip to hostname, temporarily hard code the host
       var host = "www.bouncingdata.com";
-      var embedded = '<iframe src="http://' + host + ctx + '/public/dataset/embed/' + guid + '/?tab=v&tab=c&tab=d" style="border:solid 1px #777" width="800" height="600" frameborder="0"></iframe>';
+      var embedded = '<iframe src="http://' + host + ctx + '/public/embedds/' + guid + '" style="border:solid 1px #777" width="800" height="600" frameborder="0"></iframe>';
       $('#embedded-link-text-ds', $embedded).val(embedded).click(function() {
         $(this).select();
         $(this).attr('title', 'Press CTRL-C to copy embedded code');
