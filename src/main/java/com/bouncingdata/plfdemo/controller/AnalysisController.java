@@ -575,14 +575,12 @@ public class AnalysisController {
 			}
 		
 			if (anls.getName().equals(newTitle)) {
-				return new ActionResult(0,
-						"They are the same name. No need to change");
+				return new ActionResult(0, newTitle);
 			} else {
 				anls.setName(newTitle);
 				datastoreService.updateAnalysis(anls);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block			
 			return new ActionResult(-1,
 					"An exception occurs when changing the title");
 		}

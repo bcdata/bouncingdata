@@ -1036,11 +1036,8 @@ public class DatasetController {
 			}
 		
 			if (dataset.getName().equals(newTitle)) {
-				message = "They are the same name. No need to change";
-				return new ActionResult(-1,message);
+				return new ActionResult(0, newTitle);
 			} else {
-				
-				
 				oldTitle = dataset.getName();
 				newTitle=user.getUsername() + "." + newTitle;
 				dataset.setName(newTitle);				

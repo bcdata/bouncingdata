@@ -65,7 +65,7 @@ Analysis.prototype.init = function(anls, dbDetail) {
 
 
 $(document).on('click', '#detailsheader', function() {
-    $(this).replaceWith("<input type='text' id='edit' value='" + $(this).text() + "' />");
+    $(this).replaceWith("<div id='dv-edit-title' class='div-change-title'><input class='input-title' type='text' id='edit' value='" + $(this).text() + "' /></div>");
 });
 
 $(document).on('focusout', '#edit', function() {
@@ -75,27 +75,24 @@ $(document).on('focusout', '#edit', function() {
         return false;
     }
     else {
-    	
-    	
     		$.ajax({
     			  url: ctx + '/anls/changetitle',
      			 type: 'post',
      			 data: {
      				 'guid': guid,
      				 'newTitle': newTitle
-    			  },
+    		},
             success: function(res) {
               var result = res['code'];            
               if (result < 0) {
                 alert("Error occured when trying change title of this analysis. Please try again.")
               }else{
-            	  $('#edit').replaceWith('<h2 class="tc_pageheader editableName" id="detailsheader">' + newTitle + '</h2>');
+            	  $('#dv-edit-title').replaceWith('<h2 class="tc_pageheader editableName" id="detailsheader">' + newTitle + '</h2>');
               }
-                       
 				return;     
             },
             error: function(res) {
-              console.debug(res);
+            	console.debug(res);
             }
           });
     		

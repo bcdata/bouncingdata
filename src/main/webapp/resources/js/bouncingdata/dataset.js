@@ -59,7 +59,7 @@ Dataset.prototype.init = function(dataset) {
     
     
     $(document).on('click', '#detailsheader', function() {
-        $(this).replaceWith("<input type='text' id='edit' value='" + $(this).text() + "' />");
+        $(this).replaceWith("<div id='dv-edit-title' class='div-change-title'><input class='input-title' type='text' id='edit' value='" + $(this).text() + "' /></div>");
     });
 
     $(document).on('focusout', '#edit', function() {
@@ -83,7 +83,7 @@ Dataset.prototype.init = function(dataset) {
                   if (result < 0) {
                     alert(updatedTitle);                    
                   }else{
-                	  $('#edit').replaceWith('<h2 class="tc_pageheader editableName" id="detailsheader">' + updatedTitle + '</h2>');
+                	  $('#dv-edit-title').replaceWith('<h2 class="tc_pageheader editableName" id="detailsheader">' + updatedTitle + '</h2>');
                   }
                   return;           
                 },

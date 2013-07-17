@@ -949,3 +949,28 @@ a.tag-element:hover {
     border:1px solid #E2E2E2;
 }
 /** vinhpq : end */
+
+/** vinhpq : style for change title */
+.div-change-title {
+	border-color: rgb(77, 144, 254);
+	width: 99%;
+	border: 1px solid #DDD;
+	height: 28px;
+	padding: 0;
+	display: inline-block;
+	background-color: #FFFFFF;
+	margin-bottom: 5px;
+	margin-top: 9px;
+}
+
+.input-title {
+	width: 98%;
+	padding: 0 0 0 5px;
+	border: 0 none;
+	height: 28px;
+	outline: none;
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #333;
+}
+/** vinhpq : end */
