@@ -251,13 +251,13 @@ public class LoginController implements AuthenticationFailureHandler{
       datastoreService.createUser(user);
       result.setStatusCode(0);
       result.setMessage("- Successfully create user " + username);
-//      result.setMessage("- Successfully create user " + username + ".<br/>- Information activate your account will be sent on e-mail address: " + email);
+      result.setMessage("- Successfully create user " + username + ".<br/>- Information activate your account will be sent on e-mail address: " + email);
       
       //Set active link 
-//      String url = request.getRequestURL().toString() + "/activelink/" + username;
+      String url = request.getRequestURL().toString() + "/activelink/" + username;
 
       // Send register mail 
-//      Utils.sendMailActiveUser(username, email, url);
+      Utils.sendMailActiveUser(username, email, url);
       
       model.addAttribute("regResult", result);
     } catch (Exception e) {

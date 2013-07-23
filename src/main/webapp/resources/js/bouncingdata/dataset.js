@@ -62,14 +62,15 @@ Dataset.prototype.init = function(dataset) {
         $(this).replaceWith("<div id='dv-edit-title' class='div-change-title'><input class='input-title' type='text' id='edit' value='" + $(this).text() + "' /></div>");
     });
 
-    $(document).on('focusout', '#edit', function() {
-        var newTitle = this.value;
-        if (newTitle == '') {
-            alert("Cant be blank!");
-            return false;
-        }
-        else {
-        	       	
+    $(document).on('keydown', '#edit', function(e) {
+    	var keyCode = e.keyCode || e.which; 
+    	if ( keyCode == '13' || keyCode == '9') {
+	        var newTitle = this.value;
+	        if (newTitle == '') {
+	            alert("Cant be blank!");
+	            return false;
+	        }
+	        else {
         		$.ajax({
         			  url: ctx + '/dataset/changetitle',
          			 type: 'post',
@@ -91,9 +92,8 @@ Dataset.prototype.init = function(dataset) {
                   console.debug(res);
                 }
               });
-        		
-        	        
-        }
+        	}
+    	}
     });
 
     

@@ -115,12 +115,12 @@ public class DatastoreServiceImpl implements DatastoreService {
       // throw custom exception
       throw new IllegalArgumentException("The username was existed.");
     }
-    // check email
-    
-    user.setEnabled(true);
+    // vinhpq : add fail status active for register active mail
+    user.setEnabled(false);
     user.setJoinedDate(new Date());
     
     // hash password
+    
     // persist data
     dataStorage.createUser(user);
   }

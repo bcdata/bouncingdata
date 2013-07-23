@@ -47,6 +47,27 @@ $(function() {
   com.bouncingdata.Nav.setSelected('search', '${query}');
 });
 </script>
+
+<style>
+	.event-content {
+		float: left;
+		border: 1px solid #E2E2E2;
+		border-radius: 2px;
+		padding: 10px;
+		width: 510px;
+		position: relative;
+		margin-bottom: 10px;
+	}
+	
+	.title{
+		font-size: 13px;
+		line-height: 1.2em;
+		margin: 0;
+	}
+	
+	
+</style>
+
 <div id="main-content" class="main-content search-page">
   <div class="right-content"></div>
   <div class="center-content">
@@ -71,26 +92,30 @@ $(function() {
                 <li>
                   <!-- a class="anls-item" href="<c:url value="/anls/${anls.guid}" />" title="View analysis">${anls.name }</a-->
                   <div class="search-result-item">
-                    <div class="thumbnail">
-                      <a href="<c:url value="/anls/${anls.guid}" />" class="anls-item">
-                        <c:choose>
-                          <c:when test="${not empty anls.thumbnail }">
-                            <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
-                          </c:when>
-                          <c:otherwise>
-                            <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
-                          </c:otherwise>
-                        </c:choose>
-                      </a>
-                    </div>
-                    <p class="title">
-                      <a class="anls-item" href="<c:url value="/anls/${anls.guid}" />" title="View analysis"><strong>${anls.name}</strong></a>
-                      <br style="line-height: 18px;" />
-                      by <a class="user-link" href="">${anls.user.username }</a>
-                    </p>
-                    <div class="description">
-                      ${anls.description }
-                    </div>
+                  	<div class="event-content">
+	                    <div class="thumbnail">
+	                      <a href="<c:url value="/anls/${anls.guid}" />" class="anls-item">
+	                        <c:choose>
+	                          <c:when test="${not empty anls.thumbnail }">
+	                            <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+	                          </c:when>
+	                          <c:otherwise>
+	                            <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+	                          </c:otherwise>
+	                        </c:choose>
+	                      </a>
+	                    </div>
+	                    <p class="title">
+	                      <a class="anls-item" href="<c:url value="/anls/${anls.guid}" />" title="View analysis"><strong>${anls.name}</strong></a>
+	                      <br style="line-height: 18px;" />
+	                      <p style="font-size: 11px; color: #999999; margin-bottom: 0px;">Author: 
+	                      	<a class="user-link" href="javascript:void(0);" style="color: #999999;">${anls.user.username }</a>
+	                      </p>
+	                    </p>
+	                    <div class="description">
+	                      ${anls.description }
+	                    </div>
+	                    </div>
                     <div class="clear"></div>
                   </div>
                 </li>
@@ -111,19 +136,23 @@ $(function() {
               <c:forEach items="${searchResult.scrapers }" var="scrp">
                 <li>
                   <div class="search-result-item">
-                    <div class="thumbnail">
-                      <a href="javscript:void(0)" class="scraper-item">
-                        <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
-                      </a>
+	                  <div class="event-content">
+	                    <div class="thumbnail">
+	                      <a href="javscript:void(0)" class="scraper-item">
+	                        <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+	                      </a>
+	                    </div>
+	                    <p class="title">
+	                      <a class="scraper-item" href="javascript:void(0)" title="View scraper"><strong>${scrp.name}</strong></a>
+	                      <br style="line-height: 18px;" />
+	                      <p style="font-size: 11px; color: #999999; margin-bottom: 0px;">Author:
+	                      	 <a class="user-link" href="" style="color: #999999;">${scrp.user.username }</a>
+                      	  </p>
+	                    </p>
+	                    <p class="description">
+	                      <span>${scrp.description }</span>
+	                    </p>
                     </div>
-                    <p class="title">
-                      <a class="scraper-item" href="javascript:void(0)" title="View scraper"><strong>${scrp.name}</strong></a>
-                      <br style="line-height: 18px;" />
-                      by <a class="user-link" href="">${scrp.user.username }</a>
-                    </p>
-                    <p class="description">
-                      <span>${scrp.description }</span>
-                    </p>
                     <div class="clear"></div>
                   </div>
                 </li>
@@ -145,19 +174,23 @@ $(function() {
               <c:forEach items="${searchResult.datasets }" var="dts">
                 <li>
                   <div class="search-result-item">
-                    <div class="thumbnail">
-                      <a href="javscript:void(0)" class="dataset-item">
-                        <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
-                      </a>
-                    </div>
-                    <p class="title">
-                      <a class="dataset-item" href="<c:url value="/dataset/view/${dts.guid}" />" title="View dataset"><strong>${dts.name}</strong></a>
-                      <br style="line-height: 18px;" />
-                      by <a class="user-link" href="">${dts.user.username }</a>
-                    </p>
-                    <p class="description">
-                      <span>${dts.description }</span>
-                    </p>
+	                  <div class="event-content">
+	                    <div class="thumbnail">
+	                      <a href="javscript:void(0)" class="dataset-item">
+	                        <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
+	                      </a>
+	                    </div>
+	                    <p class="title">
+	                      <a class="dataset-item" href="<c:url value="/dataset/view/${dts.guid}" />" title="View dataset"><strong>${dts.name}</strong></a>
+	                      <br style="line-height: 18px;" />
+	                      <p style="font-size: 11px; color: #999999; margin-bottom: 0px;">Author:
+	                        <a class="user-link" href="" style="color: #999999;">${dts.user.username }</a>
+	                      </p>
+	                    </p>
+	                    <p class="description">
+	                      <span>${dts.description }</span>
+	                    </p>
+	                    </div>
                     <div class="clear"></div>
                   </div>
                 </li>
