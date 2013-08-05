@@ -120,6 +120,13 @@ Dataset.prototype.init = function(dataset) {
       });
     });
     
+    $(document).on('keydown', '.add-tag-popup #add-tag-input', function(e) {
+    	var keyCode = e.keyCode || e.which;
+    	if ( keyCode == '13') {
+    		$('.add-tag-popup #add-tag-button').click();
+    	}
+    });
+    
     $('.add-tag-popup #add-tag-button').click(function() {
       var tag = $('#add-tag-input').val();
       if (!tag) return false;
@@ -149,7 +156,7 @@ Dataset.prototype.init = function(dataset) {
             $.ajax({
               url: ctx + '/tag/removetag',
               type: 'post',
-              data: {
+              data: {	
                 guid: guid,
                 tag: tag,
                 type: 'dataset'

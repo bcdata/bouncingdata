@@ -208,6 +208,13 @@ $(document).on('keydown', '#edit', function(e) {
         $addTagPopup.hide();
       }
     });
+    
+    $(document).on('keydown', '.add-tag-popup #add-tag-input', function(e) {
+    	var keyCode = e.keyCode || e.which;
+    	if ( keyCode == '13') {
+    		$('.add-tag-popup #add-tag-button').click();
+    	}
+    });
         
     $('.add-tag-popup #add-tag-button').click(function() {
       var tag = $('#add-tag-input').val();

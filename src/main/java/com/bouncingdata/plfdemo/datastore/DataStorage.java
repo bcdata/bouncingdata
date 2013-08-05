@@ -141,6 +141,9 @@ public interface DataStorage {
    * @throws DataAccessException
    */
   public void updateAnalysis(Analysis analysis);
+  
+  public void updateScraper(Scraper scraper);
+  
   public boolean updateDataset(Dataset dataset);
   /**
    * @param analysisId

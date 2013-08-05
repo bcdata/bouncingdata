@@ -76,6 +76,11 @@ public class DatastoreServiceImpl implements DatastoreService {
     dataStorage.updateAnalysis(Analysis);
   }
   
+  @Override
+  public void updateScraper(Scraper scraper) throws Exception {
+    dataStorage.updateScraper(scraper);
+  }
+  
   public void deleteAnalysis(int analysisId) throws Exception {
     Analysis anls = dataStorage.getAnalysis(analysisId);
     if (anls == null) {

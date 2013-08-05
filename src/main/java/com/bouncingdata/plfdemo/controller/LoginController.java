@@ -140,13 +140,15 @@ public class LoginController implements AuthenticationFailureHandler{
   }
   
   @RequestMapping(value="/help/python", method = RequestMethod.GET)
-  public String openPyHelp() {
+  public String openPyHelp(ModelMap model) {
+	model.addAttribute("mode", "help-python");
     return "help-python";
   }
   
   @RequestMapping(value="/help/r", method = RequestMethod.GET)
-  public String openRHelp() {
-    return "help-r";
+  public String openRHelp(ModelMap model) {
+	  model.addAttribute("mode", "help-r");
+	  return "help-r";
   }
     
   @RequestMapping(value="/auth", method=RequestMethod.GET)

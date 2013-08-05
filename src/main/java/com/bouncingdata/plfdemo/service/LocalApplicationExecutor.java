@@ -124,7 +124,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
         p.destroy();
         t.cancel();
         exitCode = 1;
-      }
+      } 
       
     } catch (IOException e) {
       e.printStackTrace();
@@ -132,7 +132,7 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
       e.printStackTrace();
     }
     
-    int datasetCount = dataPostProcess(ticket, app, user);
+    int datasetCount = dataPostScraperProcess(ticket, app, user, output);
     int visCount = 0;
     if (app instanceof Analysis) {
       // copy visuals from log dir to visualizations dir
@@ -383,6 +383,90 @@ public class LocalApplicationExecutor implements ApplicationExecutor, ServletCon
         datastoreService.createDatasets(dsList);
         
       }
+      
+    } else if (script == null) {
+      // temporarily ignore the anonymous script
+      return 0;
+    }
+   
+    return datasets.size();
+  }
+  
+  /**
+   * Post-process phase for generated datasets from script execution
+   * @param executionId
+   * @param script
+   * @param user
+   * @return the number of processed dataset
+   * @throws Exception
+   */
+  private int dataPostScraperProcess(String executionId, BcDataScript script, User user, String dataScraper) throws Exception {
+    String execLogPath = logDir + Utils.FILE_SEPARATOR + executionId;
+    File execLogDir = new File(execLogPath);
+    Map<String, DatasetDetail> datasets = null;
+    ObjectMapper mapper = new ObjectMapper();
+    dataScraper = "{u'date': u'08-01-2013', u'milliseconds_since_epoch': 1375343650484L, u'time': u'07:54:10 AM'}";
+    if (script instanceof Scraper) {
+      Scraper scraper = (Scraper) script;
+      datasets = new HashMap<String, DatasetDetail>();
+      List<Dataset> dsList = new ArrayList<Dataset>();
+      File scriptLocation = new File(storePath + Utils.FILE_SEPARATOR + script.getGuid());
+	  
+      try {
+	      JsonNode dsLogNode = mapper.readTree(dataScraper);
+	      for (int i = 0; i < dsLogNode.size(); i++) {
+	        JsonNode dsNode = dsLogNode.get(i);
+	        String identifier = dsNode.get("name").getTextValue();
+	        Dataset ds = new Dataset();
+	        ds.setName(identifier);
+	        ds.setDescription(dsNode.get("description").getTextValue());
+	        String guid = Utils.generateGuid();
+	        ds.setGuid(guid);
+	        ds.setSchema(dsNode.get("schema").getTextValue());
+	        ds.setUser(user);
+	        ds.setCreateAt(new Date());
+	        ds.setLastUpdate(new Date());
+	        ds.setScraper(scraper);
+	        ds.setRowCount(dsNode.get("size").getIntValue());
+	        ds.setActive(true);
+	        dsList.add(ds);
+	        datasets.put(guid, new DatasetDetail(guid, ds.getName(), ds.getRowCount(), null, null));
+	      }
+	    } catch (IOException e) {
+	      logger.debug("Failed to process dataset log.", e);
+	    }  
+	    
+	    File[] attachmentFiles = execLogDir.listFiles(new FileFilter() {
+	      
+	      @Override
+	      public boolean accept(File pathname) {
+	        return pathname.getName().endsWith(".att");
+	      }
+	    });
+	    
+	    if (attachmentFiles != null) {
+	      for (File f : attachmentFiles) {
+	        try {
+	          String s = FileUtils.readFileToString(f);
+	          JsonNode rootNode = mapper.readTree(s);
+	          String identifier = rootNode.get("name").getTextValue();
+	          JsonNode data = rootNode.get("data");
+	          datasets.put(identifier, new DatasetDetail(identifier, identifier, data.size(), null, data.toString()));
+	          try {
+	            FileUtils.copyFile(f, new File(scriptLocation.getAbsoluteFile() + Utils.FILE_SEPARATOR + f.getName()));
+	          } catch (IOException e) {
+	            logger.debug("Failed to copy attachment file " + f.getAbsolutePath() + " to " + scriptLocation.getAbsolutePath());
+	          }
+	        } catch (Exception e) {
+	          logger.debug("Failed to process attachment log.", e);
+	        }
+	      }
+	    }
+	         
+	    // invalidate old datasets?
+	    datastoreService.invalidateDataset(scraper);      
+	    datastoreService.createDatasets(dsList);
+       
       
     } else if (script == null) {
       // temporarily ignore the anonymous script

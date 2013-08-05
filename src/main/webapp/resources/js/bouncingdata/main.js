@@ -76,6 +76,24 @@ Main.prototype.init = function() {
       }
     });
     
+    $('.top-page-panel a#create-scraper').click(function() {
+        var $createButton = $('.top-page-panel .create-button a#create-button-link');
+        $createButton.removeClass('active');
+        $('.top-page-panel .create-submenu').hide();
+        
+        var data = {
+          name : 'Untitled Scraper',
+          language : 'python',
+          description : '',
+          code : '',
+          isPublic : false,
+          tags : '',
+          type : 'scraper'
+        };
+        
+        me.newScraper(data, false);
+      });
+    
     $('.top-page-panel a#create-analysis').click(function() {
       /*me.$newDialog.dialog("open");
       var $createButton = $('.top-page-panel .create-button a#create-button-link');
@@ -490,6 +508,25 @@ Main.prototype.newAnalysis = function(appData, newTab) {
     async: false
   });
 }
+
+Main.prototype.newScraper = function(appData, newTab) {
+	  var me = this;
+	  $.ajax({
+	    url: ctx + "/main/createapp",
+	    data: appData,
+	    type: "post",
+	    success: function(anls) {
+	      if (newTab) {
+	        window.open(ctx + '/editor/scraper/' + anls.guid + '/edit?feature=new', '_blank');
+	      } else window.location = ctx + '/editor/scraper/' + anls.guid + '/edit?feature=new';
+	    },
+	    error: function(res) {
+	      window.alert('Failed to create new Scraper. Please try again.');
+	      console.debug(res);
+	    },
+	    async: false
+	  });
+	}
 
 function Utils() {
 }

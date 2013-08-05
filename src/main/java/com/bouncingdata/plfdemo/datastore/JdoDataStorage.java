@@ -474,7 +474,32 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
-
+  
+  @Override
+  public void updateScraper(Scraper scraper) {
+    if (scraper.getUser() == null) return;
+    PersistenceManager pm = getPersistenceManager();
+    Transaction tx = pm.currentTransaction();
+    // User user = pm.getObjectById(User.class, analysis.getUser().getId());
+    try {
+      tx.begin();
+      Scraper scp = pm.getObjectById(Scraper.class, scraper.getId());
+      scp.setName(scraper.getName());
+      scp.setDescription(scraper.getDescription());
+      scp.setLanguage(scraper.getLanguage());
+      // anls.setUser(user);
+      scp.setLastUpdate(new Date());
+      scp.setPublished(scraper.isPublished());
+      scp.setLineCount(scraper.getLineCount());
+      tx.commit();
+    } finally {
+      if (tx.isActive()) {
+        tx.rollback();
+      }
+      pm.close();
+    }
+  }
+  
   @Override
   public void createVisualization(Visualization visualization) {
     PersistenceManager pm = getPersistenceManager();
@@ -1861,7 +1886,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	     q.execute();
 	     
 	     // delete dataset tag 
-	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `Dataset_tags` WHERE `id_EID` = " + dsId);
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `Dataset_tags` WHERE `id_OID` = " + dsId);
 	     q.execute();
 	     
 	     // delete 2 tables (dataset vote & dataset) 
@@ -1914,7 +1939,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 	     q.execute();
 	     
 	     // delete analyses tag 
-	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `Analysis_tags` WHERE `id_EID` = " + anlsId);
+	     q = pm.newQuery("javax.jdo.query.SQL", "DELETE FROM `Analysis_tags` WHERE `id_OID` = " + anlsId);
 	     q.execute();
 	     
 	     // delete 2 tables (analyses vote & analyses) 
@@ -2063,7 +2088,8 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   @Override
   public List<Dataset> getDatasetsIn1Month(int startPoint, int numrows){
     PersistenceManager pm = getPersistenceManager();
-    Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `is_public` = 1 ORDER BY `create_at` DESC LIMIT " + startPoint + "," + numrows);
+    //Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `is_public` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
+    Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `is_public` = 1 ORDER BY `create_at` DESC LIMIT " + startPoint + "," + numrows);
     q.setClass(Dataset.class);
 //    q.setRange(startPoint, numrows + startPoint);
     
@@ -2084,7 +2110,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   @Override
   public List<Analysis> getAnalysesIn1Month(int startPoint, int numrows) {
     PersistenceManager pm = getPersistenceManager();
-    Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `published` = 1 ORDER BY `create_at` DESC LIMIT " + startPoint + "," + numrows);
+    // Get data in a last month 
+    //    Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `published` = 1 ORDER BY `create_at` DESC LIMIT " + startPoint + "," + numrows);
+    Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `published` = 1 ORDER BY `create_at` DESC LIMIT " + startPoint + "," + numrows);
     q.setClass(Analysis.class);
 //    q.setRange(startPoint, numrows + startPoint);
     try {
@@ -2106,7 +2134,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   @Override
   public List<Analysis> getPopularAnalysesIn1Month(int startPoint, int numrows) {
     PersistenceManager pm = getPersistenceManager();
-    Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `published` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
+    // Get data in a last month
+    //Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `published` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
+    Query q = pm.newQuery("javax.jdo.query.SQL","SELECT * FROM  `analyses` WHERE  `published` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
     q.setClass(Analysis.class);
 //    q.setRange(startPoint, numrows + startPoint);
     
@@ -2127,7 +2157,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   @Override
   public List<Dataset> getPopularDatasetsIn1Month(int startPoint, int numrows){
     PersistenceManager pm = getPersistenceManager();
-    Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `is_public` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
+    // Get data in a last month
+    // Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `create_at` >= DATE_SUB( CURDATE( ) , INTERVAL 1 MONTH ) and `is_public` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
+    Query q = pm.newQuery("javax.jdo.query.SQL", "SELECT * FROM  `datasets` WHERE  `is_public` = 1 ORDER BY `score` DESC LIMIT " + startPoint + "," + numrows);
     q.setClass(Dataset.class);
 //    q.setRange(startPoint, numrows + startPoint);
     

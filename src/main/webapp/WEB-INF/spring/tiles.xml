@@ -15,6 +15,10 @@
     <put-attribute name="main-content" value="/WEB-INF/views/editor.jsp"></put-attribute>
   </definition>
   
+  <definition name="speditor" extends="based-layout">
+    <put-attribute name="main-content" value="/WEB-INF/views/speditor.jsp"></put-attribute>
+  </definition>
+  
   <definition name="size" extends="based-layout">
     <put-attribute name="main-content" value="/WEB-INF/views/size.jsp"></put-attribute>
   </definition>

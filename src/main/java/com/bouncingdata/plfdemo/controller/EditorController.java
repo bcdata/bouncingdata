@@ -28,6 +28,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.dto.VisualizationType;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.AnalysisDataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
@@ -51,6 +52,62 @@ public class EditorController {
   @Autowired
   private ApplicationExecutor     appExecutor;
 
+  @RequestMapping(value = "/scraper/{guid}/{mode}", method = RequestMethod.GET)
+  public String openSpEditor(@PathVariable String guid, @PathVariable String mode, ModelMap model, Principal principal, WebRequest req) {
+	  if (!"edit".equalsIgnoreCase(mode)) {
+	      model.addAttribute("errorMsg", "Unknown page.");
+	      return "error";
+	  }
+	  
+	  try { 
+		  Scraper anls = datastoreService.getScraperByGuid(guid);
+	      if (anls == null) {
+	        model.addAttribute("errorMsg", "Scraper not found!");
+	        return "error";
+	      }
+
+	      User user = (User) ((Authentication) principal).getPrincipal();
+	      if (user == null || !user.getUsername().equals(anls.getUser().getUsername())) {
+	        model.addAttribute("errorMsg", "You have no permission to edit this scraper!");
+	        return "error";
+	      }
+
+	      try {
+	        ObjectMapper logmapper = new ObjectMapper();
+	        String data = logmapper.writeValueAsString(new String[] { "2", guid, mode });
+	        datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.OPEN_EDITOR, data);
+	      } catch (Exception e) {
+	        logger.debug("Failed to log action", e);
+	      }
+	      model.addAttribute("anls", anls);
+
+	      String code = appStoreService.getScriptCode(guid, null);
+	      model.addAttribute("anlsCode", StringEscapeUtils.escapeJavaScript(code));
+	        
+	      if ("edit".equals(mode)) {
+	          String feature = req.getParameter("feature");
+	          if ("new".equals(feature)) {
+	            model.addAttribute("feature", "new");
+	          } else {
+	            model.addAttribute("feature", "edit");
+	            String execId = req.getParameter("execid");
+	            if (execId != null && !execId.isEmpty()) {
+	              // do something
+	              model.addAttribute("lastOutput", StringEscapeUtils.escapeJavaScript(anls.getLastOutput()));
+	            }
+	          }
+	          return "speditor";
+	        }
+	      
+	  } catch (Exception e) {
+	      logger.debug("Failed to load analysis {}", guid);
+	      model.addAttribute("errorMsg", e.getMessage());
+	      return "error";
+	  }
+
+    return "speditor";
+  }
+  
   @RequestMapping(value = "/anls/{guid}/{mode}", method = RequestMethod.GET)
   public String openEditor(@PathVariable String guid, @PathVariable String mode, ModelMap model, Principal principal, WebRequest req) {
 
@@ -201,4 +258,33 @@ public class EditorController {
 
   }
 
+  @RequestMapping(value = "/scraper/{guid}/describe", method = RequestMethod.POST)
+  public @ResponseBody void saveDescriptionScraper(@PathVariable String guid, @RequestParam(value = "name", required = true) String name,
+      @RequestParam(value = "description", required = true) String description,
+      @RequestParam(value = "isPublic", required = true) boolean isPublic, ModelMap model, Principal principal) {
+    User user = (User) ((Authentication) principal).getPrincipal();
+    if (user == null) {
+      return;
+    }
+
+    try {
+      try {
+        ObjectMapper logmapper = new ObjectMapper();
+        String data = logmapper.writeValueAsString(new String[] { "3", guid, name, description });
+        datastoreService.logUserAction(user.getId(), UserActionLog.ActionCode.SAVE_DESCRIPTION, data);
+      } catch (Exception e) {
+        logger.debug("Failed to log action", e);
+      }
+
+      Scraper scp = datastoreService.getScraperByGuid(guid);
+      scp.setName(name);
+      scp.setDescription(description);
+      scp.setPublished(isPublic);
+      datastoreService.updateScraper(scp);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+  
 }

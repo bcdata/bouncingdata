@@ -230,8 +230,9 @@ $(function() {
           <span id="filter-top-left" style="float: left;">
             <a href="<c:url value="/stream/${pageId}/all/${tp}" />" ${fm eq 'all'?'class="nav-selected"':''}>All</a>&nbsp;|&nbsp;
             <a href="<c:url value="/stream/${pageId}/analysis/${tp}" />" ${fm eq 'analysis'?'class="nav-selected"':''}>Analysis</a>&nbsp;|&nbsp;
-            <a href="<c:url value="/stream/${pageId}/dataset/${tp}" />" ${fm eq 'dataset'?'class="nav-selected"':''}>Dataset</a>&nbsp;|&nbsp;
-            <a href="<c:url value="/stream/${pageId}/scraper/${tp}" />" ${fm eq 'scraper'?'class="nav-selected"':''}>Scraper</a>
+            <a href="<c:url value="/stream/${pageId}/dataset/${tp}" />" ${fm eq 'dataset'?'class="nav-selected"':''}>Dataset</a>
+            <%-- &nbsp;|&nbsp;
+            <a href="<c:url value="/stream/${pageId}/scraper/${tp}" />" ${fm eq 'scraper'?'class="nav-selected"':''}>Scraper</a> --%>
           </span>
           <span id="filter-top-right" style="float: right;">
             <a href="<c:url value="/stream/${pageId}/${fm}/recent" />" ${tp eq 'recent'?'class="nav-selected"':''} >Recent</a>&nbsp;|&nbsp;

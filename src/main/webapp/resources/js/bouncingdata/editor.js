@@ -43,8 +43,10 @@ Editor.prototype.init = function(anls, feature) {
     me.$loading = $(".editor-status .ajax-loading");
     
     $('button#editor-execute').click(function() {
-      if (executeAction == 'execute') {
-        me.execute();
+     debugger;
+     var type = 'analysis';
+     if (executeAction == 'execute') {
+        me.execute(type);
       } else if (executeAction == 'next') {
         // just go to next step
         window.location.href = ctx + '/editor/anls/' + me.anls.guid + '/size';
@@ -52,6 +54,17 @@ Editor.prototype.init = function(anls, feature) {
         // do nothing
         console.debug('Unknown action!');
       }     
+    });
+    
+    $('button#speditor-execute').click(function() {
+        debugger; 
+        var type = 'scraper';
+        if (executeAction == 'execute') {
+           me.execute(type);
+        } else {
+           // do nothing
+           console.debug('Unknown action!');
+         }     
     });
     
     $('#execution-logs .clear-console').click(function() {
@@ -207,57 +220,67 @@ Editor.prototype.initDescribe = function(anls) {
       }
     });
     
+    $(document).on('keydown', '.add-tag-popup #add-tag-input', function(e) {
+    	var keyCode = e.keyCode || e.which;
+    	if ( keyCode == '13') {
+    		$('.add-tag-popup #add-tag-button').click();
+    	}
+    });
+    
+    
     $('.add-tag-popup #add-tag-button').click(function() {
-      var tag = $('#add-tag-input').val();
-      if (!tag) return false;
-      $.ajax({
-        url: ctx + '/tag/addtag',
-        type: 'post',
-        data: {
-          'guid': anls.guid,
-          'tag': tag,
-          'type': 'analysis'
-        },
-        success: function(res) {
-    	console.debug(res);
-    	var result = res['message'];
-		 if(result=='') return;
-		 var tags= result.split(",");	
-         for (var i=0;i<tags.length;i++){        	 
-          
-          $('.tag-set .tag-list').append('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + '/tag/'
-              + tags[i] + '">' + tags[i] + '</a></div>');
-          $('.tag-remove', $newTag).click(function() {
-              var self = this;
-              if (anls.user != com.bouncingdata.Main.username) return;
-              var tag = $(this).prev().text();
-              $.ajax({
-                url: ctx + '/tag/removetag',
-                type: 'post',
-                data: {
-                  'guid': guid,
-                  'tag': tag,
-                  'type': 'analysis'
-                },
-                success: function(res) {
-                  if (res['code'] < 0) {
-                    console.debug(res);
-                    return;
-                  }
-                  $(self).parent().remove();
-                },
-                error: function(res) {
-                  console.debug(res);
-                }
-              });
-            });
-          
-        }
-        },
-        error: function(res) {
-          console.debug(res);
-        }
-      });
+	      var tag = $('#add-tag-input').val();
+	      if (!tag) return false;
+	      $.ajax({
+	        url: ctx + '/tag/addtag',
+	        type: 'post',
+	        data: {
+	          'guid': anls.guid,
+	          'tag': tag,
+	          'type': 'analysis'
+	        },
+	        success: function(res) {
+	    	console.debug(res);
+	    	var result = res['message'];
+			 if(result=='') return;
+			 var tags= result.split(",");	
+	         for (var i=0;i<tags.length;i++){        	 
+	          var $newTag = $('<div class="tag-element-outer"><a class="tag-element" href="' + ctx + '/tag/' + tags[i] + '">' + tags[i] + '</a><span class="tag-remove" title="Remove tag from this datasetd">x</span></div>');
+	          $('.tag-set .tag-list').append($newTag);
+	          $('.tag-remove', $newTag).click(function() {
+	              var self = this;
+//	              if (anls.user != com.bouncingdata.Main.username) return;
+	              var tag = $(this).prev().text();
+	              $.ajax({
+	                url: ctx + '/tag/removetag',
+	                type: 'post',
+	                data: {
+	                  'guid': anls.guid,
+	                  'tag': tag,
+	                  'type': 'analysis'
+	                },
+	                success: function(res) {
+	                  if (res['code'] < 0) {
+	                    console.debug(res);
+	                    return;
+	                  }
+	                  $(self).parent().remove();
+	                },
+	                error: function(res) {
+	                  console.debug(res);
+	                }
+	              });
+	            });
+	          
+	        }
+	         
+	        //delete value in input 
+	        $('#add-tag-input').val('');
+	        },
+	        error: function(res) {
+	          console.debug(res);
+	        }
+	      });
     });
     
     
@@ -327,14 +350,15 @@ Editor.prototype.loadDashboard = function(visuals, dashboard, $dashboard, anls) 
   com.bouncingdata.Dashboard.load(visuals, dashboard, $dashboard, anls.username==com.bouncingdata.Main.username);
 }
 
-Editor.prototype.execute = function(callback) {
+Editor.prototype.execute = function(type,callback) {
+  debugger;
   var me = this;
   var code = me.editor.getSession().getDocument().getValue();
   if (!code) {
     console.debug('No code to execute!');
     return;
   }
-  var type = 'analysis';
+  
   me.setStatus("running");
   
   $.ajax({
