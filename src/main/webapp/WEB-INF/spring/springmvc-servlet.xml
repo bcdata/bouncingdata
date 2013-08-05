@@ -41,11 +41,14 @@
   <bean id="localAppExecutor" class="com.bouncingdata.plfdemo.service.LocalApplicationExecutor">
     <property name="storePath" value="${com.bouncingdata.appstore.storePath}"></property>
     <property name="logDir" value="${com.bouncingdata.appstore.logDir}"></property>
+     <property name="scaledImageWidth" value="${com.bouncingdata.appstore.scaledImageWidth}"></property>
+      <property name="scaledImageHeight" value="${com.bouncingdata.appstore.scaledImageHeight}"></property>
   </bean>
  
   <bean id="appStoreService" class="com.bouncingdata.plfdemo.service.ApplicationStoreService">
     <property name="storePath" value="${com.bouncingdata.appstore.storePath}"></property>
     <property name="logDir" value="${com.bouncingdata.appstore.logDir}"></property>
+    
   </bean>
   
   <bean id="mailService" class="com.bouncingdata.plfdemo.service.MailService">
