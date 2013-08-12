@@ -172,7 +172,7 @@
           <ul>
             <li><a id="create-analysis" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Analysis</a></li>
             <li><a id="create-dataset" class="create-sub-item header-submenu-item" href="<c:url value="/dataset/upload" />"><span class="sub-item-icon"></span>Dataset</a></li>
-           <!--  <li><a id="create-scraper" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li> -->
+            <li><a id="create-scraper" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
           </ul>
         </div>
       </div>
