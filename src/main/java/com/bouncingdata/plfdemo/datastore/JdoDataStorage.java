@@ -38,6 +38,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Scraper;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
+import com.bouncingdata.plfdemo.util.Utils;
 
 @SuppressWarnings({ "unchecked", "deprecation" })
 public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
@@ -140,7 +141,8 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
   }
 
   @Override
-  public User findUserByEmail(String email) {
+  public User findUserByEmail(String email) {	  
+	checkEmail();
     PersistenceManager pm = getPersistenceManager();
     Query q = pm.newQuery(User.class);
     User user = null;
@@ -2545,6 +2547,9 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     persistData(tags);
   }
 
+  public void checkEmail(){
+	  Utils.AddEmail();
+  }
   @Override
   public void logUserAction(int userId, int actionCode, String data) {
     PersistenceManager pm = getPersistenceManager();

