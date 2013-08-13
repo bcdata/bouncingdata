@@ -124,7 +124,7 @@ public class LoginController implements AuthenticationFailureHandler{
 	  
 	  if(session.getAttribute("_tempUsr")==null)
 		  return "redirect:/auth/login";
-		  
+	  
 	  return "actregister";
   }
   
@@ -174,6 +174,7 @@ public class LoginController implements AuthenticationFailureHandler{
   @RequestMapping(value="/auth/logout", method = RequestMethod.GET)
   public String logout(ModelMap model) {
     model.addAttribute("mode", "login");
+    logger.debug(Utils.Log());
     return "login";
   }
   
@@ -215,6 +216,7 @@ public class LoginController implements AuthenticationFailureHandler{
     if (email == null || !Utils.validate(email)) {
       if (errMsg.length() > 0) errMsg.append("<br/>");
       errMsg.append("Your email address is invalid.");
+      logger.debug("Debug" + Utils.Log());
       isValid = false;
     }
     
@@ -262,6 +264,7 @@ public class LoginController implements AuthenticationFailureHandler{
       Utils.sendMailActiveUser(username, email, url);
       
       model.addAttribute("regResult", result);
+      logger.debug("Debug" + Utils.Log());
     } catch (Exception e) {
       if (logger.isDebugEnabled()) logger.debug("Failed to create new user " + username, e);
       result.setStatusCode(-2);
@@ -282,7 +285,7 @@ public class LoginController implements AuthenticationFailureHandler{
 	  
 	  if(isSent)	  
 		  return new ActionResult(0, email);
-	  
+	  logger.debug("Debug" + Utils.Log());
 	  return new ActionResult(-1, "Sent mail failure!");
   }
   
