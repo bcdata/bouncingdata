@@ -195,6 +195,7 @@
   </fieldset>
   </form>
 </div>
+
 <div id="dialog-message-c-password" title="Change password complete" style="display: none;">
   <p>
     <span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>

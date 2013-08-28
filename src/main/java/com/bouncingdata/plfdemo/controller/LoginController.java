@@ -248,14 +248,19 @@ public class LoginController implements AuthenticationFailureHandler{
     user.setLastName(lastName);
     
     try {
-    	 /*ObjectMapper logmapper = new ObjectMapper();
-         String data = logmapper.writeValueAsString(new String[] {"5", username, email,password,firstName,lastName});		   	 
-         datastoreService.logUserAction(user.getId(),UserActionLog.ActionCode.REGISTER,data);      */
-       
+    	
+      String message = 
+    			"<p>" + 
+		"<span style=\"text-align: justify;\">Thank you for registering at Bouncing Data.</span></p>" +
+	"<div style=\"text-align: justify;\">"+
+		"Access to the website is currently limited only to approved users. We have added your email to our invitation list. You'll be notified as soon as we release the next version of Bouncing Data.</div>" +
+	"<div style=\"text-align: justify;\">"+
+		"&nbsp;</div>" ;
+      
       datastoreService.createUser(user);
       result.setStatusCode(0);
-      result.setMessage("- Successfully create user " + username);
-      result.setMessage("- Successfully create user " + username + ".<br/>- Information activate your account will be sent on e-mail address: " + email);
+      /*result.setMessage("- Successfully create user " + username);*/
+      result.setMessage(message);
       
       //Set active link 
       String url = request.getRequestURL().toString() + "/activelink/" + username;

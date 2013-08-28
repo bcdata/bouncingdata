@@ -184,8 +184,20 @@ public class Utils {
 	 */
   public static boolean sendMailActiveUser(String username, String sEmail, String lnkReset) {
 		
-	String title = "Bouncing Data: Registration mail to activate your account!";
-
+	String title = "Welcome to Bouncing Data!";
+	String message = 
+			"<p>" + 
+	"<span style=\"text-align: justify;\">Thank you for registering at Bouncing Data. We are committed to build Bouncing Data to become a place where people like you and us can collect, analyze, visualize, share, and discuss dataset and their understanding of the world.</span></p>" +
+"<div style=\"text-align: justify;\">"+
+	"We are currently operating under the alpha version, and the access to the website is limited only to approved users. We have added your email to our invitation list. You&#39;ll be notified as soon as we release the next version of Bouncing Data.</div>" +
+"<div style=\"text-align: justify;\">"+
+	"&nbsp;</div>" +
+"<div style=\"text-align: justify;\">"+
+	"Stay tune. And again, thank you for your interest.</div>"+
+"<div>"+
+	"&nbsp;</div>"+
+"<div style=\"text-align: justify;\">"+
+	"Bouncing Data team.&nbsp;</div>";
 	String content = "<table cellpadding='0' cellspacing='0' border='0' width='620'>"+ 
 						"<tbody>"+  
 							"<tr>  "+
@@ -199,11 +211,8 @@ public class Utils {
 										   "border-left: 1px solid #cccccc; "+
 										   "padding: 15px;font-size: 12px;font-weight: lighter;'>"+ 
 									"<div style='margin-bottom: 15px;'>Hi " + username + ",</div> "+
-									"<div style='margin-bottom: 15px'>To finish register account please click on the link below or copy and paste into your browser:</div>"+ 
-									"<div style='margin-bottom: 15px; width: 95%; margin-top: 20px; font-family: LucidaGrande, tahoma, verdana, arial, sans-serif; padding: 10px; background-color: #fff9d7; border: 1px solid #e2c822;'> "+
-										"<a href='" + lnkReset + "' style='color: #3b5998; text-decoration: none; font-weight: bold; font-size: 13px' target='_blank'>" + lnkReset + "</a>"+ 
-									"</div> "+
-									"<div style='margin-bottom: 15px; margin: 0'>Thanks &amp; Best Regards!<br>Bouncing Data System</div>"+ 
+									"<div style='margin-bottom: 15px'>" + message + "</div>"+ 			
+									
 								"</td>"+ 
 							"</tr>"+ 
 						"</tbody>"+ 

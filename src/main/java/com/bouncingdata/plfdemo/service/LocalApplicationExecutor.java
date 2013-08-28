@@ -631,7 +631,8 @@ public class LocalApplicationExecutor implements ApplicationExecutor,
 				v.setGuid(guid);
 				v.setActive(true);
 				datastoreService.createVisualization(v);
-
+/*
+ * No need to make thumbnail
 				if (!makeThumb && type == VisualizationType.PNG) {
 					// create thumbnail
 					BufferedImage img = ImageIO.read(f);
@@ -639,15 +640,18 @@ public class LocalApplicationExecutor implements ApplicationExecutor,
 					int thumbnailsHeight = Integer.parseInt(this.scaledImageHeight);
 					
 					BufferedImage thumbnail = Scalr.resize(img,Scalr.Method.QUALITY, Scalr.Mode.FIT_EXACT, thumbnailsWidth, thumbnailsHeight,
-							  Scalr.OP_ANTIALIAS); 
+							  Scalr.OP_ANTIALIAS); 					
 					
-					//ImageIO.write(thumbnail, "png", new File(servletContext.getRealPath("/thumbnails") + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
 					ImageIO.write(img, "png", new File(servletContext.getRealPath("/thumbnails") + Utils.FILE_SEPARATOR + anls.getGuid() + ".jpg"));
 					makeThumb = true;
 					anls.setThumbnail(anls.getGuid());
 					datastoreService.updateAnalysis(anls);
 				}
-
+*/
+				anls.setThumbnail(anls.getGuid());
+				datastoreService.updateAnalysis(anls);
+				
+				
 				try {
 					FileUtils.copyFile(
 							f,
