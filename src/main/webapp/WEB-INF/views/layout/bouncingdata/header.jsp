@@ -138,35 +138,66 @@
   </div>
   
   <h2 class="header-logo">
-    <a href="<c:url value="/"/>">Bouncing Data</a>
+    <a href="<c:url value="/"/>">
+    	<font id="section-one">Bouncing</font><font id="section-two">data</font><font id="section-three">.com</font>
+    </a>
   </h2>
   <div class="top-page-panel">
     <div class="search-container">
       <form id="search-form" class="search-form" method="get">
         <div class="search-input-wrapper">
-          <input type="text" class="search-input" id="query" name="query" />
+          <input type="text" class="search-input" id="query" name="query" value="Search or type a command ..." onblur="if(value=='') value = 'Search or type a command ...'" onfocus="if(value=='Search or type a command ...') value = ''"/>
+          
+          <div id="search-submit">
+			<img src="<c:url value="/resources/images/search_icon.png"/>" >
+		  </div>
         </div>
         <input type="hidden" name="criteria" value="global" id="criteria" />
-        <!-- button type="submit" id="search-submit">Search</button-->
+        <!-- <button type="submit" id="search-submit">Search</button> -->
       </form>
     </div>
     <div class="header-buttons">
-      <ul class="guide-button-container">
-        <li><a href="<c:url value="/learn"/>" class="guide-button learn-button">Learn</a></li>
-        <li><a href="<c:url value="/help/python"/>" class="guide-button help-button">Help</a></li>
-        <li><a class="guide-button me-button">Me</a></li>
-      </ul>
-      <div class="guide-button-submenu">
-        <div class="header-hidden-menu me-menu">
+      <div>
+        <a href="<c:url value="/learn"/>" class="guide-button learn-button">Learn</a>
+        <font class="guide-button-space">|</font>
+        <a href="<c:url value="/help/python"/>" class="guide-button help-button">Help</a>
+        <font class="guide-button-space">|</font>
+        <a class="guide-button me-button">About</a>
+      </div>   
+      
+    </div>
+      
+      <div id="information-person">
+    	<sec:authorize access="isAuthenticated()">
+          <div style="float: right;margin-top: -8px;padding-right: 12px;"> 
+          	<img src="<c:url value="/resources/images/bottom-arrow.png"/>" style="margin-top: 13px;margin-left: 8px;width: 7px;height: 4px;">
+          </div>
+          
+          <div style="float: right;margin-top: -8px;"> 
+          	<img src="<c:url value="/resources/images/no-avatar.png"/>" style="width: 28px;height: 28px;border-radius: 2px;border: 1px solid #ACD1F6;">
+          </div>
+          
+          <div style="float: right;margin-right: 12px;">
+          	<sec:authentication property="principal.username" />
+          </div>
+	    </sec:authorize>
+        <div class="me-menu header-hidden-menu">
           <ul>
             <li><a id="change-password" name="change-password" class="header-submenu-item" href="#">Change password</a></li>
+            <li><a id="edit-information" name="edit-information" class="header-submenu-item" href="#">Edit Information</a></li>
             <li><a class="header-submenu-item" href="<c:url value="/auth/security_logout" />">Logout</a></li>
           </ul>
         </div>
-      </div>
-      <div class="create-button-container">
+    </div>
+    
+      <div class="create-button-container" >
         <div id="create-button" class="create-button">
-          <a id="create-button-link" class="create-button-link" href="javascript:void(0);">Create</a>
+           <div style="float: right;"> 
+          	 	<img src="<c:url value="/resources/images/create-arrow.png"/>" style="margin-top: 10px;padding-right: 10px;">
+           </div>
+           <div style="float: right;margin-right: 10px;">
+           		<a id="create-button-link" class="create-button-link" href="javascript:void(0);">CREATE</a>
+           	</div>
         </div>
         <div class="create-submenu header-hidden-menu" style="display: none;">
           <ul>
@@ -176,7 +207,6 @@
           </ul>
         </div>
       </div>
-    </div>
   </div>
 </div>
 

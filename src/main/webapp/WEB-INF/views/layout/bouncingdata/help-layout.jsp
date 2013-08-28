@@ -10,7 +10,7 @@
 	    var $link = $('a', this);
 	    var href = $link.prop('href');
 	    $link.bind('click', function(e) {
-	      com.bouncingdata.Main.toggleAjaxLoading(true);
+	      com.bouncingdata.Main.toggleAjaxLoading(false);
 	      $('.help-page-nav a.selected-lang').removeClass('selected-lang');
 	      $(this).addClass('selected-lang');
 	      window.history.pushState({linkId: href, type: 'page'}, $link.text(), href);

@@ -58,7 +58,15 @@
   <script type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/scripts/shBrushPython.js" />"></script>
   <link href="<c:url value="/resources/js/syntaxhighlighter/styles/shCore.css" />" rel="stylesheet" type="text/css" />
   <link href="<c:url value="/resources/js/syntaxhighlighter/styles/shThemeDefault.css" />" rel="stylesheet" type="text/css" />
-    
+  
+  <!-- Vinhpq : Masonry layout styles -->
+  <link href="<c:url value="/resources/js/masonry/styles/base.css" />" rel="stylesheet" />
+  
+  <!-- Vinhpq : Masonry javascript
+    ================================================== -->
+  <script type="text/javascript" src="<c:url value="/resources/js/masonry/scripts/jquery.masonry.min.js" />"></script>
+  <script type="text/javascript" src="<c:url value="/resources/js/masonry/scripts/base.js" />"></script>
+  
   <script>
     var ctx = '${pageContext.request.contextPath}';
     com.bouncingdata.Main.setContext(ctx);

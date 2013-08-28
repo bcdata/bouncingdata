@@ -241,10 +241,87 @@ $(function() {
         </div>
         <div class="clear"></div>
         <div class="stream main-activity-stream" id="stream">
-          <c:if test="${not empty recentAnalyses }">
+        <div class="container">
+         <c:if test="${not empty recentAnalyses }">
+            <c:forEach items="${recentAnalyses }" var="anls">
+             	<c:choose>
+					<c:when test="${anls.classType eq 'Analysis' }"> 
+						<div class="box" >
+			             <div class="article">
+			             	<div class="article-content">
+			             		  <c:if test="${not empty anls.thumbnail }">
+			             		  		<img class="thumbnail" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+			             		  </c:if>
+				                  <h4><a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}"/>">${anls.name}</a></h4>
+				                  <span>
+				                  		<c:if test="${anls.score > 0}">
+					                      ${anls.score } like | 0 dislike
+					                    </c:if>
+					                    <c:if test="${anls.score == 0}">
+					                      0 like | 0 dislike
+					                    </c:if>
+					                    <c:if test="${anls.score < 0}">
+					                      0 like | ${anls.score } dislike    
+					                    </c:if>
+					                    | ${anls.commentCount } comments
+				                 </span>
+			                  </div>
+			                  <div class="person-section">
+			                  	<table>
+			                  		<tr>
+			                  			<td><img class="person-avatar" src="<c:url value="/resources/images/no-avatar.png" />" ></td>
+			                  			<td>
+			                  				<span><a href="javascript:void(0);" class="person-link-name">${anls.username }</a></span><br/>
+			                  				<span><%= java.lang.Math.round(java.lang.Math.random() * 100) %> posted</span>
+			                  			</td>
+			                  		</tr>
+			                  	</table>
+						       </div>
+				             </div>
+				         </div>
+					</c:when>
+					
+					<c:otherwise>
+					
+						<div class="box">
+				             <div class="article">
+				             <div class="article-content">
+				                  <h4 class="article-dataset"><a id="evt-title-${anls.id}" href="<c:url value="/dataset/view/${anls.guid}" />">${anls.name}</a></h4>
+				                  <span>
+				                  		<c:if test="${anls.score > 0}">
+					                      ${anls.score } like | 0 dislike
+					                    </c:if>
+					                    <c:if test="${anls.score == 0}">
+					                      0 like | 0 dislike
+					                    </c:if>
+					                    <c:if test="${anls.score < 0}">
+					                      0 like | ${anls.score } dislike    
+					                    </c:if>
+					                    | ${anls.commentCount } comments
+				                 </span>
+				             </div>
+				                  <div class="person-section person-dataset">
+				                  	<table>
+				                  		<tr>
+				                  			<td><img class="person-avatar" src="<c:url value="/resources/images/no-avatar.png" />" ></td>
+				                  			<td>
+				                  				<span><a href="javascript:void(0);" class="person-link-name">${anls.username }</a></span><br/>
+				                  				<span>23 posted</span>
+				                  			</td>
+				                  		</tr>
+				                  	</table>
+							       </div>
+				             </div>
+				         </div>
+					</c:otherwise>
+				</c:choose>
+            </c:forEach>
+         </c:if>
+      </div> 
+          <%-- <c:if test="${not empty recentAnalyses }">
             <c:forEach items="${recentAnalyses }" var="anls">         
               
-              <div class="event stream-item ${anls.classType}" aid=${anls.id }>
+              <div class="event stream-item ${anls.classType}" aid=${anls.id}>
                 <div class="event-content">
                   <!-- div class="info" aid="${activity.id }">
                     <a href="#" class="user"><strong>${activity.user.username }</strong></a>&nbsp;
@@ -338,13 +415,15 @@ $(function() {
               </div>
             
             </c:forEach>
-          </c:if>      
+          </c:if>     --%>  
+          
           
           <div class="stream-footer">
             <a href="javascript:void(0);" class="more-feed" pageid="${pageId}" fm="${fm}" tp="${tp}">More</a> &nbsp;&nbsp;
             <img style="display: none;" class="feed-loading" src="<c:url value="/resources/images/loader32.gif" />" />
           </div>    
         </div>
+      
       </div>
     </div>
   </div>
