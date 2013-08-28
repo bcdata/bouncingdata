@@ -17,7 +17,7 @@
   }
 </script>
 
-<div id="main-content" class="upload-container">
+<div id="main-content" class="upload-container" >
   <div class="top-bar">
     <div class="left-buttons">
       <button class="close-button" id="upload-close">Discard</button>
@@ -128,3 +128,4 @@
   </div>
 </div>
 
+</div>

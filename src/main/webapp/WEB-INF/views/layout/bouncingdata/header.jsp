@@ -185,12 +185,12 @@
           <ul>
             <li><a id="change-password" name="change-password" class="header-submenu-item" href="#">Change password</a></li>
             <li><a id="edit-information" name="edit-information" class="header-submenu-item" href="#">Edit Information</a></li>
-            <li><a class="header-submenu-item" href="<c:url value="/auth/security_logout" />">Logout</a></li>
+            <li><a id="log-out" class="header-submenu-item" href="#">Logout</a></li>
           </ul>
         </div>
     </div>
     
-      <div class="create-button-container" >
+      <div class="create-button-container">
         <div id="create-button" class="create-button">
            <div style="float: right;"> 
           	 	<img src="<c:url value="/resources/images/create-arrow.png"/>" style="margin-top: 10px;padding-right: 10px;">
@@ -199,11 +199,13 @@
            		<a id="create-button-link" class="create-button-link" href="javascript:void(0);">CREATE</a>
            	</div>
         </div>
+        
         <div class="create-submenu header-hidden-menu" style="display: none;">
           <ul>
             <li><a id="create-analysis" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Analysis</a></li>
-            <li><a id="create-dataset" class="create-sub-item header-submenu-item" href="<c:url value="/dataset/upload" />"><span class="sub-item-icon"></span>Dataset</a></li>
-            <li><a id="create-scraper" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
+            <li><a id="create-dataset" class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Dataset</a></li>
+            <!-- id="create-scraper"  -->
+            <li><a class="create-sub-item header-submenu-item" href="javascript:void(0);"><span class="sub-item-icon"></span>Scraper</a></li>
           </ul>
         </div>
       </div>

@@ -36,7 +36,7 @@ Main.prototype.init = function() {
     // initializes main navigation & ajax loading capabilities
     com.bouncingdata.Nav.init();
     
-    $('.top-page-panel .create-button a#create-button-link').click(function() {    
+    $('.top-page-panel .create-button-container').click(function() {    
       $('.top-page-panel .header-hidden-menu').hide();
       if (!$(this).hasClass('active')) {
         $(this).addClass('active');
@@ -63,16 +63,16 @@ Main.prototype.init = function() {
     });
     
     $(document).click(function() {
-      var $createButton = $('.top-page-panel .create-button a#create-button-link');
+      var $createButton = $('.top-page-panel .create-button-container');
       if ($createButton.hasClass('active')) {
         $createButton.removeClass('active');
         $('.top-page-panel .create-submenu').hide();
       }
       
-      var $createButton = $('.top-page-panel #information-person');
-      if ($createButton.hasClass('active')) {
-        $createButton.removeClass('active');
-        $('.top-page-panel .me-menu').hide();
+      var $inforButton = $('.top-page-panel #information-person');
+      if ($inforButton.hasClass('active')) {
+    	  $inforButton.removeClass('active');
+    	  $('.top-page-panel .me-menu').hide();
       }
       
       var $guideButton = $('.top-page-panel .guide-button.active');
@@ -80,6 +80,14 @@ Main.prototype.init = function() {
         $guideButton.removeClass('active');
         $('.top-page-panel .header-hidden-menu').hide();
       }
+    });
+    
+    $('.top-page-panel a#log-out').click(function() {
+    	window.location.href = ctx + "/auth/security_logout";
+    });
+    
+    $('.top-page-panel a#create-dataset').click(function() {
+    	window.location.href = ctx + "/dataset/upload";
     });
     
     $('.top-page-panel a#create-scraper').click(function() {

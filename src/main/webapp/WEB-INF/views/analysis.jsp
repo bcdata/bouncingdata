@@ -72,7 +72,7 @@ $(function() {
     });
 });
 </script>
-<div id="main-content" class="analysis-container">
+<div id="main-content" class="analysis-container" >
   <div class="analysis-info right-content">
     <div class="anls-summary summary">
       <div class="author-summary">       

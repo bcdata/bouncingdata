@@ -22,7 +22,7 @@
   }
 </script>
 
-<div id="main-content" class="editor-container">
+<div id="main-content" class="editor-container" style="width: 1020px; margin: 0 auto;">
   <div class="top-bar">
     <div class="left-buttons">
       <button id="editor-clone">Clone</button>
