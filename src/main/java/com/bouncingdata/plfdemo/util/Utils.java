@@ -153,7 +153,12 @@ public class Utils {
     		  representClass_object.setDescription(dataset_object.getDescription());
     		  representClass_object.setGuid(dataset_object.getGuid());
     		  representClass_object.setUsername(dataset_object.getUser().getUsername());
-    		  representClass_object.setName(dataset_object.getName());
+    		  //representClass_object.setName(dataset_object.getName());
+    		  String removed = dataset_object.getUser().getUsername() + ".";
+    		  String name = dataset_object.getName();
+    		  name = name.replace(removed, "");
+    		  representClass_object.setName(name);
+    		  
     		  representClass_object.setFlag(dataset_object.isPublic());
     		  representClass_object.setClassType("Dataset");
 //    		  representClass_object.setTotalpost(datastoreService.getPost(analysis_object.getUser().getId()));
