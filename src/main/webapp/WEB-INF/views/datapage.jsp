@@ -63,7 +63,7 @@ $(function() {
 </script>
 <style>
 	#q{
-		width: 98%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
+		width: 84%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
 	}
 	#divQuery{
 		border-color: rgb(77, 144, 254);float: left;width: 58%; border: 1px solid #DDD; height: 28px; padding: 0; display: inline-block; background-color: #FFFFFF;
@@ -222,7 +222,6 @@ $(function() {
 				</c:otherwise>
 			  </c:choose>
 			    <input type="button" id="search-query-button" value="Go"/>
-	          <input type="hidden" id="oq" name="oq" value="${dataset.guid}"/>
 			</div>
         </form>	
         <div class="clear"></div>
@@ -236,10 +235,7 @@ $(function() {
                   var data = ${data};
                   var $table = $('#data-table');
                   com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false});  
-						$table.css('width','100%');							
-						$table.$('tr.odd').css('backgroundColor', '#f3f7e5');  						
-						$('.data-table tr.odd>td.sorting_1').css('backgroundColor', '#e8f0ce');
-						$('.data-table tr.even>td.sorting_1').css('backgroundColor', '#f3f7e5');
+						$table.css('width','100%');	
                 });
                                    
               </script>
