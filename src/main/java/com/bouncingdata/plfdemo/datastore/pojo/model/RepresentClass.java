@@ -18,7 +18,8 @@ public class RepresentClass implements Comparator<RepresentClass> {
 	private String name;
 	private String classType;
 	private boolean flag;
-
+	private int totalpost;
+	
 	public boolean getFlag() {
 		return flag;
 	}
@@ -126,5 +127,13 @@ public class RepresentClass implements Comparator<RepresentClass> {
 			return +1;
 		else
 			return 0;
+	}
+
+	public int getTotalpost() {
+		return totalpost;
+	}
+
+	public void setTotalpost(int totalpost) {
+		this.totalpost = totalpost;
 	}
 }

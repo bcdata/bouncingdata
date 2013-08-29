@@ -309,7 +309,7 @@ public class ActivityController {
       }
       
       // merge data 2 class Analysis and Dataset 
-      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder);
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder, datastoreService);
       model.addAttribute("recentAnalyses", lstRepresentClass);
       
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
@@ -542,8 +542,39 @@ public class ActivityController {
       
       session.setAttribute("startpoint", startPoint);
       
+    //Get raw image (not thumnail)
+      String source_image = "";
+      Analysis _analysis = null;
+      List<Visualization> _visuals = null;
+      for(int i =0; i < allAnalyses.size(); i ++ ){
+    	  _analysis = allAnalyses.get(i);
+    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
+    	  
+    	  if (_visuals != null) {
+    		  for (Visualization v : _visuals) {
+    			  if ("png".equals(v.getType())) {
+    				  try {
+							source_image = appStoreService.getVisualization(
+									_analysis.getGuid(), v.getGuid(), v.getType());
+    				  } catch (Exception e) {
+							if (logger.isDebugEnabled()) {
+								logger.debug(
+										"Error occurs when retrieving visualizations {} from analysis {}",
+										v.getGuid(), _analysis.getGuid());
+								logger.debug("Exception detail", e);
+							}
+							continue;
+						}
+    			  }
+    		  }
+    	  }
+    	  
+    	  if(source_image != null && source_image.length() > 0)
+    		  allAnalyses.get(i).setThumbnail(source_image);
+      }
+      
       // merge data 2 class Analysis and Dataset 
-      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder);
+      List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder, datastoreService);
       return (lstRepresentClass);
       
     } catch (Exception e) {

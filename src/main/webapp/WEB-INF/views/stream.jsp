@@ -92,7 +92,7 @@ $(function() {
                   <a href="<c:url value="/anls/${anls.guid}" />"> 
                     <c:choose>
                       <c:when test="${not empty anls.thumbnail }">
-                        <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+                        <img class="thumb-img" src="data:image/png;base64,${anls.thumbnail}" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
                       </c:when>
                       <c:otherwise>
                         <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
@@ -152,7 +152,7 @@ $(function() {
                   <a href="<c:url value="/anls/${anls.guid}" />">
                     <c:choose>
                       <c:when test="${not empty anls.thumbnail }">
-                        <img class="thumb-img" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+                        <img class="thumb-img" src="data:image/png;base64,${anls.thumbnail}" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
                       </c:when>
                       <c:otherwise>
                         <img class="thumb-img" src="<c:url value="/thumbnails/no-image.jpg" />" />
@@ -250,7 +250,7 @@ $(function() {
 			             <div class="article">
 			             	<div class="article-content">
 			             		  <c:if test="${not empty anls.thumbnail }">
-			             		  		<img class="thumbnail" src="data:image/png;base64,${anls.thumbnail}" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+			             		  		<img class="thumbnail" src="data:image/png;base64,${anls.thumbnail}" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
 			             		  </c:if>
 				                  <h4><a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}"/>">${anls.name}</a></h4>
 				                  <span>
@@ -306,7 +306,7 @@ $(function() {
 				                  			<td><img class="person-avatar" src="<c:url value="/resources/images/no-avatar.png" />" ></td>
 				                  			<td>
 				                  				<span><a href="javascript:void(0);" class="person-link-name">${anls.username }</a></span><br/>
-				                  				<span>23 posted</span>
+				                  				<span><%= java.lang.Math.round(java.lang.Math.random() * 100) %> posted</span>
 				                  			</td>
 				                  		</tr>
 				                  	</table>

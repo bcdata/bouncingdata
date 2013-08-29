@@ -329,7 +329,7 @@ div.clear {
 }
 
 #page .header-container .search-container .search-input-wrapper {
-  width: 575px;
+  width: 525px;
   border: 1px solid #DDD;
   height: 28px;
   padding: 0;
@@ -339,7 +339,7 @@ div.clear {
 }
 
 #page .header-container .search-container .search-input {
-  width: 86%;
+  width: 85%;
   padding: 0 0 0 10px;
   border: 0 none;
   height: 28px;

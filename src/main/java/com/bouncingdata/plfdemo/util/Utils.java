@@ -43,6 +43,7 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
 import com.bouncingdata.plfdemo.service.DTMailSender;
+import com.bouncingdata.plfdemo.service.DatastoreService;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn;
 import com.bouncingdata.plfdemo.util.dataparsing.DatasetColumn.ColumnType;
 
@@ -105,15 +106,15 @@ public class Utils {
    * @param allDatasets
    * @return
    */
-  public static List<RepresentClass> mergeData2Class(List<Analysis> allAnalyses, List<Dataset> allDatasets, boolean isOrder){
+  public static List<RepresentClass> mergeData2Class(List<Analysis> allAnalyses, List<Dataset> allDatasets, boolean isOrder, DatastoreService datastoreService){
 	  
 	  List<RepresentClass> lstRepresentClass =  new ArrayList<RepresentClass>();
 
       RepresentClass representClass_object = null;
 	  Analysis analysis_object = null;
 	  Dataset dataset_object = null;
-	  
-      if(allAnalyses!=null && allAnalyses.size()>0){
+	  try{
+      if(allAnalyses!=null && allAnalyses.size()>0){    	  
     	  
     	  for(int i=0;i < allAnalyses.size();i++){
 
@@ -132,7 +133,7 @@ public class Utils {
     		  representClass_object.setName(analysis_object.getName());
     		  representClass_object.setFlag(analysis_object.isPublished());
     		  representClass_object.setClassType("Analysis");
-    		  
+//    		  representClass_object.setTotalpost(datastoreService.getPost(analysis_object.getUser().getId()));  
     		  
     		  lstRepresentClass.add(representClass_object);
     	  }
@@ -155,6 +156,7 @@ public class Utils {
     		  representClass_object.setName(dataset_object.getName());
     		  representClass_object.setFlag(dataset_object.isPublic());
     		  representClass_object.setClassType("Dataset");
+//    		  representClass_object.setTotalpost(datastoreService.getPost(analysis_object.getUser().getId()));
     		  
     		  lstRepresentClass.add(representClass_object);
 		}
@@ -163,6 +165,10 @@ public class Utils {
       if(lstRepresentClass != null && lstRepresentClass.size() > 0 && isOrder){
     	  Collections.sort(lstRepresentClass, new RepresentClass());
       }
+      
+	  }catch(Exception ex){
+		  
+	  }
 	  
 	  return lstRepresentClass;
   }
