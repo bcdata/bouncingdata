@@ -27,6 +27,8 @@ import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Tag;
 import com.bouncingdata.plfdemo.datastore.pojo.model.User;
 import com.bouncingdata.plfdemo.datastore.pojo.model.UserActionLog;
+import com.bouncingdata.plfdemo.datastore.pojo.model.Visualization;
+import com.bouncingdata.plfdemo.service.ApplicationStoreService;
 import com.bouncingdata.plfdemo.service.DatastoreService;
 import com.bouncingdata.plfdemo.util.Utils;
 
@@ -37,6 +39,9 @@ public class ActivityController {
   
   @Autowired
   private DatastoreService datastoreService;
+  
+  @Autowired
+  private ApplicationStoreService appStoreService;
   
   @RequestMapping(value={"/stream"}, method=RequestMethod.GET)
   public String getDefaultStream(WebRequest request, 
@@ -96,6 +101,7 @@ public class ActivityController {
 	    	  // type filter (all/analysis/dataset/scraper)
 	    	  if(filter.equals("all")){
 	    	      allAnalyses = datastoreService.getAnalysesIn1Month(0,10);
+	    	      
 	    	      allDatasets = datastoreService.getDatasetsIn1Month(0,10);    		  
 	    	  }
 	    	  
@@ -270,6 +276,37 @@ public class ActivityController {
     	  startPoint = 20;
       
       session.setAttribute("startpoint", startPoint);
+      
+      //Get raw image (not thumnail)
+      String source_image = "";
+      Analysis _analysis = null;
+      List<Visualization> _visuals = null;
+      for(int i =0; i < allAnalyses.size(); i ++ ){
+    	  _analysis = allAnalyses.get(i);
+    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
+    	  
+    	  if (_visuals != null) {
+    		  for (Visualization v : _visuals) {
+    			  if ("png".equals(v.getType())) {
+    				  try {
+							source_image = appStoreService.getVisualization(
+									_analysis.getGuid(), v.getGuid(), v.getType());
+    				  } catch (Exception e) {
+							if (logger.isDebugEnabled()) {
+								logger.debug(
+										"Error occurs when retrieving visualizations {} from analysis {}",
+										v.getGuid(), _analysis.getGuid());
+								logger.debug("Exception detail", e);
+							}
+							continue;
+						}
+    			  }
+    		  }
+    	  }
+    	  
+    	  if(source_image != null && source_image.length() > 0)
+    		  allAnalyses.get(i).setThumbnail(source_image);
+      }
       
       // merge data 2 class Analysis and Dataset 
       List<RepresentClass> lstRepresentClass = Utils.mergeData2Class(allAnalyses, allDatasets, isOrder);

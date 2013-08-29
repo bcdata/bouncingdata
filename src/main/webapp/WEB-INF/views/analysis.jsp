@@ -139,11 +139,6 @@ $(function() {
     <div class="anls-title main-title"><h2>${anls.name}</h2></div>
 </c:otherwise>
 </c:choose>
-
-
-
-
-
         <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">

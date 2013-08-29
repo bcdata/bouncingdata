@@ -250,7 +250,7 @@ $(function() {
 			             <div class="article">
 			             	<div class="article-content">
 			             		  <c:if test="${not empty anls.thumbnail }">
-			             		  		<img class="thumbnail" src="<c:url value="/thumbnails/${anls.thumbnail}.jpg" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+			             		  		<img class="thumbnail" src="data:image/png;base64,${anls.thumbnail}" />" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
 			             		  </c:if>
 				                  <h4><a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}"/>">${anls.name}</a></h4>
 				                  <span>
