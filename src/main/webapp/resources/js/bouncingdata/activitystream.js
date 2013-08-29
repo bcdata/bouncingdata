@@ -24,7 +24,8 @@ ActivityStream.prototype.init = function() {
     });*/
 
     $('.more-feed').click(function() {
-      var $lastEvent = $('#stream .event:last');
+//      var $lastEvent = $('#stream .box:last');
+    	var $lastEvent = $('#stream .hide-temp:last');
       if ($lastEvent.length > 0 && !me.streamEnded && !me.streamLoading) {
         me.loadMore();
       }
@@ -39,7 +40,8 @@ ActivityStream.prototype.init = function() {
         if ($stream.length > 0 && itemNumber < 100 
             && ($(window).scrollTop() + 80 >= $(document).height() - $(window).height())) {
           if (!me.streamEnded && !me.streamLoading) {
-            var $lastEvent = $('#stream .event:last');
+//            var $lastEvent = $('#stream .box:last');
+        	  var $lastEvent = $('#stream .hide-temp:last');
             if ($lastEvent.length > 0) {
 //              me.loadMore($lastEvent.attr('aid'));
             	me.loadMore();
@@ -123,7 +125,7 @@ ActivityStream.prototype.appendFeeds = function(feedList, pageId) {
 //      pvicon: (pageId=='streambyself' ? (feed.flag==false? pv:'') : ''),
       cmturl : (feed.classType=='Analysis' ? ctx + '/anls/' +feed.guid : '#'),
       url : (feed.classType=='Analysis' ? ctx + '/anls/' +feed.guid : ctx + '/dataset/view/' +feed.guid),
-      thumbnail: ((feed.thumbnail !=null || feed.thumbnail != '') ? ctx + '/thumbnails/' + feed.thumbnail + '.jpg' : ctx + '/thumbnails/no-image.jpg'),
+      thumbnail: ((feed.thumbnail !=null || feed.thumbnail != '') ? 'data:image/png;base64,' + feed.thumbnail : ctx + '/thumbnails/no-image.jpg'),
       commentCount: feed.commentCount
     });
     

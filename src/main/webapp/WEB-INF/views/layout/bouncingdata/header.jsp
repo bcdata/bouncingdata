@@ -500,7 +500,7 @@
   </script>
   
   <script id="feed-item-template" type="text/x-jquery-tmpl">  
-	<div class="event stream-item \${classType}" aid=\${id }>
+       <div class="event stream-item \${classType}" aid=\${id }>
                 <div class="event-content">
                   <a class="event-avatar-link">
                     <img class="avatar no-avatar" src="<c:url value="/resources/images/no-avatar.png" />">
@@ -531,4 +531,5 @@
                 <div class="clear"></div>
               </div>
   </script>
+   
 </jqtemplate>

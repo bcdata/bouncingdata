@@ -241,12 +241,12 @@ $(function() {
         </div>
         <div class="clear"></div>
         <div class="stream main-activity-stream" id="stream">
-        <div class="container">
+        <div class="container" id="box-container">
          <c:if test="${not empty recentAnalyses }">
             <c:forEach items="${recentAnalyses }" var="anls">
              	<c:choose>
 					<c:when test="${anls.classType eq 'Analysis' }"> 
-						<div class="box" >
+						<div class="box stream-item" >
 			             <div class="article">
 			             	<div class="article-content">
 			             		  <c:if test="${not empty anls.thumbnail }">
@@ -283,7 +283,7 @@ $(function() {
 					
 					<c:otherwise>
 					
-						<div class="box">
+						<div class="box stream-item">
 				             <div class="article">
 				             <div class="article-content">
 				                  <h4 class="article-dataset"><a id="evt-title-${anls.id}" href="<c:url value="/dataset/view/${anls.guid}" />">${anls.name}</a></h4>
