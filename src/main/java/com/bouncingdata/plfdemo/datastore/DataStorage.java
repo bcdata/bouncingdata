@@ -577,6 +577,12 @@ public interface DataStorage {
   int increasePageView(int objectId, String type);
   
   PageView getPageView(int objectId, String type);
-  
+  /**
+   * @param userId
+   * @return
+   * @throws DataAccessException
+   */
+  public int getPost(int userId);
+    
 }
 

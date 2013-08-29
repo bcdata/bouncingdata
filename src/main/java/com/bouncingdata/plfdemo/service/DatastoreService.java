@@ -388,6 +388,7 @@ public interface DatastoreService {
   void addAnalysisTag(int anlsId, int tagId);
   
   void addDatasetTag(int datasetId, int tagId);
+  public int getPost(int userId) throws Exception;
   
   /**
    * 

@@ -45,8 +45,18 @@ public class User implements UserDetails {
   // Recover password feature
   private String activeCode;
   private String expiryDate;
+  public int totalPost;
   
-  @Persistent(mappedBy="user")
+  
+  public int getTotalPost() {
+	return totalPost;
+}
+
+public void setTotalPost(int totalPost) {
+	this.totalPost = totalPost;
+}
+
+@Persistent(mappedBy="user")
   UserActionLog actionLog;
   public void logAction(int actionCode,String data){
 	   actionLog = new UserActionLog(actionCode,this,data);	   

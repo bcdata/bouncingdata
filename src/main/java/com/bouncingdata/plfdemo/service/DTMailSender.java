@@ -27,8 +27,11 @@ public class DTMailSender {
 	private String title;
 	Session session;
 	String host = "smtp.gmail.com";
-	String from = "bouncingdata";
-	String pass = "T1234567";
+	String from = "bd@bouncingdata.com";
+	String pass = "bouncinginvite";
+	String port = "465";
+	String protocol ="ssl";
+	String protocolEnable = "mail.smtp.start"+ protocol + ".enable";
 	Transport transport;
 	
 	public DTMailSender(String title, String content) {				
@@ -38,11 +41,11 @@ public class DTMailSender {
 	
 	public boolean init(){
 		Properties props = System.getProperties();
-		props.put("mail.smtp.starttls.enable", "true"); // added this line
+		props.put(protocolEnable, "true"); // added this line
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.user", from);
 		props.put("mail.smtp.password", pass);
-		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.port", port);
 		props.put("mail.smtp.auth", "true");
 
 		session = Session.getDefaultInstance(props, null);
@@ -73,15 +76,15 @@ public class DTMailSender {
 	
 	public boolean sendGroupMail(String[] targetAddrList){		
 		
-		String host = "smtp.gmail.com";
+		/*String host = "smtp.gmail.com";
 	    String from = "bouncingdata";
-	    String pass = "T1234567";
+	    String pass = "T1234567";*/
 	    Properties props = System.getProperties();
-	    props.put("mail.smtp.starttls.enable", "true"); // added this line
+	    props.put(protocolEnable, "true"); // added this line
 	    props.put("mail.smtp.host", host);
 	    props.put("mail.smtp.user", from);
 	    props.put("mail.smtp.password", pass);
-	    props.put("mail.smtp.port", "587");
+	    props.put("mail.smtp.port", port);
 	    props.put("mail.smtp.auth", "true");
 
 	   // String[] to = {target}; // added this line
@@ -123,15 +126,15 @@ public class DTMailSender {
 	
 	public boolean sendEmail(String targetAddr){		
 		
-		String host = "smtp.gmail.com";
+		/*String host = "smtp.gmail.com";
 	    String from = "bouncingdata";
-	    String pass = "T1234567";
+	    String pass = "T1234567";*/
 	    Properties props = System.getProperties();
-	    props.put("mail.smtp.starttls.enable", "true"); // added this line
+	    props.put(protocolEnable, "true"); // added this line
 	    props.put("mail.smtp.host", host);
 	    props.put("mail.smtp.user", from);
 	    props.put("mail.smtp.password", pass);
-	    props.put("mail.smtp.port", "587");
+	    props.put("mail.smtp.port", port);
 	    props.put("mail.smtp.auth", "true");
 
 	    Session session = Session.getDefaultInstance(props, null);

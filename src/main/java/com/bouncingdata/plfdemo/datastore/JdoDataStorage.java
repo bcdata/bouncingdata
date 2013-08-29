@@ -322,13 +322,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     User user = pm.getObjectById(User.class, analysis.getUser().getId());
     Transaction tx = pm.currentTransaction();
     analysis.setUser(user);
-    /*
-     * Set<Tag> tags = analysis.getTags(); if (tags != null) { Set<Tag> tagSet =
-     * new HashSet<Tag>(); for (Tag t : tags) { if (t.getId() > 0) { Tag tag =
-     * pm.getObjectById(Tag.class, t.getId()); tagSet.add(tag); } else {
-     * tagSet.add(t); } } analysis.setTags(tagSet); }
-     */
-
+   
     try {
       tx.begin();
       pm.makePersistent(analysis);
@@ -2672,5 +2666,53 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
       pm.close();
     }
   }
+
+  public int getTotalAnalysisPost(int userId){
+	  return getPublicAnalyses(userId).size();
+  }
+  public int getTotalDatasetPost(int userId){	  
+	  int post = 0;
+		List<Dataset> lList = getDatasetList(userId);
+		for (Dataset temp : lList) {
+			if(temp.isPublic()) post++;
+			
+		}
+		return post;
+  }
+  
+  public int getTotalScraperPost(int userId){
+	  int post = 0;
+		List<Scraper> lList = getScraperList(userId);
+		for (Scraper temp : lList) {
+			if(temp.isPublished()) post++;
+			
+		}
+		return post;
+  }
+  
+  @Override
+  public int getPost(int userId) {
+  	int totalPost = getTotalAnalysisPost(userId) + getTotalDatasetPost(userId) + getTotalScraperPost(userId);
+    return totalPost;
+  }
+ 
+/*@Override
+public int getPost(int userId) {
+	int totalPost = 0;
+	PersistenceManager pm = getPersistenceManager();
+	Transaction tx = pm.currentTransaction();
+    try {
+    	tx.begin();
+    	User user = pm.getObjectById(User.class, userId);
+    	totalPost = getTotalAnalysisPost(userId) + getTotalDatasetPost(userId) + getTotalScraperPost(userId);
+    	user.setTotalPost(totalPost);
+    	pm.setUserObject(user);
+    	tx.commit();
+    } finally {
+    	if (tx.isActive()) tx.rollback();
+	      pm.close();
+    }
+	return totalPost;
+}*/
 
 }
