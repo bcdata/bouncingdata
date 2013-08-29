@@ -115,14 +115,14 @@ $(document).on('keydown', '#edit', function(e) {
 
     me.loadCommentList(guid);
 
-    var $score = $('.header .score');
+    /*var $score = $('.header .score');
     var score = $score.text();
     if (score > 0) {
       $score.attr('class', 'score score-positive');
     } else {
       if (score == 0) $score.attr('class', 'score');
       else $score.attr('class', 'score score-negative');
-    }
+    }*/
 
     $('.header a.anls-vote-up').click(function() {
       me.voteAnalysis(guid, 1);
@@ -383,6 +383,7 @@ Analysis.prototype.loadCommentList = function(guid) {
     dataType: 'json',
     success: function(result) {      
       var $commentList = $('#comment-list');
+      
       $commentList.css('background', '#fff');
       
       me.commentCount = result.length;
@@ -454,7 +455,7 @@ Analysis.prototype.renderCommentNode = function(id) {
   var $comment = $.tmpl(this.$commentTemplate, { id: id, 
     username: commentObj.user.username, 
     message: commentObj.message,
-    date: new Date(commentObj.lastUpdate),
+    date: new Date(commentObj.lastUpdate).toUTCString(),
     upVote: commentObj.upVote,
     downVote: commentObj.downVote
   });
@@ -530,16 +531,17 @@ Analysis.prototype.voteAnalysis = function(guid, vote) {
 	  type: 'post',
 	  success: function(result) {
 		  if(result=='1'){
-			  var $score = $('.header .score');
 			  if (vote >= 0) {
+			     var $score = $('#up-score');
 				  me.votingCache[guid]++;
 				  $score.text($score.text() - (-1));
 			  } 
 			  else {
+			  	  var $score = $('#down-score');
 				  me.votingCache[guid]--;
-				  $score.text($score.text() - 1);
+				  $score.text($score.text() - (-1));
 			  }
-			  var score = $score.text();
+			  /*var score = $score.text();
 			  if (score > 0) {
 				  $score.attr('class', 'score score-positive');
 			  } else {
@@ -547,7 +549,7 @@ Analysis.prototype.voteAnalysis = function(guid, vote) {
 					  $score.attr('class', 'score');
 				  else 
 					  $score.attr('class', 'score score-negative');
-			  }
+			  }*/
 		  }
 	  },
 	  error: function(result) {
@@ -576,21 +578,21 @@ Analysis.prototype.voteComment = function(guid, commentId, vote) {
     type: 'post',
     success: function(result) {
       var $commentBody = $('li.comment-item#comment-' + commentId + ' > div.comment-item-body');
-      var $score = $('span.comment-score', $commentBody);
+      //var $score = $('span.comment-score', $commentBody);
       if (vote >= 0) {
-        me.votingCache[commentId]++;          
-        $score.text($score.text() - (-1));
+        var $upvote_score = $('span.up-vote',$commentBody);
+        $upvote_score.text($upvote_score.text() - (-1));
       } else {
-        me.votingCache[commentId]--;
-        $score.text($score.text() - 1);
+        var $downvote_score = $('span.down-vote',$commentBody);
+        $downvote_score.text($downvote_score.text() - (-1));
       }
-      var score = $score.text();
+      /*var score = $score.text();
       if (score > 0) {
         $score.attr('class', 'comment-score comment-score-positive');
       } else {
         if (score == 0) $score.attr('class', 'comment-score'); 
         else $score.attr('class', 'comment-score comment-score-negative');
-      }
+      }*/
     },
     error: function(result) {
       console.debug("Failed to vote comment #" + commentId);
@@ -600,7 +602,7 @@ Analysis.prototype.voteComment = function(guid, commentId, vote) {
 }
 
 Analysis.prototype.updateCommentCounter = function() {
-  $('.comments .comments-count').text(this.commentCount + " comments");
+  $('.comments-container .comments-title a').text("Comments (" + this.commentCount + ")");
 }
 
 Analysis.prototype.reload = function() {

@@ -230,25 +230,15 @@ Dataset.prototype.voteDataset = function(guid, vote) {
 		  },
 		  type: 'post',
 		  success: function(result) {
-			  if(result=='1'){
-				  var $score = $('.header .score');
-				  if (vote >= 0) {
-					  me.votingCache[guid]++;
-					  $score.text($score.text() - (-1));
-				  } 
-				  else {
-					  me.votingCache[guid]--;
-					  $score.text($score.text() - 1);
-				  }
-				  var score = $score.text();
-				  if (score > 0) {
-					  $score.attr('class', 'score score-positive');
-				  } else {
-					  if (score == 0) 
-						  $score.attr('class', 'score');
-					  else 
-						  $score.attr('class', 'score score-negative');
-				  }
+			  if (vote >= 0) {
+			     var $score = $('#dataset-up-score');
+				  me.votingCache[guid]++;
+				  $score.text($score.text() - (-1));
+			  } 
+			  else {
+			  	  var $score = $('#dataset-down-score');
+				  me.votingCache[guid]--;
+				  $score.text($score.text() - (-1));
 			  }
 		  },
 		  error: function(result) {

@@ -150,10 +150,10 @@ $(function() {
 
 		<c:choose>
 <c:when test="${isOwner }">
-	<h2 class="tc_pageheader editableName" id="detailsheader">${dataset.name}</h2>
+	<span class="dataset-title tc_pageheader editableName" id="detailsheader">${dataset.name}</span>
 </c:when>
 <c:otherwise>
-    <div class="dataset-title main-title"><h2>${dataset.name}</h2></div>
+    <div class="dataset-title main-title">${dataset.name}</div>
 </c:otherwise>
 </c:choose>    
 
@@ -177,11 +177,12 @@ $(function() {
           <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-512cd44d6cd449d2"></script>
           <!-- AddThis Button END -->
         </div>
-        <div class="action-links dataset-action-links" style="margin-top: 4px;">
-          <h3 class="dataset-score score">${dataset.score}</h3>&nbsp;
+        <div class="action-links dataset-action-links">
           <a href="javascript:void(0);" class="action vote-up dataset-vote-up">Vote up</a>&nbsp;&nbsp;
+          <span class="score dataset-score">&nbsp;<span id="dataset-up-score">${dataset.score >= 0 ? dataset.score : 0}</span>&nbsp;</span>&nbsp;&nbsp;
           <a href="javascript:void(0);" class="action vote-down dataset-vote-down">Vote down</a>&nbsp;&nbsp;
-          <c:if test="${isOwner}">
+			 <span class="score dataset-score">&nbsp;<span id="dataset-down-score">${dataset.score < 0 ? dataset.score : 0}</span>&nbsp;</span>&nbsp;&nbsp;
+			 <c:if test="${isOwner}">
           	<a id="dels-ds" href="javascript:void(0);" >Delete</a>&nbsp;&nbsp;
           </c:if>
           <%-- <c:if test="${${dataset.public}"> --%>
@@ -197,7 +198,12 @@ $(function() {
         <div class="clear"></div>
       </div>
       <div class="header-rule"></div>
-      <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">
+      <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">        
+        <ul>
+          <li><a href="#data">View</a></li>
+          <li><a href="#schema">Schema</a></li>
+          <li><a href="#ref-doc">Reference Doc</a></li>
+        </ul>
         <form id="search-query" method="post" action="<c:url value="/dataset/squery"/>">
 	        <div id="divQuery">
 	          <c:choose>
@@ -218,12 +224,6 @@ $(function() {
 	          <input type="hidden" id="oq" name="oq" value="${dataset.guid}"/>
 			</div>
         </form>	
-        
-        <ul>
-          <li><a href="#data">View</a></li>
-          <li><a href="#schema">Schema</a></li>
-          <li><a href="#ref-doc">Reference Doc</a></li>
-        </ul>
         <div class="clear"></div>
         <div id="data" class="ui-tabs-hide">
           <table class="data-table" id="data-table">
@@ -235,6 +235,9 @@ $(function() {
                   var data = ${data};
                   var $table = $('#data-table');
                   com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false});  
+						$table.$('tr.odd').css('backgroundColor', '#f3f7e5');      
+						//$table.$('tr.odd')[0].css('backgroundColor', '#e8f0ce');
+						console.log($table.$('tr.odd'));
                 });
                                    
               </script>

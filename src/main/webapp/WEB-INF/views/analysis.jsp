@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-
 <script>
   //com.bouncingdata.Main.loadCss(ctx + "/resources/css/bouncingdata/analysis.css", "analysis");
   var anls = {
@@ -19,6 +18,89 @@
   } else {
     com.bouncingdata.Analysis.init(anls, dbDetail);
   }
+</script>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+/*	google.load("visualization", "1", {packages:["corechart"]});
+   google.setOnLoadCallback(showChart);
+      
+  function showChart() {
+  
+   var jsonObj = {"code" : -1, "message" : ""};
+   
+	$.ajax({
+		url: '/bouncingdata/anls/json/${anls.guid}' ,
+		type : "GET",
+		async: false,
+		success : function(res) {
+			jsonObj = res;
+		}
+	});   
+   
+	console.log(jsonObj);
+	if(jsonObj.code != 0) {
+		$("#anls-chart").remove();
+		$("#anls-chart-button").remove();
+		$("ul.anls-tabs").css("width","204px");
+		return;
+	}
+			
+	var message = (jsonObj.message);
+	var messObj = JSON.parse(message);
+	var dataTable = convertToDataTable(messObj.columns, messObj.schema, messObj.x, messObj.y);
+	
+	if(messObj.charttype=="line")
+		lineChart(dataTable);
+	if(messObj.charttype=="scatter")
+		scatterChart(dataTable);
+}
+
+function convertToDataTable(columns, schema, x, y) {
+	var dataTable = new google.visualization.DataTable();
+	dataTable.addRows(x.length);
+	
+	i = 0;
+	$.each(columns, function(cid,column){
+			dataTable.addColumn(schema[i++],column);
+		});
+	
+	row=0;
+	$.each(x, function(xid, xval) {
+			dataTable.setValue(row++, 0, xval);
+		});
+	row=0;
+	$.each(y, function(yid, yval) {
+			dataTable.setValue(row++, 1, yval);
+		});
+
+	return dataTable;
+}
+
+function lineChart(dataTable) {
+	var chart = new google.visualization.LineChart(document.getElementById('anls-chart'));
+	//TODO: Config options
+	var options = {
+          title: 'Line Chart',
+          height : 350,
+          width : 550, 
+        };
+	chart.draw(dataTable, options);
+}
+
+function scatterChart(dataTable) {
+	var chart = new google.visualization.ScatterChart(document.getElementById('anls-chart'));
+	//TODO: Config options
+	var options = {
+          title: 'Scatter Chart',
+          height : 350,
+          width : 550,  
+        };  
+   	chart.draw(dataTable, options);
+	
+	console.log(dataTable);
+}
+*/
 </script>
 <script>
 $(function() {
@@ -72,7 +154,7 @@ $(function() {
     });
 });
 </script>
-<div id="main-content" class="analysis-container" >
+<div id="main-content" class="analysis-container">
   <div class="analysis-info right-content">
     <div class="anls-summary summary">
       <div class="author-summary">       
@@ -133,12 +215,17 @@ $(function() {
 
 <c:choose>
 <c:when test="${isOwner }">
-	<h2 class="tc_pageheader editableName" id="detailsheader">${anls.name}</h2>
+	<span class="anls-title tc_pageheader editableName" id="detailsheader">${anls.name}</span>
 </c:when>
 <c:otherwise>
-    <div class="anls-title main-title"><h2>${anls.name}</h2></div>
+    <div class="anls-title main-title">${anls.name}</div>
 </c:otherwise>
 </c:choose>
+
+
+
+
+
         <div class="share-panel" style="float: right; width: 140px;">
           <!-- AddThis Button BEGIN -->
           <div class="addthis_toolbox addthis_default_style ">
@@ -158,9 +245,10 @@ $(function() {
           <!-- AddThis Button END -->
         </div>
         <div class="anls-action-links action-links">
-          <h3 class="score anls-score">${anls.score}</h3>&nbsp;
-          <a href="javascript:void(0)" class="action anls-action anls-vote-up">Vote up</a>&nbsp;&nbsp;
-          <a href="javascript:void(0)" class="action anls-action anls-vote-down">Vote down</a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="action anls-action anls-vote-up">Vote up</a>&nbsp;
+          <span class="score anls-score">&nbsp;<span id="up-score">${anls.score >= 0 ? anls.score : 0}</span>&nbsp;</span>&nbsp;&nbsp;
+          <a href="javascript:void(0)" class="action anls-action anls-vote-down">Vote down</a>&nbsp;
+			 <span class="score anls-score">&nbsp;<span id="down-score">${anls.score < 0 ? anls.score : 0}</span>&nbsp;</span>&nbsp;&nbsp;
           <a href="<c:url value="/anls/clone/processing/${anls.guid }" />" target="_blank" class="action anls-action anls-clone">Clone</a>&nbsp;&nbsp;
           <c:if test="${anls.published}">
           	<a href="javascript:void(0)" class="action anls-action anls-embed-button" id="anls-embed-button">Embed</a>&nbsp;&nbsp;
@@ -201,9 +289,9 @@ $(function() {
       <div class="anls-header-rule"></div>
       <div class="anls-content anls-tab-container ui-tabs" id="anls-content">
         <ul class="anls-tabs">
-          <li class="anls-tab"><a href="#anls-dashboard" style="padding-left: 20px;padding-right: 20px;">Viz</a></li>
-          <li class="anls-tab"><a href="#anls-code" style="padding-left: 18px;padding-right: 18px;">Code</a></li>
-          <li class="anls-tab"><a href="#anls-data" style="padding-left: 20px;padding-right: 20px;">Data</a></li>
+          <li class="anls-tab"><a href="#anls-dashboard">Visualization</a></li>
+          <li class="anls-tab"><a href="#anls-code">Code</a></li>
+          <li class="anls-tab"><a href="#anls-data">Data</a></li>
         </ul>
         <div class="clear"></div>
         <div class="anls-tabs-content-wrapper">
@@ -253,6 +341,8 @@ $(function() {
               </c:forEach>  
             </c:if>
           </div>
+          <!-- Hidden tab for chart 20130823-->
+          <div class="ui-tabs-hide" id="anls-chart" style="float: center; width:600px; padding: 0; overflow: hidden;">Loading chart content</div>
         </div>
       </div>
       <div class="clear"></div>
@@ -270,7 +360,7 @@ $(function() {
           <form>
             <fieldset>
             <p>
-              <textarea rows="5" id="message" spellcheck='false'></textarea>
+              <textarea rows="5" id="message" spellcheck='false' placeholder='Content...'></textarea>
             </p>  
             <p>
               <input type="button" class="comment-submit" id="comment-submit" value="Post comment">
@@ -281,7 +371,7 @@ $(function() {
         <div class="clear"></div>
         <label id="comments"></label>
         <div class="comments">
-          <h3 class="comments-count">Comments</h3>
+          <!--<h3 class="comments-count">Comments</h3>-->
           <ul id="comment-list" class="comment-list">            
           </ul>
         </div>
