@@ -2690,11 +2690,11 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		return post;
   }
   
-  @Override
+  /*@Override
   public int getPost(int userId) {
   	int totalPost = getTotalAnalysisPost(userId) + getTotalDatasetPost(userId) + getTotalScraperPost(userId);
     return totalPost;
-  }
+  }*/
  
 /*@Override
 public int getPost(int userId) {

@@ -174,7 +174,7 @@ public class LoginController implements AuthenticationFailureHandler{
   @RequestMapping(value="/auth/logout", method = RequestMethod.GET)
   public String logout(ModelMap model) {
     model.addAttribute("mode", "login");
-    logger.debug(Utils.Log());
+//    logger.debug(Utils.Log());
     return "login";
   }
   

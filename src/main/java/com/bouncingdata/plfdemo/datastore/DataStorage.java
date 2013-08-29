@@ -582,7 +582,7 @@ public interface DataStorage {
    * @return
    * @throws DataAccessException
    */
-  public int getPost(int userId);
+  /*public int getPost(int userId);*/
     
 }
 

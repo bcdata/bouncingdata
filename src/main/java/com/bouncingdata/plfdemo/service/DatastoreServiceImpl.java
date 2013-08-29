@@ -800,9 +800,9 @@ public boolean updateDataset(Dataset dataset) throws Exception {
 	return dataStorage.updateDataset(dataset);
 }
 
-@Override
+/*@Override
 public int getPost(int userId) throws Exception {
 	// TODO Auto-generated method stub
 	 return dataStorage.getPost(userId);
-}
+}*/
 }

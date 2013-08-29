@@ -185,7 +185,7 @@
           <ul>
             <li><a id="change-password" name="change-password" class="header-submenu-item" href="#">Change password</a></li>
             <li><a id="edit-information" name="edit-information" class="header-submenu-item" href="#">Edit Information</a></li>
-            <li><a id="log-out" class="header-submenu-item" href="#">Logout</a></li>
+            <li><a id="log-out" class="header-submenu-item" href="<c:url value="/auth/security_logout" />">Logout</a></li>
           </ul>
         </div>
     </div>
