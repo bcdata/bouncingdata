@@ -20,6 +20,14 @@
 }
 */
 
+#main-content .center-content {
+	margin-left: 2.5%;
+}
+
+#main-content .center-content .center-content-wrapper{
+	margin-right: 6%;
+}
+
 #main-content.analysis-container .right-content, #main-content.datapage-container .right-content  {
   width: 230px;  
 }
@@ -75,7 +83,6 @@
 
 .analysis-container#main-content .analysis-main .anls-dashboard {
   position: relative;
-  width: 600px;
   height: 500px;
   margin-top: 0;
   border: 1px solid #E2E2E2;
@@ -134,8 +141,13 @@
   cursor: pointer;
 }
 
-.analysis-main .anls-content, .analysis-main .comments-container, .center-content-wrapper > .description, .datapage-container #dataset-content {
+.analysis-main .anls-content, .center-content-wrapper > .description, .datapage-container #dataset-content {
   padding: 15px;
+}
+
+.analysis-main .comments-container {
+	padding-left: 15px;	
+	padding-right: 10px;
 }
 
 .analysis-info .anls-info-header, .right-content .info-header {
@@ -188,8 +200,8 @@
 }
 
 .dataset-content #divQuery{
-	float: right;
-	width: 50%;
+	display: inline;
+	width: 40%;
 	margin-top: 0.4em;
 }
 
@@ -226,6 +238,7 @@
 
 .analysis-container .anls-tab a, .dataset-content ul.ui-tabs-nav li a {
   width: 100%;
+  padding-top: 8% !important;
   padding-right: 0 !important;
   padding-left: 0 !important;
   text-align: center;
@@ -275,7 +288,6 @@
 }
 
 #comment-form {
-  width: 600px;
   margin-top: 10px;
 }
 
@@ -290,7 +302,7 @@
 }
 
 #comment-form fieldset input#comment-title, #comment-form fieldset textarea#message {
-  width: 596px;
+  width: 99%;
   border: 1px solid #E2E2E2;
   padding: 2px;
 }
@@ -335,7 +347,7 @@
 
 .comments-container li.comment-item {
   padding-top: 15px;
-  border-top: 1px dotted #CCCCCC;  
+  border-top: 1px solid #CCCCCC;  
 }
 
 .comment-item .comment-item-body {

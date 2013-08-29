@@ -221,6 +221,7 @@ $(function() {
 					<input type="text" id="q" name="q" value="Search query ..." onblur="if(value=='') value = 'Search query ...'" onfocus="if(value=='Search query ...') value = ''" title="Using MySql syntax">
 				</c:otherwise>
 			  </c:choose>
+			    <input type="button" id="search-query-button" value="Go"/>
 	          <input type="hidden" id="oq" name="oq" value="${dataset.guid}"/>
 			</div>
         </form>	
@@ -235,9 +236,10 @@ $(function() {
                   var data = ${data};
                   var $table = $('#data-table');
                   com.bouncingdata.Utils.renderDatatable(data, $table, { "sScrollX": "735px", "sScrollY": "500px", "bPaginate": false, "bFilter": false});  
-						$table.$('tr.odd').css('backgroundColor', '#f3f7e5');      
-						//$table.$('tr.odd')[0].css('backgroundColor', '#e8f0ce');
-						console.log($table.$('tr.odd'));
+						$table.css('width','100%');							
+						$table.$('tr.odd').css('backgroundColor', '#f3f7e5');  						
+						$('.data-table tr.odd>td.sorting_1').css('backgroundColor', '#e8f0ce');
+						$('.data-table tr.even>td.sorting_1').css('backgroundColor', '#f3f7e5');
                 });
                                    
               </script>
