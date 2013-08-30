@@ -3,9 +3,9 @@
  * Table
  */
 table.dataTable {
-	margin: 0 auto;
+	margin: 10px auto;
 	clear: both;
-	width: 100%;
+	width: 100% !important;
 }
 
 table.dataTable thead th {
@@ -215,6 +215,7 @@ table.dataTable th:active {
  */
 .dataTables_scroll {
 	clear: both;
+	overflow: auto;
 }
 
 .dataTables_scrollBody {

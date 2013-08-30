@@ -154,24 +154,27 @@ $(function() {
     });
 });
 </script>
-<div id="main-content" class="analysis-container" style=" width: 95%; margin: 0 auto; ">
+<div id="main-content" class="analysis-container" style=" width: 100%; margin: 0 auto; ">
   <div class="analysis-info right-content">
     <div class="anls-summary summary">
       <div class="author-summary">       
         <a class="author-avatar" href="javascript:void(0);"><img src="<c:url value="/resources/images/no-avatar.png" />" /></a>       
         <p class="author-name"><a href="javascript:void(0);"><strong>${anls.user.username }</strong></a></p>
-        <p class="published-date">Published on ${anls.shortCreateAt }</p>
+        <p class="published-date">Published on <span class="data">${anls.shortCreateAt }</span></p>
         <div class="clear"></div>
       </div>
-      <p><strong>Reference: </strong></p>
-      <p><strong>Referenced by: </strong></p>
-      <p><strong>Dataset used: </strong></p>
-      <p><strong>Last updated: </strong>${anls.shortLastUpdate }</p>
-      <p><strong>View count: </strong>${pageView }</p>
+      <div class="info">
+      <p><span class="key">Reference</span>:</p>
+      <p><span class="key">Referenced by </span>: </p>
+      <p><span class="key">Dataset used </span>: </p>
+      <p><span class="key">Last updated </span>: <span class="val">${anls.shortLastUpdate }</span></p>
+      <p><span class="key">View count </span>: <span class="val">${pageView }</span></p>
+      </div>
     </div>
     
+    <div class="right-content-detail">
     <div class="tag-set">
-     <p><strong>Tags:</strong></p>
+     <p><span class="item-key">Tags</span></p>
       <div class="tag-list">
       <c:if test="${not empty anls.tags }">
         <c:forEach items="${anls.tags }" var="tag">
@@ -194,7 +197,7 @@ $(function() {
       </c:if>
     </div>
     <div class="anls-related-info related-info">
-      <p><strong>Related:</strong></p>
+      <p><span class="item-key">Related</span>
       <div class="related-tabs ui-tabs" id="related-tabs">
         <ul>
           <li><a href="#related-dataset">Dataset</a></li>
@@ -206,6 +209,7 @@ $(function() {
         <div id="related-voters" class="ui-tabs-hide"></div>
       </div>
       
+    </div>
     </div>
   </div>
     
