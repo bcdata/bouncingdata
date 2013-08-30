@@ -160,7 +160,7 @@ public class ActivityController {
         	  else if(filter.equals("scraper")){
         		  
         	  }
-          } else if(type.equals("popular")){
+          } else if(type.equals("populastream/{page}/{r")){
         	  isOrder = false;
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
@@ -317,6 +317,10 @@ public class ActivityController {
       
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
+      
+      //Gettags
+      List<Tag> mostPopularTags = datastoreService.getTags(10);
+      model.addAttribute("listtags", mostPopularTags);
       
       session.setAttribute("pageId", page);
       session.setAttribute("fm", filter);

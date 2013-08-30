@@ -48,6 +48,9 @@ public class TagController {
 			model.addAttribute("anlsList", analyses);
 			model.addAttribute("tag", tagItem);
 			model.addAttribute("menuId", tagItem);
+			  //Gettags
+		    List<Tag> mostPopularTags = datastoreService.getTags(10);
+		      model.addAttribute("listtags", mostPopularTags);
 		}
 		return "tag";
 	}
