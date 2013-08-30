@@ -2689,7 +2689,27 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		}
 		return post;
   }
-  
+
+@Override
+public List<Tag> getTags(int num) {
+	// TODO Auto-generated method stub
+	 PersistenceManager pm = getPersistenceManager();
+	    Query q = pm.newQuery(Tag.class);
+
+	    try {
+	      List<Tag> tags = (List<Tag>) q.execute();
+
+	      if (tags != null) {
+	        tags = tags.subList(0, Math.min(tags.size(), num));
+	        return (List<Tag>) pm.detachCopyAll(tags);
+	      } else
+	        return null;
+	    } finally {
+	      q.closeAll();
+	      pm.close();
+	    }
+}
+
   /*@Override
   public int getPost(int userId) {
   	int totalPost = getTotalAnalysisPost(userId) + getTotalDatasetPost(userId) + getTotalScraperPost(userId);

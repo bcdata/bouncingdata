@@ -384,6 +384,7 @@ public interface DatastoreService {
   void removeDatasetTags(Dataset dts, List<Tag> tags);
 
   void createTag(String tag);
+  List<Tag>  getTags(int num);
   
   void addAnalysisTag(int anlsId, int tagId);
   

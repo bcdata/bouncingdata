@@ -528,7 +528,8 @@ width: 40%;
   line-height: 24px;
   padding-left: 4px;
   display: block;
-  color: #555555;
+  color: #003366;
+  font-family:Tahoma;
   background: none repeat scroll 0 0 transparent;
 }
 
@@ -541,8 +542,8 @@ width: 40%;
 }
 
 #page .main-navigation ul.main-nav-links a.main-nav-item:hover, #page .main-navigation ul.main-nav-links a.sub-nav-item:hover {
-  background-color: #555555 !important;
-  color: #fff !important;
+  /* background-color: #555555 !important; */
+  color: #94BD20 !important;
   text-decoration: none !important;
 }
 
@@ -867,11 +868,12 @@ fieldset {
 }
 
 .tag-element-outer {
-  background-color: #E0EAF1;
-  border-bottom: 1px solid #B3CEE1;
-  border-right: 1px solid #B3CEE1;
-  color: #3E6D8E; 
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #D3D3D3;
+  border-right: 1px solid #D3D3D3;
+  color: #A7A7A7; 
   font-size: 90%;
+  font-family:Tahoma;
   white-space: nowrap;
   margin: 2px 0 2px 2px;
   display: inline-block;

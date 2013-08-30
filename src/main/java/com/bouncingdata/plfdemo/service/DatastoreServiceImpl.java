@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bouncingdata.plfdemo.datastore.DataStorage;
+import com.bouncingdata.plfdemo.datastore.JdoDataStorage;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.SearchResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.UserInfo;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Activity;
@@ -799,6 +800,13 @@ public boolean updateDataset(Dataset dataset) throws Exception {
 	// TODO Auto-generated method stub
 	return dataStorage.updateDataset(dataset);
 }
+
+@Override
+public List<Tag>  getTags(int num) {
+	// TODO Auto-generated method stub
+	return dataStorage.getTags(num);
+}
+
 
 /*@Override
 public int getPost(int userId) throws Exception {
