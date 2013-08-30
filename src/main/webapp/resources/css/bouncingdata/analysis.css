@@ -132,7 +132,7 @@
 
 
 #main-content .right-content .related-info  {
-  background-color: #F9F9F9;
+  background-color: transparent;
   border-radius: 4px;
   margin-top: 12px;
   min-height: 40px;
@@ -189,6 +189,7 @@
 
 #main-content .right-content #related-tabs {
   border: 0;
+  background: transparent;
 }
 
 .anls-dashboard .viz-container {
