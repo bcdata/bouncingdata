@@ -154,7 +154,7 @@ $(function() {
     });
 });
 </script>
-<div id="main-content" class="analysis-container">
+<div id="main-content" class="analysis-container" style=" width: 95%; margin: 0 auto; ">
   <div class="analysis-info right-content">
     <div class="anls-summary summary">
       <div class="author-summary">       
@@ -372,7 +372,7 @@ $(function() {
         <label id="comments"></label>
         <div class="comments">
           <!--<h3 class="comments-count">Comments</h3>-->
-          <ul id="comment-list" class="comment-list">            
+          <ul id="comment-list" class="comment-list" style="background-color: #E5E4E4;">            
           </ul>
         </div>
       </div>

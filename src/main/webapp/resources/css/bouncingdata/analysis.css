@@ -29,11 +29,13 @@
 
 #main-content .center-content .center-content-wrapper{
 	margin-right: 6%;
+	padding-left: 40px;
 	/*background: #e0e0e0 !important;*/
 }
 
 #main-content.analysis-container .right-content, #main-content.datapage-container .right-content  {
   width: 230px;  
+  margin-left: 15px;
 }
 
 .analysis-container#main-content .center-content .center-content-wrapper .top-rule, .datapage-container#main-content .center-content .center-content-wrapper .top-rule {
@@ -386,7 +388,7 @@
 
 .comments-container ul#comment-list {
   list-style: none;
-  background: #fff url('../../images/loader32.gif') no-repeat scroll left top;
+  /* background:  #fff url('../../images/loader32.gif') no-repeat scroll left top; */
   min-height: 20px;
   /*width: 800px;*/
   padding-left: 0;

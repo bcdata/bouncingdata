@@ -384,7 +384,7 @@ Analysis.prototype.loadCommentList = function(guid) {
     success: function(result) {      
       var $commentList = $('#comment-list');
       
-      $commentList.css('background', '#fff');
+      $commentList.css('background', '#E5E4E4');
       
       me.commentCount = result.length;
       

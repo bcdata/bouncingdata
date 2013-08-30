@@ -195,7 +195,7 @@ $(function() {
         <div class="clear"></div>
       </div>
       <div class="header-rule"></div>
-      <div class="dataset-content data-tab-container ui-tabs" id="dataset-content">        
+      <div class="dataset-content data-tab-container ui-tabs" id="dataset-content" style="margin-left: 5px;">        
         <ul>
           <li><a href="#data">View</a></li>
           <li><a href="#schema">Schema</a></li>

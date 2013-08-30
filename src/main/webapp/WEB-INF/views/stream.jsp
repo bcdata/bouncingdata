@@ -196,7 +196,7 @@ $(function() {
     </div>
   </div>
   <div class="center-content" >
-    <div class="center-content-wrapper" style="width: 100%;">
+    <div class="center-content-wrapper" style="width: 100%;padding-left: 0px;">
     <!-- vinhpq : for ajax filter. Don't need reload page. 
     <script type="text/javascript">
 	$(document).ready(function() {
