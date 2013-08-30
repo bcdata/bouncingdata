@@ -543,7 +543,7 @@ width: 40%;
 }
 
 #page .main-navigation a.nav-selected {
-  background: white !important;
+  /* background: white !important; */
   color: #94BD20 !important;
   font-weight: bold !important;
 }
