@@ -168,7 +168,8 @@ public class DatasetController {
   
   @RequestMapping(value = { "/upload" }, method = RequestMethod.GET)
   public String getUploadPage(ModelMap model, Principal principal, HttpSession session) {
-    try {
+    
+	try {
       User user = (User) ((Authentication) principal).getPrincipal();
       ObjectMapper logmapper = new ObjectMapper();
       String data;
@@ -184,6 +185,7 @@ public class DatasetController {
     if(session.getAttribute("varUp") != null)  
     	session.removeAttribute("varUp");
     
+    model.addAttribute("mode", "upload");
     return "upload";
   }
   
@@ -757,7 +759,11 @@ public class DatasetController {
       // page view increment
       int pageView = datastoreService.increasePageView(ds.getId(), PageType.DATASET.getType());
       model.addAttribute("pageView", pageView);
-
+      
+    //Gettags
+      List<Tag> mostPopularTags = datastoreService.getTags(10);
+      model.addAttribute("listtags", mostPopularTags);
+      
     } catch (Exception e) {
       logger.debug("", e);
       model.addAttribute("errorMsg", e.getMessage());

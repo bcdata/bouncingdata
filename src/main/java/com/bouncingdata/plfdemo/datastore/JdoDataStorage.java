@@ -1538,7 +1538,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Query q = pm.newQuery(Analysis.class);
     q.setFilter("published == true");
     q.setOrdering("score DESC");
-    q.setRange(0, 10);
+    q.setRange(0, 5);
     try {
       List<Analysis> analyses = (List<Analysis>) q.execute();
       if (analyses != null) {
@@ -1636,7 +1636,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Query q = pm.newQuery(Dataset.class);
     q.setFilter("isPublic == true");
     q.setOrdering("score DESC");
-    q.setRange(0, 10);
+    q.setRange(0, 5);
     try {
       List<Dataset> datasets = (List<Dataset>) q.execute();
       if (datasets != null) {
@@ -2689,7 +2689,27 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
 		}
 		return post;
   }
-  
+
+@Override
+public List<Tag> getTags(int num) {
+	// TODO Auto-generated method stub
+	 PersistenceManager pm = getPersistenceManager();
+	    Query q = pm.newQuery(Tag.class);
+
+	    try {
+	      List<Tag> tags = (List<Tag>) q.execute();
+
+	      if (tags != null) {
+	        tags = tags.subList(0, Math.min(tags.size(), num));
+	        return (List<Tag>) pm.detachCopyAll(tags);
+	      } else
+	        return null;
+	    } finally {
+	      q.closeAll();
+	      pm.close();
+	    }
+}
+
   /*@Override
   public int getPost(int userId) {
   	int totalPost = getTotalAnalysisPost(userId) + getTotalDatasetPost(userId) + getTotalScraperPost(userId);

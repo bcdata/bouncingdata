@@ -89,11 +89,13 @@
         <tiles:insertAttribute name="main-content" />
       </div>
     </div>
+    <c:if test="${mode ne 'upload'}">
     <div class="footer-container">
       <div class="footer">
         <tiles:insertAttribute name="footer-content" />
       </div>
     </div>
+    </c:if>
   </div>
   <div id="ajaxLoadingMessage">
     <span class="ajaxLoadingMessage">Loading...</span>

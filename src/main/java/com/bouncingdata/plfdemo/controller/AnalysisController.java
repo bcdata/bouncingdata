@@ -258,7 +258,11 @@ public class AnalysisController {
 			int pageView = datastoreService.increasePageView(anls.getId(),
 					PageType.ANALYSIS.getType());
 			model.addAttribute("pageView", pageView);
-
+			
+			//Gettags
+	      List<Tag> mostPopularTags = datastoreService.getTags(10);
+	      model.addAttribute("listtags", mostPopularTags);
+		      
 			return "analysis";
 		} catch (Exception e) {
 			logger.debug("Failed to load analysis {}", guid);

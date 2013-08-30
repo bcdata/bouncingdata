@@ -160,7 +160,7 @@ public class ActivityController {
         	  else if(filter.equals("scraper")){
         		  
         	  }
-          } else if(type.equals("popular")){
+          } else if(type.equals("populastream/{page}/{r")){
         	  isOrder = false;
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
@@ -313,10 +313,45 @@ public class ActivityController {
       model.addAttribute("recentAnalyses", lstRepresentClass);
       
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      
+      source_image = "";
+      _analysis = null;
+      _visuals = null;
+      for(int i =0; i < mostPopularAnalyses.size(); i ++ ){
+    	  _analysis = allAnalyses.get(i);
+    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
+    	  
+    	  if (_visuals != null) {
+    		  for (Visualization v : _visuals) {
+    			  if ("png".equals(v.getType())) {
+    				  try {
+							source_image = appStoreService.getVisualization(
+									_analysis.getGuid(), v.getGuid(), v.getType());
+    				  } catch (Exception e) {
+							if (logger.isDebugEnabled()) {
+								logger.debug(
+										"Error occurs when retrieving visualizations {} from analysis {}",
+										v.getGuid(), _analysis.getGuid());
+								logger.debug("Exception detail", e);
+							}
+							continue;
+						}
+    			  }
+    		  }
+    	  }
+    	  
+    	  if(source_image != null && source_image.length() > 0)
+    		  mostPopularAnalyses.get(i).setThumbnail(source_image);
+      }
+      
       model.addAttribute("topAnalyses", mostPopularAnalyses);
       
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
       model.addAttribute("topDatasets", mostPopularDatasets);
+      
+      //Gettags
+      List<Tag> mostPopularTags = datastoreService.getTags(10);
+      model.addAttribute("listtags", mostPopularTags);
       
       session.setAttribute("pageId", page);
       session.setAttribute("fm", filter);
@@ -542,7 +577,7 @@ public class ActivityController {
       
       session.setAttribute("startpoint", startPoint);
       
-    //Get raw image (not thumnail)
+      //Get raw image (not thumnail)
       String source_image = "";
       Analysis _analysis = null;
       List<Visualization> _visuals = null;
@@ -604,10 +639,45 @@ public class ActivityController {
 	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
 	      model.addAttribute("topAnalyses", mostPopularAnalyses);
 	      
+	    //Get raw image (not thumnail)
+	      String source_image = "";
+	      Analysis _analysis = null;
+	      List<Visualization> _visuals = null;
+	      for(int i =0; i < mostPopularAnalyses.size(); i ++ ){
+	    	  _analysis = mostPopularAnalyses.get(i);
+	    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
+	    	  
+	    	  if (_visuals != null) {
+	    		  for (Visualization v : _visuals) {
+	    			  if ("png".equals(v.getType())) {
+	    				  try {
+								source_image = appStoreService.getVisualization(
+										_analysis.getGuid(), v.getGuid(), v.getType());
+	    				  } catch (Exception e) {
+								if (logger.isDebugEnabled()) {
+									logger.debug(
+											"Error occurs when retrieving visualizations {} from analysis {}",
+											v.getGuid(), _analysis.getGuid());
+									logger.debug("Exception detail", e);
+								}
+								continue;
+							}
+	    			  }
+	    		  }
+	    	  }
+	    	  
+	    	  if(source_image != null && source_image.length() > 0)
+	    		  mostPopularAnalyses.get(i).setThumbnail(source_image);
+	      }
+	      
 	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
 	      model.addAttribute("topDatasets", mostPopularDatasets);
 	      
-	      model.addAttribute("menuId", "tags");
+	    //Gettags
+	      List<Tag> mostPopularTags = datastoreService.getTags(10);
+	      model.addAttribute("listtags", mostPopularTags);
+	      
+	      model.addAttribute("pageId", "tags");
 	  } catch (Exception e) {
 	      logger.debug("Failed to load activity stream", e);
 	      model.addAttribute("errorMsg", "Failed to load the activity stream");

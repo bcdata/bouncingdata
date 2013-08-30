@@ -577,6 +577,7 @@ public interface DataStorage {
   int increasePageView(int objectId, String type);
   
   PageView getPageView(int objectId, String type);
+  List<Tag>  getTags(int num);
   /**
    * @param userId
    * @return
