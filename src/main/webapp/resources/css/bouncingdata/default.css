@@ -119,7 +119,7 @@ div.clear {
   width: 100%;
   margin: 0 auto;
   height: 100%;
-  background: none repeat scroll 0 0 #FFF;
+  background: none repeat scroll 0 0 #F9F9F9;
 }
 
 #page .header-container {
@@ -1038,5 +1038,110 @@ a.tag-element:hover {
 	font-size: 1.5em;
 	font-weight: bold;
 	color: #333;
+}
+
+.rsection {
+	margin-top: 25px;
+	margin-left: 10px;
+	width: 100%;
+	float: left;
+}
+
+.most-popular-section{
+	color: #88B100;
+	font-family: Times New Roman;
+	font-size: 19px;
+}
+
+.most-popular-section .most-popular-items {
+	
+}
+
+.most-popular-items .popular-item {
+	float: left; 
+	margin-top: 10px; 
+	border-bottom: 1px dotted #D8D8D8; 
+	width: 97%; 
+	padding-bottom: 5px;
+} 
+
+.popular-item .popular-img-item {
+	float: left; 
+	margin-right: 5px;
+}
+
+.popular-item .popular-item-title {
+	color: #036; 
+	font-size: 14px; 
+	font-family: Tahoma; 
+	font-weight: bold;
+}
+
+.popular-item  .popular-item-author {
+	color: #888; 
+	font-size: 12px; 
+	margin-top: 3px; 
+	font-family: serif;
+}
+
+.most-popular-items .more-popular-item {
+	float: right;
+	margin-top: 10px;   
+	width: 97%; 
+	padding-bottom: 5px; 
+	text-align: right;
+	color: #888; 
+	font-size: 14px; 
+	font-family: Times New Roman;
+	margin-right: 9px;
+}
+
+.most-popular-items .popular-item-link {
+	text-decoration: none;	
+}
+
+.most-popular-items .popular-item-link:hover {
+	color: #88B100;
+}
+
+.most-popular-items .staff-pick-section {
+	float: left; 
+	margin-top: 10px;
+	border-bottom: 1px solid #D8D8D8; 
+	width: 97%;
+	font-family: Tahoma;
+}
+
+.staff-pick-section .staff-pick-link {
+	color: #888;
+	float: left;
+	margin-right: 20px; 
+	font-size: 16px;  
+	height: 20px;
+}
+
+.staff-pick-section .staff-pick-link.active {
+	color: #333333;
+	border-bottom: 1px solid black;
+	margin-bottom: -1px;
+}
+
+.staff-pick-section .staff-pick-link:hover {
+	color: #333333;
+	border-bottom: 1px solid black;
+	margin-bottom: -1px;
+}
+
+#staff-pick-analysis {
+	
+}
+
+#staff-pick-analysis .staff-pick-analysis-image {
+	height: 56px;
+	width: 75px;
+}
+
+#staff-pick-dataset {
+	display:none;
 }
 /** vinhpq : end */

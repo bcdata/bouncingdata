@@ -168,7 +168,8 @@ public class DatasetController {
   
   @RequestMapping(value = { "/upload" }, method = RequestMethod.GET)
   public String getUploadPage(ModelMap model, Principal principal, HttpSession session) {
-    try {
+    
+	try {
       User user = (User) ((Authentication) principal).getPrincipal();
       ObjectMapper logmapper = new ObjectMapper();
       String data;
@@ -184,6 +185,7 @@ public class DatasetController {
     if(session.getAttribute("varUp") != null)  
     	session.removeAttribute("varUp");
     
+    model.addAttribute("mode", "upload");
     return "upload";
   }
   

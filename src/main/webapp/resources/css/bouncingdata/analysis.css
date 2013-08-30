@@ -187,6 +187,7 @@
 
 .analysis-container .anls-content, .datapage-container .dataset-content {
   border: 0 none;
+  background: #E5E4E4;
 }
 .analysis-container .anls-content ul.anls-tabs, .dataset-content ul {
   float: left;
