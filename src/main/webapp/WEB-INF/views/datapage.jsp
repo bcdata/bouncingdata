@@ -63,10 +63,7 @@ $(function() {
 </script>
 <style>
 	#q{
-		width: 84%; padding: 0 0 0 5px;border: 0 none; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
-	}
-	#divQuery{
-		border-color: rgb(77, 144, 254);float: left;width: 58%; border: 1px solid #DDD; height: 28px; padding: 0; display: inline-block; background-color: #FFFFFF;
+		padding: 0 0 0 5px; height: 28px; outline: none; font-size: 12px;color: #9a9a9a;
 	}
 	#psearchleft {
 		float: left;width: 93%;
@@ -221,7 +218,7 @@ $(function() {
 					<input type="text" id="q" name="q" value="Search query ..." onblur="if(value=='') value = 'Search query ...'" onfocus="if(value=='Search query ...') value = ''" title="Using MySql syntax">
 				</c:otherwise>
 			  </c:choose>
-			    <input type="button" id="search-query-button" value="Go"/>
+			    <input type="submit" class="search-query-button" value="Go">
 			</div>
         </form>	
         <div class="clear"></div>
