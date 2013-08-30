@@ -409,6 +409,7 @@ div.clear {
 #page > .main-container {
   	width: 98%;
 	margin: 0 auto;
+	margin-top: -7px;
 }
 
 #page .main-content-container {
@@ -428,9 +429,9 @@ div.clear {
 
 #page .main-navigation {
   float: left;
-  width: 158px;
+  width: 178px;
   height: 100%;
-  padding-top: 23px;
+  padding-top: 10px;
   z-index: 1001;
 }
 
@@ -446,24 +447,38 @@ body > .popup-container {
 }
 
 .footer-container {
-  width: 1020px;
-  background-color: transparent;
-  margin: 0 auto;
-  clear: both;
+  	width: 100%;
+	background-color: transparent;
+	margin: 0 auto;
+	clear: both;
+	float: left;
 }
 
 .footer-container .footer {
-  margin: 0 auto;
-  padding: 0 0 20px 0;
-  color: #333333;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 11px;
+  	margin: 0 auto;
+	background-color: black;
+	color: #ABABAB;
+	font-family: Courier;
+	font-size: 13px;
+	font-weight: bold;
+	float: left;
+	width: 100%;
 }
 
-.footer-container .footer .footer-content {
-  text-align: center;
-  padding-top: 15px;
-  font-size: 0.9em;
+.footer-container .footer .lfooter-content {
+  text-align: left;
+padding: 5px 0 5px 15px;
+font-size: 0.9em;
+width: 40%;
+float: left;
+}
+
+.footer-container .footer .rfooter-content {
+  text-align: right;
+float: right;
+padding: 5px 15px 5px 0;
+font-size: 0.9em;
+width: 40%;
 }
 
 .footer-container .footer .footer-horizontal-rule {

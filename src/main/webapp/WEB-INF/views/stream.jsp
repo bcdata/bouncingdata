@@ -72,7 +72,7 @@ $(function() {
     });
 });
 </script>
-<div id="main-content" class="homepage-container">
+<div id="main-content" class="homepage-container" >
   <div class="right-content">
     <div class="right-content-section most-popular-section">
       <h4 class="right-section-title">Most Popular</h4>
@@ -195,8 +195,8 @@ $(function() {
       </div>
     </div>
   </div>
-  <div class="center-content">
-    <div class="center-content-wrapper">
+  <div class="center-content" >
+    <div class="center-content-wrapper" style="width: 100%;">
     <!-- vinhpq : for ajax filter. Don't need reload page. 
     <script type="text/javascript">
 	$(document).ready(function() {

@@ -100,9 +100,9 @@ public class ActivityController {
 	    	  
 	    	  // type filter (all/analysis/dataset/scraper)
 	    	  if(filter.equals("all")){
-	    	      allAnalyses = datastoreService.getAnalysesIn1Month(0,25);
+	    	      allAnalyses = datastoreService.getAnalysesIn1Month(0,35);
 	    	      
-	    	      allDatasets = datastoreService.getDatasetsIn1Month(0,25);    		  
+	    	      allDatasets = datastoreService.getDatasetsIn1Month(0,15);    		  
 	    	  }
 	    	  
 	    	  else if(filter.equals("analysis")){
@@ -120,8 +120,8 @@ public class ActivityController {
 	    	  isOrder = false;
 	    	  // type filter (all/analysis/dataset/scraper)
 	    	  if(filter.equals("all")){
-	    		  allAnalyses = datastoreService.getPopularAnalysesIn1Month(0,25);
-	        	  allDatasets = datastoreService.getPopularDatasetsIn1Month(0,25);	  
+	    		  allAnalyses = datastoreService.getPopularAnalysesIn1Month(0,35);
+	        	  allDatasets = datastoreService.getPopularDatasetsIn1Month(0,15);	  
 	    	  }
 	    	  
 	    	  else if(filter.equals("analysis")){
@@ -145,8 +145,8 @@ public class ActivityController {
         	  
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
-        		  allAnalyses = datastoreService.getAllAnalysesBySelf(user.getId(), 0, 25);
-        		  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId(), 0, 25);
+        		  allAnalyses = datastoreService.getAllAnalysesBySelf(user.getId(), 0, 35);
+        		  allDatasets = datastoreService.getAllDatasetsBySelf(user.getId(), 0, 15);
         	  }
         	  
         	  else if(filter.equals("analysis")){
@@ -164,8 +164,8 @@ public class ActivityController {
         	  isOrder = false;
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
-        		  allAnalyses = datastoreService.getPopularAnalysesBySelf(user.getId(),0 , 25);
-        		  allDatasets = datastoreService.getPopularDatasetsBySelf(user.getId(),0 , 25);
+        		  allAnalyses = datastoreService.getPopularAnalysesBySelf(user.getId(),0 , 35);
+        		  allDatasets = datastoreService.getPopularDatasetsBySelf(user.getId(),0 , 15);
         	  }
         	  
         	  else if(filter.equals("analysis")){
@@ -189,8 +189,8 @@ public class ActivityController {
         	  
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
-        		  allAnalyses = datastoreService.getRecentAnalysisStaffPick(0, 25);
-        		  allDatasets = datastoreService.getRecentDatasetsStaffPick(0, 25);
+        		  allAnalyses = datastoreService.getRecentAnalysisStaffPick(0, 35);
+        		  allDatasets = datastoreService.getRecentDatasetsStaffPick(0, 15);
         	  }
         	  
         	  else if(filter.equals("analysis")){
@@ -208,8 +208,8 @@ public class ActivityController {
         	  isOrder = false;
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
-        		  allAnalyses = datastoreService.getPopularAnalysesStaffPick(0, 25);
-            	  allDatasets = datastoreService.getPopularDatasetsStaffPick(0, 25);
+        		  allAnalyses = datastoreService.getPopularAnalysesStaffPick(0, 35);
+            	  allDatasets = datastoreService.getPopularDatasetsStaffPick(0, 15);
         	  }
         	  
         	  else if(filter.equals("analysis")){
@@ -233,8 +233,8 @@ public class ActivityController {
         	  
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
-        		  allAnalyses = datastoreService.get20AuthorAnalysesRecent(0, 25);
-        		  allDatasets = datastoreService.get20AuthorDataSetRecent(0, 25);
+        		  allAnalyses = datastoreService.get20AuthorAnalysesRecent(0, 35);
+        		  allDatasets = datastoreService.get20AuthorDataSetRecent(0, 15);
         	  }
         	  
         	  else if(filter.equals("analysis")){
@@ -252,8 +252,8 @@ public class ActivityController {
         	  isOrder = false;
         	  // type filter (all/analysis/dataset/scraper)
         	  if(filter.equals("all")){
-            	  allAnalyses = datastoreService.get20AuthorAnalysesItemPopular(0, 25);
-            	  allDatasets = datastoreService.get20AuthorDataSetItemPopular(0, 25);
+            	  allAnalyses = datastoreService.get20AuthorAnalysesItemPopular(0, 35);
+            	  allDatasets = datastoreService.get20AuthorDataSetItemPopular(0, 15);
         	  }
         	  
         	  else if(filter.equals("analysis")){

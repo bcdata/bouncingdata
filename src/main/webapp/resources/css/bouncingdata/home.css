@@ -16,6 +16,7 @@
 #main-content.homepage-container .right-content {
   width: 300px;
   color: #333333 !important;
+  padding-left: 10px;
 }
 
 .homepage-container .stream-filter {

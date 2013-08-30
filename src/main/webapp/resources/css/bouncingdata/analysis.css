@@ -21,7 +21,10 @@
 */
 
 #main-content .center-content {
-	margin-left: 2.5%;
+	/* margin-left: 2.5%; */
+	background-color: #E5E4E4;
+	border-left: 1px solid #B8BBC2;
+	border-right: 1px solid #B8BBC2;
 }
 
 #main-content .center-content .center-content-wrapper{
