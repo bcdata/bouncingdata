@@ -759,7 +759,11 @@ public class DatasetController {
       // page view increment
       int pageView = datastoreService.increasePageView(ds.getId(), PageType.DATASET.getType());
       model.addAttribute("pageView", pageView);
-
+      
+    //Gettags
+      List<Tag> mostPopularTags = datastoreService.getTags(10);
+      model.addAttribute("listtags", mostPopularTags);
+      
     } catch (Exception e) {
       logger.debug("", e);
       model.addAttribute("errorMsg", e.getMessage());

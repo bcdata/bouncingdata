@@ -30,6 +30,7 @@
 #main-content .center-content .center-content-wrapper{
 	margin-right: 6%;
 	padding-left: 40px;
+	min-height: 580px;
 	/*background: #e0e0e0 !important;*/
 }
 

@@ -1538,7 +1538,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Query q = pm.newQuery(Analysis.class);
     q.setFilter("published == true");
     q.setOrdering("score DESC");
-    q.setRange(0, 10);
+    q.setRange(0, 5);
     try {
       List<Analysis> analyses = (List<Analysis>) q.execute();
       if (analyses != null) {
@@ -1636,7 +1636,7 @@ public class JdoDataStorage extends JdoDaoSupport implements DataStorage {
     Query q = pm.newQuery(Dataset.class);
     q.setFilter("isPublic == true");
     q.setOrdering("score DESC");
-    q.setRange(0, 10);
+    q.setRange(0, 5);
     try {
       List<Dataset> datasets = (List<Dataset>) q.execute();
       if (datasets != null) {

@@ -313,6 +313,37 @@ public class ActivityController {
       model.addAttribute("recentAnalyses", lstRepresentClass);
       
       List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
+      
+      source_image = "";
+      _analysis = null;
+      _visuals = null;
+      for(int i =0; i < mostPopularAnalyses.size(); i ++ ){
+    	  _analysis = allAnalyses.get(i);
+    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
+    	  
+    	  if (_visuals != null) {
+    		  for (Visualization v : _visuals) {
+    			  if ("png".equals(v.getType())) {
+    				  try {
+							source_image = appStoreService.getVisualization(
+									_analysis.getGuid(), v.getGuid(), v.getType());
+    				  } catch (Exception e) {
+							if (logger.isDebugEnabled()) {
+								logger.debug(
+										"Error occurs when retrieving visualizations {} from analysis {}",
+										v.getGuid(), _analysis.getGuid());
+								logger.debug("Exception detail", e);
+							}
+							continue;
+						}
+    			  }
+    		  }
+    	  }
+    	  
+    	  if(source_image != null && source_image.length() > 0)
+    		  mostPopularAnalyses.get(i).setThumbnail(source_image);
+      }
+      
       model.addAttribute("topAnalyses", mostPopularAnalyses);
       
       List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
@@ -546,7 +577,7 @@ public class ActivityController {
       
       session.setAttribute("startpoint", startPoint);
       
-    //Get raw image (not thumnail)
+      //Get raw image (not thumnail)
       String source_image = "";
       Analysis _analysis = null;
       List<Visualization> _visuals = null;
@@ -608,8 +639,43 @@ public class ActivityController {
 	      List<Analysis> mostPopularAnalyses = datastoreService.getMostPopularAnalyses();
 	      model.addAttribute("topAnalyses", mostPopularAnalyses);
 	      
+	    //Get raw image (not thumnail)
+	      String source_image = "";
+	      Analysis _analysis = null;
+	      List<Visualization> _visuals = null;
+	      for(int i =0; i < mostPopularAnalyses.size(); i ++ ){
+	    	  _analysis = mostPopularAnalyses.get(i);
+	    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
+	    	  
+	    	  if (_visuals != null) {
+	    		  for (Visualization v : _visuals) {
+	    			  if ("png".equals(v.getType())) {
+	    				  try {
+								source_image = appStoreService.getVisualization(
+										_analysis.getGuid(), v.getGuid(), v.getType());
+	    				  } catch (Exception e) {
+								if (logger.isDebugEnabled()) {
+									logger.debug(
+											"Error occurs when retrieving visualizations {} from analysis {}",
+											v.getGuid(), _analysis.getGuid());
+									logger.debug("Exception detail", e);
+								}
+								continue;
+							}
+	    			  }
+	    		  }
+	    	  }
+	    	  
+	    	  if(source_image != null && source_image.length() > 0)
+	    		  mostPopularAnalyses.get(i).setThumbnail(source_image);
+	      }
+	      
 	      List<Dataset> mostPopularDatasets = datastoreService.getMostPopularDatasets();
 	      model.addAttribute("topDatasets", mostPopularDatasets);
+	      
+	    //Gettags
+	      List<Tag> mostPopularTags = datastoreService.getTags(10);
+	      model.addAttribute("listtags", mostPopularTags);
 	      
 	      model.addAttribute("menuId", "tags");
 	  } catch (Exception e) {

@@ -1146,4 +1146,8 @@ a.tag-element:hover {
 #staff-pick-dataset {
 	display:none;
 }
+
+.popular-item-title {
+	cursor: pointer;
+}
 /** vinhpq : end */
