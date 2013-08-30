@@ -677,7 +677,7 @@ public class ActivityController {
 	      List<Tag> mostPopularTags = datastoreService.getTags(10);
 	      model.addAttribute("listtags", mostPopularTags);
 	      
-	      model.addAttribute("menuId", "tags");
+	      model.addAttribute("pageId", "tags");
 	  } catch (Exception e) {
 	      logger.debug("Failed to load activity stream", e);
 	      model.addAttribute("errorMsg", "Failed to load the activity stream");
