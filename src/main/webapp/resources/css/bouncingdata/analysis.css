@@ -26,6 +26,7 @@
 
 #main-content .center-content .center-content-wrapper{
 	margin-right: 6%;
+	/*background: #e0e0e0 !important;*/
 }
 
 #main-content.analysis-container .right-content, #main-content.datapage-container .right-content  {
@@ -143,6 +144,7 @@
 
 .analysis-main .anls-content, .center-content-wrapper > .description, .datapage-container #dataset-content {
   padding: 15px;
+  /*background: #e0e0e0 !important;*/
 }
 
 .analysis-main .comments-container {
@@ -186,10 +188,15 @@
   -webkit-border-radius: 0px; 
 }
 
-.analysis-container .anls-content .anls-tabs-content-wrapper > .ui-tabs-panel, .datapage-container #dataset-content > .ui-tabs-panel {
+.analysis-container .anls-content .anls-tabs-content-wrapper > .ui-tabs-panel {
   padding: 0;
   margin-top: 10px;
 } 
+.datapage-container #dataset-content > .ui-tabs-panel {
+  padding: 0;
+  margin-top: 10px;
+  background-color: white;
+}
 
 .dataset-header .dataset-title{
   margin: 0;
@@ -203,18 +210,31 @@
 	border: transparent;
 	display: block;
 	margin-top: 0.4em;
-	margin-left: 2%;
+	margin-left: 1.5%;
+	float: left;
+	width: 60.8%; 
+	height: 28px; 
+	padding: 0;
 }
 
 .dataset-content #divQuery input[type="text"]{
 	border: 1px solid;
+	float: left;
+	width: 85.2%;
+	height: 95%;
+	margin-top: 1px; 
 }
 
-.dataset-content #divQuery input[type="button"]{
+.dataset-content #divQuery .search-query-button{
+	display: inline-block;
+	text-align: center;
 	background: #003366;
 	color: white;
 	width: 13%;
 	height: 100%;
+	border-radius: 0;
+	border: 0;
+	margin-top: 1px; 
 }
 
 /** Tabs **/
@@ -498,13 +518,11 @@ li.comment-item .comment-score {
 }
 
 .anls-data, #dataset-content #data {
-  
 }
 
 #dataset-content #data .dataTables_wrapper {
   overflow: hidden;
   padding-left: 10px;
-  padding-right: 10px;
 }
 
 .anls-data .anls-dataset, .anls-data .anls-attachment {
