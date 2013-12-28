@@ -1,0 +1,3 @@
+Installation guide
+1. cd to folder containing BCPublish_1.0.tar.gz
+2. R CMD install BCPublish
