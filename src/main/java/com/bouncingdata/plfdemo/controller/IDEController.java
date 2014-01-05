@@ -1,6 +1,5 @@
 package com.bouncingdata.plfdemo.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.dto.ExecutionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.BcDataScript;
@@ -48,6 +48,7 @@ public class IDEController {
 	@Autowired
 	private BcDatastoreService  userDataService;
 
+	private static final int ERR_AUTH_FAILED = -1;
 	private static final int ERR_NONE = 0;
 	private static final int ERR_UPLOAD_FAILED = 1;
 	private static final int ERR_PARSING_FAILED = 2;
@@ -56,82 +57,123 @@ public class IDEController {
 
 	private Logger  logger = LoggerFactory.getLogger(IDEController.class);
 
-	//Testing controller
-	@RequestMapping(value={"/test_publish"}, method = RequestMethod.POST)
-	public @ResponseBody String yatc(@RequestParam("file1") MultipartFile file,  @RequestParam("user") String user) {
-		String ret = "Ret";
-
-		if(file.isEmpty()) {
-			logger.warn("File data empty");
+	private ActionResult genFailedActionResult(int errCode) {
+		return new ActionResult(errCode, errorCode2ErrorMessage(errCode));
+	}
+	
+	private ActionResult genSuccessActionResult(String message) {
+		return new ActionResult(ERR_NONE, message);
+	}
+	
+	private String errorCode2ErrorMessage(int err) {
+		String ret = null;
+		switch (err) {
+		case ERR_AUTH_FAILED:
+			ret = "Authentication failed";
+			break;
+		case ERR_NONE:
+			ret = "NONE";
+			break;
+		case ERR_UPLOAD_FAILED:
+			ret = "Upload failed";
+			break;
+		case ERR_PARSING_FAILED:
+			ret = "Parsing failed";
+			break;
+		case ERR_INSERT_TO_DB_FAILED:
+			ret = "Insert to DB failed";
+			break;
+		case ERR_EXECUTE_FAILED:
+			ret = "Execution failed";
+			break;
+		default:
+			break;
 		}
-		else {
-			logger.warn("File name: " + file.getName());
-			try {
-				String fileContent = new String(file.getBytes());
-				logger.warn("File content:" + fileContent);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
 		return ret;
 	}
 
-	@RequestMapping(value={"/publish"}, method = RequestMethod.POST)
-	public @ResponseBody String uploadAnalysis(@RequestParam("file1") MultipartFile file
-			,  @RequestParam(value = "user", required= true) String userName
-			,  @RequestParam(value = "title", required = false) String title
-			,  @RequestParam(value = "description", required = false) String description) {
+	private int preProcess(String userName, String password, MultipartFile file) {
+		int authCheck = checkUserPassword(userName, password);
+		if(authCheck != ERR_NONE) {
+			return authCheck;
+		}
+		return checkUploadFile(file);
+	}
 
-		String ret = errorCode2ErrorMessage(ERR_UPLOAD_FAILED);
+	private int checkUserPassword(String userName, String password) {
+		User user = datastoreService.findUserByUsername(userName);
+		if(user != null && user.getPassword().equals(password))
+			return ERR_NONE;
+		else
+			return ERR_AUTH_FAILED;
+	}
+
+	private int checkUploadFile(MultipartFile file) {
+		return (file != null && file.getSize() > 0) ? ERR_NONE : ERR_UPLOAD_FAILED;
+	}
+
+	private boolean isToPublic(String isPublic) {
+		return (isPublic != null && isPublic.compareToIgnoreCase("true") == 0);
+	}
+
+	@RequestMapping(value={"/publish"}, method = RequestMethod.POST)
+	public @ResponseBody ActionResult uploadAnalysis(@RequestParam("file1") MultipartFile file
+			,  @RequestParam(value = "user", required= true) String userName
+			,  @RequestParam(value = "password", required= true) String password
+			,  @RequestParam(value = "title", required = false) String title
+			,  @RequestParam(value = "description", required = false) String description
+			,	@RequestParam(value = "isPublic", required = false) String isPublic) {
+
+		int err = preProcess(userName, password, file);
+		if(err != ERR_NONE) {
+			return genFailedActionResult(err);
+		}
+
+		ActionResult ret = genFailedActionResult(ERR_UPLOAD_FAILED);
+
 		try {			
 			// Parse the request to get file item.
-			if(!file.isEmpty()) {
-				title = (title != null) ? title : file.getOriginalFilename();
-				description = (description != null) ? description : "";
+			title = (title != null) ? title : file.getOriginalFilename();
+			description = (description != null) ? description : "";
 
-				//TODO Verify this post is a new post or an update of an existed one
-				boolean isNewScript = true;
-				BcDataScript script = null;
+			//TODO Verify this post is a new post or an update of an existed one
+			boolean isNewScript = true;
+			BcDataScript script = null;
 
-				//Load or generate script
-				String code = new String(file.getBytes());
-				User user = datastoreService.findUserByUsername(userName);
-				String language = "r";
-				String guid;
+			//Load or generate script
+			String code = new String(file.getBytes());
+			User user = datastoreService.findUserByUsername(userName);
+			String language = "r";
+			String guid;
 
-				if(isNewScript) {
-					boolean isPublic = false;
-					Set<Tag> tagSet = null;
-					script = genBcDataScript(title, description, language, code, isPublic, tagSet, user);
+			if(isNewScript) {
+				boolean isPublicAnalysis = isToPublic(isPublic);
+				Set<Tag> tagSet = null;
+				script = genBcDataScript(title, description, language, code, isPublicAnalysis, tagSet, user);
 
-					//Because of historical reasons, we have to persist script into DB immediately. Any solution ?
-					guid = datastoreService.createBcDataScript(script, script.getType());
-					script = datastoreService.getAnalysisByGuid(guid);
-				}
-				else {
-					//TODO
-					guid = script.getGuid();
-				}
-
-				//Execute script
-				ExecutionResult result = appExecutor.executeR(script, code, user);
-				script.setLastOutput(result.getOutput());
-
-				//If execution succeeds,  store analysis files and persist analysis into DB
-				if( !isNewScript) {
-					datastoreService.updateBcDataScript(script);
-				}
-				appStoreService.createApplicationFile(guid, language, code);
-				ret = guid;
+				//Because of historical reasons, we have to persist script into DB immediately. Any solution ?
+				guid = datastoreService.createBcDataScript(script, script.getType());
+				script = datastoreService.getAnalysisByGuid(guid);
 			}
-			else 
-				ret = errorCode2ErrorMessage(ERR_UPLOAD_FAILED);
+			else {
+				//TODO
+				guid = script.getGuid();
+			}
+
+			//Execute script
+			ExecutionResult result = appExecutor.executeR(script, code, user);
+			script.setLastOutput(result.getOutput());
+
+			//If execution succeeds, store analysis files and persist analysis into DB
+			if( !isNewScript) {
+				datastoreService.updateBcDataScript(script);
+			}
+			appStoreService.createApplicationFile(guid, language, code);
+			ret = genSuccessActionResult(guid);
 		}
 		catch (Exception e) {
 			logger.warn("Analysis publishing exception", e);
-			ret = errorCode2ErrorMessage(ERR_EXECUTE_FAILED);
+			ret = genFailedActionResult(ERR_EXECUTE_FAILED);
 		} 
 		return ret;
 	}
@@ -156,67 +198,41 @@ public class IDEController {
 	}
 
 	@RequestMapping(value={"/publish_dataset"}, method = RequestMethod.POST)
-	public @ResponseBody String uploadDataSet(@RequestParam("file1") MultipartFile file
+	public @ResponseBody ActionResult uploadDataSet(@RequestParam("file1") MultipartFile file
 			,	@RequestParam(value = "user", required= true) String userName
+			, 	@RequestParam(value = "password", required= true) String password
 			,	@RequestParam(value = "firstRowAsHeader", required = false) String firstRowAsHeader
 			,	@RequestParam(value = "delimiter", required = false) String delimiter
 			,	@RequestParam(value = "title", required = true) String datasetName
 			,	@RequestParam(value = "description", required = false) String datasetDescription
-			,	@RequestParam(value = "tags", required = false) String tags) {
+			,	@RequestParam(value = "tags", required = false) String tags
+			,	@RequestParam(value = "isPublic", required = false) String isPublic) {
 
 		//TODO Log user action ?
 
-		int err = checkUploadFile(file);
+		int err = preProcess(userName, password, file);
 		if(err != ERR_NONE) {
-			return errorCode2ErrorMessage(err);
+			return genFailedActionResult(err);
 		}
 
 		List<DatasetColumn> datasetColumns = new ArrayList<DatasetColumn>();
 		List<String[]> dataRows = new ArrayList<String[]>();
 		err = parseDatasetSchema(file, firstRowAsHeader, delimiter, dataRows, datasetColumns);
 		if(err != ERR_NONE) {
-			return errorCode2ErrorMessage(err);
+			return genFailedActionResult(err);
 		}
 
 		StringBuffer datasetGuid = new StringBuffer();
-
 		err = persistDatasetToDB(userName, datasetName, datasetDescription, tags
 				, datasetColumns
 				, dataRows
+				, isPublic
 				, datasetGuid);
 		if(err != ERR_NONE) {
-			return errorCode2ErrorMessage(err);
+			return genFailedActionResult(err);
 		}
 
-		return datasetGuid.toString();
-	}
-
-	private String errorCode2ErrorMessage(int err) {
-		String ret = null;
-		switch (err) {
-		case ERR_NONE:
-			ret = "NONE";
-			break;
-		case ERR_UPLOAD_FAILED:
-			ret = "Upload failed";// , "Execution failed""
-			break;
-		case ERR_PARSING_FAILED:
-			ret = "Parsing failed";
-			break;
-		case ERR_INSERT_TO_DB_FAILED:
-			ret = "Insert to DB failed";
-			break;
-		case ERR_EXECUTE_FAILED:
-			ret = "Execution failed";
-			break;
-		default:
-			break;
-		}
-		return ret;
-	}
-
-	private int checkUploadFile(MultipartFile file) {
-		return (file != null && file.getSize() > 0) ? ERR_NONE : ERR_UPLOAD_FAILED;
+		return genSuccessActionResult(datasetGuid.toString());
 	}
 
 	private int parseDatasetSchema(MultipartFile file
@@ -276,6 +292,7 @@ public class IDEController {
 	private int persistDatasetToDB(String userName, String datasetName, String datasetDescription, String tags
 			, List<DatasetColumn> columnsList
 			, List<String[]> data
+			, String isPublic
 			, StringBuffer outputGUID) {
 
 		User user = datastoreService.findUserByUsername(userName);
@@ -290,7 +307,8 @@ public class IDEController {
 			userDataService.storeData(dsFName, columnsArray, data.subList(1, data.size()));
 
 			//Insert to DB bouncingdata
-			Dataset ds = genDataset(user, datasetDescription, dsFName, data, guid, datasetSchema);
+			boolean isPublicDataset = isToPublic(isPublic);
+			Dataset ds = genDataset(user, datasetDescription, dsFName, data, guid, datasetSchema, isPublicDataset);
 			datastoreService.createDataset(ds);
 
 			//add tag
@@ -324,9 +342,10 @@ public class IDEController {
 	}
 
 	private Dataset genDataset(User user, String datasetDescription, String dsFName
-			,	List<String[]> data
-			,	String guid
-			,	String datasetSchema) {
+			, List<String[]> data
+			, String guid
+			, String datasetSchema
+			, boolean isPublic) {
 		Dataset ds = new Dataset();
 		ds.setUser(user);
 		ds.setActive(true);
@@ -339,7 +358,7 @@ public class IDEController {
 		ds.setRowCount(data.size() - 1);
 		ds.setGuid(guid);
 		ds.setSchema(datasetSchema);
-		ds.setPublic(false);
+		ds.setPublic(isPublic);
 		return ds;
 	}
 }
