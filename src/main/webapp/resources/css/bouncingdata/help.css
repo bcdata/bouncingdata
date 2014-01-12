@@ -1,3 +1,8 @@
+#main-content .right-content {
+	width: 300px !important;
+	padding-left: 10px
+}
+
 .help-page code {
   display: block;
   padding: 8px;
@@ -62,3 +67,7 @@
   margin-top: 1em;
   padding: 0.3em 1em;
 } 
+
+.help-page .help-main-content > div{
+	margin-bottom: 30px;
+}
