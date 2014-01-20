@@ -1,0 +1,5 @@
+#stream #box-container .box .article .article-content iframe {
+  width: 100%;
+  height: 100%;
+  position: relative;
+} 
