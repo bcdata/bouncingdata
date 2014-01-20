@@ -356,9 +356,22 @@ $(function() {
 					<c:when test="${anls.classType eq 'Analysis' }"> 
 						<div class="box stream-item" >
 			             <div class="article">
-			             	<div class="article-content">
+			             	<div class="article-content" id="dv_${anls.id}">
 			             		  <c:if test="${not empty anls.thumbnail }">
-			             		  		<img class="thumbnail" src="data:image/png;base64,${anls.thumbnail}" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+			             		  	<img id="tbn_${anls.id}" class="thumbnail" onerror="this.src='<c:url value="/thumbnails/no-image.jpg" />'; this.onerror=null;" />
+										<script type="text/javascript" >
+			             		    var patt1 = /visualize\/app\/(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}\/(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}\/html/i;
+										 if(patt1.test("${anls.thumbnail}")) {
+											//Case of the html visualization
+											$("#tbn_${anls.id}").css("display","none");
+											var iFrameElement = $('<iframe style="width: 100%; height: 100%;" scrolling="no"></iframe>');
+											iFrameElement.attr('src', ctx + '/' + "${anls.thumbnail}");
+											$("#dv_${anls.id}").append(iFrameElement);
+										 } else {
+										 	//Case of the png visualization
+										 	$("#tbn_${anls.id}").attr('src', "data:image/png;base64,${anls.thumbnail}");
+										 }											
+										</script>			             		  
 			             		  </c:if>
 				                  <h4><a id="evt-title-${anls.id }" href="<c:url value="/anls/${anls.guid}"/>">${anls.name}</a></h4>
 				                  <span>

@@ -89,17 +89,23 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
   var type = viz.type.toLowerCase();
   var src = viz.source;
   
+  console.log(src);
+  
   var $vizContainer = $('<div class="viz-container"></div>');
   $vizContainer.attr('guid', viz.guid).attr('n', viz.name);
   $vizContainer.css('width', w + 'px').css('height', h + 'px');  
-  //var $vizHandle = $('<div class="viz-handle"><span class="permalink viz-permalink"><a href="" target="_blank">permalink</a></span></div>');
   //var $vizHandle = $('<div class="viz-handle"></div>');
   //$vizContainer.append($vizHandle);
   
   var $inner;
   switch(type) {
   case "html":
-    $inner = $('<iframe style="width:' + (w-10) + 'px; height:' + (h-15) + 'px;"></iframe>');
+    var $vizHandle = $('<div class="viz-handle"><span class="permalink viz-permalink"><a href="" target="_blank">permalink</a></span></div>'); 
+    //$inner = $('<iframe style="width:' + (w-10) + 'px; height:' + (h-15) + 'px;"></iframe>');
+    //TrungPT 20140119: Set width to 100% because parents element 's width is fixed to 100% !important in analysis.css, causing gap
+    //between iframe and the parent frame  
+    $inner = $('<iframe style="width: 100%; height: 100%"></iframe>');
+    	 	    
     $('a', $vizHandle).attr('href', src);
     $inner.load().appendTo($vizContainer);
     

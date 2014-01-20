@@ -16,11 +16,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
-import com.bouncingdata.plfdemo.datastore.pojo.dto.ActionResult;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Analysis;
 import com.bouncingdata.plfdemo.datastore.pojo.model.Dataset;
 import com.bouncingdata.plfdemo.datastore.pojo.model.RepresentClass;
@@ -277,7 +275,7 @@ public class ActivityController {
       
       session.setAttribute("startpoint", startPoint);
       
-      //Get raw image (not thumnail)
+      //Get raw image (not thumbnail)
       String source_image = "";
       Analysis _analysis = null;
       List<Visualization> _visuals = null;
@@ -286,22 +284,11 @@ public class ActivityController {
     	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
     	  
     	  if (_visuals != null) {
-    		  for (Visualization v : _visuals) {
-    			  if ("png".equals(v.getType())) {
-    				  try {
-							source_image = appStoreService.getVisualization(
-									_analysis.getGuid(), v.getGuid(), v.getType());
-    				  } catch (Exception e) {
-							if (logger.isDebugEnabled()) {
-								logger.debug(
-										"Error occurs when retrieving visualizations {} from analysis {}",
-										v.getGuid(), _analysis.getGuid());
-								logger.debug("Exception detail", e);
-							}
-							continue;
-						}
-    			  }
-    		  }
+    		  if (_visuals != null) {
+        		  for (Visualization v : _visuals) {
+        			  source_image = appStoreService.getVisualizationSource(_analysis.getGuid(), v.getGuid(), v.getType());
+        		  }
+        	  }
     	  }
     	  
     	  if(source_image != null && source_image.length() > 0)
@@ -322,22 +309,11 @@ public class ActivityController {
     	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
     	  
     	  if (_visuals != null) {
-    		  for (Visualization v : _visuals) {
-    			  if ("png".equals(v.getType())) {
-    				  try {
-							source_image = appStoreService.getVisualization(
-									_analysis.getGuid(), v.getGuid(), v.getType());
-    				  } catch (Exception e) {
-							if (logger.isDebugEnabled()) {
-								logger.debug(
-										"Error occurs when retrieving visualizations {} from analysis {}",
-										v.getGuid(), _analysis.getGuid());
-								logger.debug("Exception detail", e);
-							}
-							continue;
-						}
-    			  }
-    		  }
+    		  if (_visuals != null) {
+        		  for (Visualization v : _visuals) {
+        			  source_image = appStoreService.getVisualizationSource(_analysis.getGuid(), v.getGuid(), v.getType());
+        		  }
+        	  }
     	  }
     	  
     	  if(source_image != null && source_image.length() > 0)
@@ -577,7 +553,7 @@ public class ActivityController {
       
       session.setAttribute("startpoint", startPoint);
       
-      //Get raw image (not thumnail)
+      //Get raw image (not thumbnail)
       String source_image = "";
       Analysis _analysis = null;
       List<Visualization> _visuals = null;
@@ -587,20 +563,7 @@ public class ActivityController {
     	  
     	  if (_visuals != null) {
     		  for (Visualization v : _visuals) {
-    			  if ("png".equals(v.getType())) {
-    				  try {
-							source_image = appStoreService.getVisualization(
-									_analysis.getGuid(), v.getGuid(), v.getType());
-    				  } catch (Exception e) {
-							if (logger.isDebugEnabled()) {
-								logger.debug(
-										"Error occurs when retrieving visualizations {} from analysis {}",
-										v.getGuid(), _analysis.getGuid());
-								logger.debug("Exception detail", e);
-							}
-							continue;
-						}
-    			  }
+    			  source_image = appStoreService.getVisualizationSource(_analysis.getGuid(), v.getGuid(), v.getType());
     		  }
     	  }
     	  
@@ -648,22 +611,11 @@ public class ActivityController {
 	    	  _visuals = datastoreService.getAnalysisVisualizations(_analysis.getId());
 	    	  
 	    	  if (_visuals != null) {
-	    		  for (Visualization v : _visuals) {
-	    			  if ("png".equals(v.getType())) {
-	    				  try {
-								source_image = appStoreService.getVisualization(
-										_analysis.getGuid(), v.getGuid(), v.getType());
-	    				  } catch (Exception e) {
-								if (logger.isDebugEnabled()) {
-									logger.debug(
-											"Error occurs when retrieving visualizations {} from analysis {}",
-											v.getGuid(), _analysis.getGuid());
-									logger.debug("Exception detail", e);
-								}
-								continue;
-							}
-	    			  }
-	    		  }
+	    		  if (_visuals != null) {
+	        		  for (Visualization v : _visuals) {
+	        			  source_image = appStoreService.getVisualizationSource(_analysis.getGuid(), v.getGuid(), v.getType());
+	        		  }
+	        	  }
 	    	  }
 	    	  
 	    	  if(source_image != null && source_image.length() > 0)

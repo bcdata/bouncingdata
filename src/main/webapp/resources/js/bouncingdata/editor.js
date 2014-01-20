@@ -68,8 +68,8 @@ Editor.prototype.init = function(anls, feature) {
     });
     
     $('#execution-logs .clear-console').click(function() {
-      me.jqconsole.Reset();
-      me.startPrompt(jqconsole, 'python');
+      me.jqConsole.Reset();
+      me.startPrompt(me.jqConsole, 'python');
     });
     
     $('button#editor-clone').click(function() {
