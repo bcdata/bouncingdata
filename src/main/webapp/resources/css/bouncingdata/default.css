@@ -442,7 +442,7 @@ div.clear {
 }
 
 #page .main-navigation .main-nav-container ul.main-nav-links .main-nav-links-table td.first-td{
-	background-image:  url('/bouncingdata/resources/images/left-menu-arrow.png');
+	background-image:  url('../../images/left-menu-arrow.png');
 	background-position: left center;
 	width: 11px;
 	height: 11px;
@@ -451,7 +451,7 @@ div.clear {
 }
 
 #page .main-navigation .main-nav-container ul.main-nav-links .main-nav-links-table tr:hover>td.first-td{
-	background-image:  url('/bouncingdata/resources/images/left-menu-arrow-hover.png');
+	background-image:  url('../../images/left-menu-arrow-hover.png');
 	width: 11px;
 	height: 11px;
 	padding: 0;
@@ -459,7 +459,7 @@ div.clear {
 }
 
 #page .main-navigation .main-nav-container ul.main-nav-links .main-nav-links-table tr.nav-selected>td.first-td{
-	background-image:  url('/bouncingdata/resources/images/left-menu-arrow-hover.png');
+	background-image:  url('../../images/left-menu-arrow-hover.png');
 	width: 11px;
 	height: 11px;
 	padding: 0;
