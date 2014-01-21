@@ -89,8 +89,6 @@ Dashboard.prototype.addViz = function(x, y, w, h, viz, $container, editMode) {
   var type = viz.type.toLowerCase();
   var src = viz.source;
   
-  console.log(src);
-  
   var $vizContainer = $('<div class="viz-container"></div>');
   $vizContainer.attr('guid', viz.guid).attr('n', viz.name);
   $vizContainer.css('width', w + 'px').css('height', h + 'px');  
